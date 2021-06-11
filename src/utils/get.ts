@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export function get<T>(obj?: any, path?: string): T {
+  if (!path || !path.length) {
+    return obj;
+  }
+  const [head, ...tail] = path.split(".");
+  return get(obj && obj[head], tail.join("."));
+}

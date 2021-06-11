@@ -13,6 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export { SingleBar } from "./single-bar";

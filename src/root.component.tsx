@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import { Content } from "./content";
+
+export default function Root() {
+  return (
+    <BrowserRouter>
+      <Content />
+    </BrowserRouter>
+  );
+}

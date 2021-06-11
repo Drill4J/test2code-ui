@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export const isPristine = (
+  initial: Record<string, any>,
+  current: Record<string, any>,
+): boolean =>
+  !Object.entries(current).find(([key, value]) => {
+    if (typeof initial[key] === "object") {
+      return !isPristine(initial[key], value);
+    }
+
+    return initial[key] !== value;
+  });

@@ -13,6 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export const formatPackages = (value: string[] = []): string =>
+  value.reduce(
+    (acc: string, item: string, index: number) =>
+      (index !== value.length - 1 && item !== ""
+        ? `${acc + item}\n`
+        : acc + item),
+    "",
+  );

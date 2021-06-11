@@ -14,34 +14,27 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { defaultTest2CodePluginSocket } from "@Drill4J/sockets";
-import { matchPath, useLocation, useParams } from "react-router-dom";
+import { test2CodePluginSocket } from "../test-to-code-plugin-socket";
+import { useQueryParams } from "./use-query-params";
 
-export function useTestToCodeConnection<T>(
-  topic: string,
-  message: Record<string, unknown> = {}
+export function usePreviousBuildCoverage<T>(
+  build: string,
 ): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { pathname } = useLocation();
-  const params = new URLSearchParams(window.location.search);
-  const path = "/:pluginId/:id";
-  const { params: { id = "" } = {} } =
-    matchPath<{ id?: string }>(pathname, { path }) || {};
-
+  const { agentId = "" } = useQueryParams<{ agentId: string }>() || {};
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);
     }
 
-    const unsubscribe = defaultTest2CodePluginSocket.subscribe(
-      topic,
+    const unsubscribe = test2CodePluginSocket.subscribe(
+      "/build/coverage",
       handleDataChange,
       {
         type: "AGENT",
-        agentId: id,
-        buildVersion: params.get("build"),
-        ...message,
-      }
+        agentId,
+        buildVersion: build,
+      },
     );
 
     return () => {

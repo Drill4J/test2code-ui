@@ -13,6 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { parsePackages } from "./parse-packages";
+
+describe("parsePackages", () => {
+  it("should transform to an array containing strings without spaces", () => {
+    expect(parsePackages("foo bar   buzz   bizz  ")).toStrictEqual([
+      "foobarbuzzbizz",
+    ]);
+    expect(parsePackages("                       ")).toStrictEqual([""]);
+    expect(parsePackages("")).toStrictEqual([""]);
+  });
+});

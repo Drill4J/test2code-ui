@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export { CoverageSection } from "./coverage-section";
+export { TestsSection } from "./tests-section";
+export { RisksSection } from "./risks-section";
+export { TestsToRunSection } from "./tests-to-run-section";

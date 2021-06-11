@@ -13,6 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { inputLengthRestriction } from "./input-length-restriction";
+
+describe("inputRestriction", () => {
+  it("should return the cropped string", () => {
+    expect(inputLengthRestriction("123456789", 7)).toEqual("1234567");
+  });
+});

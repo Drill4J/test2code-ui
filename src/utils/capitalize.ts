@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export function capitalize(str?: string): string {
+  if (str === null || str === undefined || str === "") {
+    return "";
+  }
+  if (typeof str !== "string") {
+    return capitalize(String(str));
+  }
+  return `${str[0].toUpperCase()}${str.substr(1).toLowerCase()}`;
+}

@@ -13,6 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { capitalize } from "./capitalize";
+
+export function kebabToPascalCase(str?: string): string {
+  if (str === null || str === undefined || str === "") {
+    return "";
+  }
+  if (typeof str !== "string") {
+    return kebabToPascalCase(String(str));
+  }
+  if (str.indexOf("-") === -1) {
+    // Not a kebab-case
+    return clean(str);
+  }
+  const arr = (str.match(/[^-]+/g) || []).map(clean);
+  return arr.map(capitalize).join("");
+}
+
+function clean(str: string): string {
+  return str.replace(/^\W+/, "").replace(/\W+$/, "");
+}

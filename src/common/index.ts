@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+
+export {
+  COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR, TESTS_TYPES_COLOR,
+} from "./constants";

@@ -13,6 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { convertToSingleSpaces } from "./convert-to-single-spaces";
+
+describe("convertToSingleSpaces", () => {
+  it("should trim left the string", () => {
+    expect(convertToSingleSpaces("   foobarbuzz")).toBe("foobarbuzz");
+  });
+
+  it("should leave only one space between words", () => {
+    expect(convertToSingleSpaces("foo    bar")).toBe("foo bar");
+  });
+
+  it("should leave only one space after words", () => {
+    expect(convertToSingleSpaces("foo    ")).toBe("foo ");
+  });
+});

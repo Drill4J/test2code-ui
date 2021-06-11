@@ -13,6 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import React from "react";
+import ReactDOM from "react-dom";
+import singleSpaReact from "single-spa-react";
+import Root from "./root.component";
+import { HUD as Test2CodeHUD } from "./hud";
+
+const lifecycles = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: Root,
+  domElementGetter: () => document.getElementById("test2code") || document.body,
+});
+
+export const HUD = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: Test2CodeHUD,
+});
+
+export const { bootstrap, mount, unmount } = lifecycles;

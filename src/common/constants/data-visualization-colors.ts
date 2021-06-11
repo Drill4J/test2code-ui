@@ -13,6 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export const DATA_VISUALIZATION_COLORS = {
+  AUTO: "#D599FF",
+  MANUAL: "#88E2F3",
+  OVERLAP: "#8B70CD",
+  BUILD_COVER: "#62adfc",
+  BUILD_OVERLAPPING: "#4f8ac9",
+  SCOPE_COVER: "#aed4fd",
+  SAVED_TIME: "#67D5B5",
+  DURATION_WITH_D4J: "#62ADFC",
+};

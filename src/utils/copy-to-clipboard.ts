@@ -13,6 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export function copyToClipboard(text: string) {
+  const span = document.createElement("span");
+  span.textContent = text;
+
+  span.style.whiteSpace = "pre";
+
+  document.body.appendChild(span);
+
+  const selection = window.getSelection();
+  const range = window.document.createRange();
+  selection && selection.removeAllRanges();
+  range.selectNode(span);
+  selection && selection.addRange(range);
+
+  window.document.execCommand("copy");
+
+  selection && selection.removeAllRanges();
+  window.document.body.removeChild(span);
+}

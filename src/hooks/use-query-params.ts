@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { useLocation } from "react-router-dom";
+import queryString from "query-string";
+
+export function useQueryParams<T>(): T {
+  return queryString.parse(useLocation().search) as unknown as T;
+}

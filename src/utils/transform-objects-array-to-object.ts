@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export const transformObjectsArrayToObject = <T, K extends keyof T>(
+  array: T[],
+  key: T[K] extends string ? K : never,
+) => array.reduce((acc, value) => ({ ...acc, [value[key] as any]: value }), {} as { [key: string]: T });

@@ -13,6 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { capitalize } from "./capitalize";
+
+describe("capitalize", () => {
+  it("should transform provided uppercase string to capitalize", () => {
+    expect(capitalize("FOO")).toBe("Foo");
+  });
+
+  it("should transform provided lowercase string to capitalize", () => {
+    expect(capitalize("foo")).toBe("Foo");
+  });
+
+  it("should return empty string if provide value is empty string", () => {
+    expect(capitalize("")).toBe("");
+  });
+});

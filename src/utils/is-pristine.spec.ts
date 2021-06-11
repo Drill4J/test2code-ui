@@ -13,6 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+import { isPristine } from "./is-pristine";
+
+describe("isPristine", () => {
+  const initial = {
+    foo: "foo",
+    bar: "bar",
+    baz: {
+      foo: "foo",
+    },
+  };
+  const changed = {
+    foo: "foofoo",
+    bar: "bar",
+    baz: {
+      foo: "foo",
+    },
+  };
+
+  it("should return true when both args is equal", () => {
+    expect(isPristine(initial, initial)).toBe(true);
+  });
+
+  it("should return false when both args is not equal", () => {
+    expect(isPristine(initial, changed)).toBe(false);
+  });
+});

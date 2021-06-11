@@ -13,6 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export function convertToPercentage(
+  numerator: number,
+  denominator: number,
+): number {
+  if (
+    denominator === 0 ||
+    Number.isNaN(numerator) ||
+    Number.isNaN(denominator) ||
+    !Number.isFinite(denominator) ||
+    !Number.isFinite(numerator)
+  ) {
+    return 0;
+  }
+  return (numerator / denominator) * 100;
+}
