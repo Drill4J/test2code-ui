@@ -13,4 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { HUD } from "./hud";
+export { AgentHud } from "./agent-hud";
+export { ServiceGroupHud } from "./service-group-hud";

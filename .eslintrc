@@ -36,7 +36,6 @@
     "object-literal-sort-keys": 0,
     "no-empty": 2,
     "no-unused-expression": 0,
-    "linebreak-style": ["error", "unix"],
     "@typescript-eslint/explicit-function-return-type": 0,
     "max-len": ["error", { "code": 140 }],
     "@typescript-eslint/no-use-before-define": 0,

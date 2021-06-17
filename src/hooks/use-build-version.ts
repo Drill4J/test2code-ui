@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
+import { useQueryParams } from "@drill4j/react-hooks";
 import { test2CodePluginSocket } from "../test-to-code-plugin-socket";
-import { useQueryParams } from "./use-query-params";
 
 export function useBuildVersion<T>(
   topic: string,

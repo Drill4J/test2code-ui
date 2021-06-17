@@ -13,5 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type ComponentPropsType<F extends (props: any) => JSX.Element> =
-  F extends (arg: infer A) => any ? A : never;
+import React from "react";
+import "twin.macro";
+
+import { percentFormatter } from "utils";
+import { Count } from "types/count";
+
+interface Props {
+  coveredMethods: Count;
+}
+
+export const MethodsTooltip = ({ coveredMethods: { covered = 0, total = 0 } }: Props) => (
+  <div tw="font-bold text-12 uppercase">
+    <div className="flex items-center w-full">
+      <div>covered methods: {covered}/{total}</div>
+      <div tw="ml-8 text-monochrome-default">{percentFormatter((covered / total) * 100)}%</div>
+    </div>
+  </div>
+);

@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useLocation } from "react-router-dom";
-import queryString from "query-string";
-
-export function useQueryParams<T>(): T {
-  return queryString.parse(useLocation().search) as unknown as T;
-}
+export { CoverageSection } from "./coverage-section";
+export { RisksSection } from "./risks-section";
+export { TestsToRunSection } from "./tests-to-run-section";
+export { TestsSection } from "./tests-section";

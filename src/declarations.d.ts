@@ -62,12 +62,3 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
-
-declare module "@Drill4J/sockets" {
-  // @ts-ignore
-  export const createApi = (apiUrl: string) => ({
-    subscribe(topic: string, callback: (v: any) => unknown, body?: any) {
-      return () => {};
-    },
-  });
-}

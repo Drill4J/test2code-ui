@@ -13,13 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { SystemSettings } from "./system-settings";
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
 
-export interface ServiceGroupEntity {
-  id?: string;
-  name?: string;
-  environment?: string;
-  description?: string;
-  type?: string;
-  systemSettings?: SystemSettings;
-}
+import { PluginCard } from "./plugin-card";
+import {
+  CoverageSection, RisksSection, TestsSection, TestsToRunSection,
+} from "./agent-sections";
+
+export const AgentHud = () => (
+  <BrowserRouter>
+    <PluginCard pluginLink="/need-to-change">
+      <CoverageSection />
+      <TestsSection />
+      <RisksSection />
+      <TestsToRunSection />
+    </PluginCard>
+  </BrowserRouter>
+);

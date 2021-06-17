@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 export { useBuildVersion } from "./use-build-version";
-export { useQueryParams } from "./use-query-params";
 export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export { useServiceGroup } from "./use-service-group";

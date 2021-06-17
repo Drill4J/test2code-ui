@@ -16,8 +16,10 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
+import { BrowserRouter } from "react-router-dom";
 import Root from "./root.component";
-import { HUD as Test2CodeHUD } from "./hud";
+
+import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 
 const lifecycles = singleSpaReact({
   React,
@@ -26,10 +28,16 @@ const lifecycles = singleSpaReact({
   domElementGetter: () => document.getElementById("test2code") || document.body,
 });
 
-export const HUD = singleSpaReact({
+export const AgentHUD = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Test2CodeHUD,
+  rootComponent: Test2CodeAgentHUD,
+});
+
+export const ServiceGroupHUD = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: () => <BrowserRouter><Test2CodeServiceGroupHUD /></BrowserRouter>,
 });
 
 export const { bootstrap, mount, unmount } = lifecycles;

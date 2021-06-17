@@ -14,33 +14,25 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { useQueryParams } from "@drill4j/react-hooks";
 import { test2CodePluginSocket } from "../test-to-code-plugin-socket";
 
-export function usePreviousBuildCoverage<T>(
-  build: string,
-): T | null {
-  const [data, setData] = useState<T | null>(null);
-  const { agentId = "" } = useQueryParams<{ agentId: string }>() || {};
+export function useServiceGroup<Data>(topic: string, serviceGroupId: string, pluginId: string): Data | null {
+  const [data, setData] = useState<Data | null>(null);
+
   useEffect(() => {
-    function handleDataChange(newData: T) {
+    function handleDataChange(newData: Data) {
       setData(newData);
     }
 
     const unsubscribe = test2CodePluginSocket.subscribe(
-      "/build/coverage",
-      handleDataChange,
-      {
-        type: "AGENT",
-        agentId,
-        buildVersion: build,
-      },
+      topic, handleDataChange, { groupId: serviceGroupId, type: "GROUP" },
     );
 
     return () => {
       unsubscribe();
     };
-  }, []);
+    // eslint-disable-next-line
+  }, [serviceGroupId, pluginId]);
 
   return data;
 }

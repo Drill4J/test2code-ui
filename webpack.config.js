@@ -39,7 +39,6 @@ module.exports = (webpackConfigEnv, argv) => {
         types: path.resolve(__dirname, "src/types/"),
         hooks: path.resolve(__dirname, "src/hooks/"),
         components: path.resolve(__dirname, "src/components/"),
-        pages: path.resolve(__dirname, "src/pages/"),
         common: path.resolve(__dirname, "src/common/"),
       },
     },

@@ -18,7 +18,6 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 interface Props {
-  label?: ReactNode;
   children?: ReactNode[];
   pluginLink: string;
 }
@@ -29,10 +28,10 @@ const Sections = styled.div`
       ${tw`border-r border-monochrome-medium-tint`}
   }`;
 
-export const PluginCard = ({ label, children, pluginLink }: Props) => (
+export const PluginCard = ({ children, pluginLink }: Props) => (
   <div tw="w-full h-fit border border-monochrome-medium-tint">
     <div tw="flex justify-between w-full p-4 border-b border-monochrome-medium-tint text-14 leading-20">
-      <span tw="font-bold text-monochrome-default uppercase">{label}</span>
+      <span tw="font-bold text-monochrome-default uppercase">test2code</span>
       <Link className="font-regular link no-underline" to={pluginLink}>View more &gt;</Link>
     </div>
     <Sections>
