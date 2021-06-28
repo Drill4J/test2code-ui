@@ -19,7 +19,7 @@ import { Icons, Tooltip } from "@drill4j/ui-kit";
 import { RISKS_TYPES_COLOR } from "common/constants";
 import { RisksSummary } from "types/risks-summary";
 import { SingleBar, DashboardSection, SectionTooltip } from "components";
-import { convertToPercentage } from "utils";
+import { convertToPercentage } from "@drill4j/common-utils";
 
 interface Props {
   risks?: RisksSummary;

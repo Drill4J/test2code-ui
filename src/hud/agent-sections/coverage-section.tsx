@@ -18,7 +18,7 @@ import { NavLink, useParams } from "react-router-dom";
 import { Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { percentFormatter } from "utils";
+import { percentFormatter } from "@drill4j/common-utils";
 import { BuildSummary } from "types/build-summary";
 import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";

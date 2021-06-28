@@ -14,7 +14,7 @@
     "browser": true
   },
   "root": true,
-  "ignorePatterns": ["src/utils/*spec.ts"],
+  "ignorePatterns": ["src/utils/*spec.ts", "dist"],
   "rules": {
     "drill4j/license-header": ["error"],
     "react/jsx-filename-extension": [

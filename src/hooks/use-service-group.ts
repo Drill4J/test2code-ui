@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { test2CodePluginSocket } from "../test-to-code-plugin-socket";
+
+import { test2CodePluginSocket } from "common/connections";
 
 export function useServiceGroup<Data>(topic: string, serviceGroupId: string, pluginId: string): Data | null {
   const [data, setData] = useState<Data | null>(null);

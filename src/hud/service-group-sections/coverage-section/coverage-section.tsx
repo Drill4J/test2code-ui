@@ -16,7 +16,7 @@
 import React from "react";
 import { Tooltip } from "@drill4j/ui-kit";
 
-import { percentFormatter } from "utils";
+import { percentFormatter } from "@drill4j/common-utils";
 import { Count } from "types/count";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { SingleBar, DashboardSection } from "components";
