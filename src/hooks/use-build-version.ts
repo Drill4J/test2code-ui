@@ -54,7 +54,7 @@ export function useBuildVersion<T>(
       unsubscribe();
     };
   }, [message.buildVersion, message.agentId,
-    message.output, agentId, buildVersion]); // TODO investigate about filters and orderBy as dependency
+    message.output, agentId, buildVersion, topic]); // TODO investigate about filters and orderBy as dependency
 
   return data;
 }

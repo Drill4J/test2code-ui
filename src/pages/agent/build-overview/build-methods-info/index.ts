@@ -13,13 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
-import { CoveragePluginHeader } from "./coverage-plugin-header";
-import "twin.macro";
-
-export const BuildInfo = () => (
-  <div tw="mx-6">
-    <CoveragePluginHeader />
-    build info
-  </div>
-);
+export { BuildMethodsInfo } from "./build-methods-info";

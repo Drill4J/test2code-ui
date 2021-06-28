@@ -20,20 +20,46 @@ import { getAgentRoutePath } from "router";
 import { getPagePath, routes } from "common";
 import { RisksModal } from "components";
 import { QualityGatePane } from "modules";
-import { BuildInfo } from "./build-info";
+import { SessionsManagementPaneProvider } from "modules/sessions-management-pane";
+import { BuildOverview } from "./build-overview";
 import { BaselineBuildModal } from "./baseline-build-modal";
+import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
+import { ScopeOverview } from "./scope-overview";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
     <Switch>
       <Route exact path={getAgentRoutePath("/")} render={() => <Redirect to={getPagePath({ name: "methods" })} />} />
       <Route
-        path={[getAgentRoutePath(routes.methods), getAgentRoutePath("/tests")]}
-        component={BuildInfo}
+        path={[getAgentRoutePath(routes.methods), getAgentRoutePath(routes.tests)]}
+        component={BuildOverview}
       />
+      <Route path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]} component={ScopeOverview} />
     </Switch>
     <Route path={getAgentRoutePath(routes.riskModal)} component={RisksModal} />
     <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
     <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />
+    <Route
+      path={[getAgentRoutePath(routes.sessionManagement),
+        getAgentRoutePath(routes.scopePageSessionManagement),
+        getAgentRoutePath(routes.allScopePageSessionManagement)]}
+      component={SessionsManagementPaneProvider}
+    />
+    <Route
+      path={[getAgentRoutePath(routes.finishScopeModal),
+        getAgentRoutePath(routes.scopePageFinishScopeModal),
+        getAgentRoutePath(routes.allScopePageFinishScopeModal)]}
+      component={FinishScopeModal}
+    />
+    <Route
+      path={[getAgentRoutePath(routes.allScopePageRenameScopeModal),
+        getAgentRoutePath(routes.scopePageRenameScopeModal)]}
+      component={RenameScopeModal}
+    />
+    <Route
+      path={[getAgentRoutePath(routes.scopePageDeleteScopeModal),
+        getAgentRoutePath(routes.allScopePageDeleteScopeModal)]}
+      component={DeleteScopeModal}
+    />
   </div>
 );
