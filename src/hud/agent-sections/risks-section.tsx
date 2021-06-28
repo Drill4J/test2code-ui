@@ -20,7 +20,7 @@ import { BuildSummary } from "types/build-summary";
 import { RISKS_TYPES_COLOR } from "common/constants";
 import { SingleBar, DashboardSection, SectionTooltip } from "components";
 import { useBuildVersion } from "hooks";
-import { convertToPercentage } from "utils";
+import { convertToPercentage } from "@drill4j/common-utils";
 
 export const RisksSection = () => {
   const {

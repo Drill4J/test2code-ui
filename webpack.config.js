@@ -35,11 +35,14 @@ module.exports = (webpackConfigEnv, argv) => {
     ],
     resolve: {
       alias: {
-        utils: path.resolve(__dirname, "src/utils/"),
         types: path.resolve(__dirname, "src/types/"),
         hooks: path.resolve(__dirname, "src/hooks/"),
         components: path.resolve(__dirname, "src/components/"),
         common: path.resolve(__dirname, "src/common/"),
+        pages: path.resolve(__dirname, "src/pages/"),
+        router: path.resolve(__dirname, "src/router/"),
+        modules: path.resolve(__dirname, "src/modules/"),
+        "switch-build-context": path.resolve(__dirname, "src/switch-build-context/"),
       },
     },
   });

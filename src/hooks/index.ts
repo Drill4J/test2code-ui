@@ -14,5 +14,6 @@
  * limitations under the License.
  */
 export { useBuildVersion } from "./use-build-version";
-export { usePreviousBuildCoverage } from "./use-previouse-build-coverage-version";
+export { usePreviousBuildCoverage } from "./use-previouse-build-coverage";
 export { useServiceGroup } from "./use-service-group";
+export { useAgent } from "./use-agent";

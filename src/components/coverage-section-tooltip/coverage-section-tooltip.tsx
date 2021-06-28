@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { camelToTitle, percentFormatter } from "utils";
+import { camelToTitle, percentFormatter } from "@drill4j/common-utils";
 import "twin.macro";
 
 interface Props {

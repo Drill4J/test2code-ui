@@ -17,14 +17,44 @@ import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import { BrowserRouter } from "react-router-dom";
-import Root from "./root.component";
+import axios from "axios";
 
+import { Agent } from "pages";
+import { SwitchBuildContext } from "switch-build-context";
 import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
+
+axios.defaults.baseURL = process.env.REACT_APP_API_HOST
+  ? `http://${process.env.REACT_APP_API_HOST}/api`
+  : "/api";
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (token) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+interface RootComponentProps {
+  switchBuild: (version: string, path: string) => void
+}
 
 const lifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Root,
+  rootComponent: ({ switchBuild }: RootComponentProps) => (
+    <BrowserRouter>
+      <SwitchBuildContext.Provider value={switchBuild}>
+        <Agent />
+      </SwitchBuildContext.Provider>
+    </BrowserRouter>
+  ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
 });
 

@@ -21,7 +21,7 @@ import { SingleBar, DashboardSection, SectionTooltip } from "components";
 import { TESTS_TYPES_COLOR } from "common/constants";
 import { BuildCoverage } from "types/build-coverage";
 import { TestTypes } from "types/test-types";
-import { capitalize, convertToPercentage } from "utils";
+import { capitalize, convertToPercentage } from "@drill4j/common-utils";
 import { TestsInfo } from "types/tests-info";
 import { useBuildVersion } from "hooks";
 

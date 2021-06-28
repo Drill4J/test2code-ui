@@ -17,3 +17,4 @@
 export {
   COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR, TESTS_TYPES_COLOR,
 } from "./constants";
+export { getPagePath, routes } from "./get-page-path";

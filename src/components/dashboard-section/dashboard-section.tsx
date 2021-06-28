@@ -16,7 +16,7 @@
 import React from "react";
 import "twin.macro";
 
-import { spacesToDashes } from "utils";
+import { spacesToDashes } from "@drill4j/common-utils";
 
 interface Props {
   graph?: React.ReactNode | React.ReactNode[];

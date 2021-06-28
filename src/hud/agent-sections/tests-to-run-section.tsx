@@ -17,7 +17,7 @@ import React from "react";
 import { Tooltip } from "@drill4j/ui-kit";
 
 import { SingleBar, DashboardSection, SectionTooltip } from "components";
-import { capitalize, convertToPercentage } from "utils";
+import { capitalize, convertToPercentage } from "@drill4j/common-utils";
 import { TESTS_TO_RUN_TYPES_COLOR } from "common/constants";
 import { BuildSummary } from "types/build-summary";
 import { TestTypes } from "types/test-types";
