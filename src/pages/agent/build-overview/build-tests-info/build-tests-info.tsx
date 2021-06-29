@@ -24,8 +24,9 @@ import { useActiveScope, useAgent, useBuildVersion } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { ActiveScopeInfo } from "modules";
 import { ActiveBuildTestsInfo } from "./active-build-tests-info";
+import { BuildTestsTable } from "./build-tests-table";
 
-const Content = styled.div`
+const Info = styled.div`
   ${tw`grid gap-8`}
   grid-template-columns: 1fr 320px;
   @media screen and (min-width: 1024px) {
@@ -56,19 +57,22 @@ export const BuildTestsInfo = () => {
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
 
   return (
-    <Content>
-      <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
-        <ActiveBuildTestsInfo testsInfo={testsInfo} />
-      </ActiveBuildTestsBar>
-      <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
-        <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-        <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
-      </Cards>
-      {isShowActiveScopeInfo && (
-        <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
-          <ActiveScopeInfo scope={scope} />
-        </div>
-      )}
-    </Content>
+    <>
+      <Info>
+        <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
+          <ActiveBuildTestsInfo testsInfo={testsInfo} />
+        </ActiveBuildTestsBar>
+        <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
+          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
+          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+        </Cards>
+        {isShowActiveScopeInfo && (
+          <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
+            <ActiveScopeInfo scope={scope} />
+          </div>
+        )}
+      </Info>
+      <BuildTestsTable />
+    </>
   );
 };

@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { DashboardSection } from "./dashboard-section";
-export { SectionTooltip } from "./section-tooltip";
-export { SingleBar } from "./single-bar";
-export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
-export { TabsPanel, Tab } from "./tabs";
-export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
+import React from "react";
+import tw, { styled } from "twin.macro";
+
+const Cell = styled.div(({ disabled }: { disabled?: boolean }) => [
+  tw`inline-flex`,
+  tw`leading-16 font-bold text-monochrome-black underline cursor-pointer`,
+  disabled && tw`no-underline cursor-default pointer-events-none`,
+]);
+
+interface Props {
+  children: React.ReactNode;
+  disabled?: boolean;
+  onClick?: () => void;
+}
+
+export const ClickableCell = ({ children, ...rest }: Props) => <Cell {...rest}>{children}</Cell>;

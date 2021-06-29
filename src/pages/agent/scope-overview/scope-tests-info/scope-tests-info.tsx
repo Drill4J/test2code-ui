@@ -22,6 +22,7 @@ import { BuildCoverage } from "types/build-coverage";
 import { useBuildVersion } from "hooks";
 import { useParams } from "react-router-dom";
 import { ActiveBuildTestsInfo } from "../../build-overview/build-tests-info/active-build-tests-info";
+import { ScopeTestsTable } from "./scope-tests-table";
 
 export const ScopeTestsInfo = () => {
   const { scopeId } = useParams<{ scopeId?: string; }>();
@@ -29,12 +30,15 @@ export const ScopeTestsInfo = () => {
   const testsInfo: TestsInfo = byTestType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
 
   return (
-    <div tw="flex flex-col gap-10">
-      <ActiveBuildTestsInfo testsInfo={testsInfo} />
-      <div tw="flex gap-2">
-        <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-        <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+    <>
+      <div tw="flex flex-col gap-10">
+        <ActiveBuildTestsInfo testsInfo={testsInfo} />
+        <div tw="flex gap-2">
+          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
+          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+        </div>
       </div>
-    </div>
+      <ScopeTestsTable />
+    </>
   );
 };

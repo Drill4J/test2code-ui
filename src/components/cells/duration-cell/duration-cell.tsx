@@ -13,11 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { DashboardSection } from "./dashboard-section";
-export { SectionTooltip } from "./section-tooltip";
-export { SingleBar } from "./single-bar";
-export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
-export { TabsPanel, Tab } from "./tabs";
-export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
+import React from "react";
+import "twin.macro";
+import { getDuration } from "@drill4j/common-utils";
+
+interface Props {
+  value?: number;
+}
+
+export const DurationCell = ({ value = 0 }: Props) => {
+  const {
+    hours, seconds, minutes, isLessThenOneSecond,
+  } = getDuration(value);
+
+  return (
+    <div tw="leading-16 text-monochrome-black">
+      {isLessThenOneSecond && <span tw="mr-1 text-monochrome-dark-tint">&#60;</span>}
+      {`${hours}:${minutes}:${isLessThenOneSecond ? "01" : seconds}`}
+    </div>
+  );
+};
