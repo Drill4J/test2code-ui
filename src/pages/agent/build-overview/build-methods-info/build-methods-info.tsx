@@ -26,11 +26,13 @@ import {
   useActiveScope, useAgent, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
+import { TableActionsProvider } from "@drill4j/ui-kit";
 import { PreviousBuildInfo } from "./previous-build-info-types";
 import { BuildCoverageInfo } from "./build-coverage-info";
 import { ActiveBuildCoverageInfo } from "./active-build-coverage-info";
+import { MethodsTable } from "../../methods-table";
 
-const Content = styled.div`
+const Info = styled.div`
   ${tw`grid gap-8`}
   grid-template-columns: 1fr 320px;
   @media screen and (min-width: 1024px) {
@@ -72,68 +74,78 @@ export const BuildMethodsInfo = () => {
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
   const loading = false;
   return (
-    <Content>
-      <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
-        {(scope?.active && status === AGENT_STATUS.ONLINE) ? (
-          <ActiveBuildCoverageInfo
-            buildCoverage={buildCoverage}
-            previousBuildInfo={previousBuildInfo}
-            scope={scope}
-            status={status}
-            loading={loading}
-          />
-        ) : (
-          <BuildCoverageInfo
-            buildCodeCoverage={buildCodeCoverage}
-            previousBuildInfo={previousBuildInfo}
-          />
+    <>
+      <Info>
+        <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
+          {(scope?.active && status === AGENT_STATUS.ONLINE) ? (
+            <ActiveBuildCoverageInfo
+              buildCoverage={buildCoverage}
+              previousBuildInfo={previousBuildInfo}
+              scope={scope}
+              status={status}
+              loading={loading}
+            />
+          ) : (
+            <BuildCoverageInfo
+              buildCodeCoverage={buildCodeCoverage}
+              previousBuildInfo={previousBuildInfo}
+            />
+          )}
+        </ActiveBuildTestsBar>
+        <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
+          <BuildMethodsCard
+            totalCount={all?.total}
+            covered={all?.covered}
+            label="TOTAL METHODS"
+            testContext="deleted-methods"
+          >
+            {deleted?.total} <span tw="font-regular">deleted</span>
+          </BuildMethodsCard>
+          <BuildMethodsCard
+            totalCount={newMethods?.total}
+            covered={newMethods?.covered}
+            label="NEW"
+          >
+            {Boolean(risks?.new) && (
+              <Link
+                tw="link"
+                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=new`}
+                data-test="build-project-methods:link-button:new:risks"
+              >
+                {risks?.new} risks
+              </Link>
+            )}
+          </BuildMethodsCard>
+          <BuildMethodsCard
+            totalCount={modified?.total}
+            covered={modified?.covered}
+            label="MODIFIED"
+          >
+            {Boolean(risks?.modified) && (
+              <Link
+                tw="link"
+                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=modified`}
+                data-test="build-project-methods:link-button:modified:risks"
+              >
+                {risks?.modified} risks
+              </Link>
+            )}
+          </BuildMethodsCard>
+        </Cards>
+        {isShowActiveScopeInfo && (
+          <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
+            <ActiveScopeInfo scope={scope} />
+          </div>
         )}
-      </ActiveBuildTestsBar>
-      <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
-        <BuildMethodsCard
-          totalCount={all?.total}
-          covered={all?.covered}
-          label="TOTAL METHODS"
-          testContext="deleted-methods"
-        >
-          {deleted?.total} <span tw="font-regular">deleted</span>
-        </BuildMethodsCard>
-        <BuildMethodsCard
-          totalCount={newMethods?.total}
-          covered={newMethods?.covered}
-          label="NEW"
-        >
-          {Boolean(risks?.new) && (
-            <Link
-              tw="link"
-              to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=new`}
-              data-test="build-project-methods:link-button:new:risks"
-            >
-              {risks?.new} risks
-            </Link>
-          )}
-        </BuildMethodsCard>
-        <BuildMethodsCard
-          totalCount={modified?.total}
-          covered={modified?.covered}
-          label="MODIFIED"
-        >
-          {Boolean(risks?.modified) && (
-            <Link
-              tw="link"
-              to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=modified`}
-              data-test="build-project-methods:link-button:modified:risks"
-            >
-              {risks?.modified} risks
-            </Link>
-          )}
-        </BuildMethodsCard>
-      </Cards>
-      {isShowActiveScopeInfo && (
-        <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
-          <ActiveScopeInfo scope={scope} />
-        </div>
-      )}
-    </Content>
+      </Info>
+      <TableActionsProvider>
+        <MethodsTable
+          topic="/build/coverage/packages"
+          associatedTestsTopic="/build"
+          classesTopicPrefix="build"
+          showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
+        />
+      </TableActionsProvider>
+    </>
   );
 };

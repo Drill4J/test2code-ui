@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { DashboardSection } from "./dashboard-section";
-export { SectionTooltip } from "./section-tooltip";
-export { SingleBar } from "./single-bar";
-export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
-export { TabsPanel, Tab } from "./tabs";
-export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
+import { DurationCell } from "./duration-cell";
+import { CompoundCell } from "./compound-cell";
+import { CoverageCell } from "./coverage-cell";
+import { ClickableCell } from "./clickable-cell";
+import { TestStatusCell } from "./test-status-cell";
+
+export const Cells = {
+  Duration: DurationCell,
+  Compound: CompoundCell,
+  Clickable: ClickableCell,
+  Coverage: CoverageCell,
+  TestStatus: TestStatusCell,
+};

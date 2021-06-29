@@ -13,11 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { DashboardSection } from "./dashboard-section";
-export { SectionTooltip } from "./section-tooltip";
-export { SingleBar } from "./single-bar";
-export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
-export { TabsPanel, Tab } from "./tabs";
-export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
+import React from "react";
+import "twin.macro";
+
+interface Props {
+  icon?: React.ReactNode;
+  type?: "primary" | "secondary";
+  value: any;
+  testContext: string;
+}
+
+export const NameCell = ({ icon, value, testContext }: Props) => (
+  <span tw="flex items-center">
+    {icon && <div tw="flex items-center mr-2">{icon}</div>}
+    <div className="text-ellipsis text-14 text-monochrome-black" data-test={`name-cell:content:${testContext}`} title={value}>{value}</div>
+  </span>
+);
