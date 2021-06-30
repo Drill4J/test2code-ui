@@ -16,6 +16,7 @@
 import React from "react";
 import { Route, Switch, Redirect } from "react-router";
 import { getAgentRoutePath } from "router";
+import "twin.macro";
 
 import { getPagePath, routes } from "common";
 import { RisksModal } from "components";
@@ -25,17 +26,21 @@ import { BuildOverview } from "./build-overview";
 import { BaselineBuildModal } from "./baseline-build-modal";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
 import { ScopeOverview } from "./scope-overview";
+import { AllScopes } from "./all-scopes";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
-    <Switch>
-      <Route exact path={getAgentRoutePath("/")} render={() => <Redirect to={getPagePath({ name: "methods" })} />} />
-      <Route
-        path={[getAgentRoutePath(routes.methods), getAgentRoutePath(routes.tests)]}
-        component={BuildOverview}
-      />
-      <Route path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]} component={ScopeOverview} />
-    </Switch>
+    <div tw="mx-6">
+      <Switch>
+        <Route exact path={getAgentRoutePath("/")} render={() => <Redirect to={getPagePath({ name: "methods" })} />} />
+        <Route
+          path={[getAgentRoutePath(routes.methods), getAgentRoutePath(routes.tests)]}
+          component={BuildOverview}
+        />
+        <Route path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]} component={ScopeOverview} />
+        <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+      </Switch>
+    </div>
     <Route path={getAgentRoutePath(routes.riskModal)} component={RisksModal} />
     <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
     <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />

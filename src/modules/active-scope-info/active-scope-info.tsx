@@ -40,9 +40,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
   } = scope || {};
   const { pathname } = useLocation();
   const {
-    params: {
-      agentId = "", buildVersion = "", pluginId = "", tab = "",
-    } = {},
+    params: { tab = "" } = {},
   } = matchPath<{agentId: string, buildVersion: string, pluginId: string; tab: string }>(pathname,
     { path: getAgentRoutePath("/:tab") }) || {};
   const { push } = useHistory();
@@ -77,7 +75,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
         </Link>
         <Link
           className="link"
-          to={getPagePath({ name: "finishScopeModal", params: { tab } })}
+          to={getPagePath({ name: "allScopes" })}
           data-test="active-scope-info:all-scopes-link"
         >
           All Scopes

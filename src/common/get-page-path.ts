@@ -30,8 +30,11 @@ interface Routes {
   scopePageFinishScopeModal: "tab" | "scopeId"
   scopePageRenameScopeModal: "tab" | "scopeId"
   scopePageDeleteScopeModal: "tab" | "scopeId"
-  allScopePageFinishScopeModal: void
-  allScopePageSessionManagement: void
+  allScopes: void
+  allScopePageFinishScopeModal: "scopeId"
+  allScopePageSessionManagement: "scopeId"
+  allScopePageRenameScopeModal: "scopeId"
+  allScopePageDeleteScopeModal: "scopeId"
 }
 
 export const routes = {
@@ -49,10 +52,11 @@ export const routes = {
   scopePageDeleteScopeModal: "/scopes/:scopeId/:tab/delete-scope-modal",
   scopePageSessionManagement: "/scopes/:scopeId/:tab/session-management",
   scopePageFinishScopeModal: "/scopes/:scopeId/:tab/finish-scope-modal",
-  allScopePageSessionManagement: "/scopes/session-management",
-  allScopePageFinishScopeModal: "/scopes/finish-scope-modal",
-  allScopePageRenameScopeModal: "/scopes/rename-scope-modal",
-  allScopePageDeleteScopeModal: "/scopes/delete-scope-modal",
+  allScopes: "/scopes",
+  allScopePageSessionManagement: "/scopes/:scopeId/session-management",
+  allScopePageFinishScopeModal: "/scopes/:scopeId/finish-scope-modal",
+  allScopePageRenameScopeModal: "/scopes/:scopeId/rename-scope-modal",
+  allScopePageDeleteScopeModal: "/scopes/:scopeId/delete-scope-modal",
 };
 
 export const router = createRouter<Routes>(routes);

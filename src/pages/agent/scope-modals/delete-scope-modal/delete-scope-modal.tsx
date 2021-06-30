@@ -30,7 +30,7 @@ import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
   const scope = useBuildVersion<ActiveScope>("/active-scope");
-  const { agentId = "", buildVersion = "" } = useParams<{ agentId?: string; buildVersion?: string; }>();
+  const { agentId = "" } = useParams<{ agentId?: string; buildVersion?: string; }>();
   const { pluginId = "" } = useParams<{ pluginId: string }>();
   const { push, location: { pathname = "" } } = useHistory();
   const [errorMessage, setErrorMessage] = useState("");
