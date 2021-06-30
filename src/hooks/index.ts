@@ -22,3 +22,5 @@ export { useActiveSessions } from "./use-active-sessions";
 export { useAgentRouteParams } from "./use-agent-route-params";
 export { useGroupData } from "./use-group-data";
 export { useGroupRouteParams } from "./use-group-route-params";
+export { useAdminConnection } from "./use-admin-connection";
+export { useBaselineVersion } from "./use-baseline-version";
