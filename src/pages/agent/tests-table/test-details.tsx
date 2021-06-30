@@ -17,9 +17,7 @@ import React from "react";
 import {
   Icons, Stub, Table, useTableActionsState,
 } from "@drill4j/ui-kit";
-import {
-  Route, useParams, Link,
-} from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import queryString from "query-string";
 import "twin.macro";
 
@@ -29,7 +27,7 @@ import { Cells } from "components";
 
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";
-import { useAgent } from "../../../hooks";
+import { useAgent } from "hooks";
 
 interface Props {
   tests: FilterList<TestCoverageInfo>;
@@ -37,7 +35,7 @@ interface Props {
 }
 
 export const TestDetails = ({
-  topicCoveredMethodsByTest, tests: { items: tests = [], totalCount = 0, filteredCount = 0 },
+  tests: { items: tests = [], totalCount = 0, filteredCount = 0 },
 }: Props) => {
   const {
     pluginId, buildVersion, agentId, scopeId, tab,

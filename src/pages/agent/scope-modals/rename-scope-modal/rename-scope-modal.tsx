@@ -30,12 +30,6 @@ import { useCloseModal } from "@drill4j/common-hooks";
 import { renameScope } from "../../api";
 import { useBuildVersion } from "../../../../hooks";
 
-interface Props {
-  isOpen: boolean;
-  onToggle: (value: boolean) => void;
-  scope: ActiveScope | null;
-}
-
 const validateScope = composeValidators(
   required("name", "Scope Name"),
   sizeLimit({

@@ -24,14 +24,13 @@ import { Tab, TabsPanel } from "components";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
-import { MethodsTable } from "../methods-table";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2 text-monochrome-black`}
 `;
 
 export const BuildOverview = () => (
-  <div tw="mx-6">
+  <>
     <CoveragePluginHeader />
     <div tw="mb-4 border-b border-monochrome-medium-tint">
       <TabsPanel path={getAgentRoutePath("/:tab")}>
@@ -51,5 +50,5 @@ export const BuildOverview = () => (
     </div>
     <Route path={getAgentRoutePath(routes.methods)} component={BuildMethodsInfo} />
     <Route path={getAgentRoutePath(routes.tests)} component={BuildTestsInfo} />
-  </div>
+  </>
 );

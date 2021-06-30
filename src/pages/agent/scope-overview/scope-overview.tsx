@@ -34,7 +34,7 @@ import { ScopeTestsInfo } from "./scope-tests-info";
 
 export const ScopeOverview = () => {
   const {
-    pluginId = "", scopeId = "", buildVersion = "", tab = "", agentId = "",
+    scopeId = "", buildVersion = "", agentId = "",
   } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
@@ -47,7 +47,7 @@ export const ScopeOverview = () => {
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
       ? <Redirect to={{ pathname: getPagePath({ name: "methods" }) }} />
       : (
-        <div tw="px-6">
+        <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
           <div tw="flex flex-col items-center w-full border-b border-monochrome-medium-tint">
             <div tw="mb-4 w-full border-b border-monochrome-medium-tint">
@@ -71,7 +71,7 @@ export const ScopeOverview = () => {
               <Route path={getAgentRoutePath(routes.scopeTests)} component={ScopeTestsInfo} />
             </div>
           </div>
-        </div>
+        </>
       )
   );
 };
