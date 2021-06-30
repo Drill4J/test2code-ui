@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { matchPath, useLocation } from "react-router-dom";
 import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
+import { agentPluginPath } from "router";
 
 interface Message {
   agentId?: string;
@@ -32,7 +33,10 @@ export function useBuildVersion<T>(
   message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { agentId = "", buildVersion = "" } = useParams<{ agentId?: string; buildVersion?: string }>() || {};
+  const { pathname } = useLocation();
+  const { params: { agentId = "", buildVersion = "" } = {} } = matchPath<{ agentId?: string; buildVersion?: string }>(pathname, {
+    path: agentPluginPath,
+  }) || {};
 
   useEffect(() => {
     function handleDataChange(newData: T) {

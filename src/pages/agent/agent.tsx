@@ -18,7 +18,7 @@ import { Route, Switch, Redirect } from "react-router";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 
-import { getPagePath, routes } from "common";
+import { getPagePath, modalsRoutes, routes } from "common";
 import { RisksModal } from "components";
 import { QualityGatePane } from "modules";
 import { SessionsManagementPaneProvider } from "modules/sessions-management-pane";
@@ -45,25 +45,19 @@ export const Agent = () => (
     <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
     <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />
     <Route
-      path={[getAgentRoutePath(routes.sessionManagement),
-        getAgentRoutePath(routes.scopePageSessionManagement),
-        getAgentRoutePath(routes.allScopePageSessionManagement)]}
+      path={`*${modalsRoutes.sessionManagement}`}
       component={SessionsManagementPaneProvider}
     />
     <Route
-      path={[getAgentRoutePath(routes.finishScopeModal),
-        getAgentRoutePath(routes.scopePageFinishScopeModal),
-        getAgentRoutePath(routes.allScopePageFinishScopeModal)]}
+      path={`*${modalsRoutes.finishScope}`}
       component={FinishScopeModal}
     />
     <Route
-      path={[getAgentRoutePath(routes.allScopePageRenameScopeModal),
-        getAgentRoutePath(routes.scopePageRenameScopeModal)]}
+      path={`*${modalsRoutes.renameScope}`}
       component={RenameScopeModal}
     />
     <Route
-      path={[getAgentRoutePath(routes.scopePageDeleteScopeModal),
-        getAgentRoutePath(routes.allScopePageDeleteScopeModal)]}
+      path={`*${modalsRoutes.deleteScope}`}
       component={DeleteScopeModal}
     />
   </div>

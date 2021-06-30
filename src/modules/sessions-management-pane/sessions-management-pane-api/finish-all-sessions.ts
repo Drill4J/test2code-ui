@@ -15,13 +15,14 @@
  */
 import axios from "axios";
 import { Message } from "@drill4j/types-admin";
+import { PLUGIN_ID } from "common";
 
 export const finishAllSession = async (
-  { agentId, agentType, pluginId }: { agentId: string, agentType: string, pluginId: string },
+  { agentId, agentType }: { agentId: string, agentType: string },
   showGeneralAlertMessage: (message: Message) => void,
 ): Promise<void> => {
   try {
-    await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${pluginId}/dispatch-action`, {
+    await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "STOP_ALL",
     });
     showGeneralAlertMessage && showGeneralAlertMessage({

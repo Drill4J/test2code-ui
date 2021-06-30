@@ -14,24 +14,24 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { useHistory, useParams, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {
   Button, Popup, GeneralAlerts, Spinner,
 } from "@drill4j/ui-kit";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { useCloseModal } from "@drill4j/common-hooks";
+import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useBuildVersion } from "hooks";
+import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { ActiveSessions } from "types/active-sessions";
-import { getPagePath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
-  const scope = useBuildVersion<ActiveScope>("/active-scope");
-  const { agentId = "" } = useParams<{ agentId?: string; buildVersion?: string; }>();
-  const { pluginId = "" } = useParams<{ pluginId: string }>();
+  const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
   const { push, location: { pathname = "" } } = useHistory();
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -64,7 +64,7 @@ export const DeleteScopeModal = () => {
                 You are about to delete an active scope, but at least one active<br />
                 session has been detected. First, you need to finish it in <br />
                 <Link
-                  to={getPagePath({ name: "scopePageSessionManagement", params: { scopeId: scope.id, tab: "methods" } })}
+                  to={getModalPath({ name: "sessionManagement" })}
                   tw="link font-bold text-14"
                   onClick={() => {}}
                 >

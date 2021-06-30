@@ -27,7 +27,7 @@ import tw, { styled } from "twin.macro";
 import { AGENT_STATUS } from "common/constants";
 import { useBuildVersion } from "hooks";
 import { ActiveScope } from "types/active-scope";
-import { getPagePath } from "common";
+import { getModalPath } from "common";
 import { getAgentRoutePath } from "router";
 import { toggleScope } from "../../api";
 import { ScopeStatus } from "../scope-status";
@@ -48,7 +48,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const { pathname } = useLocation();
   const {
     params: {
-      pluginId = "", scopeId = "", agentId = "", tab = "",
+      pluginId = "", scopeId = "", agentId = "",
     } = {},
   } = matchPath<{ pluginId: string, scopeId: string, agentId?: string; tab?: string; }>(pathname, {
     path: getAgentRoutePath("/scopes/:scopeId/:tab"),
@@ -79,7 +79,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
       label: "Sessions Management",
       icon: "ManageSessions",
       Content: ({ children }: { children: JSX.Element }) => (
-        <Link to={getPagePath({ name: "scopePageSessionManagement", params: { tab, scopeId } })}>
+        <Link to={getModalPath({ name: "sessionManagement" })}>
           {children}
         </Link>
       ),
@@ -87,12 +87,12 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
     {
       label: "Rename",
       icon: "Edit",
-      onClick: () => push(getPagePath({ name: "scopePageRenameScopeModal", params: { tab, scopeId } })),
+      onClick: () => push(getModalPath({ name: "renameScope", params: { scopeId } })),
     },
     {
       label: "Delete",
       icon: "Delete",
-      onClick: () => push(getPagePath({ name: "scopePageDeleteScopeModal", params: { tab, scopeId } })),
+      onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId } })),
     },
   ].filter(Boolean);
   const loading = false;
@@ -118,7 +118,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
             className="flex gap-x-2 mr-4"
             primary
             size="large"
-            onClick={() => push(getPagePath({ name: "scopePageFinishScopeModal", params: { scopeId, tab } }))}
+            onClick={() => push(getModalPath({ name: "finishScope" }))}
             data-test="scope-info:finish-scope-button"
           >
             <Icons.Complete />

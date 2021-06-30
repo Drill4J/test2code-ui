@@ -15,7 +15,6 @@
  */
 import React from "react";
 import { Icons, Menu } from "@drill4j/ui-kit";
-import { useParams } from "react-router-dom";
 import { capitalize } from "@drill4j/common-utils";
 import { Message } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
@@ -54,7 +53,6 @@ const Actions = styled.div<{disabled?: boolean}>`
 export const SessionInfo = ({
   testType, isGlobal, isRealtime, sessionId, agentId, showGeneralAlertMessage,
 }: Props) => {
-  const { pluginId = "" } = useParams<{ pluginId: string }>();
   const { bulkOperation } = useSessionsPaneState();
   const disabled = bulkOperation.isProcessing;
 
@@ -65,8 +63,8 @@ export const SessionInfo = ({
         <Actions disabled={disabled}>
           <Menu
             items={[
-              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId, pluginId, showGeneralAlertMessage)(sessionId) },
-              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId, pluginId, showGeneralAlertMessage)(sessionId) },
+              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId, showGeneralAlertMessage)(sessionId) },
+              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId, showGeneralAlertMessage)(sessionId) },
             ]}
           />
         </Actions>

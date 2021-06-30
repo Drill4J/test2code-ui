@@ -15,8 +15,8 @@
  */
 
 export {
-  COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR, TESTS_TYPES_COLOR,
+  COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR, TESTS_TYPES_COLOR, AGENT_STATUS, PLUGIN_ID,
 } from "./constants";
 export { getPagePath, routes } from "./get-page-path";
 export { defaultAdminSocket, test2CodePluginSocket } from "./connections";
-export { modalRoutes, getModalPath } from "./get-modal-path";
+export { modalsRoutes, getModalPath } from "./get-modal-path";

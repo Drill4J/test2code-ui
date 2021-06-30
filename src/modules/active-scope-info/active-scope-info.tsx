@@ -15,15 +15,14 @@
  */
 import React from "react";
 import {
-  Link, matchPath, useHistory, useLocation,
+  Link, useHistory,
 } from "react-router-dom";
 import { Button, Icons, SessionIndicator } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { getPagePath } from "common";
-import { getAgentRoutePath } from "router";
+import { getModalPath, getPagePath } from "common";
 
 interface Props {
   scope: ActiveScope | null;
@@ -38,11 +37,6 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
     id: scopeId = "",
     coverage: { percentage = 0 } = {},
   } = scope || {};
-  const { pathname } = useLocation();
-  const {
-    params: { tab = "" } = {},
-  } = matchPath<{agentId: string, buildVersion: string, pluginId: string; tab: string }>(pathname,
-    { path: getAgentRoutePath("/:tab") }) || {};
   const { push } = useHistory();
   return (
     <Content>
@@ -59,7 +53,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
         tw="flex justify-center gap-x-2 w-68"
         primary
         size="large"
-        onClick={() => push(getPagePath({ name: "finishScopeModal", params: { tab } }))}
+        onClick={() => push(getModalPath({ name: "finishScope" }))}
         data-test="active-scope-info:finish-scope-button"
       >
         <Icons.Complete />
@@ -82,7 +76,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
         </Link>
         <Link
           tw="link"
-          to={getPagePath({ name: "sessionManagement", params: { tab } })}
+          to={getModalPath({ name: "sessionManagement" })}
           data-test="active-scope-info:sessions-management-link"
         >
           Sessions Management

@@ -16,7 +16,6 @@
 import React, { useState } from "react";
 import { Form, Field } from "react-final-form";
 
-import { useParams } from "react-router-dom";
 import {
   Button, FormGroup, Popup, GeneralAlerts, Spinner, Fields,
   composeValidators, sizeLimit, required,
@@ -26,9 +25,9 @@ import "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { useCloseModal } from "@drill4j/common-hooks";
+import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import { renameScope } from "../../api";
-import { useBuildVersion } from "../../../../hooks";
+import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
 
 const validateScope = composeValidators(
   required("name", "Scope Name"),
@@ -38,9 +37,9 @@ const validateScope = composeValidators(
 );
 
 export const RenameScopeModal = () => {
-  const { agentId = "" } = useParams<{agentId?: string}>();
-  const { pluginId = "" } = useParams<{ pluginId: string }>();
-  const scope = useBuildVersion<ActiveScope>("/active-scope");
+  const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
   const [errorMessage, setErrorMessage] = useState("");
   const closeModal = useCloseModal("/rename-scope-modal");
 

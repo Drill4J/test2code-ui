@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { useParams, useHistory, Link } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
 import {
   Button, Inputs, Popup, GeneralAlerts, Spinner,
 } from "@drill4j/ui-kit";
@@ -24,14 +24,16 @@ import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
-import { useBuildVersion } from "hooks";
-import { getPagePath } from "common";
+import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { getModalPath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
   const scope = useBuildVersion<ActiveScope>("/active-scope");
-  const { agentId = "", buildVersion = "", tab = "" } = useParams<{ agentId?: string; buildVersion?: string; tab?: string; }>();
+  const {
+    agentId = "", buildVersion = "", pluginId = "",
+  } = useAgentRouteParams();
   const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [errorMessage, setErrorMessage] = useState("");
   const [ignoreScope, setIgnoreScope] = useState(false);
@@ -39,7 +41,6 @@ export const FinishScopeModal = () => {
   const testsCount = scope
     ? (scope.coverage.byTestType || []).reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0)
     : 0;
-  const { pluginId = "" } = useParams<{ pluginId: string }>();
   const { push, location: { pathname = "" } } = useHistory();
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
   const closeModal = useCloseModal("/finish-scope-modal");
@@ -69,7 +70,7 @@ export const FinishScopeModal = () => {
               First, you need to finish it in&nbsp;
               <Link
                 tw="link font-bold text-14"
-                to={getPagePath({ name: "sessionManagement", params: { tab } })}
+                to={getModalPath({ name: "sessionManagement" })}
               >
                 Sessions Management
               </Link>

@@ -16,17 +16,17 @@
 import * as queryString from "querystring";
 
 interface Routes {
-  sessionManager: void;
+  sessionManagement: void;
   renameScope: "scopeId";
   deleteScope: "scopeId";
   finishScope: "scopeId";
 }
 
-export const modalRoutes = {
-  sessionManager: "/session-management",
-  renameScope: "/rename-scope",
-  deleteScope: "/delete-scope",
-  finishScope: "/finish-scope",
+export const modalsRoutes = {
+  sessionManagement: "/session-management-modal",
+  renameScope: "/rename-scope-modal",
+  deleteScope: "/delete-scope-modal",
+  finishScope: "/finish-scope-modal",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
@@ -40,13 +40,13 @@ export const getModalPath = <AppPages extends Routes,
   PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string => {
   const pluginLocation = window.location.pathname.split("/").slice(0, 7).join("/");
   const pluginRoute = window.location.pathname.split("/").slice(7).join("/");
-  let path = `${pluginLocation}/${pluginRoute}${modalRoutes[name as
-    keyof typeof modalRoutes]}/?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
-  Object.values(modalRoutes).forEach((value) => {
+  let path = `${pluginLocation}/${pluginRoute}${modalsRoutes[name as
+    keyof typeof modalsRoutes]}/?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
+  Object.values(modalsRoutes).forEach((value) => {
     if (pluginRoute.includes(value)) {
       const [newPluginRoute] = pluginRoute.split(value);
-      path = `${pluginLocation}/${newPluginRoute}${modalRoutes[name as
-        keyof typeof modalRoutes]}/?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
+      path = `${pluginLocation}/${newPluginRoute}${modalsRoutes[name as
+        keyof typeof modalsRoutes]}/?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
     }
   });
   return path;

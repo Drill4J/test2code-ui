@@ -28,7 +28,7 @@ import { TestTypeSummary } from "types/test-type-summary";
 import { useActiveScope, useAgent, useBuildVersion } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { getPagePath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
 
@@ -157,13 +157,13 @@ export const AllScopes = () => {
                     active && {
                       label: "Finish Scope",
                       icon: "Check",
-                      onClick: () => push(getPagePath({ name: "allScopePageFinishScopeModal", params: { scopeId: id } })),
+                      onClick: () => push(getModalPath({ name: "finishScope" })),
                     },
                     active && {
                       label: "Sessions Management",
                       icon: "ManageSessions",
                       Content: ({ children }: { children: JSX.Element }) => (
-                        <Link to={getPagePath({ name: "allScopePageSessionManagement", params: { scopeId: id } })}>
+                        <Link to={getModalPath({ name: "sessionManagement" })}>
                           {children}
                         </Link>
                       ),
@@ -189,12 +189,12 @@ export const AllScopes = () => {
                     {
                       label: "Rename",
                       icon: "Edit",
-                      onClick: () => push(getPagePath({ name: "allScopePageRenameScopeModal", params: { scopeId: id } })),
+                      onClick: () => push(getModalPath({ name: "renameScope", params: { scopeId: id } })),
                     },
                     {
                       label: "Delete",
                       icon: "Delete",
-                      onClick: () => push(getPagePath({ name: "allScopePageDeleteScopeModal", params: { scopeId: id } })),
+                      onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId: id } })),
                     },
                   ].filter(Boolean);
                   return (
