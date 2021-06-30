@@ -15,28 +15,26 @@
  */
 import React from "react";
 import { Modal } from "@drill4j/ui-kit";
-import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
+import { useQueryParams, useCloseModal } from "@drill4j/common-hooks";
 import "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion } from "hooks";
+import { useParams } from "react-router-dom";
 import { ItemInfo } from "./item-info";
 import { TestsList } from "./tests-list";
 
-interface Props {
-  associatedTestsTopic: string;
-}
-
-export const AssociatedTestModal = ({ associatedTestsTopic }: Props) => {
+export const AssociatedTestModal = () => {
+  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
   const params = useQueryParams<{testId?: string; treeLevel?: number}>();
-  const associatedTests = useBuildVersion<AssociatedTests>(`${associatedTestsTopic}/tests/associatedWith/${
+  const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
   const {
     tests = [], packageName = "", className: testClassName = "", methodName = "",
   } = associatedTests;
   const testsMap = tests.reduce((acc, { type = "", name = "" }) =>
     ({ ...acc, [type]: acc[type] ? [...acc[type], name] : [name] }), {} as { [testType: string]: string[] });
-  const closeModal = useCloseModal("/associated-test-modal");
+  const closeModal = useCloseModal("/associated-tests-modal");
 
   return (
     <Modal isOpen onToggle={closeModal}>

@@ -20,13 +20,13 @@ import "twin.macro";
 
 import { getPagePath, modalsRoutes, routes } from "common";
 import { RisksModal } from "components";
-import { QualityGatePane } from "modules";
-import { SessionsManagementPaneProvider } from "modules/sessions-management-pane";
+import { QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal } from "modules";
 import { BuildOverview } from "./build-overview";
 import { BaselineBuildModal } from "./baseline-build-modal";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
+import { CoveredMethodsByTestSidebar } from "../../modules/covered-methods-by-test-sidebar";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -59,6 +59,14 @@ export const Agent = () => (
     <Route
       path={`*${modalsRoutes.deleteScope}`}
       component={DeleteScopeModal}
+    />
+    <Route
+      path={`*${modalsRoutes.associatedTests}`}
+      component={AssociatedTestModal}
+    />
+    <Route
+      path={`*${modalsRoutes.coveredMethods}`}
+      component={CoveredMethodsByTestSidebar}
     />
   </div>
 );

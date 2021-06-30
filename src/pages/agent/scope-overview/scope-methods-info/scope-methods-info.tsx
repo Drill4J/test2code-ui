@@ -85,7 +85,6 @@ export const ScopeMethodsInfo = () => {
       <TableActionsProvider>
         <MethodsTable
           topic={`/build/scopes/${scopeId}/coverage/packages`}
-          associatedTestsTopic={`/build/scopes/${scopeId}`}
           classesTopicPrefix={`build/scopes/${scopeId}`}
           showCoverageIcon={Boolean(activeSessions.length) || Boolean(scope?.sessionsFinished)}
         />

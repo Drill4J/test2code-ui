@@ -135,7 +135,6 @@ export const BuildMethodsInfo = () => {
       <TableActionsProvider>
         <MethodsTable
           topic="/build/coverage/packages"
-          associatedTestsTopic="/build"
           classesTopicPrefix="build"
           showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
         />

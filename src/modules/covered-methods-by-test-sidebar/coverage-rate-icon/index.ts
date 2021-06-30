@@ -13,7 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { QualityGatePane } from "./quality-gate-pane";
-export { ActiveScopeInfo } from "./active-scope-info";
-export { SessionsManagementPaneProvider, SessionsManagementPane } from "./sessions-management-pane";
-export { AssociatedTestModal } from "./associated-test-modal";
+export { CoverageRateIcon } from "./coverage-rate-icon";
