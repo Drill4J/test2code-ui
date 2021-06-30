@@ -27,7 +27,7 @@ import { AGENT_STATUS } from "common/constants";
 import { useAgent, useBuildVersion, usePreviousBuildCoverage } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { getPagePath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { getAgentRoutePath } from "router";
 import { useSwitchBuild } from "switch-build-context";
 import { ActionSection } from "./action-section";
@@ -133,7 +133,7 @@ export const CoveragePluginHeader = () => {
       >
         {risksCount > 0 ? (
           <Count
-            to={getPagePath({ name: "riskModal", params: { tab: "methods" } })}
+            to={getModalPath({ name: "risks", params: { filter: "all" } })}
             className="flex items-center w-full"
             data-test="action-section:count:risks"
           >

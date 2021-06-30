@@ -20,6 +20,7 @@ interface Routes {
   renameScope: "scopeId";
   deleteScope: "scopeId";
   finishScope: "scopeId";
+  risks: "filter";
 }
 
 export const modalsRoutes = {
@@ -27,6 +28,7 @@ export const modalsRoutes = {
   renameScope: "/rename-scope-modal",
   deleteScope: "/delete-scope-modal",
   finishScope: "/finish-scope-modal",
+  risks: "/risks-modal",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {

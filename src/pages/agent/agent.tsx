@@ -41,7 +41,7 @@ export const Agent = () => (
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
       </Switch>
     </div>
-    <Route path={getAgentRoutePath(routes.riskModal)} component={RisksModal} />
+    <Route path={`*${modalsRoutes.risks}`} component={RisksModal} />
     <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
     <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />
     <Route
