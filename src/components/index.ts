@@ -18,3 +18,6 @@ export { SectionTooltip } from "./section-tooltip";
 export { SingleBar } from "./single-bar";
 export { CoverageSectionTooltip } from "./coverage-section-tooltip";
 export { RisksModal } from "./risks-modal";
+export { TabsPanel, Tab } from "./tabs";
+export { BuildMethodsCard, BuildTestsCard } from "./cards";
+export { Cells } from "./cells";

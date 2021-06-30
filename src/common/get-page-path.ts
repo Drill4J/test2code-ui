@@ -19,18 +19,40 @@ interface Routes {
   methods: void
   tests: void
   testsToRun: void
+  scopeMethods: "scopeId"
+  scopeTests: "scopeId"
   riskModal: "tab"
   qualityGate: "tab"
   baselineBuildModal: "tab"
+  sessionManagement: "tab"
+  finishScopeModal: "tab"
+  scopePageSessionManagement: "tab" | "scopeId"
+  scopePageFinishScopeModal: "tab" | "scopeId"
+  scopePageRenameScopeModal: "tab" | "scopeId"
+  scopePageDeleteScopeModal: "tab" | "scopeId"
+  allScopePageFinishScopeModal: void
+  allScopePageSessionManagement: void
 }
 
 export const routes = {
   methods: "/methods",
   tests: "/tests",
+  scopeMethods: "/scopes/:scopeId/methods",
+  scopeTests: "/scopes/:scopeId/tests",
   testsToRun: "/tests-to-tun",
   riskModal: "/:tab/risks-modal",
   qualityGate: "/:tab/quality-gate",
   baselineBuildModal: "/:tab/baseline-build-modal",
+  sessionManagement: "/:tab/session-management",
+  finishScopeModal: "/:tab/finish-scope-modal",
+  scopePageRenameScopeModal: "/scopes/:scopeId/:tab/rename-scope-modal",
+  scopePageDeleteScopeModal: "/scopes/:scopeId/:tab/delete-scope-modal",
+  scopePageSessionManagement: "/scopes/:scopeId/:tab/session-management",
+  scopePageFinishScopeModal: "/scopes/:scopeId/:tab/finish-scope-modal",
+  allScopePageSessionManagement: "/scopes/session-management",
+  allScopePageFinishScopeModal: "/scopes/finish-scope-modal",
+  allScopePageRenameScopeModal: "/scopes/rename-scope-modal",
+  allScopePageDeleteScopeModal: "/scopes/delete-scope-modal",
 };
 
 export const router = createRouter<Routes>(routes);

@@ -15,14 +15,13 @@
  */
 import React from "react";
 import {
-  Link, Route, matchPath, useLocation,
+  Link, matchPath, useLocation,
 } from "react-router-dom";
 import {
   Button, Icons, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { QualityGatePane } from "modules";
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { AGENT_STATUS } from "common/constants";
 import { useAgent, useBuildVersion, usePreviousBuildCoverage } from "hooks";

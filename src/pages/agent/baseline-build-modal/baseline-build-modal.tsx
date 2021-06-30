@@ -24,7 +24,7 @@ import { useAgent, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
 import { useCloseModal } from "@drill4j/common-hooks";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { toggleBaseline } from "../build-info/api";
+import { toggleBaseline } from "../api";
 
 const Message = styled.div`
   ${tw`text-14 leading-20`}

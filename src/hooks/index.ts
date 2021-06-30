@@ -17,3 +17,5 @@ export { useBuildVersion } from "./use-build-version";
 export { usePreviousBuildCoverage } from "./use-previouse-build-coverage";
 export { useServiceGroup } from "./use-service-group";
 export { useAgent } from "./use-agent";
+export { useActiveScope } from "./use-active-scope";
+export { useActiveSessions } from "./use-active-sessions";
