@@ -15,31 +15,18 @@
  */
 import React from "react";
 import {
-  Link, matchPath, useLocation,
+  Link,
 } from "react-router-dom";
 import { Icons, Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { useAgent, useBuildVersion } from "hooks";
+import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
 import { ParentBuild } from "types/parent-build";
-import { getPagePath } from "common";
-import { getAgentRoutePath } from "router";
+import { getModalPath } from "common";
 
 export const BaselineTooltip = () => {
-  const { pathname } = useLocation();
-  const {
-    params: {
-      agentId = "", buildVersion = "", tab = "",
-    } = {},
-  } = matchPath<{
-    pluginId: string;
-    agentId: string;
-    buildVersion: string;
-    tab: string;
-  }>(pathname, {
-    path: getAgentRoutePath("/:tab"),
-  }) || {};
+  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
 
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
@@ -51,7 +38,7 @@ export const BaselineTooltip = () => {
   return (
     <Tooltip message={<div tw="text-center">{info}</div>} position="top-center">
       <FlagWrapper
-        to={getPagePath({ name: "baselineBuildModal", params: { tab } })}
+        to={getModalPath({ name: "baselineBuildModal" })}
         active={Boolean(isActiveBuild && previousBuildVersion)}
         disabled={disabled}
       >

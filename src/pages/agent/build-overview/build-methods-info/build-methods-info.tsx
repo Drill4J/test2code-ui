@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 import React from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { ParentBuild } from "@drill4j/types-admin";
+import { TableActionsProvider } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { BuildMethodsCard } from "components";
@@ -23,10 +24,10 @@ import { ActiveScopeInfo } from "modules";
 import { Methods } from "types/methods";
 import { BuildCoverage } from "types/build-coverage";
 import {
-  useActiveScope, useAgent, useBuildVersion, usePreviousBuildCoverage,
+  useActiveScope, useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+import { getModalPath } from "common";
 import { PreviousBuildInfo } from "./previous-build-info-types";
 import { BuildCoverageInfo } from "./build-coverage-info";
 import { ActiveBuildCoverageInfo } from "./active-build-coverage-info";
@@ -51,14 +52,7 @@ const ActiveBuildTestsBar = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 export const BuildMethodsInfo = () => {
-  const {
-    pluginId = "", agentId = "", buildVersion = "", tab = "",
-  } = useParams<{
-    pluginId: string;
-    agentId: string;
-    buildVersion: string;
-    tab: string;
-  }>();
+  const { agentId = "" } = useAgentRouteParams();
   const scope = useActiveScope();
   const {
     all, new: newMethods, modified, deleted, risks,
@@ -109,7 +103,7 @@ export const BuildMethodsInfo = () => {
             {Boolean(risks?.new) && (
               <Link
                 tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=new`}
+                to={getModalPath({ name: "risks", params: { filter: "new" } })}
                 data-test="build-project-methods:link-button:new:risks"
               >
                 {risks?.new} risks
@@ -124,7 +118,7 @@ export const BuildMethodsInfo = () => {
             {Boolean(risks?.modified) && (
               <Link
                 tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/risks-modal/?filter=modified`}
+                to={getModalPath({ name: "risks", params: { filter: "modified" } })}
                 data-test="build-project-methods:link-button:modified:risks"
               >
                 {risks?.modified} risks
@@ -141,7 +135,6 @@ export const BuildMethodsInfo = () => {
       <TableActionsProvider>
         <MethodsTable
           topic="/build/coverage/packages"
-          associatedTestsTopic="/build"
           classesTopicPrefix="build"
           showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
         />

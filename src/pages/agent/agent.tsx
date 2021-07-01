@@ -18,15 +18,15 @@ import { Route, Switch, Redirect } from "react-router";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 
-import { getPagePath, routes } from "common";
+import { getPagePath, modalsRoutes, routes } from "common";
 import { RisksModal } from "components";
-import { QualityGatePane } from "modules";
-import { SessionsManagementPaneProvider } from "modules/sessions-management-pane";
+import { QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal } from "modules";
 import { BuildOverview } from "./build-overview";
 import { BaselineBuildModal } from "./baseline-build-modal";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
+import { CoveredMethodsByTestSidebar } from "../../modules/covered-methods-by-test-sidebar";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -41,30 +41,14 @@ export const Agent = () => (
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
       </Switch>
     </div>
-    <Route path={getAgentRoutePath(routes.riskModal)} component={RisksModal} />
-    <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
-    <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />
-    <Route
-      path={[getAgentRoutePath(routes.sessionManagement),
-        getAgentRoutePath(routes.scopePageSessionManagement),
-        getAgentRoutePath(routes.allScopePageSessionManagement)]}
-      component={SessionsManagementPaneProvider}
-    />
-    <Route
-      path={[getAgentRoutePath(routes.finishScopeModal),
-        getAgentRoutePath(routes.scopePageFinishScopeModal),
-        getAgentRoutePath(routes.allScopePageFinishScopeModal)]}
-      component={FinishScopeModal}
-    />
-    <Route
-      path={[getAgentRoutePath(routes.allScopePageRenameScopeModal),
-        getAgentRoutePath(routes.scopePageRenameScopeModal)]}
-      component={RenameScopeModal}
-    />
-    <Route
-      path={[getAgentRoutePath(routes.scopePageDeleteScopeModal),
-        getAgentRoutePath(routes.allScopePageDeleteScopeModal)]}
-      component={DeleteScopeModal}
-    />
+    <Route path={`*${modalsRoutes.risks}`} component={RisksModal} />
+    <Route path={`*${modalsRoutes.baselineBuildModal}`} component={BaselineBuildModal} />
+    <Route path={`*${modalsRoutes.qualityGate}`} component={QualityGatePane} />
+    <Route path={`*${modalsRoutes.sessionManagement}`} component={SessionsManagementPaneProvider} />
+    <Route path={`*${modalsRoutes.finishScope}`} component={FinishScopeModal} />
+    <Route path={`*${modalsRoutes.renameScope}`} component={RenameScopeModal} />
+    <Route path={`*${modalsRoutes.deleteScope}`} component={DeleteScopeModal} />
+    <Route path={`*${modalsRoutes.associatedTests}`} component={AssociatedTestModal} />
+    <Route path={`*${modalsRoutes.coveredMethods}`} component={CoveredMethodsByTestSidebar} />
   </div>
 );

@@ -15,14 +15,14 @@
  */
 import axios, { AxiosResponse } from "axios";
 
+import { PLUGIN_ID } from "common";
 import { StartSessionPayloadTypes } from "./start-session-payload-types";
 
 export function startServiceGroupSessions(
   serviceGroupId: string,
-  pluginId: string,
 ) {
   return ({ sessionId, isGlobal, isRealtime }: StartSessionPayloadTypes): Promise<AxiosResponse> => axios.post(`/groups/${
-    serviceGroupId}/plugins/${pluginId}/dispatch-action`, {
+    serviceGroupId}/plugins/${PLUGIN_ID}/dispatch-action`, {
     type: "START",
     payload: { sessionId: sessionId.trim(), isGlobal, isRealtime },
   });

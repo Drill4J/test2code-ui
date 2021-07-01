@@ -15,7 +15,7 @@
  */
 import React, { useEffect } from "react";
 import { Form } from "react-final-form";
-import { useParams } from "react-router-dom";
+import { matchPath, useLocation } from "react-router-dom";
 import {
   Modal, GeneralAlerts, Icons, composeValidators,
   sizeLimit,
@@ -29,6 +29,7 @@ import { Message } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { useActiveSessions } from "hooks";
+import { agentPluginPath, groupPluginPath } from "router";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,
@@ -56,11 +57,16 @@ export const SessionsManagementPane = () => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation, isNewSession } = useSessionsPaneState();
   const { generalAlertMessage, showGeneralAlertMessage } = useGeneralAlertMessage();
+  const { pathname } = useLocation();
   const {
-    agentId = "", serviceGroupId = "", pluginId = "", buildVersion = "",
-  } = useParams<{ agentId: string; serviceGroupId: string; pluginId: string; buildVersion: string}>();
-  const agentType = serviceGroupId ? "ServiceGroup" : "Agent";
-  const id = agentId || serviceGroupId;
+    params: {
+      agentId = "", groupId = "", buildVersion = "",
+    } = {},
+  } = matchPath<{ agentId: string; groupId: string; buildVersion: string}>(pathname, {
+    path: [agentPluginPath, groupPluginPath],
+  }) || {};
+  const agentType = groupId ? "ServiceGroup" : "Agent";
+  const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
   useEffect(() => showGeneralAlertMessage(null), [isNewSession]);
@@ -78,8 +84,8 @@ export const SessionsManagementPane = () => {
             form.change("isRealtime", false);
           };
           return agentId
-            ? handleStartAgentSession({ id: agentId, pluginId }, values, resetForm, showGeneralAlertMessage)
-            : handleStartServiceGroupSession({ id: serviceGroupId, pluginId }, values, resetForm, showGeneralAlertMessage);
+            ? handleStartAgentSession({ id: agentId }, values, resetForm, showGeneralAlertMessage)
+            : handleStartServiceGroupSession({ id: groupId }, values, resetForm, showGeneralAlertMessage);
         }) as any}
         validate={validateManageSessionsPane}
         render={({
@@ -100,7 +106,7 @@ export const SessionsManagementPane = () => {
             {isNewSession && (
               <ManagementNewSession
                 agentId={agentId}
-                serviceGroupId={serviceGroupId}
+                serviceGroupId={groupId}
                 hasGlobalSession={hasGlobalSession}
               />
             )}
@@ -133,7 +139,6 @@ export const SessionsManagementPane = () => {
                 <BulkOperationWarning
                   agentId={id}
                   agentType={agentType}
-                  pluginId={pluginId}
                   showGeneralAlertMessage={showGeneralAlertMessage}
                 />
               ) : (
@@ -157,13 +162,12 @@ type ShowGeneralAlertMessage = (incomingMessage: Message | null) => void;
 
 interface Identifiers {
   id: string;
-  pluginId: string
 }
 
-async function handleStartServiceGroupSession({ id, pluginId }: Identifiers,
+async function handleStartServiceGroupSession({ id }: Identifiers,
   values: FormValues, resetForm: () => void, showGeneralAlertMessage: ShowGeneralAlertMessage) {
   try {
-    const response = await startServiceGroupSessions(id, pluginId)(values);
+    const response = await startServiceGroupSessions(id)(values);
     const serviceWithError = response?.data.find((service: any) => service?.code === 409);
     if (serviceWithError && serviceWithError?.data?.fieldErrors) {
       return handleFieldErrors(serviceWithError?.data?.fieldErrors);
@@ -186,10 +190,10 @@ async function handleStartServiceGroupSession({ id, pluginId }: Identifiers,
   return handleFieldErrors([]);
 }
 
-async function handleStartAgentSession({ id, pluginId }: Identifiers,
+async function handleStartAgentSession({ id }: Identifiers,
   values: FormValues, resetForm: () => void, showGeneralAlertMessage: ShowGeneralAlertMessage) {
   try {
-    await startAgentSession(id, pluginId)(values);
+    await startAgentSession(id)(values);
     resetForm();
     showGeneralAlertMessage({ type: "SUCCESS", text: "New session has been started successfully." });
   } catch (error) {

@@ -17,8 +17,7 @@ import React from "react";
 import {
   Icons, Stub, Table, useTableActionsState,
 } from "@drill4j/ui-kit";
-import { useParams, Link } from "react-router-dom";
-import queryString from "query-string";
+import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { capitalize } from "@drill4j/common-utils";
@@ -27,7 +26,8 @@ import { Cells } from "components";
 
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";
-import { useAgent } from "hooks";
+import { useAgent, useAgentRouteParams } from "hooks";
+import { getModalPath } from "../../../common";
 
 interface Props {
   tests: FilterList<TestCoverageInfo>;
@@ -37,9 +37,7 @@ interface Props {
 export const TestDetails = ({
   tests: { items: tests = [], totalCount = 0, filteredCount = 0 },
 }: Props) => {
-  const {
-    pluginId, buildVersion, agentId, scopeId, tab,
-  } = useParams<{buildVersion?: string; pluginId?: string; agentId?: string; scopeId?: string; tab?: string; }>();
+  const { agentId } = useAgentRouteParams();
   const { status } = useAgent(agentId);
   const { search } = useTableActionsState();
   const [searchQuery] = search;
@@ -100,12 +98,7 @@ export const TestDetails = ({
                 data-test="test-actions:view-curl:id"
                 disabled={!value}
               >
-                <Link to={scopeId
-                  ? `/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${
-                    scopeId}/${tab}/covered-methods-modal?${queryString.stringify({ coveredMethods: covered, testId: id })}`
-                  : `/full-page/${agentId}/${buildVersion}/${
-                    pluginId}/dashboard/${tab}/covered-methods-modal?${queryString.stringify({ coveredMethods: covered, testId: id })}`}
-                >
+                <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
                   {value}
                 </Link>
               </Cells.Clickable>

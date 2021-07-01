@@ -20,8 +20,7 @@ import {
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
-import { Route, useParams, Link } from "react-router-dom";
-import queryString from "query-string";
+import { Link } from "react-router-dom";
 import { useExpanded, useTable } from "react-table";
 import "twin.macro";
 
@@ -31,18 +30,16 @@ import { Package } from "types/package";
 
 import { Cells } from "components";
 import { NameCell } from "./name-cell";
-import { AssociatedTestModal } from "./associated-test-modal";
 import { CoverageCell } from "./coverage-cell";
+import { getModalPath } from "../../../common";
 
 interface Props {
   topic: string;
-  associatedTestsTopic: string;
   classesTopicPrefix: string;
   showCoverageIcon: boolean;
 }
 
 export const MethodsTable = ({
-  associatedTestsTopic,
   classesTopicPrefix,
   topic,
   showCoverageIcon,
@@ -54,24 +51,6 @@ export const MethodsTable = ({
     filteredCount = 0,
   } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: search, orderBy: sort, output: "LIST" }) ||
   {};
-
-  const {
-    buildVersion, agentId, pluginId, scopeId, tab,
-  } =
-    useParams<{
-      agentId?: string;
-      pluginId?: string;
-      buildVersion?: string;
-      scopeId?: string;
-      tab: string;
-    }>();
-
-  const getModalLink = (id: string, treeLevel: number) =>
-    (scopeId
-      ? `/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${scopeId}/${tab}/associated-test-modal/
-    ?${queryString.stringify({ testId: id, treeLevel })}`
-      : `/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/${tab}/associated-test-modal/
-    ?${queryString.stringify({ testId: id, treeLevel })}`);
 
   const columns = [
     {
@@ -168,7 +147,7 @@ export const MethodsTable = ({
           disabled={!value}
         >
           {value ? (
-            <Link to={getModalLink(row.original.id, 1)}>{value}</Link>
+            <Link to={getModalPath({ name: "associatedTests", params: { testId: row.original.id, treeLevel: "1" } })}>{value}</Link>
           ) : (
             "n/a"
           )}
@@ -244,15 +223,6 @@ export const MethodsTable = ({
               />
             )
           }
-        />
-        <Route
-          path={[
-            "/full-page/:agentId/:buildVersion/:pluginId/dashboard/:tab/associated-test-modal",
-            "/full-page/:agentId/:buildVersion/:pluginId/scope/:scopeId/:tab/associated-test-modal",
-          ]}
-          render={() => (
-            <AssociatedTestModal associatedTestsTopic={associatedTestsTopic} />
-          )}
         />
       </div>
     </div>

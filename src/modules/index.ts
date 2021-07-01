@@ -16,3 +16,4 @@
 export { QualityGatePane } from "./quality-gate-pane";
 export { ActiveScopeInfo } from "./active-scope-info";
 export { SessionsManagementPaneProvider, SessionsManagementPane } from "./sessions-management-pane";
+export { AssociatedTestModal } from "./associated-test-modal";

@@ -22,13 +22,12 @@ import { abortAllSession, finishAllSession } from "../sessions-management-pane-a
 
 interface Props {
   agentType: string;
-  pluginId: string;
   agentId: string;
   showGeneralAlertMessage: (message: Message) => void;
 }
 
 export const BulkOperationWarning = ({
-  agentId, agentType, pluginId, showGeneralAlertMessage,
+  agentId, agentType, showGeneralAlertMessage,
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation: { operationType } } = useSessionsPaneState();
@@ -40,7 +39,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await abortAllSession({ agentType, pluginId, agentId }, showGeneralAlertMessage);
+            await abortAllSession({ agentType, agentId }, showGeneralAlertMessage);
             dispatch(setBulkOperation("abort", false));
           }}
           handleDecline={() => dispatch(setBulkOperation(operationType, false))}
@@ -53,7 +52,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await finishAllSession({ agentType, pluginId, agentId }, showGeneralAlertMessage);
+            await finishAllSession({ agentType, agentId }, showGeneralAlertMessage);
             dispatch(setBulkOperation("finish", false));
           }}
           handleDecline={() => dispatch(setBulkOperation("finish", false))}

@@ -13,10 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { TESTS_TYPES_COLOR } from "./tests-types-color";
-export { TESTS_TO_RUN_TYPES_COLOR } from "./tests-to-run-types-color";
-export { COVERAGE_TYPES_COLOR } from "./coverage-types-color";
-export { RISKS_TYPES_COLOR } from "./risks-types-color";
-export { DATA_VISUALIZATION_COLORS } from "./data-visualization-colors";
-export { AGENT_STATUS } from "./agent-status";
-export { PLUGIN_ID } from "./plugin-id";
+export { CoverageRateIcon } from "./coverage-rate-icon";
