@@ -42,7 +42,7 @@ module.exports = (webpackConfigEnv, argv) => {
         pages: path.resolve(__dirname, "src/pages/"),
         router: path.resolve(__dirname, "src/router/"),
         modules: path.resolve(__dirname, "src/modules/"),
-        "switch-build-context": path.resolve(__dirname, "src/switch-build-context/"),
+        contexts: path.resolve(__dirname, "src/contexts/"),
       },
     },
   });

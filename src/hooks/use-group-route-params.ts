@@ -13,4 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { SwitchBuildContext, useSwitchBuild } from "./switch-build-context";
+import { matchPath, useLocation } from "react-router-dom";
+import { groupPluginPath } from "../router";
+
+export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {
+  const { pathname } = useLocation();
+  const { params: { groupId = "", pluginId = "" } = {} } = matchPath<{
+    groupId?: string; pluginId: string }>(pathname, { path: groupPluginPath }) || {};
+  return { groupId, pluginId };
+};

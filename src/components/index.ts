@@ -22,3 +22,4 @@ export { TabsPanel, Tab } from "./tabs";
 export { BuildMethodsCard, BuildTestsCard } from "./cards";
 export { Cells } from "./cells";
 export { adminUrl, TestsToRunUrl, getTestsToRunURL } from "./tests-to-run-url";
+export { Column as ListColumn, List } from "./list";
