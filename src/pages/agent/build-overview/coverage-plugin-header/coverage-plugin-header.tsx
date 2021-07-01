@@ -14,39 +14,26 @@
  * limitations under the License.
  */
 import React from "react";
-import {
-  Link, matchPath, useLocation,
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Button, Icons, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
-import { AGENT_STATUS } from "common/constants";
-import { useAgent, useBuildVersion, usePreviousBuildCoverage } from "hooks";
+import { AGENT_STATUS, PLUGIN_ID } from "common/constants";
+import {
+  useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+} from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { getModalPath, getPagePath } from "common";
-import { getAgentRoutePath } from "router";
+import { getModalPath } from "common";
 import { useSwitchBuild } from "switch-build-context";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
-  const { pathname } = useLocation();
-  const {
-    params: {
-      pluginId = "", agentId = "", buildVersion = "", tab = "",
-    } = {},
-  } = matchPath<{
-    pluginId: string;
-    agentId: string;
-    buildVersion: string;
-    tab: string;
-  }>(pathname, {
-    path: getAgentRoutePath("/:tab"),
-  }) || {};
+  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
 
   const { buildVersion: activeBuildVersion = "", status: agentStatus } = useAgent(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
@@ -155,7 +142,7 @@ export const CoveragePluginHeader = () => {
       >
         {previousBuildTests.length > 0 ? (
           <Count
-            to={`/full-page/${agentId}/${buildVersion}/${pluginId}/tests-to-run`}
+            to={`/full-page/${agentId}/${buildVersion}/${PLUGIN_ID}/tests-to-run`}
             className="flex items-center w-full"
             data-test="action-section:count:tests-to-run"
           >
