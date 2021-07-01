@@ -21,13 +21,13 @@ import {
 import tw, { styled } from "twin.macro";
 
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
-import { AGENT_STATUS, PLUGIN_ID } from "common/constants";
+import { AGENT_STATUS } from "common/constants";
 import {
   useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { getModalPath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { useSwitchBuild } from "switch-build-context";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
@@ -142,7 +142,7 @@ export const CoveragePluginHeader = () => {
       >
         {previousBuildTests.length > 0 ? (
           <Count
-            to={`/full-page/${agentId}/${buildVersion}/${PLUGIN_ID}/tests-to-run`}
+            to={getPagePath({ name: "testsToRun" })}
             className="flex items-center w-full"
             data-test="action-section:count:tests-to-run"
           >
@@ -153,7 +153,8 @@ export const CoveragePluginHeader = () => {
           <div
             tw="text-20 leading-32 text-monochrome-black"
             data-test="action-section:no-value:tests-to-run"
-          >&ndash;
+          >
+            &ndash;
           </div>
         )}
       </ActionSection>
