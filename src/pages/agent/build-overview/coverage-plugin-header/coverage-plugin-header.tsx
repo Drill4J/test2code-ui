@@ -104,7 +104,7 @@ export const CoveragePluginHeader = () => {
           </div>
           {!configured ? (
             <StatusWrapper
-              to={getPagePath({ name: "qualityGate", params: { tab } })}
+              to={getModalPath({ name: "qualityGate" })}
               data-test="coverage-plugin-header:configure-button"
             >
               <Button
@@ -116,7 +116,7 @@ export const CoveragePluginHeader = () => {
             </StatusWrapper>
           ) : (
             <StatusWrapper
-              to={getPagePath({ name: "qualityGate", params: { tab } })}
+              to={getModalPath({ name: "qualityGate" })}
               status={status}
             >
               <StatusIcon />

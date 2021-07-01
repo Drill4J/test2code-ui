@@ -17,6 +17,8 @@ import * as queryString from "querystring";
 
 interface Routes {
   sessionManagement: void;
+  qualityGate: void;
+  baselineBuildModal: void;
   renameScope: "scopeId";
   deleteScope: "scopeId";
   finishScope: "scopeId";
@@ -33,6 +35,8 @@ export const modalsRoutes = {
   risks: "/risks-modal",
   associatedTests: "/associated-tests-modal",
   coveredMethods: "/covered-methods-modal",
+  qualityGate: "/quality-gate",
+  baselineBuildModal: "/baseline-build-modal",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {

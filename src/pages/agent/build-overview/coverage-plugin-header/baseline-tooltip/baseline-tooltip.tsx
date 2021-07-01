@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 import { useAgent, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
 import { ParentBuild } from "types/parent-build";
-import { getPagePath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { getAgentRoutePath } from "router";
 
 export const BaselineTooltip = () => {
@@ -51,7 +51,7 @@ export const BaselineTooltip = () => {
   return (
     <Tooltip message={<div tw="text-center">{info}</div>} position="top-center">
       <FlagWrapper
-        to={getPagePath({ name: "baselineBuildModal", params: { tab } })}
+        to={getModalPath({ name: "baselineBuildModal" })}
         active={Boolean(isActiveBuild && previousBuildVersion)}
         disabled={disabled}
       >

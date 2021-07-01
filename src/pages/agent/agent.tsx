@@ -42,31 +42,13 @@ export const Agent = () => (
       </Switch>
     </div>
     <Route path={`*${modalsRoutes.risks}`} component={RisksModal} />
-    <Route path={getAgentRoutePath(routes.baselineBuildModal)} component={BaselineBuildModal} />
-    <Route path={getAgentRoutePath(routes.qualityGate)} component={QualityGatePane} />
-    <Route
-      path={`*${modalsRoutes.sessionManagement}`}
-      component={SessionsManagementPaneProvider}
-    />
-    <Route
-      path={`*${modalsRoutes.finishScope}`}
-      component={FinishScopeModal}
-    />
-    <Route
-      path={`*${modalsRoutes.renameScope}`}
-      component={RenameScopeModal}
-    />
-    <Route
-      path={`*${modalsRoutes.deleteScope}`}
-      component={DeleteScopeModal}
-    />
-    <Route
-      path={`*${modalsRoutes.associatedTests}`}
-      component={AssociatedTestModal}
-    />
-    <Route
-      path={`*${modalsRoutes.coveredMethods}`}
-      component={CoveredMethodsByTestSidebar}
-    />
+    <Route path={`*${modalsRoutes.baselineBuildModal}`} component={BaselineBuildModal} />
+    <Route path={`*${modalsRoutes.qualityGate}`} component={QualityGatePane} />
+    <Route path={`*${modalsRoutes.sessionManagement}`} component={SessionsManagementPaneProvider} />
+    <Route path={`*${modalsRoutes.finishScope}`} component={FinishScopeModal} />
+    <Route path={`*${modalsRoutes.renameScope}`} component={RenameScopeModal} />
+    <Route path={`*${modalsRoutes.deleteScope}`} component={DeleteScopeModal} />
+    <Route path={`*${modalsRoutes.associatedTests}`} component={AssociatedTestModal} />
+    <Route path={`*${modalsRoutes.coveredMethods}`} component={CoveredMethodsByTestSidebar} />
   </div>
 );

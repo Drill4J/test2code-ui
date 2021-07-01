@@ -21,9 +21,6 @@ interface Routes {
   testsToRun: void
   scopeMethods: "scopeId"
   scopeTests: "scopeId"
-  riskModal: "tab"
-  qualityGate: "tab"
-  baselineBuildModal: "tab"
   allScopes: void
 }
 
@@ -33,9 +30,6 @@ export const routes = {
   scopeMethods: "/scopes/:scopeId/methods",
   scopeTests: "/scopes/:scopeId/tests",
   testsToRun: "/tests-to-tun",
-  riskModal: "/:tab/risks-modal",
-  qualityGate: "/:tab/quality-gate",
-  baselineBuildModal: "/:tab/baseline-build-modal",
   allScopes: "/scopes",
 };
 
