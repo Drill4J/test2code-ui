@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { DashboardSection } from "./dashboard-section";
-export { SectionTooltip } from "./section-tooltip";
-export { SingleBar } from "./single-bar";
-export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
-export { TabsPanel, Tab } from "./tabs";
-export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
-export { adminUrl, TestsToRunUrl, getTestsToRunURL } from "./tests-to-run-url";
+import { adminUrl } from "./admin-url";
+
+export function getTestsToRunURL(agentId: string, pluginId: string, agentType?: string) {
+  const openApiUrl = 'curl -i -H "accept: application/json" -H "content-type: application/json" '
+    + `-w "\\n" -X GET ${adminUrl}api/${agentType === "ServiceGroup"
+      ? "groups" : "agents"}/${agentId}/plugins/${pluginId}/data/tests-to-run`;
+
+  return openApiUrl;
+}

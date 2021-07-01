@@ -20,13 +20,18 @@ import "twin.macro";
 
 import { getPagePath, modalsRoutes, routes } from "common";
 import { RisksModal } from "components";
-import { QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal } from "modules";
+import {
+  QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal, CoveredMethodsByTestSidebar,
+} from "modules";
+import { TableActionsProvider } from "@drill4j/ui-kit";
 import { BuildOverview } from "./build-overview";
 import { BaselineBuildModal } from "./baseline-build-modal";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
-import { CoveredMethodsByTestSidebar } from "../../modules/covered-methods-by-test-sidebar";
+
+import { TestsToRun } from "./tests-to-run";
+import { GetSuggestedTestsModal } from "./tests-to-run/tests-to-run-header/get-suggested-tests-modal";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -39,6 +44,14 @@ export const Agent = () => (
         />
         <Route path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]} component={ScopeOverview} />
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route
+          path={getAgentRoutePath(routes.testsToRun)}
+          render={() => (
+            <TableActionsProvider>
+              <TestsToRun />
+            </TableActionsProvider>
+          )}
+        />
       </Switch>
     </div>
     <Route path={`*${modalsRoutes.risks}`} component={RisksModal} />
@@ -50,5 +63,9 @@ export const Agent = () => (
     <Route path={`*${modalsRoutes.deleteScope}`} component={DeleteScopeModal} />
     <Route path={`*${modalsRoutes.associatedTests}`} component={AssociatedTestModal} />
     <Route path={`*${modalsRoutes.coveredMethods}`} component={CoveredMethodsByTestSidebar} />
+    <Route
+      path={`*${modalsRoutes.getSuggestedTests}`}
+      render={() => <GetSuggestedTestsModal agentType="Agent" />}
+    />
   </div>
 );

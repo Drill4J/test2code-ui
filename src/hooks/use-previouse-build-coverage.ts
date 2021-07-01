@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { useQueryParams } from "@drill4j/common-hooks";
 
 import { test2CodePluginSocket } from "common/connections";
+import { useAgentRouteParams } from "./use-agent-route-params";
 
-export function usePreviousBuildCoverage<T>(
-  build: string,
-): T | null {
+export function usePreviousBuildCoverage<T>(build: string): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { agentId = "" } = useQueryParams<{ agentId: string }>() || {};
+  const { agentId = "" } = useAgentRouteParams();
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);
@@ -41,7 +39,7 @@ export function usePreviousBuildCoverage<T>(
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [build]);
 
   return data;
 }
