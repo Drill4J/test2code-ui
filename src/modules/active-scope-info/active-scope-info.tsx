@@ -23,6 +23,7 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { getModalPath, getPagePath } from "common";
+import { useActiveSessions, useAgentRouteParams } from "hooks";
 
 interface Props {
   scope: ActiveScope | null;
@@ -33,6 +34,8 @@ const Content = styled.div`
 `;
 
 export const ActiveScopeInfo = ({ scope }: Props) => {
+  const { agentId, buildVersion } = useAgentRouteParams();
+  const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const {
     id: scopeId = "",
     coverage: { percentage = 0 } = {},
@@ -46,7 +49,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
           <div tw="text-32 leading-40 text-monochrome-black" data-test="active-scope-info:scope-coverage">
             {`${percentFormatter(percentage)}%`}
           </div>
-          <SessionIndicator active={false} />
+          <SessionIndicator active={Boolean(activeSessions?.length)} />
         </div>
       </div>
       <Button

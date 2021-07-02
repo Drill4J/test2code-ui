@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 import axios from "axios";
+import { PLUGIN_ID } from "common";
 
 export function toggleScope(
   agentId: string,
-  pluginId: string,
   { onSuccess, onError }: { onSuccess?: () => void; onError?: (message: string) => void } = {},
 ) {
   return async (scopeId: string) => {
     try {
-      await axios.post(`/agents/${agentId}/plugins/${pluginId}/dispatch-action`, {
+      await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
         type: "TOGGLE_SCOPE",
         payload: { scopeId },
       });

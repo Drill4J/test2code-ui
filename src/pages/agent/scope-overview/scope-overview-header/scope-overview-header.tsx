@@ -20,15 +20,14 @@ import {
 import { AgentStatus } from "@drill4j/types-admin";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import {
-  Link, matchPath, useHistory, useLocation,
+  Link, useHistory, useParams,
 } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AGENT_STATUS } from "common/constants";
-import { useBuildVersion } from "hooks";
+import { useActiveSessions, useAgentRouteParams, useBuildVersion } from "hooks";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
-import { getAgentRoutePath } from "router";
 import { toggleScope } from "../../api";
 import { ScopeStatus } from "../scope-status";
 
@@ -45,14 +44,9 @@ interface Props {
 
 export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const { push } = useHistory();
-  const { pathname } = useLocation();
-  const {
-    params: {
-      pluginId = "", scopeId = "", agentId = "",
-    } = {},
-  } = matchPath<{ pluginId: string, scopeId: string, agentId?: string; tab?: string; }>(pathname, {
-    path: getAgentRoutePath("/scopes/:scopeId/:tab"),
-  }) || {};
+  const { agentId, buildVersion } = useAgentRouteParams();
+  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
+  const activeSessionsQuantity = useActiveSessions("Agent", agentId, buildVersion)?.length;
   const {
     name = "", active = false, enabled = false, started = 0, finished = 0,
   } = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`) || {};
@@ -60,7 +54,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
     !active && {
       label: `${enabled ? "Ignore" : "Include"} in stats`,
       icon: enabled ? "EyeCrossed" : "Eye",
-      onClick: () => toggleScope(agentId, pluginId, {
+      onClick: () => toggleScope(agentId, {
         onSuccess: () => {
           sendNotificationEvent({
             type: "SUCCESS",
@@ -95,7 +89,6 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
       onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId } })),
     },
   ].filter(Boolean);
-  const loading = false;
 
   return (
     <Header>
@@ -108,8 +101,8 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
       </div>
       {status === AGENT_STATUS.ONLINE && (
         <div className="flex items-center w-full">
-          {active && <SessionIndicator tw="mr-2" active={loading} />}
-          <ScopeStatus active={active} loading={loading} enabled={enabled} started={started} finished={finished} />
+          {active && <SessionIndicator tw="mr-2" active={Boolean(activeSessionsQuantity)} />}
+          <ScopeStatus active={active} loading={Boolean(activeSessionsQuantity)} enabled={enabled} started={started} finished={finished} />
         </div>
       )}
       <div className="flex justify-end items-center w-full">
