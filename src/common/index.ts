@@ -20,3 +20,4 @@ export {
 export { getPagePath, routes } from "./get-page-path";
 export { defaultAdminSocket, test2CodePluginSocket } from "./connections";
 export { modalsRoutes, getModalPath } from "./get-modal-path";
+export { getGroupModalPath, groupModalsRoutes } from "./get-group-modal";

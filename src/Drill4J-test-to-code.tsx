@@ -19,9 +19,10 @@ import singleSpaReact from "single-spa-react";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 
-import { Agent } from "pages";
-import { SwitchBuildContext } from "switch-build-context";
+import { Agent, Group } from "pages";
+import { SwitchBuildContext } from "contexts";
 import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
+import { GroupRootComponentProps } from "./pages/group/group";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
@@ -41,14 +42,14 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
-interface RootComponentProps {
+interface AgentRootComponentProps {
   switchBuild: (version: string, path: string) => void
 }
 
 const lifecycles = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: ({ switchBuild }: RootComponentProps) => (
+  rootComponent: ({ switchBuild }: AgentRootComponentProps) => (
     <BrowserRouter>
       <SwitchBuildContext.Provider value={switchBuild}>
         <Agent />
@@ -67,7 +68,21 @@ export const AgentHUD = singleSpaReact({
 export const ServiceGroupHUD = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: () => <BrowserRouter><Test2CodeServiceGroupHUD /></BrowserRouter>,
+  rootComponent: () => (
+    <BrowserRouter>
+      <Test2CodeServiceGroupHUD />
+    </BrowserRouter>
+  ),
+});
+
+export const GroupPlugin = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: (props: GroupRootComponentProps) => (
+    <BrowserRouter>
+      <Group {...props} />
+    </BrowserRouter>
+  ),
 });
 
 export const { bootstrap, mount, unmount } = lifecycles;

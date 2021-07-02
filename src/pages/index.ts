@@ -14,3 +14,4 @@
  * limitations under the License.
  */
 export { Agent } from "./agent";
+export { Group } from "./group";

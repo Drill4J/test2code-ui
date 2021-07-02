@@ -28,7 +28,7 @@ import {
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
-import { useSwitchBuild } from "switch-build-context";
+import { useSwitchBuild } from "contexts";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
