@@ -171,7 +171,7 @@ export const AllScopes = () => {
                     !active && {
                       label: `${enabled ? "Ignore" : "Include"} in stats`,
                       icon: enabled ? "EyeCrossed" : "Eye",
-                      onClick: () => toggleScope(agentId, pluginId, {
+                      onClick: () => toggleScope(agentId, {
                         onSuccess: () => {
                           sendNotificationEvent({
                             type: "SUCCESS",

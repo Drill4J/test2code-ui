@@ -16,6 +16,8 @@
 
 export const agentPluginPath = "/agents/:agentId/builds/:buildVersion/dashboard/:pluginId";
 export const groupPluginPath = "/agents/group/:groupId/dashboard/:pluginId";
+export const agentDashboardPath = "/agents/:agentId/builds/:buildVersion/dashboard";
+export const groupDashboardPath = "/agents/group/:groupId/dashboard";
 
 export const getAgentRoutePath = (path: string) => (path.startsWith("/")
   ? `${agentPluginPath}${path}`

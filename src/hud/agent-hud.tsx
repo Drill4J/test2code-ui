@@ -16,6 +16,9 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
+import { getPagePath } from "common";
+import { Route } from "react-router";
+import { agentDashboardPath } from "router";
 import { PluginCard } from "./plugin-card";
 import {
   CoverageSection, RisksSection, TestsSection, TestsToRunSection,
@@ -23,11 +26,13 @@ import {
 
 export const AgentHud = () => (
   <BrowserRouter>
-    <PluginCard pluginLink="/need-to-change">
-      <CoverageSection />
-      <TestsSection />
-      <RisksSection />
-      <TestsToRunSection />
-    </PluginCard>
+    <Route path={agentDashboardPath}>
+      <PluginCard pluginLink={getPagePath({ name: "methods" })}>
+        <CoverageSection />
+        <TestsSection />
+        <RisksSection />
+        <TestsToRunSection />
+      </PluginCard>
+    </Route>
   </BrowserRouter>
 );

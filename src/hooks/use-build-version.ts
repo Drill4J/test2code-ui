@@ -19,6 +19,7 @@ import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
 import { agentPluginPath } from "router";
+import { useAgentRouteParams } from "./use-agent-route-params";
 
 interface Message {
   agentId?: string;
@@ -33,11 +34,7 @@ export function useBuildVersion<T>(
   message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { pathname } = useLocation();
-  const { params: { agentId = "", buildVersion = "" } = {} } = matchPath<{ agentId?: string; buildVersion?: string }>(pathname, {
-    path: agentPluginPath,
-  }) || {};
-
+  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);

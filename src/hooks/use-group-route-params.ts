@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 import { matchPath, useLocation } from "react-router-dom";
-import { groupPluginPath } from "../router";
+import { groupDashboardPath, groupPluginPath } from "../router";
 
 export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {
   const { pathname } = useLocation();
   const { params: { groupId = "", pluginId = "" } = {} } = matchPath<{
-    groupId?: string; pluginId: string }>(pathname, { path: groupPluginPath }) || {};
+    groupId?: string; pluginId: string }>(pathname, { path: [groupPluginPath, groupDashboardPath] }) || {};
   return { groupId, pluginId };
 };
