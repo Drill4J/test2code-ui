@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 import React from "react";
-import { matchPath, useLocation } from "react-router-dom";
 
-import { useServiceGroup } from "hooks";
+import { useGroupRouteParams, useServiceGroup } from "hooks";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { PluginCard } from "./plugin-card";
-import {
-} from "./agent-sections";
 import {
   CoverageSection, RisksSection, TestsSection, TestsToRunSection,
 } from "./service-group-sections";
 
 export const ServiceGroupHud = () => {
-  const { pathname } = useLocation();
-  const { params: { serviceGroupId = "" } = {} } = matchPath<{ serviceGroupId: string }>(pathname, {
-    path: "/service-group/:serviceGroupId",
-  }) || {};
+  const { groupId } = useGroupRouteParams();
   const {
     aggregated: {
       scopeCount = 0,
@@ -39,10 +33,10 @@ export const ServiceGroupHud = () => {
       testsToRun = {},
       riskCounts = {},
     } = {},
-  } = useServiceGroup<ServiceGroupSummary>("/group/summary", serviceGroupId, "test2code") || {};
+  } = useServiceGroup<ServiceGroupSummary>("/group/summary", groupId, "test2code") || {};
 
   return (
-    <PluginCard pluginLink="/need-to-change">
+    <PluginCard pluginLink="asd">
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
       <TestsSection testsType={tests} scopeCount={scopeCount} />
       <RisksSection risks={riskCounts} />

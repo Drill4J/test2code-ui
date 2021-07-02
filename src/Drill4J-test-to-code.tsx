@@ -21,8 +21,10 @@ import axios from "axios";
 
 import { Agent, Group } from "pages";
 import { SwitchBuildContext } from "contexts";
+import { Route } from "react-router";
 import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
+import { groupDashboardPath } from "./router";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
@@ -70,7 +72,9 @@ export const ServiceGroupHUD = singleSpaReact({
   ReactDOM,
   rootComponent: () => (
     <BrowserRouter>
-      <Test2CodeServiceGroupHUD />
+      <Route path={groupDashboardPath}>
+        <Test2CodeServiceGroupHUD />
+      </Route>
     </BrowserRouter>
   ),
 });

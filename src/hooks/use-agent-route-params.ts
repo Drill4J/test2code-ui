@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 import { matchPath, useLocation } from "react-router-dom";
-import { agentPluginPath } from "../router";
+import { agentDashboardPath, agentPluginPath } from "../router";
 
 export const useAgentRouteParams = (): { agentId: string; buildVersion: string; pluginId: string } => {
   const { pathname } = useLocation();
   const { params: { buildVersion = "", agentId = "", pluginId = "" } = {} } = matchPath<{
-    agentId?: string; buildVersion?: string; pluginId: string }>(pathname, { path: agentPluginPath }) || {};
+    agentId?: string; buildVersion?: string; pluginId: string }>(pathname, { path: [agentPluginPath, agentDashboardPath] }) || {};
   return { buildVersion, agentId, pluginId };
 };
