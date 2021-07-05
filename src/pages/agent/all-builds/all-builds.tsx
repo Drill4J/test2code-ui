@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 import React, { useRef } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Icons, Table, Tooltip } from "@drill4j/ui-kit";
 import { BuildVersion } from "@drill4j/types-admin";
 import { dateTimeFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 
-import { useAgent, useAdminConnection, useBaselineVersion } from "hooks";
+import {
+  useAgent, useAdminConnection, useBaselineVersion, useAgentRouteParams,
+} from "hooks";
 import { getPagePath } from "common";
 
 export const AllBuilds = () => {
-  const { agentId = "" } = useParams<{ agentId: string }>();
+  const { agentId = "" } = useAgentRouteParams();
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds`) || [];
   const { buildVersion: activeBuildVersion } = useAgent(agentId) || {};
   const { version: baseline } = useBaselineVersion(agentId, activeBuildVersion) || {};

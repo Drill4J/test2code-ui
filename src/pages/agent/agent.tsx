@@ -32,6 +32,7 @@ import { AllScopes } from "./all-scopes";
 
 import { TestsToRun } from "./tests-to-run";
 import { GetSuggestedTestsModal } from "./tests-to-run/tests-to-run-header/get-suggested-tests-modal";
+import { AllBuilds } from "./all-builds";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -51,6 +52,7 @@ export const Agent = () => (
           component={ScopeOverview}
         />
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route path={getAgentRoutePath(routes.allBuilds)} component={AllBuilds} />
         <Route
           path={getAgentRoutePath(routes.testsToRun)}
           render={() => (
