@@ -14,11 +14,9 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { matchPath, useLocation } from "react-router-dom";
 import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
-import { agentPluginPath } from "router";
 import { useAgentRouteParams } from "./use-agent-route-params";
 
 interface Message {

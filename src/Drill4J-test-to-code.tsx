@@ -44,11 +44,19 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
+  <ul>
+    <li>err: {err}</li>
+    <li>info: {info}</li>
+    <li>props: {props}</li>
+  </ul>
+);
+
 interface AgentRootComponentProps {
   switchBuild: (version: string, path: string) => void
 }
 
-const lifecycles = singleSpaReact({
+const AgentPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: ({ switchBuild }: AgentRootComponentProps) => (
@@ -59,15 +67,39 @@ const lifecycles = singleSpaReact({
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
+  errorBoundary: ErrorBoundary,
 });
 
-export const AgentHUD = singleSpaReact({
+export const AgentPlugin = {
+  mount: [
+    AgentPluginLifecycle.mount,
+  ],
+  unmount: [
+    AgentPluginLifecycle.unmount,
+  ],
+  update: AgentPluginLifecycle.update,
+  bootstrap: AgentPluginLifecycle.bootstrap,
+};
+
+export const AgentHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: Test2CodeAgentHUD,
+  errorBoundary: ErrorBoundary,
 });
 
-export const ServiceGroupHUD = singleSpaReact({
+export const AgentHUD = {
+  mount: [
+    AgentHUDLifecycle.mount,
+  ],
+  unmount: [
+    AgentHUDLifecycle.unmount,
+  ],
+  update: AgentHUDLifecycle.update,
+  bootstrap: AgentHUDLifecycle.bootstrap,
+};
+
+const GroupHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: () => (
@@ -77,9 +109,21 @@ export const ServiceGroupHUD = singleSpaReact({
       </Route>
     </BrowserRouter>
   ),
+  errorBoundary: ErrorBoundary,
 });
 
-export const GroupPlugin = singleSpaReact({
+export const GroupHUD = {
+  mount: [
+    GroupHUDLifecycle.mount,
+  ],
+  unmount: [
+    GroupHUDLifecycle.unmount,
+  ],
+  update: GroupHUDLifecycle.update,
+  bootstrap: GroupHUDLifecycle.bootstrap,
+};
+
+export const GroupPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: (props: GroupRootComponentProps) => (
@@ -87,6 +131,17 @@ export const GroupPlugin = singleSpaReact({
       <Group {...props} />
     </BrowserRouter>
   ),
+  domElementGetter: () => document.getElementById("test2code") || document.body,
+  errorBoundary: ErrorBoundary,
 });
 
-export const { bootstrap, mount, unmount } = lifecycles;
+export const GroupPlugin = {
+  mount: [
+    GroupPluginLifecycle.mount,
+  ],
+  unmount: [
+    GroupPluginLifecycle.unmount,
+  ],
+  update: GroupPluginLifecycle.update,
+  bootstrap: GroupPluginLifecycle.bootstrap,
+};

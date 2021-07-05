@@ -33,7 +33,7 @@ import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
 
 export const AllScopes = () => {
-  const { pluginId = "", buildVersion = "", agentId = "" } = useParams<{ pluginId: string; buildVersion: string; agentId?: string; }>();
+  const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
   const { push } = useHistory();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const activeScope = useActiveScope();

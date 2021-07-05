@@ -37,12 +37,19 @@ export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
     <div tw="mx-6">
       <Switch>
-        <Route exact path={getAgentRoutePath("/")} render={() => <Redirect to={getPagePath({ name: "methods" })} />} />
+        <Route
+          exact
+          path={getAgentRoutePath("/")}
+          render={() => <Redirect to={getPagePath({ name: "methods" })} />}
+        />
         <Route
           path={[getAgentRoutePath(routes.methods), getAgentRoutePath(routes.tests)]}
           component={BuildOverview}
         />
-        <Route path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]} component={ScopeOverview} />
+        <Route
+          path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
+          component={ScopeOverview}
+        />
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
         <Route
           path={getAgentRoutePath(routes.testsToRun)}
