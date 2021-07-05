@@ -44,6 +44,14 @@ axios.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
+  <ul>
+    <li>err: {err}</li>
+    <li>info: {info}</li>
+    <li>props: {props}</li>
+  </ul>
+);
+
 interface AgentRootComponentProps {
   switchBuild: (version: string, path: string) => void
 }
@@ -59,15 +67,17 @@ const lifecycles = singleSpaReact({
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
+  errorBoundary: ErrorBoundary,
 });
 
 export const AgentHUD = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: Test2CodeAgentHUD,
+  errorBoundary: ErrorBoundary,
 });
 
-export const ServiceGroupHUD = singleSpaReact({
+const GroupHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: () => (
@@ -77,9 +87,24 @@ export const ServiceGroupHUD = singleSpaReact({
       </Route>
     </BrowserRouter>
   ),
+  errorBoundary: ErrorBoundary,
 });
 
-export const GroupPlugin = singleSpaReact({
+export const ServiceGroupHUD = {
+  mount: [
+    GroupHUDLifecycle.mount,
+    async () => console.log("react finished mounting!"),
+  ],
+  unmount: [
+    async () => console.log("starting unmount"),
+    GroupHUDLifecycle.unmount,
+    async () => console.log("finished unmount"),
+  ],
+  update: GroupHUDLifecycle.update,
+  bootstrap: GroupHUDLifecycle.bootstrap,
+};
+
+export const GroupPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: (props: GroupRootComponentProps) => (
@@ -87,6 +112,31 @@ export const GroupPlugin = singleSpaReact({
       <Group {...props} />
     </BrowserRouter>
   ),
+  errorBoundary: ErrorBoundary,
 });
 
-export const { bootstrap, mount, unmount } = lifecycles;
+export const GroupPlugin = {
+  mount: [
+    GroupPluginLifecycle.mount,
+    async () => console.log("react finished mounting!"),
+  ],
+  unmount: [
+    async () => console.log("starting unmount"),
+    GroupPluginLifecycle.unmount,
+    async () => console.log("finished unmount"),
+  ],
+  update: GroupPluginLifecycle.update,
+  bootstrap: GroupPluginLifecycle.bootstrap,
+};
+
+export const mount = [
+  lifecycles.mount,
+  async () => console.log("react finished mounting!"),
+];
+export const unmount = [
+  async () => console.log("starting unmount"),
+  lifecycles.unmount,
+  async () => console.log("finished unmount"),
+];
+export const { update } = lifecycles;
+export const { bootstrap } = lifecycles;
