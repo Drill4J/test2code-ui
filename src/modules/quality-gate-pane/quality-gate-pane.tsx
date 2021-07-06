@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
 import {
   Button, Modal, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
 } from "@drill4j/ui-kit";
@@ -26,7 +25,7 @@ import {
   ConditionSetting,
   ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
-import { useBuildVersion } from "hooks";
+import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
@@ -44,7 +43,7 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
 )(formValues);
 
 export const QualityGatePane = () => {
-  const { pluginId = "", agentId = "" } = useParams<{ pluginId: string; agentId: string; }>();
+  const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
   const { generalAlertMessage, showGeneralAlertMessage } = useGeneralAlertMessage();
   const closeModal = useCloseModal("/quality-gate");
