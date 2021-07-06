@@ -17,10 +17,9 @@ import React, { useState } from "react";
 import {
   Button, Popup, Checkbox, Spinner,
 } from "@drill4j/ui-kit";
-import { useParams } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { useAgent, useBuildVersion } from "hooks";
+import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
 import { useCloseModal } from "@drill4j/common-hooks";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
@@ -38,7 +37,7 @@ const ActionButton = styled(Button)(({ isBaseline }: {isBaseline: boolean}) => [
 
 export const BaselineBuildModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { pluginId = "", agentId = "", buildVersion = "" } = useParams<{ pluginId: string; agentId: string; buildVersion: string; }>();
+  const { pluginId = "", agentId = "", buildVersion = "" } = useAgentRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;

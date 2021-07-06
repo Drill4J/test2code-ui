@@ -16,16 +16,21 @@
 import React from "react";
 import { Modal } from "@drill4j/ui-kit";
 import { useQueryParams, useCloseModal } from "@drill4j/common-hooks";
+import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion } from "hooks";
-import { useParams } from "react-router-dom";
 import { ItemInfo } from "./item-info";
 import { TestsList } from "./tests-list";
+import { routes } from "../../common";
+import { agentPluginPath } from "../../router";
 
 export const AssociatedTestModal = () => {
-  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
+  const { pathname } = useLocation();
+  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
+    path: `${agentPluginPath}${routes.scopeMethods}`,
+  }) || {};
   const params = useQueryParams<{testId?: string; treeLevel?: number}>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
@@ -35,7 +40,6 @@ export const AssociatedTestModal = () => {
   const testsMap = tests.reduce((acc, { type = "", name = "" }) =>
     ({ ...acc, [type]: acc[type] ? [...acc[type], name] : [name] }), {} as { [testType: string]: string[] });
   const closeModal = useCloseModal("/associated-tests-modal");
-
   return (
     <Modal isOpen onToggle={closeModal}>
       <div tw="flex flex-col h-full">

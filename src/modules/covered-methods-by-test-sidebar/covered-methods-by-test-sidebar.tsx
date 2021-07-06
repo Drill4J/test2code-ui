@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 import React from "react";
+import { matchPath, useLocation } from "react-router-dom";
 import { Modal } from "@drill4j/ui-kit";
+import { capitalize } from "@drill4j/common-utils";
+import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion } from "hooks";
-import { capitalize } from "@drill4j/common-utils";
-import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
-import { useParams } from "react-router-dom";
+import { routes } from "common";
+import { agentPluginPath } from "router";
 import { MethodsList } from "./methods-list";
 
 const MethodInfoValue = styled.div(({ sceleton }: { sceleton?: boolean }) =>
@@ -30,7 +32,10 @@ const MethodInfoValue = styled.div(({ sceleton }: { sceleton?: boolean }) =>
 const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 font-bold text-monochrome-black`);
 
 export const CoveredMethodsByTestSidebar = () => {
-  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
+  const { pathname } = useLocation();
+  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
+    path: `${agentPluginPath}${routes.scopeTests}`,
+  }) || {};
   const params = useQueryParams<{testId?: string; coveredMethods?: number}>();
   const topicCoveredMethodsByTest = scopeId ? `/build/scopes/${scopeId}/tests` : "/build/tests";
   const summary = useBuildVersion<MethodsCoveredByTestSummary>(
