@@ -1,6 +1,7 @@
 {
-  "name": "@Drill4J/test2code-ui",
+  "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
+  "version": "0.1.0",
   "scripts": {
     "start": "webpack serve",
     "start:standalone": "webpack serve --env standalone",
