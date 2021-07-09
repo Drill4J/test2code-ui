@@ -17,4 +17,7 @@ module.exports = {
   twin: {
     preset: "styled-components",
   },
+  styledComponents: {
+    displayName: true,
+  },
 };
