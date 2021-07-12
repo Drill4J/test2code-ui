@@ -15,3 +15,5 @@
  */
 export { AgentHud } from "./agent-hud";
 export { ServiceGroupHud } from "./service-group-hud";
+export type { AgentHudProps } from "./agent-hud";
+export type { GroupHudProps } from "./service-group-hud";
