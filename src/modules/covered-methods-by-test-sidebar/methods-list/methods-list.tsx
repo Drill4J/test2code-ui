@@ -63,8 +63,12 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
       </div>
       <div tw="h-full pt-2 w-full mb-4 overflow-y-hidden">
         <div tw="flex flex-col h-full text-14">
-          <div ref={node} style={{ height: "calc(100% - 40px)" }}>
+          <div
+            ref={node}
+            style={{ height: "calc(100% - 40px)" }}
+          >
             <VirtualList
+              style={{ paddingBottom: "16px" }}
               itemSize={56}
               height={Math.ceil(methodsListHeight)}
               itemCount={methodsCount}
