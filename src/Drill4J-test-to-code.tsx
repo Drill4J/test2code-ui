@@ -22,7 +22,7 @@ import axios from "axios";
 import { Agent, Group } from "pages";
 import { SwitchBuildContext } from "contexts";
 import { Route } from "react-router";
-import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
+import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
 import { groupDashboardPath } from "./router";
 
@@ -102,10 +102,10 @@ export const AgentHUD = {
 const GroupHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: () => (
+  rootComponent: (props: GroupHudProps) => (
     <BrowserRouter>
       <Route path={groupDashboardPath}>
-        <Test2CodeServiceGroupHUD />
+        <Test2CodeServiceGroupHUD {...props} />
       </Route>
     </BrowserRouter>
   ),

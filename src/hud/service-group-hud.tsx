@@ -22,7 +22,11 @@ import {
   CoverageSection, RisksSection, TestsSection, TestsToRunSection,
 } from "./service-group-sections";
 
-export const ServiceGroupHud = () => {
+export interface GroupHudProps {
+  customProps: { pluginPagePath: string; }
+}
+
+export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudProps) => {
   const { groupId } = useGroupRouteParams();
   const {
     aggregated: {
@@ -36,7 +40,7 @@ export const ServiceGroupHud = () => {
   } = useServiceGroup<ServiceGroupSummary>("/group/summary", groupId, "test2code") || {};
 
   return (
-    <PluginCard pluginLink="asd">
+    <PluginCard pluginLink={pluginPagePath}>
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
       <TestsSection testsType={tests} scopeCount={scopeCount} />
       <RisksSection risks={riskCounts} />

@@ -16,7 +16,6 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
-import { getPagePath } from "common";
 import { Route } from "react-router";
 import { agentDashboardPath } from "router";
 import { PluginCard } from "./plugin-card";
@@ -24,10 +23,14 @@ import {
   CoverageSection, RisksSection, TestsSection, TestsToRunSection,
 } from "./agent-sections";
 
-export const AgentHud = () => (
+export interface AgentHudProps {
+  customProps: { pluginPagePath: string; }
+}
+
+export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => (
   <BrowserRouter>
     <Route path={agentDashboardPath}>
-      <PluginCard pluginLink={getPagePath({ name: "methods" })}>
+      <PluginCard pluginLink={pluginPagePath}>
         <CoverageSection />
         <TestsSection />
         <RisksSection />
