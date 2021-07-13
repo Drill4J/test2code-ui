@@ -41,7 +41,7 @@ export const QualityGateStatus = ({ conditionSettingByType }: Props) => {
   const { pluginId = "", agentId = "" } = useParams<{ pluginId: string; agentId: string; }>();
   const { results = { coverage: false, risks: false, tests: false } } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
   const { coverage = 0, risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
-  console.log(results);
+
   return (
     <>
       <div tw="p-6 space-y-6">

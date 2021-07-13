@@ -104,7 +104,7 @@ export const QualityGatePane = () => {
         enableReinitialize
       >
         {({
-          values, isValid, dirty, isSubmitting,
+          values, isValid, dirty, isSubmitting, initialValues,
         }) => (
           <Form tw="flex flex-col h-full font-regular">
             <div tw="flex justify-between items-center h-16 px-6 border-b border-monochrome-medium-tint">
@@ -126,12 +126,8 @@ export const QualityGatePane = () => {
               </GeneralAlerts>
             )}
             {configured && !isEditing
-              ? (
-                <QualityGateStatus conditionSettingByType={values} />
-              )
-              : (
-                <QualityGateSettings conditionSettingByType={values} />
-              )}
+              ? <QualityGateStatus conditionSettingByType={initialValues} />
+              : <QualityGateSettings conditionSettingByType={values} />}
             <ActionsPanel>
               {configured && !isEditing ? (
                 <Button
