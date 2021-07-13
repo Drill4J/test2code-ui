@@ -55,7 +55,10 @@ export const QualityGatePane = () => {
     }
   };
 
-  const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
+  const {
+    status = "FAILED",
+    results = { coverage: false, risks: false, tests: false },
+  } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
 
   const conditionSettingByType = conditionSettings.reduce(
@@ -126,7 +129,7 @@ export const QualityGatePane = () => {
               </GeneralAlerts>
             )}
             {configured && !isEditing
-              ? <QualityGateStatus conditionSettingByType={initialValues} />
+              ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
               : <QualityGateSettings conditionSettingByType={values} />}
             <ActionsPanel>
               {configured && !isEditing ? (
