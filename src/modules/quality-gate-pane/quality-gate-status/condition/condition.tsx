@@ -35,10 +35,10 @@ export const Condition = ({
     testsToRun: "Suggested “Tests to run” executed",
   };
   return (
-    <div tw="flex items-center">
+    <div tw="flex">
       {passed
         ? <Icons.Checkbox width={16} height={16} tw="text-green-default" />
-        : <Icons.Warning width={16} height={16} tw="text-red-default" />}
+        : <Icons.Warning width={16} height={16} tw="text-orange-default" />}
       <div tw="flex flex-col flex-1 mr-4 ml-4 text-14 leading-16">
         {title[type]}
         {children}

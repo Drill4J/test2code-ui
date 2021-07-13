@@ -30,8 +30,7 @@ interface Props {
 }
 
 const NumberInput = styled.input`
-  width: 60px;
-  height: 32px;
+  height: 40px;
   ${tw`py-0 px-2 text-right text-14 leading-22 text-monochrome-black`};
   ${tw`rounded border border-monochrome-medium-tint bg-monochrome-white outline-none`};
 

@@ -34,12 +34,12 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
   formValues.coverage?.enabled ? numericLimits({
     fieldName: "coverage.condition.value",
     fieldAlias: "Build coverage",
-    unit: "percentages",
+    unit: "",
     min: 0.1,
     max: 100,
   }) : () => undefined,
-  formValues.risks?.enabled ? positiveInteger("risks.condition.value", "Risks") : () => undefined,
-  formValues.tests?.enabled ? positiveInteger("tests.condition.value", "Tests to run") : () => undefined,
+  formValues.risks?.enabled ? positiveInteger("risks.condition.value", "The field") : () => undefined,
+  formValues.tests?.enabled ? positiveInteger("tests.condition.value", "The field") : () => undefined,
 )(formValues);
 
 export const QualityGatePane = () => {
@@ -49,8 +49,10 @@ export const QualityGatePane = () => {
   const closeModal = useCloseModal("/quality-gate");
 
   const handleOnToggle = () => {
-    closeModal();
-    setIsEditing(false);
+    if (!isEditing) {
+      closeModal();
+      setIsEditing(false);
+    }
   };
 
   const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
@@ -171,7 +173,7 @@ export const QualityGatePane = () => {
                 onClick={handleOnToggle}
                 data-test="quality-gate-pane:cancel-button"
               >
-                Cancel
+                Close
               </Button>
             </ActionsPanel>
           </Form>

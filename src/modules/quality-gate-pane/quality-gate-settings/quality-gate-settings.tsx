@@ -17,7 +17,7 @@ import React from "react";
 import { Icons, Tooltip, Checkbox } from "@drill4j/ui-kit";
 import { parseCoverage, inputLengthRestriction } from "@drill4j/common-utils";
 import { Field } from "formik";
-import { styled } from "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { ConditionSettingByType } from "types/quality-gate-type";
 import { ThresholdValueField } from "./threshold-value-field";
@@ -27,16 +27,18 @@ interface Props {
 }
 
 const GridWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 32px 244px 60px 16px;
-  grid-template-rows: max-content;
+  ${tw`grid gap-x-4 h-14`}
+  grid-template-columns: 16px 1fr 80px;
+  
+  & > div:first-child {
+    ${tw`block`}
+  }
 `;
 
 export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
-  <div tw="h-48 pr-6 pl-6 space-y-6 mt-6">
+  <div tw="h-48 px-6 mt-6">
     <GridWrapper>
       <Field
-        tw="self-start mt-2"
         name="coverage.enabled"
         type="checkbox"
         component={Checkbox}
@@ -48,13 +50,12 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         normalize={parseCoverage}
       >
         <div tw="text-14 leading-16 text-monochrome-black" data-test="quality-gate-settings:condtion:coverage">
-          Build coverage
+          Build coverage, %
           <div tw="text-10 leading-16 text-monochrome-default" data-test="quality-gate-settings:condtion-status:coverage">
             Minimum percentage of build covered by tests
           </div>
         </div>
       </Field>
-      <div tw="justify-self-end mt-2 text-14 leading-16 text-monochrome-default">%</div>
     </GridWrapper>
     <GridWrapper>
       <Field
