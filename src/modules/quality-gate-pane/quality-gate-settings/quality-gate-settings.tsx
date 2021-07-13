@@ -59,7 +59,6 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
     </GridWrapper>
     <GridWrapper>
       <Field
-        tw="self-start mt-2"
         name="risks.enabled"
         type="checkbox"
         component={Checkbox}
@@ -92,7 +91,6 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
     </GridWrapper>
     <GridWrapper>
       <Field
-        tw="self-start mt-2"
         name="tests.enabled"
         type="checkbox"
         component={Checkbox}

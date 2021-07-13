@@ -49,10 +49,8 @@ export const QualityGatePane = () => {
   const closeModal = useCloseModal("/quality-gate");
 
   const handleOnToggle = () => {
-    if (!isEditing) {
-      closeModal();
-      setIsEditing(false);
-    }
+    closeModal();
+    setIsEditing(false);
   };
 
   const {
@@ -74,7 +72,7 @@ export const QualityGatePane = () => {
   const configured = conditionSettings.some(({ enabled }) => enabled);
 
   return (
-    <Modal isOpen onToggle={handleOnToggle}>
+    <Modal isOpen onToggle={handleOnToggle} isDisableFadeClick={isEditing}>
       <Formik
         onSubmit={async (values) => {
           await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);

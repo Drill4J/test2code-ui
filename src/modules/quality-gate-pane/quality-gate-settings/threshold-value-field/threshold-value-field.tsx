@@ -74,7 +74,7 @@ export const ThresholdValueField = ({
       <div>
         {children}
         <ErrorMessage name={name}>
-          {msg => <div tw="text-10 leading-12 text-red-default">{msg}</div>}
+          {msg => <div tw="absolute text-10 leading-12 text-red-default">{msg}</div>}
         </ErrorMessage>
       </div>
       <NumberInput
