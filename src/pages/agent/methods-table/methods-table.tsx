@@ -47,7 +47,6 @@ export const MethodsTable = ({
   const { search, sort } = useTableActionsState();
   const {
     items: coverageByPackages = [],
-    totalCount = 0,
     filteredCount = 0,
   } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: search, orderBy: sort, output: "LIST" }) ||
   {};
@@ -197,16 +196,19 @@ export const MethodsTable = ({
 
   const renderRowSubComponent = useCallback(
     ({ row }) => <ExpandedClasses parentRow={row} />,
-    [],
+    [showCoverageIcon],
   );
+
   const columnsDependency = useMemo(
     () => [showCoverageIcon],
     [showCoverageIcon],
   );
+
   return (
     <div tw="flex flex-col overflow-x-auto">
       <div style={{ minWidth: "1100px" }}>
         <Table
+          withSearch
           columns={columns}
           data={coverageByPackages}
           filteredCount={filteredCount}
