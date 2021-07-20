@@ -48,7 +48,6 @@ export const TestDetails = ({
         <Table
           isDefaulToggleSortBy
           filteredCount={filteredCount}
-          totalCount={totalCount}
           placeholder="Search tests by name"
           data={tests}
           columns={[{

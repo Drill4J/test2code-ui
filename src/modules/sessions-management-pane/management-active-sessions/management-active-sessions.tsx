@@ -15,7 +15,7 @@
  */
 import React from "react";
 import { LinkButton, Fields } from "@drill4j/ui-kit";
-import { Field } from "react-final-form";
+import { Field } from "formik";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";

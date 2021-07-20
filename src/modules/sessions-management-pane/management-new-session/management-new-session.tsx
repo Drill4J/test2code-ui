@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 import React from "react";
-import { Field } from "react-final-form";
+import { Field } from "formik";
 import { NavLink } from "react-router-dom";
 import {
   FormGroup,
   GeneralAlerts,
   Icons,
-  Tooltip, Fields,
+  Tooltip, Fields, Checkbox,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -73,14 +73,16 @@ export const ManagementNewSession = ({
       <Field
         name="isGlobal"
         type="checkbox"
-        render={({ input, meta }) => (
+      >
+        {({ field }: any) => (
           <div className="flex items-center gap-2">
-            <Fields.Checkbox
-              disabled={hasGlobalSession}
-              input={input}
-              meta={meta}
-              label="Set as global session"
-            />
+            <label>
+              <Checkbox
+                disabled={hasGlobalSession}
+                input={field}
+              />
+              <span>Set as global session</span>
+            </label>
             <Tooltip
               message={(
                 <div className="text-center">
@@ -105,17 +107,18 @@ export const ManagementNewSession = ({
             </Tooltip>
           </div>
         )}
-      />
+      </Field>
       <Field
         name="isRealtime"
         type="checkbox"
-        render={({ input, meta }) => (
+      >
+        {({ field }: any) => (
           <div className="flex items-center gap-2">
-            <Fields.Checkbox
-              input={input}
-              meta={meta}
-              label="Real-time coverage collection"
-            />
+            <label>
+              <Checkbox input={field} />
+              <span>Real-time coverage collection</span>
+            </label>
+
             <Tooltip
               message={(
                 <div className="text-center">
@@ -128,8 +131,7 @@ export const ManagementNewSession = ({
             </Tooltip>
           </div>
         )}
-        label="Real-time coverage collection"
-      />
+      </Field>
     </div>
   </div>
 );

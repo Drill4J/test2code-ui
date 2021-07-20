@@ -209,7 +209,6 @@ export const MethodsTable = ({
         <Table
           columns={columns}
           data={coverageByPackages}
-          totalCount={totalCount}
           filteredCount={filteredCount}
           placeholder="Search packages by name"
           renderRowSubComponent={renderRowSubComponent}

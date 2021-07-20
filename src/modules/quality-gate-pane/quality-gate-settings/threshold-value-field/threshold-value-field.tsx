@@ -14,10 +14,17 @@
  * limitations under the License.
  */
 import React, { useEffect, useRef } from "react";
-import { FieldRenderProps } from "react-final-form";
+import {
+  FieldInputProps, FormikProps, ErrorMessage, useField,
+} from "formik";
 import tw, { styled } from "twin.macro";
 
-interface Props extends FieldRenderProps<string> {
+interface Props {
+  field: FieldInputProps<any>;
+  form?: FormikProps<any>;
+  placeholder?: string;
+  disabled?: boolean;
+  name?: string;
   children: React.ReactNode;
 }
 
@@ -45,23 +52,22 @@ const NumberInput = styled.input`
   ${({ disabled }) =>
     disabled &&
     tw`border border-monochrome-medium-tint bg-monochrome-light-tint text-monochrome-default`}
-  ${({ error }: { error: string }) => error && tw`border border-red-default`}
+  ${({ isError }: { isError: boolean }) => isError && tw`border border-red-default`}
 `;
 
-export const ThresholdValueField = (props: Props) => {
-  const {
-    children, input, meta, disabled,
-  } = props;
-
+export const ThresholdValueField = ({
+  field: { name }, form, placeholder, disabled, children,
+}: Props) => {
+  const [field, meta] = useField(name);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (disabled) {
-      input.onChange({
-        target: {
-          value: undefined,
-        },
-      });
+      // input.onChange({
+      //   target: {
+      //     value: undefined,
+      //   },
+      // });
     } else {
       inputRef.current && inputRef.current.focus();
     }
@@ -71,13 +77,13 @@ export const ThresholdValueField = (props: Props) => {
     <div tw="contents" data-test="threshold-value-field">
       <div>
         {children}
-        {meta.error && meta.touched && <div tw="text-10 leading-12 text-red-default">{meta.error}</div>}
+        <ErrorMessage component={() => <div tw="text-10 leading-12 text-red-default" />} name={name} />
       </div>
       <NumberInput
-        {...input as any}
+        {...field}
         ref={inputRef}
         disabled={disabled}
-        error={(meta.error || meta.submitError) && meta.touched}
+        isError={Boolean(meta.error && meta.touched)}
         type="number"
       />
     </div>

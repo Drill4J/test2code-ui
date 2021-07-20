@@ -16,7 +16,7 @@
 import React from "react";
 import { Icons, Tooltip, Fields } from "@drill4j/ui-kit";
 import { parseCoverage, inputLengthRestriction } from "@drill4j/common-utils";
-import { Field } from "react-final-form";
+import { Field } from "formik";
 import { styled } from "twin.macro";
 
 import { ConditionSettingByType } from "types/quality-gate-type";

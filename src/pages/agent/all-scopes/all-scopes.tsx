@@ -52,7 +52,7 @@ export const AllScopes = () => {
       {scopesData.length > 0
         ? (
           <Table
-            withSearchPanel={false}
+            withSearch={false}
             isDefaulToggleSortBy
             data={scopesData}
             columns={[
