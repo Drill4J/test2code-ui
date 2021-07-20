@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useEffect } from "react";
-import { Form } from "react-final-form";
+import { Form, Formik, FormikProps } from "formik";
 import { matchPath, useLocation } from "react-router-dom";
 import {
   Modal, GeneralAlerts, Icons, composeValidators,
@@ -24,7 +24,6 @@ import {
   Stub,
 } from "@drill4j/ui-kit";
 import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
-import { FormApi } from "final-form";
 import { Message } from "@drill4j/types-admin";
 import "twin.macro";
 
@@ -74,24 +73,21 @@ export const SessionsManagementPane = () => {
 
   return (
     <Modal isOpen onToggle={closeModal}>
-      <Form
+      <Formik
+        initialValues={{}}
         onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
-          form: FormApi<FormValues, FormValues>): Promise<Record<string, string>> => {
-          const resetForm = () => {
-            dispatch(setIsNewSession(false));
-            form.change("sessionId", "");
-            form.change("isGlobal", false);
-            form.change("isRealtime", false);
-          };
+          { resetForm }: any): Promise<Record<string, string>> => {
+          resetForm({});
           return agentId
             ? handleStartAgentSession({ id: agentId }, values, resetForm, showGeneralAlertMessage)
             : handleStartServiceGroupSession({ id: groupId }, values, resetForm, showGeneralAlertMessage);
         }) as any}
         validate={validateManageSessionsPane}
-        render={({
-          handleSubmit, submitting, hasValidationErrors, submitErrors, dirtySinceLastSubmit,
+      >
+        {({
+          handleSubmit, isSubmitting, isValid,
         }) => (
-          <form onSubmit={handleSubmit} tw="flex flex-col h-full">
+          <Form tw="flex flex-col h-full">
             <div
               tw="h-16 px-6 py-4 text-20 leading-32 text-monochrome-black border-b border-monochrome-medium-tint"
               data-test="sessions-management-pane:header"
@@ -144,16 +140,16 @@ export const SessionsManagementPane = () => {
               ) : (
                 <ActionsPanel
                   activeSessions={activeSessions}
-                  startSessionDisabled={(submitErrors?.sessionId && !dirtySinceLastSubmit) || hasValidationErrors || submitting}
+                  startSessionDisabled={!isValid || isSubmitting}
                   onToggle={closeModal}
                   handleSubmit={handleSubmit}
-                  submitting={submitting}
+                  submitting={isSubmitting}
                 />
               )}
             </div>
-          </form>
+          </Form>
         )}
-      />
+      </Formik>
     </Modal>
   );
 };

@@ -17,6 +17,7 @@ const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-react-ts");
 const Dotenv = require("dotenv-webpack");
 const path = require("path");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = (webpackConfigEnv, argv) => {
   const defaultConfig = singleSpaDefaults({
@@ -32,6 +33,7 @@ module.exports = (webpackConfigEnv, argv) => {
       new Dotenv({
         path: "./.env.local",
       }),
+      new NodePolyfillPlugin(),
     ],
     resolve: {
       alias: {

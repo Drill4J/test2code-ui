@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import {
   Button, Modal, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
 } from "@drill4j/ui-kit";
-import { Form } from "react-final-form";
+import { Form, Formik } from "formik";
 import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
@@ -70,7 +70,7 @@ export const QualityGatePane = () => {
 
   return (
     <Modal isOpen onToggle={handleOnToggle}>
-      <Form
+      <Formik
         onSubmit={async (values) => {
           await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
           setIsEditing(false);
@@ -97,13 +97,13 @@ export const QualityGatePane = () => {
               value: conditionSettingByType.tests?.enabled ? String(conditionSettingByType.tests.condition.value) : undefined,
             },
           },
-        }}
-        initialValuesEqual={(prevValues, nextValues) => JSON.stringify(prevValues) === JSON.stringify(nextValues)}
+        } as any}
         validate={validateQualityGate}
-        render={({
-          values, handleSubmit, invalid, pristine, submitting,
+      >
+        {({
+          values, isValid, dirty, isSubmitting,
         }) => (
-          <form onSubmit={handleSubmit} tw="flex flex-col h-full font-regular">
+          <Form tw="flex flex-col h-full font-regular">
             <div tw="flex justify-between items-center h-16 px-6 border-b border-monochrome-medium-tint">
               <div tw="text-20 leading-32" data-test="quality-gate-pane:header-title">Quality Gate</div>
               {configured && !isEditing && (
@@ -145,11 +145,11 @@ export const QualityGatePane = () => {
                     className="flex justify-center items-center gap-x-1 w-16"
                     primary
                     size="large"
-                    disabled={invalid || pristine || submitting}
-                    onClick={handleSubmit}
+                    disabled={!isValid || !dirty || isSubmitting}
+                    type="submit"
                     data-test="quality-gate-pane:save-button"
                   >
-                    {submitting ? <Spinner disabled /> : "Save"}
+                    {isSubmitting ? <Spinner disabled /> : "Save"}
                   </Button>
                 )}
               {configured && isEditing && (
@@ -173,9 +173,9 @@ export const QualityGatePane = () => {
                 Cancel
               </Button>
             </ActionsPanel>
-          </form>
+          </Form>
         )}
-      />
+      </Formik>
     </Modal>
   );
 };

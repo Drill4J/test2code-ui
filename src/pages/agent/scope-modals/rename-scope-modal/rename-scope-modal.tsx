@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { Form, Field } from "react-final-form";
+import { Formik, Field, Form } from "formik";
 
 import {
   Button, FormGroup, Popup, GeneralAlerts, Spinner, Fields,
@@ -39,7 +39,7 @@ const validateScope = composeValidators(
 export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
-  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
+  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope") || {};
   const [errorMessage, setErrorMessage] = useState("");
   const closeModal = useCloseModal("/rename-scope-modal");
 
@@ -57,7 +57,7 @@ export const RenameScopeModal = () => {
             {errorMessage}
           </GeneralAlerts>
         )}
-        <Form
+        <Formik
           onSubmit={(values) => renameScope(agentId, pluginId, {
             onSuccess: () => {
               sendNotificationEvent({ type: "SUCCESS", text: "Scope name has been changed" });
@@ -67,11 +67,11 @@ export const RenameScopeModal = () => {
           })(values as ScopeSummary)}
           validate={validateScope}
           initialValues={scope}
-          keepDirtyOnReinitialize
-          render={({
-            handleSubmit, submitting, pristine, hasValidationErrors,
+        >
+          {({
+            isSubmitting, dirty, isValid,
           }) => (
-            <form onSubmit={handleSubmit} className="m-6">
+            <Form className="m-6">
               <FormGroup label="Scope Name">
                 <Field name="name" component={Fields.Input} placeholder="Enter scope name" />
               </FormGroup>
@@ -80,18 +80,18 @@ export const RenameScopeModal = () => {
                   className="flex justify-center items-center gap-x-1 w-16"
                   primary
                   size="large"
-                  onClick={handleSubmit}
-                  disabled={submitting || pristine || hasValidationErrors}
+                  type="submit"
+                  disabled={isSubmitting || !dirty || !isValid}
                 >
-                  {submitting ? <Spinner disabled /> : "Save"}
+                  {isSubmitting ? <Spinner disabled /> : "Save"}
                 </Button>
                 <Button secondary size="large" onClick={closeModal}>
                   Cancel
                 </Button>
               </div>
-            </form>
+            </Form>
           )}
-        />
+        </Formik>
       </div>
     </Popup>
   );
