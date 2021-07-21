@@ -99,6 +99,7 @@ export const QualityGatePane = () => {
           },
         } as any}
         validate={validateQualityGate}
+        enableReinitialize
       >
         {({
           values, isValid, dirty, isSubmitting,
