@@ -26,6 +26,7 @@ interface Props {
   disabled?: boolean;
   name?: string;
   children: React.ReactNode;
+  normalize?: (value: string) => string;
 }
 
 const NumberInput = styled.input`
@@ -52,38 +53,37 @@ const NumberInput = styled.input`
   ${({ disabled }) =>
     disabled &&
     tw`border border-monochrome-medium-tint bg-monochrome-light-tint text-monochrome-default`}
-  ${({ isError }: { isError: boolean }) => isError && tw`border border-red-default`}
+  ${({ isError }: { isError?: boolean }) => isError && tw`border border-red-default`}
 `;
 
 export const ThresholdValueField = ({
-  field: { name }, form, placeholder, disabled, children,
+  field: { name }, disabled, children, normalize = (str) => str,
 }: Props) => {
-  const [field, meta] = useField(name);
+  const [field, meta, helper] = useField(name);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (disabled) {
-      // input.onChange({
-      //   target: {
-      //     value: undefined,
-      //   },
-      // });
-    } else {
-      inputRef.current && inputRef.current.focus();
-    }
+    !disabled && inputRef.current && inputRef.current.focus();
   }, [disabled]);
+
+  const handleOnChange = (event: any) => {
+    helper.setValue(normalize(event.target.value));
+  };
 
   return (
     <div tw="contents" data-test="threshold-value-field">
       <div>
         {children}
-        <ErrorMessage component={() => <div tw="text-10 leading-12 text-red-default" />} name={name} />
+        <ErrorMessage name={name}>
+          {msg => <div tw="text-10 leading-12 text-red-default">{msg}</div>}
+        </ErrorMessage>
       </div>
       <NumberInput
         {...field}
         ref={inputRef}
         disabled={disabled}
         isError={Boolean(meta.error && meta.touched)}
+        onChange={handleOnChange}
         type="number"
       />
     </div>

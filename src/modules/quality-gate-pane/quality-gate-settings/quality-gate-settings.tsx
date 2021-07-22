@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { Icons, Tooltip, Fields } from "@drill4j/ui-kit";
+import { Icons, Tooltip, Checkbox } from "@drill4j/ui-kit";
 import { parseCoverage, inputLengthRestriction } from "@drill4j/common-utils";
 import { Field } from "formik";
 import { styled } from "twin.macro";
@@ -39,13 +39,13 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         tw="self-start mt-2"
         name="coverage.enabled"
         type="checkbox"
-        component={Fields.Checkbox}
+        component={Checkbox}
       />
       <Field
         name="coverage.condition.value"
         component={ThresholdValueField}
         disabled={!conditionSettingByType?.coverage?.enabled}
-        parse={parseCoverage}
+        normalize={parseCoverage}
       >
         <div tw="text-14 leading-16 text-monochrome-black" data-test="quality-gate-settings:condtion:coverage">
           Build coverage
@@ -61,13 +61,13 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         tw="self-start mt-2"
         name="risks.enabled"
         type="checkbox"
-        component={Fields.Checkbox}
+        component={Checkbox}
       />
       <Field
         name="risks.condition.value"
         component={ThresholdValueField}
         disabled={!conditionSettingByType?.risks?.enabled}
-        parse={(value: string) => inputLengthRestriction(value, 7)}
+        normalize={(value: string) => inputLengthRestriction(value, 7)}
       >
         <div tw="text-14 leading-16 text-monochrome-black">
           <div className="flex items-center gap-x-2 w-full" data-test="quality-gate-settings:condtion:risks">
@@ -94,13 +94,13 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         tw="self-start mt-2"
         name="tests.enabled"
         type="checkbox"
-        component={Fields.Checkbox}
+        component={Checkbox}
       />
       <Field
         name="tests.condition.value"
         component={ThresholdValueField}
         disabled={!conditionSettingByType?.tests?.enabled}
-        parse={(value: string) => inputLengthRestriction(value, 7)}
+        normalize={(value: string) => inputLengthRestriction(value, 7)}
       >
         <div tw="text-14 leading-16 text-monochrome-black" data-test="quality-gate-settings:condtion:tests">
           Suggested “Tests to run” executed
