@@ -77,34 +77,12 @@ export const QualityGatePane = () => {
           await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
           setIsEditing(false);
         }}
-        initialValues={{
-          coverage: {
-            enabled: conditionSettingByType.coverage?.enabled,
-            condition: {
-              ...conditionSettingByType.coverage?.condition,
-              value: conditionSettingByType.coverage?.enabled ? String(conditionSettingByType.coverage.condition.value) : undefined,
-            },
-          },
-          risks: {
-            enabled: conditionSettingByType.risks?.enabled,
-            condition: {
-              ...conditionSettingByType.risks?.condition,
-              value: conditionSettingByType.risks?.enabled ? String(conditionSettingByType.risks.condition.value) : undefined,
-            },
-          },
-          tests: {
-            enabled: conditionSettingByType.tests?.enabled,
-            condition: {
-              ...conditionSettingByType.tests?.condition,
-              value: conditionSettingByType.tests?.enabled ? String(conditionSettingByType.tests.condition.value) : undefined,
-            },
-          },
-        } as any}
+        initialValues={conditionSettingByType}
         validate={validateQualityGate}
         enableReinitialize
       >
         {({
-          values, isValid, dirty, isSubmitting, initialValues,
+          values, isValid, dirty, isSubmitting, initialValues, resetForm,
         }) => (
           <Form tw="flex flex-col h-full font-regular">
             <div tw="flex justify-between items-center h-16 px-6 border-b border-monochrome-medium-tint">
@@ -133,7 +111,7 @@ export const QualityGatePane = () => {
                 <Button
                   primary
                   size="large"
-                  onClick={() => setIsEditing(true)}
+                  onClick={() => { resetForm(); setIsEditing(true); }}
                   data-test="quality-gate-pane:edit-button"
                 >
                   Edit
@@ -156,6 +134,7 @@ export const QualityGatePane = () => {
                   className="flex gap-x-2"
                   secondary
                   size="large"
+                  type="reset"
                   onClick={() => setIsEditing(false)}
                   data-test="quality-gate-pane:back-button"
                 >
