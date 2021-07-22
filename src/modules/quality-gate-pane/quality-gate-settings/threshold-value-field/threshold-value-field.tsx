@@ -57,7 +57,7 @@ const NumberInput = styled.input`
 `;
 
 export const ThresholdValueField = ({
-  field: { name }, disabled, children, normalize,
+  field: { name }, disabled, children, normalize = (str) => str,
 }: Props) => {
   const [field, meta, helper] = useField(name);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -67,7 +67,7 @@ export const ThresholdValueField = ({
   }, [disabled]);
 
   const handleOnChange = (event: any) => {
-    helper.setValue(normalize ? normalize(event.target.value) : event.target.value);
+    helper.setValue(normalize(event.target.value));
   };
 
   return (

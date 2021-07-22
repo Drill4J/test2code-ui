@@ -44,7 +44,7 @@ export const ManagementNewSession = ({
         {agentId
           ? (
             <SettingsLink
-              className="link"
+              tw="link"
               to={`/agents/agent/${agentId}/settings/general`}
               data-test="management-new-session:settings-link:agent"
             >
@@ -53,7 +53,7 @@ export const ManagementNewSession = ({
           )
           : (
             <SettingsLink
-              className="link"
+              tw="link"
               to={`/agents/service-group/${serviceGroupId}/settings/general`}
               data-test="management-new-session:settings-link:service-group"
             >
@@ -75,17 +75,17 @@ export const ManagementNewSession = ({
         type="checkbox"
       >
         {({ field }: any) => (
-          <div className="flex items-center gap-2">
-            <label>
+          <div tw="flex items-center gap-x-2">
+            <label tw="flex gap-x-2 items-center h-5 text-monochrome-black text-14">
               <Checkbox
                 disabled={hasGlobalSession}
-                input={field}
+                field={field}
               />
               <span>Set as global session</span>
             </label>
             <Tooltip
               message={(
-                <div className="text-center">
+                <div tw="text-center">
                   {hasGlobalSession
                     ? (
                       <>
@@ -113,15 +113,14 @@ export const ManagementNewSession = ({
         type="checkbox"
       >
         {({ field }: any) => (
-          <div className="flex items-center gap-2">
-            <label>
-              <Checkbox input={field} />
+          <div tw="flex items-center gap-x-2">
+            <label tw="flex gap-x-2 items-center h-5 text-monochrome-black text-14">
+              <Checkbox field={field} />
               <span>Real-time coverage collection</span>
             </label>
-
             <Tooltip
               message={(
-                <div className="text-center">
+                <div tw="text-center">
                   Active scope coverage is updated once <br />
                   in 2 seconds. It will affect performance
                 </div>
