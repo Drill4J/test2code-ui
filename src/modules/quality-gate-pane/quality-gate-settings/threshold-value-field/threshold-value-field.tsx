@@ -30,9 +30,8 @@ interface Props {
 }
 
 const NumberInput = styled.input`
-  width: 60px;
-  height: 32px;
-  ${tw`py-0 px-2 text-right text-14 leading-22 text-monochrome-black`};
+  height: 40px;
+  ${tw`py-0 px-2 text-14 leading-22 text-monochrome-black`};
   ${tw`rounded border border-monochrome-medium-tint bg-monochrome-white outline-none`};
 
 
@@ -75,7 +74,7 @@ export const ThresholdValueField = ({
       <div>
         {children}
         <ErrorMessage name={name}>
-          {msg => <div tw="text-10 leading-12 text-red-default">{msg}</div>}
+          {msg => <div tw="absolute text-10 leading-12 text-red-default">{msg}</div>}
         </ErrorMessage>
       </div>
       <NumberInput

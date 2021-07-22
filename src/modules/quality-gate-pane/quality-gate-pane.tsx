@@ -34,12 +34,12 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
   formValues.coverage?.enabled ? numericLimits({
     fieldName: "coverage.condition.value",
     fieldAlias: "Build coverage",
-    unit: "percentages",
+    unit: "",
     min: 0.1,
     max: 100,
   }) : () => undefined,
-  formValues.risks?.enabled ? positiveInteger("risks.condition.value", "Risks") : () => undefined,
-  formValues.tests?.enabled ? positiveInteger("tests.condition.value", "Tests to run") : () => undefined,
+  formValues.risks?.enabled ? positiveInteger("risks.condition.value", "The field") : () => undefined,
+  formValues.tests?.enabled ? positiveInteger("tests.condition.value", "The field") : () => undefined,
 )(formValues);
 
 export const QualityGatePane = () => {
@@ -53,7 +53,10 @@ export const QualityGatePane = () => {
     setIsEditing(false);
   };
 
-  const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
+  const {
+    status = "FAILED",
+    results = { coverage: false, risks: false, tests: false },
+  } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
 
   const conditionSettingByType = conditionSettings.reduce(
@@ -69,7 +72,7 @@ export const QualityGatePane = () => {
   const configured = conditionSettings.some(({ enabled }) => enabled);
 
   return (
-    <Modal isOpen onToggle={handleOnToggle}>
+    <Modal isOpen onToggle={handleOnToggle} isDisableFadeClick={isEditing}>
       <Formik
         onSubmit={async (values) => {
           await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
@@ -102,7 +105,7 @@ export const QualityGatePane = () => {
         enableReinitialize
       >
         {({
-          values, isValid, dirty, isSubmitting,
+          values, isValid, dirty, isSubmitting, initialValues,
         }) => (
           <Form tw="flex flex-col h-full font-regular">
             <div tw="flex justify-between items-center h-16 px-6 border-b border-monochrome-medium-tint">
@@ -124,12 +127,8 @@ export const QualityGatePane = () => {
               </GeneralAlerts>
             )}
             {configured && !isEditing
-              ? (
-                <QualityGateStatus conditionSettingByType={values} />
-              )
-              : (
-                <QualityGateSettings conditionSettingByType={values} />
-              )}
+              ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
+              : <QualityGateSettings conditionSettingByType={values} />}
             <ActionsPanel>
               {configured && !isEditing ? (
                 <Button
@@ -171,7 +170,7 @@ export const QualityGatePane = () => {
                 onClick={handleOnToggle}
                 data-test="quality-gate-pane:cancel-button"
               >
-                Cancel
+                Close
               </Button>
             </ActionsPanel>
           </Form>
