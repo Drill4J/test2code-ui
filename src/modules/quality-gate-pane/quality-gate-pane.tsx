@@ -34,7 +34,6 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
   formValues.coverage?.enabled ? numericLimits({
     fieldName: "coverage.condition.value",
     fieldAlias: "Build coverage",
-    unit: "",
     min: 0.1,
     max: 100,
   }) : () => undefined,
