@@ -39,6 +39,7 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
   <div tw="h-48 px-6 mt-6">
     <GridWrapper>
       <Field
+        tw="text-blue-default"
         name="coverage.enabled"
         type="checkbox"
         component={Checkbox}
@@ -59,6 +60,7 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
     </GridWrapper>
     <GridWrapper>
       <Field
+        tw="text-blue-default"
         name="risks.enabled"
         type="checkbox"
         component={Checkbox}
@@ -91,6 +93,7 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
     </GridWrapper>
     <GridWrapper>
       <Field
+        tw="text-blue-default"
         name="tests.enabled"
         type="checkbox"
         component={Checkbox}
