@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
-import { Route } from "react-router-dom";
+import React, { useState } from "react";
 import { Icons } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { getAgentRoutePath } from "router";
-import { getPagePath, routes } from "common";
-import { Tab, TabsPanel } from "components";
+import { Tab } from "components";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
@@ -29,26 +26,26 @@ const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2 text-monochrome-black`}
 `;
 
-export const BuildOverview = () => (
-  <>
-    <CoveragePluginHeader />
-    <div tw="mb-4 border-b border-monochrome-medium-tint">
-      <TabsPanel path={getAgentRoutePath("/:tab")}>
-        <Tab name="methods" to={getPagePath({ name: "methods" })}>
+export const BuildOverview = () => {
+  const [activeTab, setActiveTab] = useState("methods");
+  return (
+    <>
+      <CoveragePluginHeader />
+      <div tw="flex mb-4 border-b border-monochrome-medium-tint">
+        <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")}>
           <TabIconWrapper>
             <Icons.Function />
           </TabIconWrapper>
           Build methods
         </Tab>
-        <Tab name="tests" to={getPagePath({ name: "tests" })}>
+        <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")}>
           <TabIconWrapper>
             <Icons.Test width={16} />
           </TabIconWrapper>
           Build tests
         </Tab>
-      </TabsPanel>
-    </div>
-    <Route path={getAgentRoutePath(routes.methods)} component={BuildMethodsInfo} />
-    <Route path={getAgentRoutePath(routes.tests)} component={BuildTestsInfo} />
-  </>
-);
+      </div>
+      {activeTab === "methods" ? <BuildMethodsInfo /> : <BuildTestsInfo />}
+    </>
+  );
+};

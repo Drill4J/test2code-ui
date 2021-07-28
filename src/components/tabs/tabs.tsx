@@ -13,37 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Children, cloneElement, ReactElement } from "react";
-import {
-  Link, matchPath, useLocation,
-} from "react-router-dom";
 import tw, { styled, css } from "twin.macro";
 
-interface Props {
-  children: ReactElement | ReactElement[];
-  path: string;
-}
-
-export const TabsPanel = ({ path, children }: Props) => {
-  const { pathname } = useLocation();
-  const { params: { tab = "" } = {} } = matchPath<{ tab?: string }>(pathname, { path }) || {};
-  return (
-    <div tw="flex">
-      {Children.map(children, (child: ReactElement, index: number) =>
-        cloneElement(child, {
-          active: (child.props.name || index) === tab,
-        }))}
-    </div>
-  );
-};
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface TabProps {
-  name: string;
   active?: boolean
 }
 
-export const Tab = styled(Link)<TabProps>`
+export const Tab = styled.div<TabProps>`
   ${tw`relative flex items-center pb-2 mr-4 text-14 font-bold text-monochrome-default cursor-pointer`};
   min-height: 46px;
   box-sizing: border-box;
