@@ -15,14 +15,13 @@
  */
 import React from "react";
 import {
-  Icons, Legend, Stub, Table, useTableActionsState,
+  Icons, Legend, Stub, Table, useTableActionsState, Cells,
 } from "@drill4j/ui-kit";
 import { capitalize } from "@drill4j/common-utils";
 import { FilterList } from "@drill4j/types-admin";
 import { Link } from "react-router-dom";
 import "twin.macro";
 
-import { Cells } from "components";
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";

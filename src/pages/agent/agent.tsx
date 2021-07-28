@@ -40,10 +40,10 @@ export const Agent = () => (
         <Route
           exact
           path={getAgentRoutePath("/")}
-          render={() => <Redirect to={getPagePath({ name: "methods" })} />}
+          render={() => <Redirect to={getPagePath({ name: "test2code" })} />}
         />
         <Route
-          path={[getAgentRoutePath(routes.methods), getAgentRoutePath(routes.tests)]}
+          path={getAgentRoutePath(routes.test2code)}
           component={BuildOverview}
         />
         <Route

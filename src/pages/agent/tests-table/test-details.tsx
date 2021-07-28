@@ -15,14 +15,13 @@
  */
 import React from "react";
 import {
-  Icons, Stub, Table, useTableActionsState,
+  Icons, Stub, Table, useTableActionsState, Cells,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { capitalize } from "@drill4j/common-utils";
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { Cells } from "components";
 
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";

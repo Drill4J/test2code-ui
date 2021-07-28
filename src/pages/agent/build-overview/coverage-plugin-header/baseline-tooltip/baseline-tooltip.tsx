@@ -37,18 +37,19 @@ export const BaselineTooltip = () => {
 
   return (
     <Tooltip message={<div tw="text-center">{info}</div>} position="top-center">
-      <FlagWrapper
-        to={getModalPath({ name: "baselineBuildModal" })}
-        active={Boolean(isActiveBuild && previousBuildVersion)}
-        disabled={disabled}
-      >
-        <Flag />
-      </FlagWrapper>
+      <Link to={getModalPath({ name: "baselineBuildModal" })}>
+        <FlagWrapper
+          active={Boolean(isActiveBuild && previousBuildVersion)}
+          disabled={disabled}
+        >
+          <Flag />
+        </FlagWrapper>
+      </Link>
     </Tooltip>
   );
 };
 
-const FlagWrapper = styled(Link)(({ active, disabled }: { active?: boolean; disabled?: boolean }) => [
+const FlagWrapper = styled.div(({ active, disabled }: { active?: boolean; disabled?: boolean }) => [
   tw`flex ml-2 text-monochrome-default`,
   active ? tw`text-blue-default cursor-pointer` : tw`pointer-events-none`,
   disabled && tw`pointer-events-none`,

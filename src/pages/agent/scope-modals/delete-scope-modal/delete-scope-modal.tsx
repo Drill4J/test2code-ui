@@ -103,7 +103,7 @@ export const DeleteScopeModal = () => {
                           sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
                           closeModal();
                           scope?.id && pathname.includes(scope.id)
-                          && push(getPagePath({ name: "methods" }));
+                          && push(getPagePath({ name: "test2code" }));
                         },
                         onError: setErrorMessage,
                       })(scope as ActiveScope);
