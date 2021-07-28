@@ -17,10 +17,9 @@ import React, { useState } from "react";
 import {
   Redirect, useParams,
 } from "react-router-dom";
-import { Icons } from "@drill4j/ui-kit";
+import { Icons, Tab } from "@drill4j/ui-kit";
 import "twin.macro";
 
-import { Tab } from "components";
 import { ActiveScope } from "types/active-scope";
 import { useActiveScope, useAgent, useBuildVersion } from "hooks";
 import { getPagePath } from "common";

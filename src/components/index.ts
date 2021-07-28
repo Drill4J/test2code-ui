@@ -18,8 +18,6 @@ export { SectionTooltip } from "./section-tooltip";
 export { SingleBar } from "./single-bar";
 export { CoverageSectionTooltip } from "./coverage-section-tooltip";
 export { RisksModal } from "./risks-modal";
-export { Tab } from "./tabs";
 export { BuildMethodsCard, BuildTestsCard } from "./cards";
-export { Cells } from "./cells";
 export { adminUrl, TestsToRunUrl, getTestsToRunURL } from "./tests-to-run-url";
 export { Column as ListColumn, List } from "./list";

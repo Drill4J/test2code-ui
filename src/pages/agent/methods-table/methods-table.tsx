@@ -15,8 +15,7 @@
  */
 import React, { useCallback, useMemo } from "react";
 import {
-  Icons,
-  Stub, Table, TableElements, useTableActionsState,
+  Icons, Stub, Table, TableElements, useTableActionsState, Cells,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
@@ -27,8 +26,6 @@ import "twin.macro";
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
-
-import { Cells } from "components";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
