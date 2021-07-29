@@ -25,6 +25,7 @@ import { Route } from "react-router";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
 import { groupDashboardPath } from "./router";
+import { routes } from "./common";
 
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
@@ -145,3 +146,5 @@ export const GroupPlugin = {
   update: GroupPluginLifecycle.update,
   bootstrap: GroupPluginLifecycle.bootstrap,
 };
+
+export const Routes = { ...routes };
