@@ -73,6 +73,7 @@ export const MethodsTable = ({
             )}
           </span>
         ) : null),
+      notSortable: true,
       width: "44px",
     },
     {
