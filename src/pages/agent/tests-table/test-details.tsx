@@ -34,7 +34,7 @@ interface Props {
 }
 
 export const TestDetails = ({
-  tests: { items: tests = [], totalCount = 0, filteredCount = 0 },
+  tests: { items: tests = [], filteredCount = 0 },
 }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { status } = useAgent(agentId);
@@ -49,6 +49,7 @@ export const TestDetails = ({
           filteredCount={filteredCount}
           placeholder="Search tests by name"
           data={tests}
+          withSearch
           columns={[{
             Header: "Name",
             accessor: "testName",

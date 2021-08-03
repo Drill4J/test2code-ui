@@ -93,22 +93,22 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   return (
     <Header>
       <div
-        className="text-ellipsis font-light text-24 leading-32 text-monochrome-black"
+        tw="text-ellipsis font-light text-24 leading-32 text-monochrome-black"
         data-test="scope-info:scope-name"
         title={name}
       >
         {name}
       </div>
       {status === AGENT_STATUS.ONLINE && (
-        <div className="flex items-center w-full">
-          {active && <SessionIndicator tw="mr-2" active={Boolean(activeSessionsQuantity)} />}
+        <div tw="flex items-center gap-x-2 w-full">
+          {active && <SessionIndicator active={Boolean(activeSessionsQuantity)} />}
           <ScopeStatus active={active} loading={Boolean(activeSessionsQuantity)} enabled={enabled} started={started} finished={finished} />
         </div>
       )}
-      <div className="flex justify-end items-center w-full">
+      <div tw="flex justify-end items-center w-full">
         {active && status === AGENT_STATUS.ONLINE && (
           <Button
-            className="flex gap-x-2 mr-4"
+            tw="flex gap-x-2 mr-4"
             primary
             size="large"
             onClick={() => push(getModalPath({ name: "finishScope" }))}

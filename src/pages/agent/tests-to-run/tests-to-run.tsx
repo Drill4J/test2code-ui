@@ -101,6 +101,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
             filteredCount={filteredCount}
             placeholder="Search tests by name"
             data={testsToRun}
+            withSearch
             columns={[{
               Header: "Name",
               accessor: "name",

@@ -203,23 +203,25 @@ export const MethodsTable = ({
   );
 
   return (
-    <Table
-      withSearch
-      columns={columns}
-      data={coverageByPackages}
-      filteredCount={filteredCount}
-      placeholder="Search packages by name"
-      renderRowSubComponent={renderRowSubComponent}
-      columnsDependency={columnsDependency}
-      stub={
-        coverageByPackages.length === 0 && (
-          <Stub
-            icon={<Icons.Package height={104} width={107} />}
-            title="No results found"
-            message="Try adjusting your search or filter to find what you are looking for."
-          />
-        )
-      }
-    />
+    <div tw="flex flex-col">
+      <Table
+        columns={columns}
+        data={coverageByPackages}
+        filteredCount={filteredCount}
+        placeholder="Search packages by name"
+        renderRowSubComponent={renderRowSubComponent}
+        columnsDependency={columnsDependency}
+        withSearch
+        stub={
+          coverageByPackages.length === 0 && (
+            <Stub
+              icon={<Icons.Package height={104} width={107} />}
+              title="No results found"
+              message="Try adjusting your search or filter to find what you are looking for."
+            />
+          )
+        }
+      />
+    </div>
   );
 };
