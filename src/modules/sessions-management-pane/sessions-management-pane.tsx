@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useEffect } from "react";
-import { Form, Formik, FormikProps } from "formik";
+import { Form, Formik } from "formik";
 import { matchPath, useLocation } from "react-router-dom";
 import {
   Modal, GeneralAlerts, Icons, composeValidators,
@@ -68,7 +68,6 @@ export const SessionsManagementPane = () => {
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
-  useEffect(() => showGeneralAlertMessage(null), [isNewSession]);
   const closeModal = useCloseModal("/session-management");
 
   return (
@@ -76,11 +75,18 @@ export const SessionsManagementPane = () => {
       <Formik
         initialValues={{}}
         onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
-          { resetForm }: any): Promise<Record<string, string>> => {
-          resetForm({});
-          return agentId
-            ? handleStartAgentSession({ id: agentId }, values, resetForm, showGeneralAlertMessage)
-            : handleStartServiceGroupSession({ id: groupId }, values, resetForm, showGeneralAlertMessage);
+          { resetForm, setFieldError }: any): Promise<Record<string, string>> => {
+          const error = await agentId
+            ? handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
+            : handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
+          const errorData = await error;
+          if (errorData.sessionId) {
+            setFieldError("sessionId", errorData.sessionId);
+          } else {
+            resetForm();
+            dispatch(setIsNewSession(false));
+          }
+          return Promise.resolve({});
         }) as any}
         validate={validateManageSessionsPane}
       >
@@ -161,7 +167,7 @@ interface Identifiers {
 }
 
 async function handleStartServiceGroupSession({ id }: Identifiers,
-  values: FormValues, resetForm: () => void, showGeneralAlertMessage: ShowGeneralAlertMessage) {
+  values: FormValues, showGeneralAlertMessage: ShowGeneralAlertMessage) {
   try {
     const response = await startServiceGroupSessions(id)(values);
     const serviceWithError = response?.data.find((service: any) => service?.code === 409);
@@ -175,7 +181,6 @@ async function handleStartServiceGroupSession({ id }: Identifiers,
       });
       return handleFieldErrors([]);
     }
-    resetForm();
     showGeneralAlertMessage({ type: "SUCCESS", text: "New sessions have been started successfully." });
   } catch (error) {
     showGeneralAlertMessage({
@@ -187,10 +192,9 @@ async function handleStartServiceGroupSession({ id }: Identifiers,
 }
 
 async function handleStartAgentSession({ id }: Identifiers,
-  values: FormValues, resetForm: () => void, showGeneralAlertMessage: ShowGeneralAlertMessage) {
+  values: FormValues, showGeneralAlertMessage: ShowGeneralAlertMessage) {
   try {
     await startAgentSession(id)(values);
-    resetForm();
     showGeneralAlertMessage({ type: "SUCCESS", text: "New session has been started successfully." });
   } catch (error) {
     const { data: { fieldErrors = [] } = {}, message: errorMessage = "" } = error?.response?.data || {};
