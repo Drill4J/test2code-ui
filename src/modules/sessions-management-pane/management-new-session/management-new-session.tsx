@@ -78,6 +78,7 @@ export const ManagementNewSession = ({
           <div tw="flex items-center gap-x-2">
             <label tw="flex gap-x-2 items-center h-5 text-monochrome-black text-14">
               <Checkbox
+                tw="text-blue-default"
                 disabled={hasGlobalSession}
                 field={field}
               />
@@ -115,7 +116,7 @@ export const ManagementNewSession = ({
         {({ field }: any) => (
           <div tw="flex items-center gap-x-2">
             <label tw="flex gap-x-2 items-center h-5 text-monochrome-black text-14">
-              <Checkbox field={field} />
+              <Checkbox tw="text-blue-default" field={field} />
               <span>Real-time coverage collection</span>
             </label>
             <Tooltip
