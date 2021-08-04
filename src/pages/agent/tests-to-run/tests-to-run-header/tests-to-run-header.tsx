@@ -189,7 +189,7 @@ function getEstimatedTimeSavedTooltipMessage(autoTestsCount: number) {
       the suggested Auto Tests
     </span>
   ) : (
-    <span>No suggested Auto Tests to run in current build</span>
+    <span>No Auto Tests suggested to run in current build</span>
   );
 }
 
