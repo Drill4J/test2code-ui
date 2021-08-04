@@ -20,7 +20,7 @@ import {
 } from "@drill4j/ui-kit";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { useCloseModal } from "@drill4j/common-hooks";
-import "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
@@ -85,12 +85,16 @@ export const FinishScopeModal = () => {
         <div tw="m-6">
           <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
           <div tw="mt-6 mb-9">
-            <Inputs.Checkbox
-              checked={ignoreScope}
-              onChange={() => setIgnoreScope(!ignoreScope)}
-              label="Ignore scope in build stats"
+            <Label
+              onClick={() => setIgnoreScope(!ignoreScope)}
               disabled={!testsCount || testTypes.length > 0}
-            />
+            >
+              <Inputs.Checkbox
+                tw="text-blue-default"
+                checked={ignoreScope}
+              />
+              <span tw="text-14 leading-20">Ignore scope in build stats</span>
+            </Label>
           </div>
           <div className="flex items-center gap-x-4 w-full mt-9">
             {!testTypes.length ? (
@@ -145,3 +149,8 @@ export const FinishScopeModal = () => {
     </Popup>
   );
 };
+
+const Label = styled.label<{disabled: boolean}>`
+  ${tw`flex items-center gap-x-2`}
+  ${({ disabled }) => disabled && tw`pointer-events-none opacity-30`}
+`;
