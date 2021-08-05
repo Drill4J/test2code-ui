@@ -30,10 +30,6 @@ interface Props {
   hasGlobalSession: boolean;
 }
 
-const SettingsLink = styled(NavLink)`
-  ${tw`font-bold`}
-`;
-
 export const ManagementNewSession = ({
   agentId, serviceGroupId, hasGlobalSession,
 }: Props) => (
@@ -76,14 +72,13 @@ export const ManagementNewSession = ({
       >
         {({ field }: any) => (
           <div tw="flex items-center gap-x-2">
-            <label tw="flex gap-x-2 items-center h-5 text-monochrome-black text-14">
+            <Label disabled={hasGlobalSession}>
               <Checkbox
                 tw="text-blue-default"
-                disabled={hasGlobalSession}
                 field={field}
               />
               <span>Set as global session</span>
-            </label>
+            </Label>
             <Tooltip
               message={(
                 <div tw="text-center">
@@ -135,3 +130,12 @@ export const ManagementNewSession = ({
     </div>
   </div>
 );
+
+const Label = styled.label<{disabled: boolean}>`
+  ${tw`flex gap-x-2 items-center h-5 text-monochrome-black text-14`}
+  ${({ disabled }) => disabled && tw`opacity-30 pointer-events-none`}
+`;
+
+const SettingsLink = styled(NavLink)`
+  ${tw`font-bold`}
+`;

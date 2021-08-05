@@ -18,20 +18,14 @@ import { Route, Switch, Redirect } from "react-router";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 
-import { getPagePath, modalsRoutes, routes } from "common";
-import { Modals, RisksModal } from "components";
-import {
-  QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal, CoveredMethodsByTestSidebar,
-} from "modules";
+import { getPagePath, routes } from "common";
+import { Modals } from "components";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import { BuildOverview } from "./build-overview";
-import { BaselineBuildModal } from "./baseline-build-modal";
-import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "./scope-modals";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 
 import { TestsToRun } from "./tests-to-run";
-import { GetSuggestedTestsModal } from "./tests-to-run/tests-to-run-header/get-suggested-tests-modal";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
