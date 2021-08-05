@@ -38,7 +38,5 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 export const getGroupModalPath = <AppPages extends Routes,
   PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string => {
   const { pathname } = window.location;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
   return `${pathname}?${queryString.stringify({ activeModal: groupModalsRoutes[name], ...params } as queryString.ParsedUrlQueryInput)}`;
 };
