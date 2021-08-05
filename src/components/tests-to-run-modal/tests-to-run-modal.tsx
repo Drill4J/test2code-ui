@@ -16,7 +16,7 @@
 import React, { useState, useEffect } from "react";
 import { nanoid } from "nanoid";
 import {
-  Icons, Inputs, Modal,
+  Icons, Dropdown, Modal,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 import { useCloseModal } from "@drill4j/common-hooks";
@@ -91,8 +91,8 @@ export const TestsToRunModal = () => {
           </div>
         </div>
         <div tw="h-full w-full overflow-y-auto overflow-x-hidden">
-          <div tw="mx-6 my-4">
-            <Inputs.Dropdown
+          <div tw="mx-6 my-4 text-14 text-blue-default font-bold">
+            <Dropdown
               tw="mt-3 ml-6 text-blue-default"
               items={[
                 { value: "all", label: "All test types" },
@@ -102,7 +102,7 @@ export const TestsToRunModal = () => {
                   label: `Auto tests (${(testsToRun.AUTO || []).length})`,
                 },
               ]}
-              onChange={({ value }: any) => setSelectedFilter(String(value))}
+              onChange={(value : any) => setSelectedFilter(String(value))}
               value={selectedFilter}
             />
           </div>

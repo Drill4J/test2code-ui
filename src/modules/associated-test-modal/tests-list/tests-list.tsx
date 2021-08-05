@@ -15,7 +15,7 @@
  */
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
-import { Icons, Inputs } from "@drill4j/ui-kit";
+import { Icons, Dropdown } from "@drill4j/ui-kit";
 import { useElementSize } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
@@ -48,15 +48,15 @@ export const TestsList = ({ associatedTests }: Props) => {
 
   return (
     <div tw="flex flex-col h-full overflow-y-auto">
-      <div tw="mx-6 my-4">
-        <Inputs.Dropdown
+      <div tw="mx-6 my-4 text-14 text-blue-default font-bold">
+        <Dropdown
           tw="my-4 mx-6"
           items={[
             { value: "all", label: "All tests" },
             { value: "auto", label: `Auto (${autoTests.length})` },
             { value: "manual", label: `Manual (${manualTests.length})` },
           ]}
-          onChange={({ value }: any) => setSelectedSection(String(value))}
+          onChange={(value : any) => setSelectedSection(String(value))}
           value={selectedSection}
         />
       </div>

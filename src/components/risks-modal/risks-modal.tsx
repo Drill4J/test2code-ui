@@ -16,7 +16,7 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Icons, Modal, Inputs,
+  Icons, Modal, Dropdown,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 import { useQueryParams, useCloseModal, useElementSize } from "@drill4j/common-hooks";
@@ -66,8 +66,8 @@ export const RisksModal = () => {
           methods.
         </div>
         <div tw="flex flex-col flex-grow overflow-y-hidden">
-          <div tw="mt-4 ml-6">
-            <Inputs.Dropdown
+          <div tw="mt-4 ml-6 text-14 text-blue-default font-bold">
+            <Dropdown
               items={[
                 { value: "all", label: "All risks" },
                 { value: "new", label: `Not covered new methods (${newRisks.length})` },
@@ -76,7 +76,7 @@ export const RisksModal = () => {
                   label: `Not covered modified methods (${modifiedRisks.length})`,
                 },
               ]}
-              onChange={({ value }: any) => setSelectedSection(String(value))}
+              onChange={(value : any) => setSelectedSection(String(value))}
               value={selectedSection}
             />
           </div>

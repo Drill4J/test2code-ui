@@ -16,7 +16,7 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Inputs, Icons, useElementSize,
+  Dropdown, Icons, useElementSize,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
@@ -43,8 +43,8 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
 
   return (
     <div tw="flex-col h-full overflow-hidden">
-      <div tw="mx-6 py-4 leading-32 text-monochrome-default border-b border-monochrome-medium-tint">
-        <Inputs.Dropdown
+      <div tw="mx-6 py-4 leading-32 text-14 text-blue-default font-bold border-b border-monochrome-medium-tint">
+        <Dropdown
           items={[
             { value: "all", label: "All methods" },
             { value: "new", label: `New methods (${summary?.methodCounts?.new})` },
@@ -57,7 +57,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
               label: `Unaffected methods (${summary?.methodCounts?.unaffected})`,
             },
           ]}
-          onChange={({ value }: any) => setSelectedSection(value as keyof MethodCounts)}
+          onChange={(value: any) => setSelectedSection(value as keyof MethodCounts)}
           value={selectedSection}
         />
       </div>
