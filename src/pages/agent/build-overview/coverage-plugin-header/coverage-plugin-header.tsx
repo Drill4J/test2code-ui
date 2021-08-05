@@ -48,28 +48,26 @@ export const CoveragePluginHeader = () => {
   return (
     <Content>
       <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
-      {agentStatus === AGENT_STATUS.ONLINE && (
-        <BaselinePanel>
-          <div>Current build:</div>
-          <div className="flex items-center w-full">
-            <div className="text-ellipsis text-monochrome-black" title={buildVersion}>{buildVersion}</div>
-            <BaselineTooltip />
-          </div>
-          <div>Parent build:</div>
-          {previousBuildVersion
-            ? (
-              <div className="text-ellipsis mr-6">
-                <div
-                  className="inline link"
-                  onClick={() => switchBuild(previousBuildVersion, "/")}
-                  title={previousBuildVersion}
-                >
-                  {previousBuildVersion}
-                </div>
+      <BaselinePanel>
+        <div>Current build:</div>
+        <div className="flex items-center w-full">
+          <div className="text-ellipsis text-monochrome-black" title={buildVersion}>{buildVersion}</div>
+          <BaselineTooltip />
+        </div>
+        <div>Parent build:</div>
+        {previousBuildVersion
+          ? (
+            <div className="text-ellipsis mr-6">
+              <div
+                className="inline link"
+                onClick={() => switchBuild(previousBuildVersion, "/")}
+                title={previousBuildVersion}
+              >
+                {previousBuildVersion}
               </div>
-            ) : <span>&ndash;</span>}
-        </BaselinePanel>
-      )}
+            </div>
+          ) : <span>&ndash;</span>}
+      </BaselinePanel>
       {activeBuildVersion === buildVersion && agentStatus === AGENT_STATUS.ONLINE && (
         <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
           <div className="flex items-center w-full">
