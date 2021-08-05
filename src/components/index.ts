@@ -21,3 +21,4 @@ export { RisksModal } from "./risks-modal";
 export { BuildMethodsCard, BuildTestsCard } from "./cards";
 export { adminUrl, TestsToRunUrl, getTestsToRunURL } from "./tests-to-run-url";
 export { Column as ListColumn, List } from "./list";
+export { Modals, agentModalsNames } from "./modals";

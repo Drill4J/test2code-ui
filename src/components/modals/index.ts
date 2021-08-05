@@ -13,14 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
-import { BrowserRouter } from "react-router-dom";
-import { Content } from "./content";
-
-export default function Root() {
-  return (
-    <BrowserRouter>
-      <Content />
-    </BrowserRouter>
-  );
-}
+export { Modals, agentModalsNames } from "./modals";

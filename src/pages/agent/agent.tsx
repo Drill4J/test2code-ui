@@ -19,7 +19,7 @@ import { getAgentRoutePath } from "router";
 import "twin.macro";
 
 import { getPagePath, modalsRoutes, routes } from "common";
-import { RisksModal } from "components";
+import { Modals, RisksModal } from "components";
 import {
   QualityGatePane, SessionsManagementPaneProvider, AssociatedTestModal, CoveredMethodsByTestSidebar,
 } from "modules";
@@ -61,18 +61,6 @@ export const Agent = () => (
         />
       </Switch>
     </div>
-    <Route path={`*${modalsRoutes.risks}`} component={RisksModal} />
-    <Route path={`*${modalsRoutes.baselineBuildModal}`} component={BaselineBuildModal} />
-    <Route path={`*${modalsRoutes.qualityGate}`} component={QualityGatePane} />
-    <Route path={`*${modalsRoutes.sessionManagement}`} component={SessionsManagementPaneProvider} />
-    <Route path={`*${modalsRoutes.finishScope}`} component={FinishScopeModal} />
-    <Route path={`*${modalsRoutes.renameScope}`} component={RenameScopeModal} />
-    <Route path={`*${modalsRoutes.deleteScope}`} component={DeleteScopeModal} />
-    <Route path={`*${modalsRoutes.associatedTests}`} component={AssociatedTestModal} />
-    <Route path={`*${modalsRoutes.coveredMethods}`} component={CoveredMethodsByTestSidebar} />
-    <Route
-      path={`*${modalsRoutes.getSuggestedTests}`}
-      render={() => <GetSuggestedTestsModal agentType="Agent" />}
-    />
+    <Modals />
   </div>
 );

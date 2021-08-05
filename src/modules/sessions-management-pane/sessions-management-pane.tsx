@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect } from "react";
+import React from "react";
 import { Form, Formik } from "formik";
 import { matchPath, useLocation } from "react-router-dom";
 import {
@@ -75,18 +75,16 @@ export const SessionsManagementPane = () => {
       <Formik
         initialValues={{}}
         onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
-          { resetForm, setFieldError }: any): Promise<Record<string, string>> => {
-          const error = await agentId
-            ? handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
-            : handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
-          const errorData = await error;
-          if (errorData.sessionId) {
-            setFieldError("sessionId", errorData.sessionId);
+          { resetForm, setFieldError }: any) => {
+          const error = agentId
+            ? await handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
+            : await handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
+          if (error.sessionId) {
+            setFieldError("sessionId", error.sessionId);
           } else {
             resetForm();
             dispatch(setIsNewSession(false));
           }
-          return Promise.resolve({});
         }) as any}
         validate={validateManageSessionsPane}
       >

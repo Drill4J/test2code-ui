@@ -22,11 +22,7 @@ import "twin.macro";
 import { getTestsToRunURL, TestsToRunUrl } from "components";
 import { useCloseModal } from "@drill4j/common-hooks";
 
-interface Props {
-  agentType: string;
-}
-
-export const GetSuggestedTestsModal = ({ agentType }: Props) => {
+export const GetSuggestedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useParams<{ agentId: string; pluginId: string; }>();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -35,6 +31,7 @@ export const GetSuggestedTestsModal = ({ agentType }: Props) => {
     return () => clearTimeout(timeout);
   }, [copied]);
   const closeModal = useCloseModal("/get-suggested-tests");
+
   return (
     <Popup
       isOpen
@@ -48,7 +45,7 @@ export const GetSuggestedTestsModal = ({ agentType }: Props) => {
             These are recommendations for this build updates only.<br />
             Use this Curl in your command line to get JSON:
           </span>
-          <TestsToRunUrl agentId={agentId} pluginId={pluginId} agentType={agentType} />
+          <TestsToRunUrl agentId={agentId} pluginId={pluginId} agentType="Agent" />
         </div>
         <div className="flex justify-end gap-x-4">
           <Button
@@ -56,7 +53,7 @@ export const GetSuggestedTestsModal = ({ agentType }: Props) => {
             primary
             size="large"
             onClick={() => {
-              copyToClipboard(getTestsToRunURL(agentId, pluginId, agentType));
+              copyToClipboard(getTestsToRunURL(agentId, pluginId, "Agent"));
               setCopied(true);
             }}
             data-test="get-suggested-tests-modal:copy-to-clipboard-button"

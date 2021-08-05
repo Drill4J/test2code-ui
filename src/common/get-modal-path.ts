@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import * as queryString from "querystring";
+import { agentModalsNames } from "../components";
 
 interface Routes {
   sessionManagement: void;
@@ -28,17 +29,17 @@ interface Routes {
   coveredMethods: "testId" | "coveredMethods";
 }
 
-export const modalsRoutes = {
-  sessionManagement: "/session-management-modal",
-  renameScope: "/rename-scope-modal",
-  deleteScope: "/delete-scope-modal",
-  finishScope: "/finish-scope-modal",
-  risks: "/risks-modal",
-  associatedTests: "/associated-tests-modal",
-  coveredMethods: "/covered-methods-modal",
-  qualityGate: "/quality-gate",
-  baselineBuildModal: "/baseline-build-modal",
-  getSuggestedTests: "/get-suggested-tests",
+export const modalsRoutes: Record<string, keyof typeof agentModalsNames> = {
+  sessionManagement: "SESSION_MANAGEMENT",
+  renameScope: "RENAME_SCOPE",
+  deleteScope: "DELETE_SCOPE",
+  finishScope: "FINISH_SCOPE",
+  risks: "RISKS_PANE",
+  associatedTests: "ASSOCIATED_TESTS",
+  coveredMethods: "COVERED_METHODS",
+  qualityGate: "QUALITY_GATE",
+  baselineBuildModal: "BASELINE_BUILD",
+  getSuggestedTests: "GET_SUGGESTED_TESTS",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
@@ -50,16 +51,6 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 
 export const getModalPath = <AppPages extends Routes,
   PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string => {
-  const pluginLocation = window.location.pathname.split("/").slice(0, 7).join("/");
-  const pluginRoute = window.location.pathname.split("/").slice(7).join("/");
-  let path = `${pluginLocation}/${pluginRoute}${modalsRoutes[name as
-    keyof typeof modalsRoutes]}?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
-  Object.values(modalsRoutes).forEach((value) => {
-    if (pluginRoute.includes(value)) {
-      const [newPluginRoute] = pluginRoute.split(value);
-      path = `${pluginLocation}/${newPluginRoute}${modalsRoutes[name as
-        keyof typeof modalsRoutes]}?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
-    }
-  });
-  return path;
+  const { pathname } = window.location;
+  return `${pathname}?${queryString.stringify({ activeModal: modalsRoutes[name], ...params } as queryString.ParsedUrlQueryInput)}`;
 };

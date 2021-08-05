@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import * as queryString from "querystring";
+import { agentModalsNames } from "../components";
 
 interface Routes {
   sessionManagement: void;
@@ -21,10 +22,10 @@ interface Routes {
   testsToRun: void;
 }
 
-export const groupModalsRoutes = {
-  sessionManagement: "/session-management-modal",
-  finishAllScopes: "/finish-all-scopes-modal",
-  testsToRun: "/tests-to-run-modal",
+export const groupModalsRoutes: Record<string, keyof typeof agentModalsNames> = {
+  sessionManagement: "SESSION_MANAGEMENT",
+  finishAllScopes: "FINISH_ALL_SCOPES",
+  testsToRun: "TESTS_TO_RUN",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
@@ -36,7 +37,6 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 
 export const getGroupModalPath = <AppPages extends Routes,
   PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string => {
-  const pluginLocation = window.location.pathname.split("/").slice(0, 6).join("/");
-  return `${pluginLocation}${groupModalsRoutes[name as
-    keyof typeof groupModalsRoutes]}?${queryString.stringify(params as queryString.ParsedUrlQueryInput)}`;
+  const { pathname } = window.location;
+  return `${pathname}?${queryString.stringify({ activeModal: groupModalsRoutes[name], ...params } as queryString.ParsedUrlQueryInput)}`;
 };
