@@ -75,7 +75,7 @@ export const SessionsManagementPane = () => {
       <Formik
         initialValues={{}}
         onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
-          { resetForm, setFieldError }: any): Promise<Record<string, string>> => {
+          { resetForm, setFieldError }: any) => {
           const error = agentId
             ? await handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
             : await handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
@@ -85,7 +85,6 @@ export const SessionsManagementPane = () => {
             resetForm();
             dispatch(setIsNewSession(false));
           }
-          return Promise.resolve({});
         }) as any}
         validate={validateManageSessionsPane}
       >
