@@ -67,6 +67,7 @@ export const RenameScopeModal = () => {
           })(values as ScopeSummary)}
           validate={validateScope}
           initialValues={scope}
+          enableReinitialize
         >
           {({
             isSubmitting, dirty, isValid,

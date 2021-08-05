@@ -14,22 +14,19 @@
  * limitations under the License.
  */
 import React from "react";
-import { Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Menu } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 
-import { List, ListColumn } from "components";
-import { SessionsManagementPaneProvider as SessionsManagementPane } from "modules";
+import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
-import { TestsToRunModal } from "components/tests-to-run-modal";
-import { getGroupModalPath, groupModalsRoutes, routes as agentRoutes } from "common";
+import { getGroupModalPath, routes as agentRoutes } from "common";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";
 import { TestToCodeCell } from "./test-to-code-cell";
 import { TestToCodeHeaderCell } from "./test-to-code-header-cell";
-import { FinishAllScopesModal } from "./finish-all-scopes-modal";
 
 export interface GroupRootComponentProps {
   getAgentPluginPath: (props: { agentId: string; buildVersion: string; path?: string}) => string;
@@ -162,18 +159,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
           )}
         />
       </List>
-      <Route
-        path={`*${groupModalsRoutes.sessionManagement}`}
-        component={SessionsManagementPane}
-      />
-      <Route
-        path={`*${groupModalsRoutes.finishAllScopes}`}
-        render={() => <FinishAllScopesModal agentsCount={serviceGroupSummaries.length} />}
-      />
-      <Route
-        path={`*${groupModalsRoutes.testsToRun}`}
-        component={TestsToRunModal}
-      />
+      <Modals />
     </div>
   );
 };

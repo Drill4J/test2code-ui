@@ -22,11 +22,7 @@ import "twin.macro";
 import { getTestsToRunURL, TestsToRunUrl } from "components";
 import { useCloseModal } from "@drill4j/common-hooks";
 
-interface Props {
-  agentType: string;
-}
-
-export const GetSuggestedTestsModal = ({ agentType }: Props) => {
+export const GetSuggestedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useParams<{ agentId: string; pluginId: string; }>();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -35,6 +31,8 @@ export const GetSuggestedTestsModal = ({ agentType }: Props) => {
     return () => clearTimeout(timeout);
   }, [copied]);
   const closeModal = useCloseModal("/get-suggested-tests");
+  const agentType = "Agent";
+
   return (
     <Popup
       isOpen
