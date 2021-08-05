@@ -61,7 +61,7 @@ export const CoveragePluginHeader = () => {
               <div className="text-ellipsis mr-6">
                 <div
                   className="inline link"
-                  onClick={() => switchBuild(previousBuildVersion, "/methods")}
+                  onClick={() => switchBuild(previousBuildVersion, "/")}
                   title={previousBuildVersion}
                 >
                   {previousBuildVersion}
