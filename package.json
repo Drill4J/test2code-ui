@@ -1,7 +1,7 @@
 {
   "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
-  "version": "0.1.14",
+  "version": "0.1.15",
   "main": "dist",
   "scripts": {
     "start": "webpack serve --port 8080",

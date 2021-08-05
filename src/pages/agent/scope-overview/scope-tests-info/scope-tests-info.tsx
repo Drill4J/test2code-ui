@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 import React from "react";
+import { useParams } from "react-router-dom";
+import { TableActionsProvider } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { BuildTestsCard } from "components";
 import { TestsInfo } from "types/tests-info";
 import { BuildCoverage } from "types/build-coverage";
 import { useBuildVersion } from "hooks";
-import { useParams } from "react-router-dom";
 import { ActiveBuildTestsInfo } from "../../build-overview/build-tests-info/active-build-tests-info";
 import { ScopeTestsTable } from "./scope-tests-table";
 
@@ -38,7 +39,9 @@ export const ScopeTestsInfo = () => {
           <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
         </div>
       </div>
-      <ScopeTestsTable />
+      <TableActionsProvider>
+        <ScopeTestsTable />
+      </TableActionsProvider>
     </>
   );
 };
