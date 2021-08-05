@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 
 import { useActiveSessions, useGroupRouteParams } from "hooks";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { PLUGIN_ID } from "common";
+import { getGroupModalPath } from "common";
 import { finishAllScopes } from "./finish-all-scopes";
 
 interface Props {
@@ -65,7 +65,7 @@ export const FinishAllScopesModal = ({ agentsCount }: Props) => {
               At least one active session has been detected.<br />
               First, you need to finish it in&nbsp;
               <Link
-                to={`/service-group-full-page/${groupId}/${PLUGIN_ID}/session-management-pane`}
+                to={getGroupModalPath({ name: "sessionManagement" })}
                 tw="link text-14"
               >
                 Sessions Management
