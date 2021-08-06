@@ -25,7 +25,7 @@ import tw, { styled } from "twin.macro";
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
 import { useAgentRouteParams, useBuildVersion } from "hooks";
-import { getModalPath } from "common";
+import { getModalPath, getPagePath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
@@ -114,7 +114,7 @@ export const FinishScopeModal = () => {
                       onError: setErrorMessage,
                     })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
                     isScopeInfoPage && !scope?.sessionsFinished &&
-                        push(`/full-page/${agentId}/${buildVersion}/${pluginId}/dashboard/methods`);
+                        push(getPagePath({ name: "test2code" }));
                     setLoading(false);
                   }}
                   data-test="finish-scope-modal:finish-scope-button"
