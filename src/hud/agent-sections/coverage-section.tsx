@@ -75,19 +75,21 @@ export const CoverageSection = () => {
         label="Build Coverage"
         info={`${percentFormatter(buildCodeCoverage)}%`}
         graph={(
-          <Tooltip tw="relative" message={<CoverageSectionTooltip data={tooltipData} />}>
-            <SingleBar
-              width={108}
-              height={128}
-              color={COVERAGE_TYPES_COLOR.TOTAL}
-              percent={percentFormatter(buildCodeCoverage)}
-            />
-            {!isFirstBuild && (
-              <div
-                tw="absolute w-27 border-t border-dashed border-monochrome-shade"
-                style={{ bottom: `${previousBuildCodeCoverage}%` }}
+          <Tooltip message={<CoverageSectionTooltip data={tooltipData} />}>
+            <div tw="relative">
+              <SingleBar
+                width={108}
+                height={128}
+                color={COVERAGE_TYPES_COLOR.TOTAL}
+                percent={percentFormatter(buildCodeCoverage)}
               />
-            )}
+              {!isFirstBuild && (
+                <div
+                  tw="absolute w-27 border-t border-dashed border-monochrome-shade"
+                  style={{ bottom: `${previousBuildCodeCoverage}%` }}
+                />
+              )}
+            </div>
           </Tooltip>
         )}
         additionalInfo={(
