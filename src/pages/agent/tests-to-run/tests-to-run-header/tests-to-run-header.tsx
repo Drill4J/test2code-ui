@@ -59,6 +59,7 @@ export const TestsToRunHeader = ({
       AUTO: { total: totalAutoTestsToRun = 0, completed: completedAutoTestsToRun = 0 } = {},
     } = {},
   } = summaryTestsToRun;
+
   const {
     buildVersion, previousBuildVersion, activeBuildVersion,
   } = agentInfo;

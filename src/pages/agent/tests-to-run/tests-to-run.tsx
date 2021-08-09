@@ -124,7 +124,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
             },
             {
               Header: "State",
-              accessor: "stats.result",
+              accessor: "details.result",
               Cell: ({ row: { original: { toRun } } }: any) => (
                 <span tw="leading-64">
                   {toRun
@@ -162,7 +162,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
             },
             {
               Header: "Duration",
-              accessor: "stats.duration",
+              accessor: "details.duration",
               Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
               width: "10%",
             }]}
