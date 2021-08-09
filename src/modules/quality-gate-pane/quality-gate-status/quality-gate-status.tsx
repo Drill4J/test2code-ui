@@ -102,7 +102,7 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
           {copied
             ? (
               <div className="flex items-center gap-x-1 text-10 leading-16 primary-blue-default">
-                <span className="monochrome-black">Copied to clipboard.</span>
+                <span tw="text-monochrome-black">Copied to clipboard.</span>
                 <Icons.Check height={10} width={14} viewBox="0 0 14 10" />
               </div>
             )
