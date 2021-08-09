@@ -1,12 +1,12 @@
 {
   "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "main": "dist",
   "scripts": {
-    "start": "webpack serve --port 8080",
-    "start:standalone": "webpack serve --env standalone",
-    "build": "webpack --mode=production",
+    "start": "npm run tailwind:css && webpack serve --port 8080",
+    "start:standalone": "npm run tailwind:css && webpack serve --env standalone",
+    "build": "npm run tailwind:css && webpack --mode=production",
     "analyze": "webpack --mode=production --env analyze",
     "lint": "eslint src --ext js,ts,tsx",
     "lint:fix": "eslint src --ext js,ts,tsx --fix",
@@ -14,7 +14,8 @@
     "check-format": "prettier --check .",
     "test": "cross-env BABEL_ENV=test jest",
     "watch-tests": "cross-env BABEL_ENV=test jest --watch",
-    "coverage": "cross-env BABEL_ENV=test jest --coverage"
+    "coverage": "cross-env BABEL_ENV=test jest --coverage",
+    "tailwind:css": "tailwind build src/tailwind.css -c tailwind.config.js -o src/index.css"
   },
   "devDependencies": {
     "@babel/core": "^7.14.3",

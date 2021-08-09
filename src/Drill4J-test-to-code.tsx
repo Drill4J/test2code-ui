@@ -27,6 +27,8 @@ import { GroupRootComponentProps } from "./pages/group/group";
 import { groupDashboardPath } from "./router";
 import { routes } from "./common";
 
+import "./index.css";
+
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
   : "/api";
