@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { Button, Icons, Popup } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
 import { useCloseModal } from "@drill4j/common-hooks";
+import { useAgentRouteParams } from "hooks";
 
 export const GetSuggestedTestsModal = () => {
-  const { agentId = "", pluginId = "" } = useParams<{ agentId: string; pluginId: string; }>();
+  const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     const timeout = setTimeout(() => setCopied(false), 5000);
