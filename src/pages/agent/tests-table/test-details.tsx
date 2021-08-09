@@ -72,7 +72,7 @@ export const TestDetails = ({
           },
           {
             Header: "Status",
-            accessor: "stats.result",
+            accessor: "details.result",
             Cell: ({ value }: any) => (
               <Cells.TestStatus
                 type={value}
@@ -106,7 +106,7 @@ export const TestDetails = ({
           },
           {
             Header: "Duration",
-            accessor: "stats.duration",
+            accessor: "details.duration",
             Cell: Cells.Duration,
             width: "10%",
           }]}
