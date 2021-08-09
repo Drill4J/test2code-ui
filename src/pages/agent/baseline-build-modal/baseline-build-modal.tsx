@@ -51,7 +51,7 @@ export const BaselineBuildModal = () => {
       header={`${isBaseline ? "Unset" : "Set"} as Baseline Build`}
       closeOnFadeClick
     >
-      <div tw="w-108">
+      <div tw="w-108 font-regular">
         <div className="flex flex-col gap-6 pt-4 px-6 pb-6">
           <Message className="flex items-center w-full">
             {isBaseline
@@ -68,10 +68,10 @@ export const BaselineBuildModal = () => {
               )}
           </Message>
           {!isBaseline && (
-            <Message className="flex items-start gap-2 w-full">
+            <Message tw="flex gap-2 w-full text-blue-default">
               <Checkbox checked={isConfirmed} onChange={() => setIsConfirmed(!isConfirmed)} />
-              <span>
-                I understand that it’s necessary to run all tests <br /> to determine the number of suggested tests.
+              <span tw="text-monochrome-black">
+                I understand that it’s necessary to run all tests to determine the number of suggested tests.
               </span>
             </Message>
           )}
