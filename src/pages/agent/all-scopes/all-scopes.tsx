@@ -42,6 +42,7 @@ export const AllScopes = () => {
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
   );
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
+  const isActiveBuildVersion = (activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE);
 
   return (
     <div tw="flex flex-col w-full h-full">
@@ -55,6 +56,7 @@ export const AllScopes = () => {
             withSearch={false}
             isDefaulToggleSortBy
             data={scopesData}
+            columnsDependency={[isActiveBuildVersion, activeScope?.coverage.percentage]}
             columns={[
               {
                 Header: "Name",
@@ -155,7 +157,7 @@ export const AllScopes = () => {
               {
                 Header: () => null,
                 accessor: "actions",
-                Cell: activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE ? ({ row: { original = {} } = {} }: any) => {
+                Cell: isActiveBuildVersion ? ({ row: { original = {} } = {} }: any) => {
                   const { active, enabled, id } = original;
                   const menuActions = [
                     active && {
