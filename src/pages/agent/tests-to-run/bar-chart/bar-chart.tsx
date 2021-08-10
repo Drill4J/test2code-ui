@@ -73,7 +73,7 @@ const ChartBlock = styled.div`
 `;
 
 const XAxis = styled.div`
-  ${tw`grid gap-5 text-12 leading-24 text-monochrome-black`};
+  ${tw`grid gap-1 text-12 leading-24 text-monochrome-black`};
   grid-template-columns: max-content auto;
 `;
 
@@ -81,7 +81,7 @@ const XAxisLegend = styled.div`
   ${tw`grid gap-12 pr-2 text-monochrome-default`};
 
   & > div {
-    ${tw`w-16 text-center text-ellipsis`};
+    ${tw`w-24 text-center`};
 
     &:last-child {
       ${tw`text-monochrome-black`};
@@ -206,9 +206,9 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
         <XAxis>
           <span>Build</span>
           <XAxisLegend style={{ gridTemplateColumns: `repeat(${visibleBarsCount}, 64px)` }}>
-            {bars.map(({ buildVersion }) => (
+            {bars.map(({ buildVersion = "" }) => (
               <div key={nanoid()} title={buildVersion}>
-                {buildVersion}
+                {cropInCenter(buildVersion)}
               </div>
             ))}
           </XAxisLegend>
@@ -217,6 +217,10 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
     </Content>
   );
 };
+
+function cropInCenter(str: string) {
+  return str.length > 14 ? `${str.slice(0, 7)}...${str.slice(-7)}` : str;
+}
 
 const MS_IN_SECONDS = 1000;
 const MS_IN_MINUTES = MS_IN_SECONDS * 60;
