@@ -29,7 +29,7 @@ import { TestsToRun } from "./tests-to-run";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
-    <div tw="mx-6">
+    <div>
       <Switch>
         <Route
           exact

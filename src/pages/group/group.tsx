@@ -43,7 +43,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
   }));
 
   return (
-    <div tw="px-6">
+    <div>
       <List
         data={serviceGroupSummaries}
         gridTemplateColumns="3fr repeat(3, 1fr) 50px"
