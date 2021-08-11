@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -24,7 +24,7 @@ import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
-import { useBuildVersion, usePreviousBuildCoverage } from "hooks";
+import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
 
 const BuildInfo = styled.div`
   ${tw`grid items-center`}
@@ -34,6 +34,7 @@ const BuildInfo = styled.div`
 `;
 
 export const CoverageSection = () => {
+  const { agentId = "" } = useAgentRouteParams();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary") || {};
@@ -51,7 +52,6 @@ export const CoverageSection = () => {
       covered: modifiedMethodsCoveredCount = 0,
     } = {},
   } = useBuildVersion<Methods>("/build/methods") || {};
-  const { agentId = "" } = useParams<{ agentId: string }>();
   const tooltipData = {
     totalCovered: {
       total: allMethodsTotalCount,
@@ -99,7 +99,7 @@ export const CoverageSection = () => {
               <div className="text-ellipsis">
                 <NavLink
                   className="font-bold link leading-16 no-underline"
-                  to={`/full-page/${agentId}/${previousBuildVersion}/dashboard`}
+                  to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
                   title={`Build ${previousBuildVersion}`}
                 >
                   &nbsp;Build {previousBuildVersion}
