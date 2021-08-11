@@ -64,7 +64,7 @@ export const MethodsTable = ({
         (row.canExpand ? (
           <span
             {...row.getToggleRowExpandedProps?.()}
-            tw="absolute top-2.5 left-11 z-50 grid place-items-center w-4 h-4 text-blue-default"
+            tw="absolute top-2.5 left-11 z-10 grid place-items-center w-4 h-4 text-blue-default"
           >
             {row.isExpanded ? (
               <Icons.Expander rotate={90} />
