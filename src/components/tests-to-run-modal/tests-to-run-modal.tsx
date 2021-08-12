@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import React, { useState, useEffect } from "react";
-import { nanoid } from "nanoid";
 import {
   Icons, Dropdown, Modal,
 } from "@drill4j/ui-kit";
@@ -26,8 +25,12 @@ import { useGroupData, useGroupRouteParams } from "hooks";
 import { PLUGIN_ID } from "common";
 import { getTestsToRunURL, TestsToRunUrl } from "../tests-to-run-url";
 
+interface TestToRun {
+  name?: string;
+}
+
 interface GroupedTestToRun {
-  byType?: Record<string, string[]>;
+  byType?: Record<string, TestToRun[]>;
   totalCount?: number;
 }
 
@@ -108,9 +111,9 @@ export const TestsToRunModal = () => {
           </div>
           <div tw="text-14 mt-4 px-6 space-y-4">
             {(getSelectedTests() || []).map((test) => (
-              <div tw="flex items-center gap-x-4" key={nanoid()}>
+              <div tw="flex items-center gap-x-4" key={test.name}>
                 <Icons.Test tw="flex items-center min-w-16px" />
-                <div tw="break-all">{test}</div>
+                <div tw="break-all">{test.name}</div>
               </div>
             ))}
           </div>
