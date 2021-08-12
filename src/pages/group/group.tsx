@@ -101,7 +101,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
         />
         <ListColumn
           name="actions"
-          Cell={({ item: { id: agentId = "" } }) => (
+          Cell={({ item: { id: agentId = "", buildVersion = "" } }) => (
             <MenuWrapper>
               <Menu
                 testContext="test-to-code-plugin:actions:cell"
@@ -110,7 +110,12 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     label: "Builds list",
                     icon: "BuildList",
                     onClick: () => null,
-                    Content: ({ children }: { children: JSX.Element }) => <Link to={`/full-page/${agentId}/build-list`}>{children}</Link>,
+                    Content: ({ children }: { children: JSX.Element }) => (
+                      <Link
+                        to={`/agents/${agentId}/builds/${buildVersion}/dashboard/test2code`}
+                      >{children}
+                      </Link>
+                    ),
                   },
                   {
                     label: "Settings",
