@@ -45,7 +45,7 @@ export const ScopeOverview = () => {
       : (
         <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
-          <div tw="flex flex-col items-center w-full border-b border-monochrome-medium-tint">
+          <div tw="flex flex-col items-center w-full">
             <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
               <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")}>
                 <div tw="flex items-center mr-2 text-monochrome-black">
