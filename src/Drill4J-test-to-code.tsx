@@ -26,8 +26,11 @@ import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2C
 import { GroupRootComponentProps } from "./pages/group/group";
 import { groupDashboardPath } from "./router";
 import { routes } from "./common";
+import pkj from "../package.json";
 
 import "./index.css";
+
+console.log("Test2Code-UI version: ", pkj.version);
 
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
