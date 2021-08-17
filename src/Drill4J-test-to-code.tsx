@@ -18,16 +18,18 @@ import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
-
 import { Agent, Group } from "pages";
 import { SwitchBuildContext } from "contexts";
 import { Route } from "react-router";
+
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
 import { groupDashboardPath } from "./router";
 import { routes } from "./common";
-
+import pkj from "../package.json";
 import "./index.css";
+
+console.log("Test2Code-UI version: ", pkj.version);
 
 axios.defaults.baseURL = process.env.REACT_APP_API_HOST
   ? `http://${process.env.REACT_APP_API_HOST}/api`
