@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import React from "react";
-import { LinkButton, Fields } from "@drill4j/ui-kit";
-import { Field } from "formik";
+import { LinkButton, Fields, Field } from "@drill4j/ui-kit";
+
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";

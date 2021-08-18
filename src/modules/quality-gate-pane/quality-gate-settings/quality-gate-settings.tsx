@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 import React from "react";
-import { Icons, Tooltip, Checkbox } from "@drill4j/ui-kit";
+import {
+  Icons, Tooltip, Checkbox, Field,
+} from "@drill4j/ui-kit";
 import { parseCoverage, inputLengthRestriction } from "@drill4j/common-utils";
-import { Field } from "formik";
+
 import tw, { styled } from "twin.macro";
 
 import { ConditionSettingByType } from "types/quality-gate-type";
