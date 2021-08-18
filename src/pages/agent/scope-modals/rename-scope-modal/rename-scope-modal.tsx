@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { Formik, Field, Form } from "formik";
-
 import {
+  Formik, Field, Form,
   Button, FormGroup, Popup, GeneralAlerts, Spinner, Fields,
   composeValidators, sizeLimit, required,
 } from "@drill4j/ui-kit";
+
 import "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";

@@ -16,8 +16,9 @@
 import React, { useState } from "react";
 import {
   Button, Modal, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
+  Form, Formik,
 } from "@drill4j/ui-kit";
-import { Form, Formik } from "formik";
+
 import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 

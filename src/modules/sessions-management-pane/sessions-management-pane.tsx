@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 import React from "react";
-import { Form, Formik } from "formik";
-import { matchPath, useLocation } from "react-router-dom";
 import {
+  Form, Formik,
   Modal, GeneralAlerts, Icons, composeValidators,
   sizeLimit,
   required,
   handleFieldErrors,
   Stub,
 } from "@drill4j/ui-kit";
+import { matchPath, useLocation } from "react-router-dom";
+
 import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
 import { Message } from "@drill4j/types-admin";
 import "twin.macro";

@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 import React from "react";
-import { Field } from "formik";
-import { NavLink } from "react-router-dom";
 import {
+  Field,
   FormGroup,
   GeneralAlerts,
   Icons,
   Tooltip, Fields, Checkbox,
 } from "@drill4j/ui-kit";
+import { NavLink } from "react-router-dom";
+
 import tw, { styled } from "twin.macro";
 
 interface Props {
