@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { Button } from "@drill4j/ui-kit";
+import { Button, Typography } from "@drill4j/ui-kit";
 import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/common-utils";
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -86,21 +86,25 @@ export const TestsToRunHeader = ({
             <SubTitle data-test="tests-to-run-header:subtitle">
               Build:
               <div
-                tw="max-w-280px mr-2 ml-1 text-monochrome-black"
+                tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
                 className="text-ellipsis"
                 data-test="tests-to-run-header:current-build-version"
                 title={buildVersion}
               >
-                {buildVersion}
+                <Typography.MiddleEllipsis>
+                  <span>{buildVersion}</span>
+                </Typography.MiddleEllipsis>
               </div>
               Compared to:
               <div
-                tw="max-w-280px ml-1 text-monochrome-black"
+                tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
                 className="text-ellipsis"
                 data-test="tests-to-run-header:compared-build-version"
                 title={previousBuildVersion}
               >
-                {previousBuildVersion}
+                <Typography.MiddleEllipsis>
+                  <span>{previousBuildVersion}</span>
+                </Typography.MiddleEllipsis>
               </div>
             </SubTitle>
           </div>

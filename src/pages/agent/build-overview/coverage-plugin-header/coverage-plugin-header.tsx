@@ -16,7 +16,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  Button, Icons, Tooltip,
+  Button, Icons, Tooltip, Typography,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -51,7 +51,11 @@ export const CoveragePluginHeader = () => {
       <BaselinePanel>
         <div>Current build:</div>
         <div className="flex items-center w-full">
-          <div className="text-ellipsis text-monochrome-black" title={buildVersion}>{buildVersion}</div>
+          <div className="text-ellipsis text-monochrome-black" title={buildVersion}>
+            <Typography.MiddleEllipsis>
+              <span>{buildVersion}</span>
+            </Typography.MiddleEllipsis>
+          </div>
           <BaselineTooltip />
         </div>
         <div>Parent build:</div>
@@ -63,7 +67,9 @@ export const CoveragePluginHeader = () => {
                 onClick={() => switchBuild(previousBuildVersion, "/")}
                 title={previousBuildVersion}
               >
-                {previousBuildVersion}
+                <Typography.MiddleEllipsis>
+                  <span>{previousBuildVersion}</span>
+                </Typography.MiddleEllipsis>
               </div>
             </div>
           ) : <span>&ndash;</span>}
