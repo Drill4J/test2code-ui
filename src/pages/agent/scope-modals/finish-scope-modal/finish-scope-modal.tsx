@@ -32,7 +32,7 @@ import { ScopeSummary } from "./scope-summary";
 export const FinishScopeModal = () => {
   const scope = useBuildVersion<ActiveScope>("/active-scope");
   const {
-    agentId = "", buildVersion = "", pluginId = "",
+    agentId = "", pluginId = "",
   } = useAgentRouteParams();
   const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [errorMessage, setErrorMessage] = useState("");

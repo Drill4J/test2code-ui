@@ -42,9 +42,9 @@ export function useBuildVersion<T>(
       topic,
       handleDataChange,
       {
-        type: "AGENT",
         agentId,
         buildVersion,
+        type: "AGENT",
         ...message,
       },
     );
