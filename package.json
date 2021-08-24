@@ -1,7 +1,7 @@
 {
   "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
-  "version": "0.1.37",
+  "version": "0.1.38",
   "main": "dist",
   "scripts": {
     "start": "npm run tailwind:css && webpack serve --port 8080",
@@ -86,7 +86,7 @@
     "@drill4j/common-utils": "1.0.0",
     "@drill4j/send-notification-event": "1.0.0",
     "@drill4j/socket": "0.1.13",
-    "@drill4j/ui-kit": "^0.1.135",
+    "@drill4j/ui-kit": "^0.1.139",
     "@types/react": "^17.0.1",
     "axios": "^0.21.1",
     "babel-plugin-macros": "^3.1.0",

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { Typography } from "@drill4j/ui-kit";
 import React from "react";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -48,7 +49,9 @@ export const TestToCodeNameCell = ({ name, additionalInformation, link }: Props)
       data-test="test-to-code-name-cell:additional-information"
       title={additionalInformation}
     >
-      {additionalInformation}
+      <Typography.MiddleEllipsis>
+        <span>{additionalInformation}</span>
+      </Typography.MiddleEllipsis>
     </div>
   </Content>
 );
