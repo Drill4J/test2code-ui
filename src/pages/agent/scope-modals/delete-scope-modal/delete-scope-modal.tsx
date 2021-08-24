@@ -37,6 +37,7 @@ export const DeleteScopeModal = () => {
   const [loading, setLoading] = useState(false);
   const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const closeModal = useCloseModal("/delete-scope-modal");
+
   return (
     <Popup
       isOpen
@@ -95,7 +96,7 @@ export const DeleteScopeModal = () => {
                   <Button
                     className="flex justify-center items-center gap-x-1 px-4 w-43 h-8 text-14"
                     primary
-                    disabled={loading}
+                    disabled={!scope || loading}
                     onClick={async () => {
                       setLoading(true);
                       await deleteScope(agentId, pluginId, {

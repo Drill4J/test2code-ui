@@ -30,9 +30,9 @@ export function usePreviousBuildCoverage<T>(build: string): T | null {
       "/build/coverage",
       handleDataChange,
       {
-        type: "AGENT",
         agentId,
         buildVersion: build,
+        type: "AGENT",
       },
     );
 
