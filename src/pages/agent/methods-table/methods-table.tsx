@@ -64,7 +64,7 @@ export const MethodsTable = ({
         (row.canExpand ? (
           <span
             {...row.getToggleRowExpandedProps?.()}
-            tw="absolute top-2.5 left-11 z-10 grid place-items-center w-4 h-4 text-blue-default"
+            tw="absolute top-2.5 left-12 z-10 grid place-items-center w-4 h-4 text-blue-default"
           >
             {row.isExpanded ? (
               <Icons.Expander rotate={90} />
@@ -74,7 +74,7 @@ export const MethodsTable = ({
           </span>
         ) : null),
       notSortable: true,
-      width: "44px",
+      width: "32px",
     },
     {
       Header: "Name",
@@ -106,7 +106,7 @@ export const MethodsTable = ({
           </div>
         )),
       textAlign: "left",
-      width: "60%",
+      width: "50%",
     },
     {
       Header: () => (
@@ -123,7 +123,7 @@ export const MethodsTable = ({
       Cell: ({ value = 0 }: { value: number }) => (
         <CoverageCell value={value} showCoverageIcon={showCoverageIcon} />
       ),
-      width: "10%",
+      width: "15%",
     },
     {
       Header: "Methods total",
@@ -133,7 +133,7 @@ export const MethodsTable = ({
     {
       Header: "Methods covered",
       accessor: "coveredMethodsCount",
-      width: "10%",
+      width: "15%",
     },
     {
       Header: "Associated tests",
@@ -178,7 +178,7 @@ export const MethodsTable = ({
               {row.cells.map((cell: any) => (
                 <td
                   {...cell.getCellProps()}
-                  tw="relative first:px-4 last:px-4"
+                  tw="relative px-4"
                   style={{ textAlign: cell.column.textAlign || "right" }}
                   data-test={`expanded-td-${rowProps.key}-${cell.column.id}`}
                 >
