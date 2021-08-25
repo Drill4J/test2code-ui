@@ -51,7 +51,7 @@ export const CoveragePluginHeader = () => {
       <BaselinePanel>
         <div>Current build:</div>
         <div className="flex items-center w-full">
-          <div className="text-ellipsis text-monochrome-black" title={buildVersion}>
+          <div className="text-monochrome-black" title={buildVersion}>
             <Typography.MiddleEllipsis>
               <span>{buildVersion}</span>
             </Typography.MiddleEllipsis>
@@ -61,9 +61,9 @@ export const CoveragePluginHeader = () => {
         <div>Parent build:</div>
         {previousBuildVersion
           ? (
-            <div className="text-ellipsis mr-6">
+            <div className="mr-6">
               <div
-                className="inline link"
+                className="flex link"
                 onClick={() => switchBuild(previousBuildVersion, "/")}
                 title={previousBuildVersion}
               >
