@@ -20,7 +20,7 @@ import {
 } from "@drill4j/ui-kit";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
-import "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { useAgentRouteParams, useBuildVersion } from "hooks";
@@ -42,7 +42,7 @@ export const DeleteScopeModal = () => {
     <Popup
       isOpen
       onToggle={closeModal}
-      header={<div tw="w-97 text-ellipsis">{`Delete Scope ${scope?.name}`}</div>}
+      header={<Header skeleton={!scope}>{scope ? `Delete Scope ${scope?.name}` : ""}</Header>}
       type="info"
       closeOnFadeClick
     >
@@ -130,3 +130,6 @@ export const DeleteScopeModal = () => {
     </Popup>
   );
 };
+
+const Header = styled.div<{skeleton: boolean}>(({ skeleton }) => [tw`w-97 text-ellipsis`,
+  skeleton && tw`h-8 animate-pulse w-full bg-monochrome-medium-tint rounded mr-4`]);
