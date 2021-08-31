@@ -44,8 +44,6 @@ export const FinishScopeModal = () => {
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
   const closeModal = useCloseModal("/finish-scope-modal");
 
-  if (!scope) return null;
-
   return (
     <Popup
       isOpen
@@ -114,7 +112,7 @@ export const FinishScopeModal = () => {
                       </Field>
                       <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
                     </Label>
-                    {forceFinish && !scope.coverage.percentage && (
+                    {forceFinish && scope && !scope.coverage.percentage && (
                       <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
                         <Icons.Warning /> Scope is empty and will be deleted after finishing
                       </div>
