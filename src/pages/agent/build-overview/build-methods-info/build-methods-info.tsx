@@ -66,7 +66,7 @@ export const BuildMethodsInfo = () => {
   const { percentage: buildCodeCoverage = 0 } = buildCoverage;
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
-  const loading = false;
+
   return (
     <>
       <Info>
@@ -77,7 +77,6 @@ export const BuildMethodsInfo = () => {
               previousBuildInfo={previousBuildInfo}
               scope={scope}
               status={status}
-              loading={loading}
             />
           ) : (
             <BuildCoverageInfo
