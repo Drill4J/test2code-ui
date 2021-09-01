@@ -50,27 +50,23 @@ export const CoveragePluginHeader = () => {
       <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
       <BaselinePanel>
         <div>Current build:</div>
-        <div className="flex items-center w-full">
-          <div className="text-monochrome-black" title={buildVersion}>
-            <Typography.MiddleEllipsis>
-              <span>{buildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
+        <div className="flex items-center text-monochrome-black" title={buildVersion}>
+          <Typography.MiddleEllipsis>
+            <div>{buildVersion}</div>
+          </Typography.MiddleEllipsis>
           <BaselineTooltip />
         </div>
         <div>Parent build:</div>
         {previousBuildVersion
           ? (
-            <div className="mr-6">
-              <div
-                className="flex link"
-                onClick={() => switchBuild(previousBuildVersion, "/")}
-                title={previousBuildVersion}
-              >
-                <Typography.MiddleEllipsis>
-                  <span>{previousBuildVersion}</span>
-                </Typography.MiddleEllipsis>
-              </div>
+            <div
+              className="flex link"
+              onClick={() => switchBuild(previousBuildVersion, "/")}
+              title={previousBuildVersion}
+            >
+              <Typography.MiddleEllipsis>
+                <div>{previousBuildVersion}</div>
+              </Typography.MiddleEllipsis>
             </div>
           ) : <span>&ndash;</span>}
       </BaselinePanel>

@@ -15,7 +15,7 @@
  */
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Tooltip } from "@drill4j/ui-kit";
+import { Tooltip, Typography } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { percentFormatter } from "@drill4j/common-utils";
@@ -95,16 +95,19 @@ export const CoverageSection = () => {
         additionalInfo={(
           Boolean(buildDiff) && !isFirstBuild && scopeCount > 0 && (
             <BuildInfo>
-              {`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}
-              <div className="text-ellipsis">
+              <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
+              <Typography.MiddleEllipsis tw="inline">
                 <NavLink
-                  className="font-bold link leading-16 no-underline"
+                  tw="inline-block whitespace-nowrap font-bold link leading-16 no-underline"
                   to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
                   title={`Build ${previousBuildVersion}`}
+                  style={{ maxWidth: "230px" }}
                 >
-                  &nbsp;Build {previousBuildVersion}
+                  <span className="ellipseMe">
+                      &nbsp;Build {previousBuildVersion}
+                  </span>
                 </NavLink>
-              </div>
+              </Typography.MiddleEllipsis>
             </BuildInfo>
           ))}
       />
