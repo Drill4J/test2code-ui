@@ -75,6 +75,7 @@ export const TestDetails = ({
             accessor: "details.result",
             Cell: ({ value }: any) => (
               <Cells.TestStatus
+                tw="inline"
                 type={value}
               >
                 {capitalize(value)}
@@ -94,6 +95,7 @@ export const TestDetails = ({
             accessor: "coverage.methodCount.covered",
             Cell: ({ value, row: { original: { id = "", coverage: { methodCount: { covered = 0 } = {} } = {} } = {} } = {} }: any) => (
               <Cells.Clickable
+                tw="inline"
                 data-test="test-actions:view-curl:id"
                 disabled={!value}
               >

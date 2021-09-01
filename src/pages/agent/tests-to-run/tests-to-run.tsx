@@ -133,13 +133,13 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 </span>
               ),
               textAlign: "left",
-              width: "5%",
+              width: "10%",
             },
             {
               Header: "Coverage, %",
               accessor: "coverage.percentage",
-              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage value={value} />),
-              width: "5%",
+              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+              width: "10%",
             },
             {
               Header: "Methods covered",
@@ -150,6 +150,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
               }: any) => (
                 toRun ? null : (
                   <Cells.Clickable
+                    tw="inline"
                     disabled={!value}
                   >
                     <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>

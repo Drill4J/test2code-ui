@@ -142,6 +142,7 @@ export const MethodsTable = ({
         <Cells.Clickable
           data-test="coverage-details:associated-tests-count"
           disabled={!value}
+          tw="inline"
         >
           {value ? (
             <Link to={getModalPath({ name: "associatedTests", params: { testId: row.original.id, treeLevel: "1" } })}>{value}</Link>
