@@ -30,12 +30,11 @@ interface Props {
   previousBuildInfo?: PreviousBuildInfo;
   scope?: ActiveScope | null;
   status?: AgentStatus;
-  loading?: boolean;
 }
 
 export const ActiveBuildCoverageInfo = ({
   buildCoverage,
-  previousBuildInfo: { previousBuildVersion = "", previousBuildCodeCoverage = 0 } = {}, scope, status = "BUSY", loading,
+  previousBuildInfo: { previousBuildVersion = "", previousBuildCodeCoverage = 0 } = {}, scope, status = "BUSY",
 }: Props) => {
   const {
     coverage: {
@@ -88,7 +87,6 @@ export const ActiveBuildCoverageInfo = ({
         buildCodeCoverage={buildCodeCoverage}
         uniqueCodeCoverage={percentFormatter(uniqueCodeCoverage)}
         overlappingCode={overlapPercentage}
-        active={Boolean(loading)}
       />
       <ProgressBarLegends />
     </div>

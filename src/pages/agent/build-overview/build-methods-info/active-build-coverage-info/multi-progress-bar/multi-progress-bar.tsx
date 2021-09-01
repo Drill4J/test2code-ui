@@ -19,12 +19,13 @@ import {
 } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
+import { useActiveSessions, useAgent, useAgentRouteParams } from "hooks";
+import { AGENT_STATUS } from "common";
 
 interface Props {
   buildCodeCoverage: number;
   uniqueCodeCoverage: number;
   overlappingCode: number;
-  active: boolean;
 }
 
 const Message = styled.div`
@@ -32,10 +33,14 @@ const Message = styled.div`
 `;
 
 export const MultiProgressBar = ({
-  buildCodeCoverage = 0, uniqueCodeCoverage = 0, overlappingCode = 0, active,
+  buildCodeCoverage = 0, uniqueCodeCoverage = 0, overlappingCode = 0,
 }: Props) => {
+  const { agentId, buildVersion } = useAgentRouteParams();
   const node = useRef<HTMLDivElement>(null);
   const { width } = useElementSize(node);
+  const { status } = useAgent(agentId) || {};
+  const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
+  const active = Boolean(activeSessions?.length) && status === AGENT_STATUS.ONLINE;
 
   return (
     <div tw="relative w-full h-8 rounded bg-monochrome-light-tint" ref={node}>
