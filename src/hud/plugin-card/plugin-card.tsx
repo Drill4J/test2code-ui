@@ -23,7 +23,7 @@ interface Props {
 }
 
 const Sections = styled.div`
-  ${tw`flex flex-row`}
+  ${tw`grid grid-cols-4`}
   & > *:not(:last-child) {
       ${tw`border-r border-monochrome-medium-tint`}
   }`;
