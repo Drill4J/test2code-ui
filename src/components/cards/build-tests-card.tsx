@@ -15,18 +15,18 @@
  */
 import React from "react";
 import { percentFormatter } from "@drill4j/common-utils";
-import { TestTypeSummary } from "types/test-type-summary";
 import "twin.macro";
 
+import { TestSummary } from "types/test-summary";
 import { Card, Label, TotalCount } from "./card-styles";
 
 interface Props {
   label: string;
-  testTypeSummary?: TestTypeSummary;
+  testTypeSummary?: TestSummary;
 }
 
 export const BuildTestsCard = ({ label, testTypeSummary }: Props) => {
-  const { summary: { testCount = 0, coverage: { percentage = 0 } = {} } = {} } = testTypeSummary || {};
+  const { testCount = 0, coverage: { percentage = 0 } = {} } = testTypeSummary || {};
   return (
     <Card>
       <div className="flex justify-between items-center w-full">

@@ -35,8 +35,7 @@ export const ScopeTestsInfo = () => {
       <div tw="flex flex-col gap-10">
         <ActiveBuildTestsInfo testsInfo={testsInfo} />
         <div tw="flex gap-2">
-          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+          {byTestType.map(({ type, summary }) => <BuildTestsCard label={type} testTypeSummary={summary} />)}
         </div>
       </div>
       <TableActionsProvider>
