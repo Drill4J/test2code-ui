@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { matchPath, useLocation } from "react-router-dom";
+import { matchPath, useLocation } from "@drill4j/ui-kit";
 import { groupDashboardPath, groupPluginPath } from "../router";
 
 export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {

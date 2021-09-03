@@ -83,11 +83,7 @@ export const ActiveBuildCoverageInfo = ({
         {(finishedScopesCount === 0 && status === "ONLINE") &&
             "Press “Finish Scope” button to add your scope coverage to the build."}
       </div>
-      <MultiProgressBar
-        buildCodeCoverage={buildCodeCoverage}
-        uniqueCodeCoverage={percentFormatter(uniqueCodeCoverage)}
-        overlappingCode={overlapPercentage}
-      />
+      <MultiProgressBar />
       <ProgressBarLegends />
     </div>
   );

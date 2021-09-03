@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 import React from "react";
-import { Link } from "react-router-dom";
 import {
+  Link,
   Button, Icons, Tooltip, Typography,
 } from "@drill4j/ui-kit";
+
 import tw, { styled } from "twin.macro";
 
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
@@ -29,14 +30,15 @@ import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
 import { useSwitchBuild } from "contexts";
+import { Risk } from "types";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
   const { agentId = "", buildVersion = "" } = useAgentRouteParams();
-
   const { buildVersion: activeBuildVersion = "", status: agentStatus } = useAgent(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
+  const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
@@ -52,7 +54,7 @@ export const CoveragePluginHeader = () => {
         <div>Current build:</div>
         <div className="flex items-center text-monochrome-black" title={buildVersion}>
           <Typography.MiddleEllipsis>
-            <div>{buildVersion}</div>
+            <span tw="whitespace-nowrap" data-test="header:current-build-version">{buildVersion}</span>
           </Typography.MiddleEllipsis>
           <BaselineTooltip />
         </div>
@@ -65,7 +67,7 @@ export const CoveragePluginHeader = () => {
               title={previousBuildVersion}
             >
               <Typography.MiddleEllipsis>
-                <div>{previousBuildVersion}</div>
+                <span tw="whitespace-nowrap" data-test="header:parent-build-version">{previousBuildVersion}</span>
               </Typography.MiddleEllipsis>
             </div>
           ) : <span>&ndash;</span>}
@@ -118,23 +120,17 @@ export const CoveragePluginHeader = () => {
         label="risks"
         previousBuild={{ previousBuildVersion, previousBuildTests }}
       >
-        {risksCount > 0 ? (
-          <Count
-            to={getModalPath({ name: "risks", params: { filter: "all" } })}
-            className="flex items-center w-full"
-            data-test="action-section:count:risks"
-          >
-            {risksCount}
-            <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-          </Count>
-        ) : (
-          <div
-            tw="flex items-center w-full text-20 leading-32 text-monochrome-black"
-            data-test="action-section:no-risks-count"
-          >
-            {risksCount}
-          </div>
-        )}
+        {initialRisks.length
+          ? (
+            <Count
+              to={getPagePath({ name: "risks" })}
+              className="flex items-center w-full"
+              data-test="action-section:count:risks"
+            >
+              {risksCount}
+              <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+            </Count>
+          ) : <span>&ndash;</span>}
       </ActionSection>
       <ActionSection
         label="tests to run"

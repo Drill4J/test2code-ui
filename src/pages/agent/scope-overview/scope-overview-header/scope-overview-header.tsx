@@ -15,13 +15,11 @@
  */
 import React from "react";
 import {
-  Button, Icons, Menu, SessionIndicator,
+  Button, Icons, Menu, SessionIndicator, Link, useHistory, useParams,
 } from "@drill4j/ui-kit";
 import { AgentStatus } from "@drill4j/types-admin";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import {
-  Link, useHistory, useParams,
-} from "react-router-dom";
+
 import tw, { styled } from "twin.macro";
 
 import { AGENT_STATUS } from "common/constants";

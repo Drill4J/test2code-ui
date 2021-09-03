@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { useQueryParams } from "@drill4j/common-hooks";
+import { useQueryParams } from "@drill4j/ui-kit";
 
 import {
   AssociatedTestModal, CoveredMethodsByTestSidebar, QualityGatePane, SessionsManagementPaneProvider,

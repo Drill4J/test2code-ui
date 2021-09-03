@@ -16,12 +16,13 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Icons, Modal, Dropdown,
+  Icons, Modal, Dropdown, useQueryParams,
+  useCloseModal, useElementSize,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
-import { useQueryParams, useCloseModal, useElementSize } from "@drill4j/common-hooks";
+
 import { useBuildVersion } from "hooks";
-import { Risks } from "types/risks";
+import { Risk } from "types";
 
 const Header = styled.div`
   ${tw`flex items-center h-16 pl-6`}
@@ -32,7 +33,7 @@ const Header = styled.div`
 `;
 
 export const RisksModal = () => {
-  const risks = useBuildVersion<Risks[]>("/build/risks") || [];
+  const risks = useBuildVersion<Risk[]>("/build/risks") || [];
   const filter = useQueryParams<{filter?: string}>()?.filter || "all";
   const [selectedSection, setSelectedSection] = useState<string>(filter);
   const node = useRef<HTMLDivElement>(null);
@@ -51,7 +52,7 @@ export const RisksModal = () => {
   };
 
   return (
-    <Modal isOpen onToggle={useCloseModal("/risks-modal")}>
+    <Modal isOpen onToggle={useCloseModal("/risks-modal", ["filter"])}>
       <div className="flex flex-col h-full">
         <Header>
           <Icons.Test height={20} width={18} viewBox="0 0 18 20" />
@@ -90,16 +91,23 @@ export const RisksModal = () => {
                   <div
                     tw="flex flex-row items-center w-97 min-h-40px mb-4 pl-6 text-12"
                     key={index}
-                    style={style as Record<symbol, string>}
+                    style={style as any}
                   >
                     <div tw="flex items-center mr-4">
                       <Icons.Function />
                     </div>
                     <div tw="flex flex-col w-70">
-                      <div tw="text-ellipsis" title={getRisks()[index]?.name}>{getRisks()[index]?.name}</div>
+                      <div
+                        tw="text-ellipsis"
+                        title={getRisks()[index]?.name}
+                        data-test="risks-pane:risk-name"
+                      >
+                        {getRisks()[index]?.name}
+                      </div>
                       <div
                         tw="w-80 text-monochrome-default text-ellipsis"
                         title={getRisks()[index]?.ownerClass}
+                        data-test="risks-pane:risk-path"
                       >
                         {getRisks()[index]?.ownerClass}
                       </div>

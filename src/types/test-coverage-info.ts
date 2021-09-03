@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { Coverage } from "./coverage";
-import { TestStats } from "./test-stats";
+import { TestOverview } from "./test-overview";
 
 export interface TestCoverageInfo {
   id: string;
@@ -22,6 +22,6 @@ export interface TestCoverageInfo {
   name: string;
   toRun: boolean;
   coverage: Coverage;
-  details: TestStats;
-  [key: string]: string | boolean | Coverage | TestStats;
+  overview: TestOverview;
+  [key: string]: string | boolean | Coverage | TestOverview;
 }

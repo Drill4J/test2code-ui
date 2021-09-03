@@ -17,7 +17,8 @@ import React, { useState } from "react";
 import {
   Formik, Field, Form,
   Button, FormGroup, Popup, GeneralAlerts, Spinner, Fields,
-  composeValidators, sizeLimit, required,
+  composeValidators, sizeLimit, required, useCloseModal,
+  useQueryParams,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
@@ -25,7 +26,7 @@ import "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
+
 import { renameScope } from "../../api";
 import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
 
@@ -41,7 +42,7 @@ export const RenameScopeModal = () => {
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope") || {};
   const [errorMessage, setErrorMessage] = useState("");
-  const closeModal = useCloseModal("/rename-scope-modal");
+  const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
 
   return (
     <Popup
@@ -84,7 +85,7 @@ export const RenameScopeModal = () => {
                   type="submit"
                   disabled={isSubmitting || !dirty || !isValid}
                 >
-                  {isSubmitting ? <Spinner disabled /> : "Save"}
+                  {isSubmitting ? <Spinner /> : "Save"}
                 </Button>
                 <Button secondary size="large" onClick={closeModal}>
                   Cancel

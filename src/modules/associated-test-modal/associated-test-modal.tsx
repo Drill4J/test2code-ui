@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 import React from "react";
-import { Modal } from "@drill4j/ui-kit";
-import { useQueryParams, useCloseModal } from "@drill4j/common-hooks";
-import { matchPath, useLocation } from "react-router-dom";
+import {
+  Modal, matchPath, useLocation, useQueryParams, useCloseModal,
+} from "@drill4j/ui-kit";
+
 import "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
@@ -39,13 +40,21 @@ export const AssociatedTestModal = () => {
   } = associatedTests;
   const testsMap = tests.reduce((acc, { type = "", name = "" }) =>
     ({ ...acc, [type]: acc[type] ? [...acc[type], name] : [name] }), {} as { [testType: string]: string[] });
-  const closeModal = useCloseModal("/associated-tests-modal");
+  const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
+
   return (
     <Modal isOpen onToggle={closeModal}>
       <div tw="flex flex-col h-full">
         <div tw="flex items-center min-h-64px pl-6 text-18 leading-24">
           <span tw="text-monochrome-black">Associated tests</span>
-          {tests.length ? <div tw="ml-2 font-light text-monochrome-default">{tests.length}</div>
+          {tests.length ? (
+            <div
+              tw="ml-2 font-light text-monochrome-default"
+              data-test="associated-test-pane:tests-count"
+            >
+              {tests.length}
+            </div>
+          )
             : <div tw="ml-2"><div tw="h-4 bg-monochrome-medium-tint rounded" /></div>}
         </div>
         <ItemInfo
@@ -54,7 +63,7 @@ export const AssociatedTestModal = () => {
           methodName={methodName}
           treeLevel={Number(params?.treeLevel)}
         />
-        <TestsList associatedTests={{ testsMap, assocTestsCount: tests.length }} />
+        <TestsList associatedTests={testsMap} testsCount={tests.length} />
       </div>
     </Modal>
   );

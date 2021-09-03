@@ -16,9 +16,10 @@
 import React, { useState, useEffect } from "react";
 import {
   Icons, Dropdown, Modal,
+  useCloseModal,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
-import { useCloseModal } from "@drill4j/common-hooks";
+
 import tw from "twin.macro";
 
 import { useGroupData, useGroupRouteParams } from "hooks";

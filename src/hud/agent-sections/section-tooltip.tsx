@@ -18,14 +18,18 @@ import tw, { styled } from "twin.macro";
 
 import { percentFormatter } from "@drill4j/common-utils";
 import { capitalize } from "@drill4j/ui-kit";
-import { TestTypeSummary } from "../../types/test-type-summary";
 
-export type TestsTypeSummaryWithColor = (TestTypeSummary & {color: string})[]
+export interface TestType {
+  type?: string;
+  testCount?: number;
+  coverage?: number;
+}
 
 interface Props {
   className?: string;
-  data: TestsTypeSummaryWithColor;
+  data: TestType[];
   hideValue?: boolean;
+  testsColors: Record<string, string>;
 }
 
 const Icon = styled.span`
@@ -33,17 +37,19 @@ const Icon = styled.span`
   ${({ color }) => `background-color: ${color}`}
 `;
 
-export const SectionTooltip = ({ data, hideValue }: Props) => (
+export const SectionTooltip = ({ data, hideValue, testsColors }: Props) => (
   <div tw="flex flex-col">
-    {data.map(({ color, type, summary }) => (
+    {data.map(({
+      type = "", testCount, coverage,
+    }) => (
       <div tw="flex justify-between items-center w-full" key={type}>
         <div tw="flex items-center w-full">
-          <Icon color={color} />
-          {`${capitalize(type)} (${summary?.testCount || 0})`}
+          <Icon color={testsColors[type]} />
+          {`${capitalize(type)} (${testCount || 0})`}
         </div>
         {!hideValue && (
           <span tw="ml-8 font-regular leading-20 text-right text-monochrome-default">
-            {percentFormatter(summary?.coverage?.percentage || 0)}%
+            {percentFormatter(coverage || 0)}%
           </span>
         )}
       </div>

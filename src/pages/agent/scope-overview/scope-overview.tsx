@@ -16,8 +16,9 @@
 import React, { useState } from "react";
 import {
   Redirect, useParams,
-} from "react-router-dom";
-import { Icons, Tab } from "@drill4j/ui-kit";
+  Icons, Tab,
+} from "@drill4j/ui-kit";
+
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";

@@ -13,16 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
-import { Link } from "react-router-dom";
-import { Menu } from "@drill4j/ui-kit";
+import React, { useEffect, useState } from "react";
+import { Link, Menu } from "@drill4j/ui-kit";
+
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
+import axios from "axios";
 
+import {
+  PLUGIN_ID, getGroupModalPath, routes as agentRoutes, test2CodePluginSocket,
+} from "common";
 import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
-import { getGroupModalPath, routes as agentRoutes } from "common";
+
+import { sendNotificationEvent } from "@drill4j/send-notification-event";
+import { ScopeSummary } from "types";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";
 import { TestToCodeCell } from "./test-to-code-cell";
@@ -41,6 +47,51 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
     ...agentSummary,
     ...agentSummary.summary,
   }));
+
+  const [groupScopes, setGroupScopes] = useState<{[key: string]: ScopeSummary[]}>({});
+
+  useEffect(() => {
+    function handleDataChange(newGroupScopes: ScopeSummary[], agentId: string) {
+      if (Array.isArray(newGroupScopes)) {
+        setGroupScopes((prevGroupScopes) => ({ ...prevGroupScopes, [agentId]: newGroupScopes }));
+      }
+    }
+
+    const unsubscribe = summaries.map(({ id: agentId = "", buildVersion = "" }) => test2CodePluginSocket.subscribe(
+      "/build/scopes/finished",
+      (newData) => handleDataChange(newData, agentId),
+      {
+        agentId,
+        buildVersion,
+        type: "AGENT",
+      },
+    ));
+
+    return () => {
+      unsubscribe.forEach((unsub) => unsub());
+    };
+  }, [summaries.length]);
+
+  const toggleGroupScopes = async (enabled: boolean) => {
+    try {
+      await Promise.allSettled(Object.keys(groupScopes).map((agentId) => groupScopes[agentId]
+        .filter((scope) => scope.enabled === enabled)
+        .map((scope) =>
+          axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+            type: "TOGGLE_SCOPE",
+            payload: { scopeId: scope.id },
+          }))));
+      sendNotificationEvent({
+        type: "SUCCESS",
+        text: `Group scopes have been ${enabled ? "ignored" : "included"} in build stats.`,
+      });
+    } catch (error) {
+      sendNotificationEvent({
+        type: "ERROR",
+        text: "There is some issue with your action. Please try again later",
+      });
+    }
+  };
 
   return (
     <div>
@@ -144,6 +195,16 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                         {children}
                       </Link>
                     ),
+                  },
+                  {
+                    label: "Ignore in stats",
+                    icon: "EyeCrossed",
+                    onClick: () => toggleGroupScopes(true),
+                  },
+                  {
+                    label: "Include in stats",
+                    icon: "Eye",
+                    onClick: () => toggleGroupScopes(false),
                   },
                   {
                     label: "Sessions Management",

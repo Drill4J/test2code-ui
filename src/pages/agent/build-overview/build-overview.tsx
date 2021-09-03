@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
-import { Icons, Tab } from "@drill4j/ui-kit";
+import React, { useEffect, useState } from "react";
+import { Icons, Tab, useQueryParams } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { CoveragePluginHeader } from "./coverage-plugin-header";
@@ -27,17 +27,25 @@ const TabIconWrapper = styled.div`
 
 export const BuildOverview = () => {
   const [activeTab, setActiveTab] = useState("methods");
+  const { ownerClass, packageName } = useQueryParams<{ownerClass?: string, packageName?: string}>();
+
+  useEffect(() => {
+    if (ownerClass && packageName) {
+      setActiveTab("methods");
+    }
+  }, [ownerClass, packageName]);
+
   return (
     <>
       <CoveragePluginHeader />
       <div tw="flex mb-4 border-b border-monochrome-medium-tint">
-        <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")}>
+        <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")} data-test="build-overview:tab:build-methods">
           <TabIconWrapper>
             <Icons.Function />
           </TabIconWrapper>
           Build methods
         </Tab>
-        <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")}>
+        <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")} data-test="build-overview:tab:build-tests">
           <TabIconWrapper>
             <Icons.Test width={16} />
           </TabIconWrapper>

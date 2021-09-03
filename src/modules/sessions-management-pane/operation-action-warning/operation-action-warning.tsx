@@ -50,7 +50,7 @@ export const OperationActionWarning = ({
           data-test="operation-action-warning:yes-button"
           disabled={loading}
         >
-          {loading ? <Spinner disabled /> : "Yes"}
+          {loading ? <Spinner /> : "Yes"}
         </ConfirmButton>
       </div>
     </div>

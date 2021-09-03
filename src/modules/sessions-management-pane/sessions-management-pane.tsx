@@ -21,10 +21,10 @@ import {
   required,
   handleFieldErrors,
   Stub,
+  matchPath, useLocation,
+  useCloseModal, useGeneralAlertMessage,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation } from "react-router-dom";
 
-import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
 import { Message } from "@drill4j/types-admin";
 import "twin.macro";
 

@@ -14,18 +14,20 @@
  * limitations under the License.
  */
 import React from "react";
-import { Route, Switch, Redirect } from "react-router";
+import {
+  Route, Switch, Redirect, TableActionsProvider,
+} from "@drill4j/ui-kit";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 
 import { getPagePath, routes } from "common";
 import { Modals } from "components";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
-
 import { TestsToRun } from "./tests-to-run";
+import { RisksPage } from "./risks";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -45,6 +47,19 @@ export const Agent = () => (
           component={ScopeOverview}
         />
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route
+          path={getAgentRoutePath(routes.risks)}
+          render={() => (
+            <TableActionsProvider defaultState={{
+              search: [],
+              sort: [{ field: "coverage", order: "ASC" }],
+              expandedRows: [],
+            } as any}
+            >
+              <RisksPage />
+            </TableActionsProvider>
+          )}
+        />
         <Route
           path={getAgentRoutePath(routes.testsToRun)}
           render={() => (
