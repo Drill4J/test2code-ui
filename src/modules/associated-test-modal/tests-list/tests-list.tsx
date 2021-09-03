@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
-import { Icons, Dropdown } from "@drill4j/ui-kit";
+import { Icons, Dropdown, capitalize } from "@drill4j/ui-kit";
 import { useElementSize } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
 interface Props {
-  associatedTests: { testsMap: Record<string, string[]>; assocTestsCount: number; };
+  associatedTests: Record<string, string[]>;
+  testsCount: number;
 }
 
 const TestItem = styled.div`
@@ -28,23 +29,22 @@ const TestItem = styled.div`
   ${tw`text-14 break-normal`}
 `;
 
-export const TestsList = ({ associatedTests }: Props) => {
-  const { AUTO: autoTests = [], MANUAL: manualTests = [] } = associatedTests.testsMap;
+export const TestsList = ({ associatedTests, testsCount }: Props) => {
   const node = useRef<HTMLDivElement>(null);
   const [selectedSection, setSelectedSection] = useState("all");
   const { height: testsListHeight } = useElementSize(node);
+  const allTests = useMemo(() => Object.values(associatedTests).reduce((acc, value) => [...acc, ...value], []), [associatedTests]);
 
   const getTests = (): string[] => {
-    switch (selectedSection) {
-      case "auto":
-        return autoTests;
-      case "manual":
-        return manualTests;
-      default:
-        return [...autoTests, ...manualTests];
+    if (selectedSection === "all") {
+      return allTests;
     }
+    return associatedTests[selectedSection];
   };
   const tests = getTests();
+  const dropdownItems = Object.entries(associatedTests).map(([key, value]) => ({
+    value: key, label: `${capitalize(key)} (${value.length})`,
+  }));
 
   return (
     <div tw="flex flex-col h-full overflow-y-auto">
@@ -53,8 +53,7 @@ export const TestsList = ({ associatedTests }: Props) => {
           tw="my-4 mx-6"
           items={[
             { value: "all", label: "All tests" },
-            { value: "auto", label: `Auto (${autoTests.length})` },
-            { value: "manual", label: `Manual (${manualTests.length})` },
+            ...dropdownItems,
           ]}
           onChange={(value : any) => setSelectedSection(String(value))}
           value={selectedSection}
@@ -65,7 +64,7 @@ export const TestsList = ({ associatedTests }: Props) => {
           <VirtualList
             itemSize={56}
             height={Math.floor(testsListHeight)}
-            itemCount={tests.length || associatedTests.assocTestsCount}
+            itemCount={tests.length || testsCount}
             renderItem={({ index, style }) => (
               <TestItem key={tests[index]} style={style as Record<symbol, string>}>
                 {tests.length > 0 && (
@@ -77,7 +76,7 @@ export const TestsList = ({ associatedTests }: Props) => {
                     <div tw="text-ellipsis pl-7 text-12 text-monochrome-default" title="&ndash;">&ndash;</div>
                   </>
                 )}
-                {Object.keys(associatedTests.testsMap).length === 0 && (
+                {Object.keys(associatedTests).length === 0 && (
                   <div tw="flex space-x-2 animate-pulse">
                     <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
                     <div tw="flex-1 space-y-4 py-1">

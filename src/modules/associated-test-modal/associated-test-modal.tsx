@@ -54,7 +54,7 @@ export const AssociatedTestModal = () => {
           methodName={methodName}
           treeLevel={Number(params?.treeLevel)}
         />
-        <TestsList associatedTests={{ testsMap, assocTestsCount: tests.length }} />
+        <TestsList associatedTests={testsMap} testsCount={tests.length} />
       </div>
     </Modal>
   );
