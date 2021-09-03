@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import { useParams, Link, useHistory } from "react-router-dom";
 import {
-  Menu, Icons, Status, Stub, Table,
+  Menu, Icons, Status, Stub, Table, capitalize,
 } from "@drill4j/ui-kit";
 import {
   percentFormatter, dateFormatter, timeFormatter, transformObjectsArrayToObject,
@@ -29,8 +29,10 @@ import { useActiveScope, useAgent, useBuildVersion } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { getModalPath, getPagePath } from "common";
+import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
+import { TestSummary } from "../../../types/test-summary";
 
 export const AllScopes = () => {
   const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
@@ -38,11 +40,33 @@ export const AllScopes = () => {
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const activeScope = useActiveScope();
   const scopes = useBuildVersion<ScopeSummary[]>("/build/scopes/finished") || [];
+  const { byTestType = [] } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
   scopes.sort(
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
   );
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
   const isActiveBuildVersion = (activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE);
+
+  const testsColumns = useMemo(() => byTestType.map(({ type }) => ({
+    Header: `${capitalize(type)} tests`,
+    accessor: `${type}Tests`,
+    Cell: ({ row: { original = {} } = {} }: any) => {
+      const coverageByTestTypes = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
+      const testTypeSummary = coverageByTestTypes[type]?.summary;
+      if (!testTypeSummary) return null;
+      return (
+        <div tw="font-bold text-12 leading-20 text-monochrome-black">
+          <span>
+            {`${percentFormatter(testTypeSummary?.coverage?.percentage || 0)}%`}
+          </span>
+          <div tw="font-regular text-right text-monochrome-default leading-16">
+            {testTypeSummary?.testCount}
+          </div>
+        </div>
+      );
+    },
+    width: "120px",
+  })), [byTestType]);
 
   return (
     <div tw="flex flex-col w-full h-full">
@@ -102,7 +126,7 @@ export const AllScopes = () => {
                   </>
                 ),
                 textAlign: "left",
-                width: "15%",
+                width: "100px",
               },
               {
                 Header: "Coverage",
@@ -112,48 +136,9 @@ export const AllScopes = () => {
                     {`${percentFormatter(original?.coverage?.percentage)}%`}
                   </div>
                 ),
-                width: "15%",
+                width: "100px",
               },
-              {
-                Header: "Auto tests",
-                accessor: "autoTests",
-                Cell: ({ row: { original = {} } = {} }: any) => {
-                  const coverageByTestType = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
-                  return (
-                    <div tw="font-bold text-12 leading-20 text-monochrome-black">
-                      {coverageByTestType?.AUTO && (
-                        <span>
-                          {`${percentFormatter(coverageByTestType?.AUTO?.summary?.coverage?.percentage || 0)}%`}
-                        </span>
-                      )}
-                      <div tw="font-regular text-right text-monochrome-default leading-16">
-                        {coverageByTestType?.AUTO && coverageByTestType?.AUTO?.summary?.testCount}
-                      </div>
-                    </div>
-                  );
-                },
-                width: "15%",
-              },
-              {
-                Header: "Manual tests",
-                accessor: "manualTests",
-                Cell: ({ row: { original = {} } = {} }: any) => {
-                  const coverageByTestType = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
-                  return (
-                    <div tw="font-bold text-12 leading-20 text-monochrome-black">
-                      {coverageByTestType?.MANUAL && (
-                        <span>
-                          {`${percentFormatter(coverageByTestType?.MANUAL?.summary?.coverage?.percentage || 0)}%`}
-                        </span>
-                      )}
-                      <div tw="font-regular text-right text-monochrome-default leading-16">
-                        {coverageByTestType?.MANUAL && coverageByTestType?.MANUAL?.summary?.testCount}
-                      </div>
-                    </div>
-                  );
-                },
-                width: "15%",
-              },
+              ...testsColumns,
               {
                 Header: () => null,
                 accessor: "actions",
