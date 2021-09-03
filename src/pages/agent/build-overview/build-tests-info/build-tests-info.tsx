@@ -41,7 +41,7 @@ const ActiveBuildTestsBar = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 const Cards = styled.div<{isShowActiveScopeInfo?: boolean}>`
-  ${tw`flex gap-2 gap-y-8 col-start-1 lg:grid-cols-2`}
+  ${tw`flex gap-2 flex-col lg:flex-row col-start-1 lg:grid-cols-2`}
   ${({ isShowActiveScopeInfo }) => !isShowActiveScopeInfo && tw`col-span-2`}
   & > div {
     ${({ isShowActiveScopeInfo }) => isShowActiveScopeInfo && tw`lg:h-full`}
