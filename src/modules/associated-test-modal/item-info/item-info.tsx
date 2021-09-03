@@ -35,7 +35,7 @@ const Value = styled.div`
 `;
 
 export const ItemInfo = ({
-  packageName, testClassName, methodName, treeLevel,
+  packageName, testClassName, methodName, treeLevel = 0,
 }: Props) => (
   <div tw="bg-monochrome-light-tint border-t border-b border-monochrome-medium-tint">
     <div tw="flex flex-col justify-center min-h-64px py-2 px-6">

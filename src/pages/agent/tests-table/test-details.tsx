@@ -16,8 +16,9 @@
 import React from "react";
 import {
   Icons, Stub, Table, useTableActionsState, Cells,
+  Link,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
+
 import "twin.macro";
 
 import { capitalize } from "@drill4j/common-utils";
@@ -26,6 +27,7 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { useAgent, useAgentRouteParams } from "hooks";
+import { transformTests } from "utils";
 import { getModalPath } from "../../../common";
 
 interface Props {
@@ -34,7 +36,7 @@ interface Props {
 }
 
 export const TestDetails = ({
-  tests: { items: tests = [], filteredCount = 0 },
+  tests: { items: tests = [] },
 }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { status } = useAgent(agentId);
@@ -42,22 +44,21 @@ export const TestDetails = ({
   const [searchQuery] = search;
 
   return (
-    <div tw="flex flex-col" data-test="test-details:table-wrapper">
-      <>
-        <Table
-          isDefaulToggleSortBy
-          filteredCount={filteredCount}
-          placeholder="Search tests by name"
-          data={tests}
-          withSearch
-          columns={[{
+    <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
+      <Table
+        data={transformTests(tests)}
+        columns={[
+          {
             Header: "Name",
-            accessor: "testName",
-            Cell: ({ row }: any) => (
-              <Cells.Compound cellName={row.original.name} cellAdditionalInfo="&ndash;" icon={<Icons.Test height={16} width={16} />} />
-            ),
+            accessor: "overview.details.name",
             textAlign: "left",
-            width: "56%",
+            filterable: true,
+          },
+          {
+            Header: "Path",
+            accessor: "overview.details.path",
+            textAlign: "left",
+            filterable: true,
           },
           {
             Header: "Test type",
@@ -68,11 +69,10 @@ export const TestDetails = ({
               </>
             ),
             textAlign: "left",
-            width: "10%",
           },
           {
             Header: "Status",
-            accessor: "details.result",
+            accessor: "overview.result",
             Cell: ({ value }: any) => (
               <Cells.TestStatus
                 tw="inline"
@@ -82,13 +82,11 @@ export const TestDetails = ({
               </Cells.TestStatus>
             ),
             textAlign: "left",
-            width: "7%",
           },
           {
             Header: "Coverage, %",
             accessor: "coverage.percentage",
             Cell: Cells.Coverage,
-            width: "7%",
           },
           {
             Header: "Methods covered",
@@ -104,32 +102,32 @@ export const TestDetails = ({
                 </Link>
               </Cells.Clickable>
             ),
-            width: "10%",
           },
           {
             Header: "Duration",
-            accessor: "details.duration",
+            accessor: "overview.duration",
             Cell: Cells.Duration,
-            width: "10%",
           }]}
-        />
-      </>
-      {!tests.length && !searchQuery?.value && (
-        <Stub
-          icon={<Icons.Test height={104} width={107} />}
-          title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
-          message={status === AGENT_STATUS.BUSY
-            ? "It may take a few seconds."
-            : "Information about project tests will appear after the first launch of tests."}
-        />
-      )}
-      {!filteredCount && searchQuery?.value && (
-        <Stub
-          icon={<Icons.Test height={104} width={107} />}
-          title="No results found"
-          message="Try adjusting your search or filter to find what you are looking for."
-        />
-      )}
+        stub={
+          searchQuery?.value
+            ? (
+              <Stub
+                icon={<Icons.Test height={104} width={107} />}
+                title="No results found"
+                message="Try adjusting your search or filter to find what you are looking for."
+              />
+            )
+            : (
+              <Stub
+                icon={<Icons.Test height={104} width={107} />}
+                title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
+                message={status === AGENT_STATUS.BUSY
+                  ? "It may take a few seconds."
+                  : "Information about project tests will appear after the first launch of tests."}
+              />
+            )
+        }
+      />
     </div>
   );
 };

@@ -45,6 +45,7 @@ module.exports = (webpackConfigEnv, argv) => {
         router: path.resolve(__dirname, "src/router/"),
         modules: path.resolve(__dirname, "src/modules/"),
         contexts: path.resolve(__dirname, "src/contexts/"),
+        utils: path.resolve(__dirname, "src/utils/"),
       },
     },
   });

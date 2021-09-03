@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 import React from "react";
-import { matchPath, useLocation } from "react-router-dom";
-import { Modal } from "@drill4j/ui-kit";
+import {
+  matchPath, useLocation, Modal, useCloseModal,
+  useQueryParams,
+} from "@drill4j/ui-kit";
+
 import { capitalize } from "@drill4j/common-utils";
-import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
+
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
@@ -42,7 +45,8 @@ export const CoveredMethodsByTestSidebar = () => {
     `${topicCoveredMethodsByTest}/${params?.testId}/methods/summary`,
   ) || {};
   const showSceleton = !Object.keys(summary).length;
-  const closeModal = useCloseModal("/covered-methods-modal");
+  const closeModal = useCloseModal("/covered-methods-modal", ["testId", "coveredMethods"]);
+
   return (
     <Modal isOpen onToggle={closeModal}>
       <div tw="flex flex-col h-full">

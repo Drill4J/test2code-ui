@@ -41,7 +41,7 @@ export type { ScopeSummary } from "./scope-summary";
 export type { ServiceGroupSummary, Summary } from "./service-group-summary";
 export type { TestCount } from "./test-count";
 export type { TestCoverageInfo } from "./test-coverage-info";
-export type { TestStats } from "./test-stats";
+export type { TestOverview } from "./test-overview";
 export type { TestSummary } from "./test-summary";
 export type { TestToRunInfo } from "./test-to-run-info";
 export type { TestTypeCount } from "./test-type-count";

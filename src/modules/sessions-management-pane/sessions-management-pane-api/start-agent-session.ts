@@ -24,6 +24,8 @@ export function startAgentSession(
   return ({ sessionId, isGlobal, isRealtime }: StartSessionPayloadTypes): Promise<AxiosResponse> => axios.post(`/agents/${
     agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
     type: "START",
-    payload: { sessionId: sessionId.trim(), isGlobal, isRealtime },
+    payload: {
+      sessionId: sessionId.trim(), isGlobal, isRealtime,
+    },
   });
 }

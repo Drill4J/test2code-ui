@@ -16,8 +16,9 @@
 import React from "react";
 import {
   Link,
-} from "react-router-dom";
-import { Icons, Tooltip } from "@drill4j/ui-kit";
+  Icons, Tooltip,
+} from "@drill4j/ui-kit";
+
 import tw, { styled } from "twin.macro";
 
 import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";

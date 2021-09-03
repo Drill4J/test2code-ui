@@ -13,12 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { matchPath, useLocation } from "@drill4j/ui-kit";
-import { groupDashboardPath, groupPluginPath } from "../router";
 
-export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {
-  const { pathname } = useLocation();
-  const { params: { groupId = "", pluginId = "" } = {} } = matchPath<{
-    groupId?: string; pluginId: string }>(pathname, { path: [groupPluginPath, groupDashboardPath] }) || {};
-  return { groupId, pluginId };
-};
+interface Metadata {
+  [key: string]: string | undefined;
+}
+
+interface Params {
+  methodParams?: string;
+  classParams?: string;
+}
+
+interface Details {
+  engine?: string;
+  path?: string;
+  testName?: string;
+  params?: Params;
+  metadata?: Metadata;
+}
+
+export interface TestOverview {
+  duration?: number;
+  result?: "PASSED" | "FAILED" | "ERROR" | "SKIPPED";
+  details?: Details;
+}
