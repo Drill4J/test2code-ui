@@ -17,30 +17,17 @@ import React from "react";
 import { Tooltip } from "@drill4j/ui-kit";
 import "twin.macro";
 
-import { SingleBar, DashboardSection, SectionTooltip } from "components";
-import { TESTS_TYPES_COLOR } from "common/constants";
+import { SingleBar, DashboardSection } from "components";
 import { BuildCoverage } from "types/build-coverage";
-import { TestTypes } from "types/test-types";
 import { capitalize, convertToPercentage } from "@drill4j/common-utils";
-import { TestsInfo } from "types/tests-info";
 import { useBuildVersion } from "hooks";
+import { TestTypeSummary } from "types/test-type-summary";
+import { SectionTooltip, TestsTypeSummaryWithColor } from "./section-tooltip";
 
 export const TestsSection = () => {
   const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
   const totalCoveredMethodCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
-  const testsInfo: TestsInfo = byTestType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
-  const tooltipData = {
-    auto: {
-      value: testsInfo?.AUTO?.summary.coverage?.percentage,
-      count: testsInfo?.AUTO?.summary.testCount,
-      color: TESTS_TYPES_COLOR.AUTO,
-    },
-    manual: {
-      value: testsInfo?.MANUAL?.summary.coverage?.percentage,
-      count: testsInfo?.MANUAL?.summary.testCount,
-      color: TESTS_TYPES_COLOR.MANUAL,
-    },
-  };
+  const testsByTypeWithColors = addColors(byTestType);
 
   return (
     <DashboardSection
@@ -48,16 +35,16 @@ export const TestsSection = () => {
       info={totalCoveredMethodCount}
       additionalInfo={`${finishedScopesCount} scopes`}
       graph={(
-        <Tooltip message={<SectionTooltip data={tooltipData} />}>
+        <Tooltip message={<SectionTooltip data={testsByTypeWithColors} />}>
           <div tw="flex items-center w-full">
-            {Object.keys(TESTS_TYPES_COLOR).map((testType) => (
+            {testsByTypeWithColors.map(({ type, summary, color }) => (
               <SingleBar
-                key={testType}
+                key={type}
                 width={64}
                 height={128}
-                color={TESTS_TYPES_COLOR[testType as TestTypes]}
-                percent={convertToPercentage((testsInfo[testType] && testsInfo[testType].summary.testCount) || 0, totalCoveredMethodCount)}
-                icon={capitalize(testType)}
+                color={color}
+                percent={convertToPercentage(summary.testCount || 0, totalCoveredMethodCount)}
+                icon={capitalize(type)}
               />
             ))}
           </div>
@@ -66,3 +53,26 @@ export const TestsSection = () => {
     />
   );
 };
+
+function addColors(tests: TestTypeSummary[]):TestsTypeSummaryWithColor {
+  const colors = [
+    "#D599FF",
+    "#88E2F3",
+    "#F0876F",
+    "#A3D381",
+    "#E677C3",
+    "#EE7785",
+    "#5FEDCE",
+    "#FF7FA8",
+    "#E79B5F",
+    "#6B7EED",
+    "#FF9291",
+    "#D6AF5C",
+    "#B878DC",
+    "#FFA983",
+    "#BFC267",
+    "#83E1A5",
+    "#EDD78E",
+  ];
+  return tests.map((test, i) => ({ ...test, color: colors[i] }));
+}
