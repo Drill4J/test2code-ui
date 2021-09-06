@@ -52,7 +52,7 @@ export const CoveragePluginHeader = () => {
         <div>Current build:</div>
         <div className="flex items-center text-monochrome-black" title={buildVersion}>
           <Typography.MiddleEllipsis>
-            <div>{buildVersion}</div>
+            <span tw="whitespace-nowrap">{buildVersion}</span>
           </Typography.MiddleEllipsis>
           <BaselineTooltip />
         </div>
@@ -65,7 +65,7 @@ export const CoveragePluginHeader = () => {
               title={previousBuildVersion}
             >
               <Typography.MiddleEllipsis>
-                <div>{previousBuildVersion}</div>
+                <span tw="whitespace-nowrap">{previousBuildVersion}</span>
               </Typography.MiddleEllipsis>
             </div>
           ) : <span>&ndash;</span>}

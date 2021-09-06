@@ -15,7 +15,7 @@
  */
 import React, { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
-import { convertToPercentage } from "@drill4j/common-utils";
+import { Typography, convertToPercentage } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { useBuildVersion } from "hooks";
@@ -207,9 +207,9 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
           <span>Build</span>
           <XAxisLegend style={{ gridTemplateColumns: `repeat(${visibleBarsCount}, 64px)` }}>
             {bars.map(({ buildVersion = "" }) => (
-              <div key={nanoid()} title={buildVersion}>
-                {cropInCenter(buildVersion)}
-              </div>
+              <Typography.MiddleEllipsis key={nanoid()}>
+                <span title={buildVersion}>{buildVersion}</span>
+              </Typography.MiddleEllipsis>
             ))}
           </XAxisLegend>
         </XAxis>
@@ -217,10 +217,6 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
     </Content>
   );
 };
-
-function cropInCenter(str: string) {
-  return str.length > 14 ? `${str.slice(0, 7)}...${str.slice(-7)}` : str;
-}
 
 const MS_IN_SECONDS = 1000;
 const MS_IN_MINUTES = MS_IN_SECONDS * 60;
