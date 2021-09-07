@@ -211,6 +211,7 @@ export const AllScopes = () => {
                 } : () => null,
                 width: "48px",
                 notSortable: true,
+                disableEllipsis: true,
               },
             ]}
           />
