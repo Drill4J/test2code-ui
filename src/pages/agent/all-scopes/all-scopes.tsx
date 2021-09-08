@@ -32,7 +32,6 @@ import { getModalPath, getPagePath } from "common";
 import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
-import { TestSummary } from "../../../types/test-summary";
 
 export const AllScopes = () => {
   const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
@@ -46,27 +45,29 @@ export const AllScopes = () => {
   );
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
   const isActiveBuildVersion = (activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE);
-
-  const testsColumns = useMemo(() => byTestType.map(({ type }) => ({
-    Header: `${capitalize(type)} tests`,
-    accessor: `${type}Tests`,
-    Cell: ({ row: { original = {} } = {} }: any) => {
-      const coverageByTestTypes = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
-      const testTypeSummary = coverageByTestTypes[type]?.summary;
-      if (!testTypeSummary) return null;
-      return (
-        <div tw="font-bold text-12 leading-20 text-monochrome-black">
-          <span>
-            {`${percentFormatter(testTypeSummary?.coverage?.percentage || 0)}%`}
-          </span>
-          <div tw="font-regular text-right text-monochrome-default leading-16">
-            {testTypeSummary?.testCount}
+  const { coverage: { byTestType: activeScopeTestsType = [] } = {} } = activeScope || {};
+  const testsColumns = [...byTestType, ...activeScopeTestsType]
+    .reduce((acc: string[], item) => (acc.includes(item.type) ? acc : [...acc, item.type]), [])
+    .map((type) => ({
+      Header: `${capitalize(type)} tests`,
+      accessor: `${type}Tests`,
+      Cell: ({ row: { original = {} } = {} }: any) => {
+        const coverageByTestTypes = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
+        const testTypeSummary = coverageByTestTypes[type]?.summary;
+        if (!testTypeSummary) return null;
+        return (
+          <div tw="font-bold text-12 leading-20 text-monochrome-black">
+            <span>
+              {`${percentFormatter(testTypeSummary?.coverage?.percentage || 0)}%`}
+            </span>
+            <div tw="font-regular text-right text-monochrome-default leading-16">
+              {testTypeSummary?.testCount}
+            </div>
           </div>
-        </div>
-      );
-    },
-    width: "120px",
-  })), [byTestType]);
+        );
+      },
+      width: "120px",
+    }));
 
   return (
     <div tw="flex flex-col w-full h-full">
@@ -196,6 +197,7 @@ export const AllScopes = () => {
                 } : () => null,
                 width: "48px",
                 notSortable: true,
+                disableEllipsis: true,
               },
             ]}
           />
