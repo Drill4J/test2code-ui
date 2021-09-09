@@ -18,12 +18,12 @@ import { useParams } from "react-router-dom";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import "twin.macro";
 
-import { BuildTestsCard } from "components";
 import { TestsInfo } from "types/tests-info";
 import { BuildCoverage } from "types/build-coverage";
 import { useBuildVersion } from "hooks";
 import { ActiveBuildTestsInfo } from "../../build-overview/build-tests-info/active-build-tests-info";
 import { ScopeTestsTable } from "./scope-tests-table";
+import { TestsTypeTable } from "../../tests-type-table";
 
 export const ScopeTestsInfo = () => {
   const { scopeId } = useParams<{ scopeId?: string; }>();
@@ -34,9 +34,8 @@ export const ScopeTestsInfo = () => {
     <>
       <div tw="flex flex-col gap-10">
         <ActiveBuildTestsInfo testsInfo={testsInfo} />
-        <div tw="flex gap-2">
-          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+        <div tw="flex flex-col">
+          <TestsTypeTable data={Object.values(testsInfo).map(({ type, summary }) => ({ type, coverage: summary?.coverage?.percentage }))} />
         </div>
       </div>
       <TableActionsProvider>

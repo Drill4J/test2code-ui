@@ -18,7 +18,6 @@ import tw, { styled } from "twin.macro";
 import { useParams } from "react-router-dom";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 
-import { BuildTestsCard } from "components";
 import { TestTypeSummary } from "types/test-type-summary";
 import { TestsInfo } from "types/tests-info";
 import { useActiveScope, useAgent, useBuildVersion } from "hooks";
@@ -26,6 +25,7 @@ import { AGENT_STATUS } from "common/constants";
 import { ActiveScopeInfo } from "modules";
 import { ActiveBuildTestsInfo } from "./active-build-tests-info";
 import { BuildTestsTable } from "./build-tests-table";
+import { TestsTypeTable } from "../../tests-type-table";
 
 const Info = styled.div`
   ${tw`grid gap-8`}
@@ -63,10 +63,9 @@ export const BuildTestsInfo = () => {
         <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
           <ActiveBuildTestsInfo testsInfo={testsInfo} />
         </ActiveBuildTestsBar>
-        <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
-          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
-        </Cards>
+        <div tw="flex flex-col">
+          <TestsTypeTable data={Object.values(testsInfo).map(({ type, summary }) => ({ type, coverage: summary?.coverage?.percentage }))} />
+        </div>
         {isShowActiveScopeInfo && (
           <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
             <ActiveScopeInfo scope={scope} />
