@@ -27,6 +27,7 @@ export function deleteScope(
       await finishScope(agentId, pluginId, { onSuccess, onError })({
         prevScopeEnabled: false,
         savePrevScope: false,
+        forceFinish: false,
       });
     } else {
       try {
