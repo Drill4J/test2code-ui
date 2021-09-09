@@ -20,7 +20,7 @@ import { SingleBar, DashboardSection, SectionTooltip } from "components";
 import { TESTS_TYPES_COLOR } from "common/constants";
 import { TestTypes } from "types/test-types";
 import { TestTypeSummary } from "types/test-type-summary";
-import { capitalize, convertToPercentage } from "utils";
+import { capitalize, convertToPercentage } from "@drill4j/common-utils";
 
 interface Props {
   testsType?: TestTypeSummary[];

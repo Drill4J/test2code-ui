@@ -16,7 +16,7 @@
 import React from "react";
 import "twin.macro";
 
-import { percentFormatter } from "utils";
+import { percentFormatter } from "@drill4j/common-utils";
 import { Count } from "types/count";
 
 interface Props {

@@ -14,16 +14,25 @@
  * limitations under the License.
  */
 import { useEffect, useState } from "react";
-import { useQueryParams } from "@drill4j/react-hooks";
-import { test2CodePluginSocket } from "../test-to-code-plugin-socket";
+import { OutputType, Search, Sort } from "@drill4j/types-admin";
+
+import { test2CodePluginSocket } from "common/connections";
+import { useAgentRouteParams } from "./use-agent-route-params";
+
+interface Message {
+  agentId?: string;
+  buildVersion?: string;
+  filters?: Search[],
+  orderBy?: Sort[],
+  output?: OutputType,
+}
 
 export function useBuildVersion<T>(
   topic: string,
-  message: Record<string, unknown> = {},
+  message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { agentId = "", buildVersion = "" } = useQueryParams<{ agentId?: string; buildVersion?: string }>() || {};
-
+  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);
@@ -33,9 +42,9 @@ export function useBuildVersion<T>(
       topic,
       handleDataChange,
       {
-        type: "AGENT",
         agentId,
         buildVersion,
+        type: "AGENT",
         ...message,
       },
     );
@@ -43,7 +52,9 @@ export function useBuildVersion<T>(
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [message.buildVersion, message.agentId,
+    message.output, agentId, buildVersion, topic,
+    message.filters, message.orderBy]);
 
   return data;
 }

@@ -16,7 +16,7 @@
 import React from "react";
 import tw, { styled } from "twin.macro";
 
-import { percentFormatter, camelToTitle } from "utils";
+import { percentFormatter, camelToTitle } from "@drill4j/common-utils";
 
 interface Props {
   className?: string;

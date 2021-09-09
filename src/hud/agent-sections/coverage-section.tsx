@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 import React from "react";
-import { NavLink, useParams } from "react-router-dom";
-import { Tooltip } from "@drill4j/ui-kit";
+import { NavLink } from "react-router-dom";
+import { Tooltip, Typography } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { percentFormatter } from "utils";
+import { percentFormatter } from "@drill4j/common-utils";
 import { BuildSummary } from "types/build-summary";
 import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
-import { useBuildVersion, usePreviousBuildCoverage } from "hooks";
+import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
 
 const BuildInfo = styled.div`
   ${tw`grid items-center`}
@@ -34,6 +34,7 @@ const BuildInfo = styled.div`
 `;
 
 export const CoverageSection = () => {
+  const { agentId = "" } = useAgentRouteParams();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary") || {};
@@ -51,7 +52,6 @@ export const CoverageSection = () => {
       covered: modifiedMethodsCoveredCount = 0,
     } = {},
   } = useBuildVersion<Methods>("/build/methods") || {};
-  const { agentId = "" } = useParams<{ agentId: string }>();
   const tooltipData = {
     totalCovered: {
       total: allMethodsTotalCount,
@@ -75,34 +75,39 @@ export const CoverageSection = () => {
         label="Build Coverage"
         info={`${percentFormatter(buildCodeCoverage)}%`}
         graph={(
-          <Tooltip tw="relative" message={<CoverageSectionTooltip data={tooltipData} />}>
-            <SingleBar
-              width={108}
-              height={128}
-              color={COVERAGE_TYPES_COLOR.TOTAL}
-              percent={percentFormatter(buildCodeCoverage)}
-            />
-            {!isFirstBuild && (
-              <div
-                tw="absolute w-27 border-t border-dashed border-monochrome-shade"
-                style={{ bottom: `${previousBuildCodeCoverage}%` }}
+          <Tooltip message={<CoverageSectionTooltip data={tooltipData} />}>
+            <div tw="relative">
+              <SingleBar
+                width={108}
+                height={128}
+                color={COVERAGE_TYPES_COLOR.TOTAL}
+                percent={percentFormatter(buildCodeCoverage)}
               />
-            )}
+              {!isFirstBuild && (
+                <div
+                  tw="absolute w-27 border-t border-dashed border-monochrome-shade"
+                  style={{ bottom: `${previousBuildCodeCoverage}%` }}
+                />
+              )}
+            </div>
           </Tooltip>
         )}
         additionalInfo={(
           Boolean(buildDiff) && !isFirstBuild && scopeCount > 0 && (
             <BuildInfo>
-              {`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}
-              <div className="text-ellipsis">
+              <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
+              <Typography.MiddleEllipsis tw="inline">
                 <NavLink
-                  className="font-bold link leading-16 no-underline"
-                  to={`/full-page/${agentId}/${previousBuildVersion}/dashboard`}
+                  tw="inline-block whitespace-nowrap font-bold link leading-16 no-underline"
+                  to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
                   title={`Build ${previousBuildVersion}`}
+                  style={{ maxWidth: "230px" }}
                 >
-                  &nbsp;Build {previousBuildVersion}
+                  <span className="ellipseMe">
+                      &nbsp;Build {previousBuildVersion}
+                  </span>
                 </NavLink>
-              </div>
+              </Typography.MiddleEllipsis>
             </BuildInfo>
           ))}
       />

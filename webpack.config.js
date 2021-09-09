@@ -17,6 +17,7 @@ const { merge } = require("webpack-merge");
 const singleSpaDefaults = require("webpack-config-single-spa-react-ts");
 const Dotenv = require("dotenv-webpack");
 const path = require("path");
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 
 module.exports = (webpackConfigEnv, argv) => {
   const defaultConfig = singleSpaDefaults({
@@ -27,19 +28,23 @@ module.exports = (webpackConfigEnv, argv) => {
   });
 
   return merge(defaultConfig, {
-    externals: ["single-spa"],
+    externals: ["single-spa", "@drill4j/ui-kit", "react", "react-dom"],
     plugins: [
       new Dotenv({
         path: "./.env.local",
       }),
+      new NodePolyfillPlugin(),
     ],
     resolve: {
       alias: {
-        utils: path.resolve(__dirname, "src/utils/"),
         types: path.resolve(__dirname, "src/types/"),
         hooks: path.resolve(__dirname, "src/hooks/"),
         components: path.resolve(__dirname, "src/components/"),
         common: path.resolve(__dirname, "src/common/"),
+        pages: path.resolve(__dirname, "src/pages/"),
+        router: path.resolve(__dirname, "src/router/"),
+        modules: path.resolve(__dirname, "src/modules/"),
+        contexts: path.resolve(__dirname, "src/contexts/"),
       },
     },
   });

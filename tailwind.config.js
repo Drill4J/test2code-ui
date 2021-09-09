@@ -18,6 +18,7 @@ const plugin = require("tailwindcss/plugin");
 
 module.exports = {
   purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  mode: "jit",
   darkMode: false,
   theme: {
     extend: {
@@ -184,7 +185,10 @@ module.exports = {
     }),
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ["checked"],
+      borderColor: ["checked"],
+    },
   },
   plugins: [
     plugin(({ addUtilities }) => {

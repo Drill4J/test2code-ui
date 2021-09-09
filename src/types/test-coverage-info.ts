@@ -22,6 +22,6 @@ export interface TestCoverageInfo {
   name: string;
   toRun: boolean;
   coverage: Coverage;
-  stats: TestStats;
+  details: TestStats;
   [key: string]: string | boolean | Coverage | TestStats;
 }

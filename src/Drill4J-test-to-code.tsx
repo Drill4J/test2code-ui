@@ -17,27 +17,139 @@ import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
 import { BrowserRouter } from "react-router-dom";
-import Root from "./root.component";
+import axios from "axios";
 
-import { AgentHud as Test2CodeAgentHUD, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
+import { Agent, Group } from "pages";
+import { SwitchBuildContext } from "contexts";
+import { Route } from "react-router";
+import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
+import { GroupRootComponentProps } from "./pages/group/group";
+import { groupDashboardPath } from "./router";
+import { routes } from "./common";
+import pkj from "../package.json";
 
-const lifecycles = singleSpaReact({
+import "./index.css";
+
+console.log("Test2Code-UI version: ", pkj.version);
+
+axios.defaults.baseURL = process.env.REACT_APP_API_HOST
+  ? `http://${process.env.REACT_APP_API_HOST}/api`
+  : "/api";
+
+axios.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("auth_token");
+
+    if (token) {
+      // eslint-disable-next-line no-param-reassign
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error),
+);
+
+const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
+  <ul>
+    <li>err: {err}</li>
+    <li>info: {info}</li>
+    <li>props: {props}</li>
+  </ul>
+);
+
+interface AgentRootComponentProps {
+  switchBuild: (version: string, path: string) => void
+}
+
+const AgentPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Root,
+  rootComponent: ({ switchBuild }: AgentRootComponentProps) => (
+    <BrowserRouter>
+      <SwitchBuildContext.Provider value={switchBuild}>
+        <Agent />
+      </SwitchBuildContext.Provider>
+    </BrowserRouter>
+  ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
+  errorBoundary: ErrorBoundary,
 });
 
-export const AgentHUD = singleSpaReact({
+export const AgentPlugin = {
+  mount: [
+    AgentPluginLifecycle.mount,
+  ],
+  unmount: [
+    AgentPluginLifecycle.unmount,
+  ],
+  update: AgentPluginLifecycle.update,
+  bootstrap: AgentPluginLifecycle.bootstrap,
+};
+
+export const AgentHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
   rootComponent: Test2CodeAgentHUD,
+  errorBoundary: ErrorBoundary,
 });
 
-export const ServiceGroupHUD = singleSpaReact({
+export const AgentHUD = {
+  mount: [
+    AgentHUDLifecycle.mount,
+  ],
+  unmount: [
+    AgentHUDLifecycle.unmount,
+  ],
+  update: AgentHUDLifecycle.update,
+  bootstrap: AgentHUDLifecycle.bootstrap,
+};
+
+const GroupHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: () => <BrowserRouter><Test2CodeServiceGroupHUD /></BrowserRouter>,
+  rootComponent: (props: GroupHudProps) => (
+    <BrowserRouter>
+      <Route path={groupDashboardPath}>
+        <Test2CodeServiceGroupHUD {...props} />
+      </Route>
+    </BrowserRouter>
+  ),
+  errorBoundary: ErrorBoundary,
 });
 
-export const { bootstrap, mount, unmount } = lifecycles;
+export const GroupHUD = {
+  mount: [
+    GroupHUDLifecycle.mount,
+  ],
+  unmount: [
+    GroupHUDLifecycle.unmount,
+  ],
+  update: GroupHUDLifecycle.update,
+  bootstrap: GroupHUDLifecycle.bootstrap,
+};
+
+export const GroupPluginLifecycle = singleSpaReact({
+  React,
+  ReactDOM,
+  rootComponent: (props: GroupRootComponentProps) => (
+    <BrowserRouter>
+      <Group {...props} />
+    </BrowserRouter>
+  ),
+  domElementGetter: () => document.getElementById("test2code") || document.body,
+  errorBoundary: ErrorBoundary,
+});
+
+export const GroupPlugin = {
+  mount: [
+    GroupPluginLifecycle.mount,
+  ],
+  unmount: [
+    GroupPluginLifecycle.unmount,
+  ],
+  update: GroupPluginLifecycle.update,
+  bootstrap: GroupPluginLifecycle.bootstrap,
+};
+
+export const Routes = { ...routes };

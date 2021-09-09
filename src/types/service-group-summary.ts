@@ -42,5 +42,6 @@ export interface ServiceGroupSummary {
     testsToRun: TestCount;
     scopeCount?: number;
     recommendations?: string[];
+    risks?: number;
   };
 }
