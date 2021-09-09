@@ -50,7 +50,7 @@ export const BaselineTooltip = () => {
 };
 
 const FlagWrapper = styled.div(({ active, disabled }: { active?: boolean; disabled?: boolean }) => [
-  tw`flex ml-2 text-monochrome-default`,
+  tw`ml-2 text-monochrome-default`,
   active ? tw`text-blue-default cursor-pointer` : tw`pointer-events-none`,
   disabled && tw`pointer-events-none`,
 ]);
