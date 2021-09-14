@@ -87,7 +87,12 @@ export const FinishScopeModal = () => {
             setLoading(true);
             await finishScope(agentId, pluginId, {
               onSuccess: () => {
-                sendNotificationEvent({ type: "SUCCESS", text: "Scope has been finished" });
+                sendNotificationEvent({
+                  type: "SUCCESS",
+                  text: scope?.coverage.percentage
+                    ? "Scope has been finished"
+                    : "Scope has been finished and deleted",
+                });
                 closeModal();
               },
               onError: setErrorMessage,
@@ -119,7 +124,7 @@ export const FinishScopeModal = () => {
                     )}
                   </div>
                 )}
-                <Label disabled={!testsCount || activeSessionTest.length > 0}>
+                <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
                   <Field
                     type="checkbox"
                     name="ignoreScope"
