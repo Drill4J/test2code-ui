@@ -96,10 +96,17 @@ export const RisksModal = () => {
                       <Icons.Function />
                     </div>
                     <div tw="flex flex-col w-70">
-                      <div tw="text-ellipsis" title={getRisks()[index]?.name}>{getRisks()[index]?.name}</div>
+                      <div
+                        tw="text-ellipsis"
+                        title={getRisks()[index]?.name}
+                        data-test="risks-pane:risk-name"
+                      >
+                        {getRisks()[index]?.name}
+                      </div>
                       <div
                         tw="w-80 text-monochrome-default text-ellipsis"
                         title={getRisks()[index]?.ownerClass}
+                        data-test="risks-pane:risk-path"
                       >
                         {getRisks()[index]?.ownerClass}
                       </div>

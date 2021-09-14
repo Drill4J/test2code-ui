@@ -42,7 +42,7 @@ export const ItemInfo = ({
       {packageName ? (
         <div tw="flex flex-row items-center h-8">
           <Label>Package</Label>
-          <Value className="text-ellipsis" title={packageName}>{packageName}</Value>
+          <Value className="text-ellipsis" title={packageName} data-test="associated-test-pane:package-name">{packageName}</Value>
         </div>
       ) : (
         <div tw="space-y-4 pt-2 pb-2 animate-pulse">

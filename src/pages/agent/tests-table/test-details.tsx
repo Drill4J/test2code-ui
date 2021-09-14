@@ -42,7 +42,7 @@ export const TestDetails = ({
   const [searchQuery] = search;
 
   return (
-    <div tw="flex flex-col">
+    <div tw="flex flex-col" data-test="test-details:table-wrapper">
       <>
         <Table
           isDefaulToggleSortBy

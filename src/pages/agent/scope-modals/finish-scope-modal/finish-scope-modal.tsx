@@ -68,6 +68,7 @@ export const FinishScopeModal = () => {
               At least one active session has been detected.<br />
               First, you need to finish it in&nbsp;
               <Link
+                data-test="finish-scope-modal:general-alert:session-management-link"
                 tw="link font-bold text-14"
                 to={getModalPath({ name: "sessionManagement" })}
               >

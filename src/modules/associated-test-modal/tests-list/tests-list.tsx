@@ -67,7 +67,7 @@ export const TestsList = ({ associatedTests }: Props) => {
             height={Math.floor(testsListHeight)}
             itemCount={tests.length || associatedTests.assocTestsCount}
             renderItem={({ index, style }) => (
-              <TestItem key={tests[index]} style={style as Record<symbol, string>}>
+              <TestItem key={tests[index]} style={style as Record<symbol, string>} data-test="associated-tests-list:item">
                 {tests.length > 0 && (
                   <>
                     <div tw="flex flex-row items-center h-5">
