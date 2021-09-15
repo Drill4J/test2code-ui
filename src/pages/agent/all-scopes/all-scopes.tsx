@@ -81,7 +81,7 @@ export const AllScopes = () => {
             withSearch={false}
             isDefaulToggleSortBy
             data={scopesData}
-            columnsDependency={[isActiveBuildVersion, activeScope?.coverage.percentage]}
+            columnsDependency={[isActiveBuildVersion, activeScope?.coverage.percentage, activeScopeTestsType.length, byTestType.length]}
             columns={[
               {
                 Header: "Name",
