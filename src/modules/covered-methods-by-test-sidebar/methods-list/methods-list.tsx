@@ -77,6 +77,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                   tw="flex flex-col justify-center pl-6 pr-6 text-12"
                   key={`${methods[index]?.name}${index}`}
                   style={style as Record<symbol, string>}
+                  data-test="covered-methods-list:item"
                 >
                   <div className="flex items-center w-full h-20px">
                     <div className="flex items-center w-full gap-4">

@@ -57,6 +57,7 @@ export const CoveredMethodsByTestSidebar = () => {
               sceleton={showSceleton}
               className="text-ellipsis"
               title={summary?.testName}
+              data-test="covered-methods-by-test-sidebar:test-name"
             >
               {summary?.testName}
             </MethodInfoValue>
@@ -66,6 +67,7 @@ export const CoveredMethodsByTestSidebar = () => {
             <MethodInfoValue
               sceleton={showSceleton}
               className="text-ellipsis"
+              data-test="covered-methods-by-test-sidebar:test-type"
             >
               {capitalize(summary?.testType?.toLowerCase())}
             </MethodInfoValue>

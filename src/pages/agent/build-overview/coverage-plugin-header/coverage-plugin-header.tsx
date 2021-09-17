@@ -52,7 +52,7 @@ export const CoveragePluginHeader = () => {
         <div>Current build:</div>
         <div className="flex items-center text-monochrome-black" title={buildVersion}>
           <Typography.MiddleEllipsis>
-            <span tw="whitespace-nowrap">{buildVersion}</span>
+            <span tw="whitespace-nowrap" data-test="header:current-build-version">{buildVersion}</span>
           </Typography.MiddleEllipsis>
           <BaselineTooltip />
         </div>
@@ -65,7 +65,7 @@ export const CoveragePluginHeader = () => {
               title={previousBuildVersion}
             >
               <Typography.MiddleEllipsis>
-                <span tw="whitespace-nowrap">{previousBuildVersion}</span>
+                <span tw="whitespace-nowrap" data-test="header:parent-build-version">{previousBuildVersion}</span>
               </Typography.MiddleEllipsis>
             </div>
           ) : <span>&ndash;</span>}
@@ -130,7 +130,7 @@ export const CoveragePluginHeader = () => {
         ) : (
           <div
             tw="flex items-center w-full text-20 leading-32 text-monochrome-black"
-            data-test="action-section:no-risks-count"
+            data-test="action-section:count:risks"
           >
             {risksCount}
           </div>
