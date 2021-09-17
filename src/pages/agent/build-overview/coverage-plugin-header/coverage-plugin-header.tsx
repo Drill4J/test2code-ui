@@ -130,7 +130,7 @@ export const CoveragePluginHeader = () => {
         ) : (
           <div
             tw="flex items-center w-full text-20 leading-32 text-monochrome-black"
-            data-test="action-section:no-risks-count"
+            data-test="action-section:count:risks"
           >
             {risksCount}
           </div>
