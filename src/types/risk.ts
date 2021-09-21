@@ -15,11 +15,20 @@
  */
 import { RiskType } from "./risk-type";
 
+type CoverageRate = "MISSED" | "PARTLY" | "FULL";
+
+interface ProbesCount{
+  covered: number,
+  total: number
+}
+
 export interface Risk {
-  name?: string,
-  ownerClass?: string,
-  type?: RiskType,
-  coverage?: number,
-  associatedTestsCount?: number,
-  id?: number,
+  ownerClass: string,
+  name: string,
+  desc: string,
+  type: RiskType,
+  probesCount: ProbesCount,
+  coverage: number,
+  coverageRate: CoverageRate,
+  assocTestsCount: number,
 }

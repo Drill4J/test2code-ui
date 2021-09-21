@@ -25,7 +25,7 @@ import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
-import { Risks } from "./risks";
+import { RisksPage } from "./risks";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -45,7 +45,14 @@ export const Agent = () => (
           component={ScopeOverview}
         />
         <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
-        <Route path={getAgentRoutePath(routes.risks)} component={Risks} />
+        <Route
+          path={getAgentRoutePath(routes.risks)}
+          render={() => (
+            <TableActionsProvider>
+              <RisksPage />
+            </TableActionsProvider>
+          )}
+        />
         <Route
           path={getAgentRoutePath(routes.testsToRun)}
           render={() => (

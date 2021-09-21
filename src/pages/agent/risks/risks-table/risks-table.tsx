@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, Cells, Table, TableActionsProvider,
+  capitalize, Cells, Icons, Stub, Table,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import { getModalPath } from "common";
@@ -24,15 +24,16 @@ import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
   data: Risk[];
+  filteredCount: number;
 }
 
-export const RisksTable = ({ data }: Props) => {
+export const RisksTable = ({ data, filteredCount }: Props) => {
   const columns = [
     {
       Header: "Name",
       accessor: "name",
       Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {} }: any) => (
-        <Cells.Compound cellName={value} cellAdditionalInfo={ownerClass} />
+        <Cells.Compound cellName={value} cellAdditionalInfo={ownerClass} icon={<Icons.Function />} />
       ),
       width: "50%",
       textAlign: "left",
@@ -54,7 +55,7 @@ export const RisksTable = ({ data }: Props) => {
     },
     {
       Header: "Associated Tests",
-      accessor: "associatedTestsCount",
+      accessor: "assocTestsCount",
       Cell: ({ value = "", row }: any) => (
         <Cells.Clickable
           data-test="risks-table:associated-tests-count"
@@ -69,14 +70,21 @@ export const RisksTable = ({ data }: Props) => {
   ];
 
   return (
-    <TableActionsProvider>
-      <Table
-        data={data}
-        columns={columns}
-        withSearch
-        isDefaulToggleSortBy
-        defaultSortBy={[{ id: "coverage", desc: false }]}
-      />
-    </TableActionsProvider>
+    <Table
+      data={data}
+      columns={columns}
+      withSearch
+      filteredCount={filteredCount}
+      placeholder="Search methods by name"
+      stub={
+        data.length === 0 && (
+          <Stub
+            icon={<Icons.Package height={104} width={107} />}
+            title="No results found"
+            message="Try adjusting your search or filter to find what you are looking for."
+          />
+        )
+      }
+    />
   );
 };
