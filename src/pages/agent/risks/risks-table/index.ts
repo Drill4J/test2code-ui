@@ -13,11 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RiskType } from "./risk-type";
-
-export interface Risks {
-  desc?: string;
-  name?: string;
-  ownerClass?: string;
-  type?: RiskType;
-}
+export { RisksTable } from "./risks-table";

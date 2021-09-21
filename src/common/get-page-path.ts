@@ -21,6 +21,7 @@ interface Routes {
   scopeMethods: "scopeId";
   scopeTests: "scopeId";
   allScopes: void;
+  risks: void;
 }
 
 export const routes = {
@@ -29,6 +30,7 @@ export const routes = {
   scopeTests: "/scopes/:scopeId",
   testsToRun: "/tests-to-tun",
   allScopes: "/scopes",
+  risks: "/risks",
 };
 
 export const router = createRouter<Routes>(routes);

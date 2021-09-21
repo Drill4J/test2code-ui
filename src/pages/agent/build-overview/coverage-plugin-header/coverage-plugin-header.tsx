@@ -120,7 +120,7 @@ export const CoveragePluginHeader = () => {
       >
         {risksCount > 0 ? (
           <Count
-            to={getModalPath({ name: "risks", params: { filter: "all" } })}
+            to={getPagePath({ name: "risks" })}
             className="flex items-center w-full"
             data-test="action-section:count:risks"
           >

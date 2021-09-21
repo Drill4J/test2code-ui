@@ -21,7 +21,7 @@ import {
 import tw, { styled } from "twin.macro";
 import { useQueryParams, useCloseModal, useElementSize } from "@drill4j/common-hooks";
 import { useBuildVersion } from "hooks";
-import { Risks } from "types/risks";
+import { Risk } from "types";
 
 const Header = styled.div`
   ${tw`flex items-center h-16 pl-6`}
@@ -32,7 +32,7 @@ const Header = styled.div`
 `;
 
 export const RisksModal = () => {
-  const risks = useBuildVersion<Risks[]>("/build/risks") || [];
+  const risks = useBuildVersion<Risk[]>("/build/risks") || [];
   const filter = useQueryParams<{filter?: string}>()?.filter || "all";
   const [selectedSection, setSelectedSection] = useState<string>(filter);
   const node = useRef<HTMLDivElement>(null);
@@ -90,7 +90,7 @@ export const RisksModal = () => {
                   <div
                     tw="flex flex-row items-center w-97 min-h-40px mb-4 pl-6 text-12"
                     key={index}
-                    style={style as Record<symbol, string>}
+                    style={style as any}
                   >
                     <div tw="flex items-center mr-4">
                       <Icons.Function />
