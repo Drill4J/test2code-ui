@@ -147,6 +147,7 @@ export const FinishAllScopesModal = () => {
                     primary
                     disabled={activeSessions.length > 0 || loading || !isValid}
                     type="submit"
+                    data-test="finish-all-scopes-modal:submit-button"
                   >
                     {loading ? <Spinner /> : "Finish all scopes"}
                   </Button>
