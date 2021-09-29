@@ -55,7 +55,7 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         <div tw="text-14 leading-16 text-monochrome-black" data-test="quality-gate-settings:condtion:coverage">
           Build coverage, %
           <div tw="text-10 leading-16 text-monochrome-default" data-test="quality-gate-settings:condtion-status:coverage">
-            Minimum percentage of build covered by tests
+            Minimum % of build methods covered by tests
           </div>
         </div>
       </Field>
@@ -88,7 +88,7 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
             </Tooltip>
           </div>
           <div tw="text-10 leading-16 text-monochrome-default" data-test="quality-gate-settings:condtion-status:risks">
-            Maximum number of risks in the build
+            Maximum number of not covered risk methods
           </div>
         </div>
       </Field>
@@ -107,9 +107,9 @@ export const QualityGateSettings = ({ conditionSettingByType }: Props) => (
         normalize={(value: string) => inputLengthRestriction(value, 7)}
       >
         <div tw="text-14 leading-16 text-monochrome-black" data-test="quality-gate-settings:condtion:tests">
-          Suggested “Tests to run” executed
+          Tests to run
           <div tw="text-10 leading-16 text-monochrome-default" data-test="quality-gate-settings:condtion-status:tests">
-            Maximum number of tests to run in the build
+            Maximum number of not executed tests to run
           </div>
         </div>
       </Field>

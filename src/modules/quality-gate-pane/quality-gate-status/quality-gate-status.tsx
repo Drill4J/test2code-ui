@@ -68,7 +68,7 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
             <div tw="block text-monochrome-default text-10 leading-16" data-test="quality-gate-status:condition-status:risks">
               {results.risks ? "Passed" : "Failed"}. You have&nbsp;
               <span tw="font-bold" data-test="quality-gate-status:condition-status:risks">{risksCount}</span>
-              &nbsp;risks
+              &nbsp;not covered risk methods
             </div>
           </Condition>
         )}
@@ -81,7 +81,7 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
             <div tw="block text-monochrome-default text-10 leading-16" data-test="quality-gate-status:condition-status:tests">
               {results.tests ? "Passed" : "Failed"}. You have&nbsp;
               <span tw="font-bold" data-test="quality-gate-status:condition-status:tests">{testToRunCount}</span>
-              {results.tests ? " Tests to run" : " not executed tests to run"}
+                &nbsp;not executed tests to run
             </div>
           </Condition>
         )}
@@ -94,7 +94,7 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
         data-test="quality-gate-status:info-panel"
       >
         <span>
-          This is quality gate configuration for this build.
+          This is Quality Gate configuration for this build.
           Use this Curl in your command line to get JSON:
         </span>
         <QualityGateConfigurationUrl agentId={agentId} pluginId={pluginId} />
