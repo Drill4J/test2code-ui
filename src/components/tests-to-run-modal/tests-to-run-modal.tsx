@@ -111,7 +111,7 @@ export const TestsToRunModal = () => {
           </div>
           <div tw="text-14 mt-4 px-6 space-y-4">
             {(getSelectedTests() || []).map((test) => (
-              <div tw="flex items-center gap-x-4" key={test.name}>
+              <div tw="flex items-center gap-x-4" key={test.name} data-test="tests-to-run-modal:tests-list:test">
                 <Icons.Test tw="flex items-center min-w-16px" />
                 <div tw="break-all">{test.name}</div>
               </div>
