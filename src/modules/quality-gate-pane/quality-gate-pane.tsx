@@ -127,7 +127,7 @@ export const QualityGatePane = () => {
                       className="flex justify-center items-center gap-x-1 w-16"
                       primary
                       size="large"
-                      disabled={!isValid || !dirty || isSubmitting || isCheckboxesPristine}
+                      disabled={!isValid || (!dirty && isCheckboxesPristine) || isSubmitting}
                       type="submit"
                       data-test="quality-gate-pane:save-button"
                     >

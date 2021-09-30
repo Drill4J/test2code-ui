@@ -33,7 +33,7 @@ export function updateQualityGateSettings(
             enabled: formValues.coverage.enabled,
             condition: {
               ...formValues.coverage.condition,
-              value: formValues.coverage.condition.value,
+              value: formValues.coverage.condition.value || 0,
             },
           },
           {
@@ -41,7 +41,7 @@ export function updateQualityGateSettings(
             enabled: formValues.risks.enabled,
             condition: {
               ...formValues.risks.condition,
-              value: formValues.risks.condition.value,
+              value: formValues.risks.condition.value || 0,
             },
           },
           {
@@ -49,7 +49,7 @@ export function updateQualityGateSettings(
             enabled: formValues.tests.enabled,
             condition: {
               ...formValues.tests.condition,
-              value: formValues.tests.condition.value,
+              value: formValues.tests.condition.value || 0,
             },
           },
         ],
