@@ -118,23 +118,14 @@ export const CoveragePluginHeader = () => {
         label="risks"
         previousBuild={{ previousBuildVersion, previousBuildTests }}
       >
-        {risksCount > 0 ? (
-          <Count
-            to={getPagePath({ name: "risks" })}
-            className="flex items-center w-full"
-            data-test="action-section:count:risks"
-          >
-            {risksCount}
-            <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-          </Count>
-        ) : (
-          <div
-            tw="flex items-center w-full text-20 leading-32 text-monochrome-black"
-            data-test="action-section:count:risks"
-          >
-            {risksCount}
-          </div>
-        )}
+        <Count
+          to={getPagePath({ name: "risks" })}
+          className="flex items-center w-full"
+          data-test="action-section:count:risks"
+        >
+          {risksCount}
+          <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+        </Count>
       </ActionSection>
       <ActionSection
         label="tests to run"
