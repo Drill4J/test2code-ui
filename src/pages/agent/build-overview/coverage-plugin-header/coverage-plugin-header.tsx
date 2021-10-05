@@ -29,14 +29,15 @@ import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
 import { useSwitchBuild } from "contexts";
+import { Risk } from "types";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
   const { agentId = "", buildVersion = "" } = useAgentRouteParams();
-
   const { buildVersion: activeBuildVersion = "", status: agentStatus } = useAgent(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
+  const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
@@ -118,14 +119,17 @@ export const CoveragePluginHeader = () => {
         label="risks"
         previousBuild={{ previousBuildVersion, previousBuildTests }}
       >
-        <Count
-          to={getPagePath({ name: "risks" })}
-          className="flex items-center w-full"
-          data-test="action-section:count:risks"
-        >
-          {risksCount}
-          <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-        </Count>
+        {initialRisks.length
+          ? (
+            <Count
+              to={getPagePath({ name: "risks" })}
+              className="flex items-center w-full"
+              data-test="action-section:count:risks"
+            >
+              {risksCount}
+              <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+            </Count>
+          ) : <span>&ndash;</span>}
       </ActionSection>
       <ActionSection
         label="tests to run"
