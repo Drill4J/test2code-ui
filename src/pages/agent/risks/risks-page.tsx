@@ -13,19 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect } from "react";
+import React from "react";
 import { FilterList, ParentBuild } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { Risk } from "types";
-import { setSort, useTableActionsDispatch, useTableActionsState } from "@drill4j/ui-kit";
+import { useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
 import { RisksTable } from "./risks-table";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
-  const dispatch = useTableActionsDispatch();
   const { buildVersion } = useAgentRouteParams();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const {
@@ -33,11 +32,6 @@ export const RisksPage = () => {
     filteredCount = 0,
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
   const notCoveredRisksCount = risks.filter(({ coverage = 0 }) => coverage === 0).length;
-
-  useEffect(() => {
-    dispatch(setSort({ field: "coverage", order: "ASC" }));
-  }, []);
-
   return (
     <div>
       <RisksPageHeader
