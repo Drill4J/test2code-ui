@@ -103,63 +103,66 @@ export const FinishScopeModal = () => {
             setLoading(false);
           }}
         >
-          {({ values: { forceFinish } }) => (
-            <Form tw="m-6">
-              <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
-              <div tw="flex flex-col gap-y-4 mt-6 mb-9 text-14 leading-20 text-blue-default">
-                {Boolean(activeSessionTest.length) && (
-                  <div>
-                    <Label disabled={false}>
-                      <Field
-                        type="checkbox"
-                        name="forceFinish"
-                      >
-                        {({ field }: any) => (<Checkbox field={field} />)}
-                      </Field>
-                      <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
-                    </Label>
-                    {forceFinish && scope && !scope.coverage.percentage && (
-                      <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
-                        <Icons.Warning /> Scope is empty and will be deleted after finishing
-                      </div>
-                    )}
-                  </div>
-                )}
-                <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
-                  <Field
-                    type="checkbox"
-                    name="ignoreScope"
+          {({ values: { forceFinish } }) => {
+            const finishScopeButtonContent = getFinishScopeButtonContent({
+              loading, hasTests: Boolean(testsCount), hasActiveSessions: Boolean(activeSessionTest.length), forceFinish,
+            });
+            return (
+              <Form tw="m-6">
+                <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
+                <div tw="flex flex-col gap-y-4 mt-6 mb-9 text-14 leading-20 text-blue-default">
+                  {Boolean(activeSessionTest.length) && (
+                    <div>
+                      <Label disabled={false}>
+                        <Field
+                          type="checkbox"
+                          name="forceFinish"
+                        >
+                          {({ field }: any) => (<Checkbox field={field} />)}
+                        </Field>
+                        <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
+                      </Label>
+                      {forceFinish && scope && !scope.coverage.percentage && (
+                        <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
+                          <Icons.Warning /> Scope is empty and will be deleted after finishing
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
+                    <Field
+                      type="checkbox"
+                      name="ignoreScope"
+                    >
+                      {({ field }: any) => (<Checkbox field={field} />)}
+                    </Field>
+                    <span tw="text-monochrome-black">Ignore scope in build stats</span>
+                  </Label>
+                </div>
+                <div className="flex items-center gap-x-4 w-full mt-9">
+                  <Button
+                    className={`flex justify-center items-center gap-x-1 ${finishScopeButtonContent === "Finish Scope" ? "w-30" : "w-40"}`}
+                    primary
+                    size="large"
+                    disabled={loading || (Boolean(activeSessionTest.length) && !forceFinish)}
+                    type="submit"
+                    data-test="finish-scope-modal:finish-scope-button"
                   >
-                    {({ field }: any) => (<Checkbox field={field} />)}
-                  </Field>
-                  <span tw="text-monochrome-black">Ignore scope in build stats</span>
-                </Label>
-              </div>
-              <div className="flex items-center gap-x-4 w-full mt-9">
-                <Button
-                  className={`flex justify-center items-center gap-x-1 ${testsCount ? "w-30" : "w-40"}`}
-                  primary
-                  size="large"
-                  disabled={loading || (Boolean(activeSessionTest.length) && !forceFinish)}
-                  type="submit"
-                  data-test="finish-scope-modal:finish-scope-button"
-                >
-                  {loading && <Spinner disabled />}
-                  {!loading && Boolean(testsCount) && "Finish Scope"}
-                  {!loading && !testsCount && "Finish and Delete" }
-                </Button>
-                <Button
-                  secondary
-                  size="large"
-                  onClick={closeModal}
-                  disabled={loading}
-                  data-test="finish-scope-modal:cancel-modal-button"
-                >
-                  Cancel
-                </Button>
-              </div>
-            </Form>
-          )}
+                    {finishScopeButtonContent}
+                  </Button>
+                  <Button
+                    secondary
+                    size="large"
+                    onClick={closeModal}
+                    disabled={loading}
+                    data-test="finish-scope-modal:cancel-modal-button"
+                  >
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            );
+          }}
         </Formik>
       </div>
     </Popup>
@@ -170,3 +173,25 @@ const Label = styled.label<{disabled: boolean}>`
   ${tw`flex items-center gap-x-2`}
   ${({ disabled }) => disabled && tw`pointer-events-none opacity-30`}
 `;
+
+function getFinishScopeButtonContent({
+  loading, hasTests, hasActiveSessions, forceFinish,
+}: any): React.ReactNode {
+  if (loading) {
+    return <Spinner disabled />;
+  }
+
+  if (hasTests) {
+    return "Finish Scope";
+  }
+
+  if (!hasTests && hasActiveSessions && !forceFinish) {
+    return "Finish Scope";
+  }
+
+  if (!hasTests) {
+    return "Finish and Delete";
+  }
+
+  return "Finish Scope";
+}
