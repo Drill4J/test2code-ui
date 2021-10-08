@@ -641,6 +641,10 @@ video {
   right: 1.5rem;
 }
 
+.bottom-6 {
+  bottom: 1.5rem;
+}
+
 .top-2\.5 {
   top: 0.625rem;
 }
