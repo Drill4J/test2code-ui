@@ -16,21 +16,22 @@
 import { createRouter, getPagePath as getPage } from "nanostores";
 
 interface Routes {
-  test2code: void;
-  testsToRun: void;
-  scopeMethods: "scopeId";
-  scopeTests: "scopeId";
-  allScopes: void;
-  risks: void;
+  overview: "buildVersion";
+  testsToRun: "buildVersion";
+  scopeMethods: "buildVersion" | "scopeId";
+  scopeTests: "buildVersion" | "scopeId";
+  allScopes: "buildVersion";
+  risks: "buildVersion";
 }
 
+// after the build version we should have some text because single spa broken if path end on "."
 export const routes = {
-  test2code: "/overview",
-  scopeMethods: "/scopes/:scopeId",
-  scopeTests: "/scopes/:scopeId",
-  testsToRun: "/tests-to-tun",
-  allScopes: "/scopes",
-  risks: "/risks",
+  overview: "/builds/:buildVersion/overview",
+  scopeMethods: "/builds/:buildVersion/overview/scopes/:scopeId",
+  scopeTests: "/builds/:buildVersion/overview/scopes/:scopeId",
+  testsToRun: "/builds/:buildVersion/overview/tests-to-tun",
+  allScopes: "/builds/:buildVersion/overview/scopes",
+  risks: "/builds/:buildVersion/overview/risks",
 };
 
 export const router = createRouter<Routes>(routes);
@@ -45,4 +46,4 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  `${window.location.pathname.split("/").slice(0, 7).join("/")}${getPage(router, name, params)}`;
+  `${window.location.pathname.split("/").slice(0, 5).join("/")}${getPage(router, name, params)}`;

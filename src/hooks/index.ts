@@ -22,3 +22,4 @@ export { useActiveSessions } from "./use-active-sessions";
 export { useAgentRouteParams } from "./use-agent-route-params";
 export { useGroupData } from "./use-group-data";
 export { useGroupRouteParams } from "./use-group-route-params";
+export { useAgentPluginRouteParams } from "./use-agent-plugin-route-params";

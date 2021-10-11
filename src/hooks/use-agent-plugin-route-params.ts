@@ -13,11 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Agent } from "@drill4j/types-admin";
-import { useAdminConnection } from "./use-admin-connection";
-import { useAgentRouteParams } from "./use-agent-route-params";
+import { matchPath, useLocation } from "react-router-dom";
+import { routes } from "common";
+import { getAgentRoutePath } from "../router";
 
-export const useAgent = (id?:string) => {
-  const { agentId = "" } = useAgentRouteParams();
-  return useAdminConnection<Agent>(`/api/agents/${id || agentId}`) || {};
+export const useAgentPluginRouteParams = (): { buildVersion: string } => {
+  const { pathname } = useLocation();
+  const { params: { buildVersion = "" } = {} } = matchPath<{ buildVersion?: string; }>(pathname, {
+    path: getAgentRoutePath(routes.overview),
+  }) || {};
+  return { buildVersion };
 };

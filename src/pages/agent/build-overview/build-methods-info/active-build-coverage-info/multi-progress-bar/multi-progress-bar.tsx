@@ -20,7 +20,7 @@ import {
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 import {
-  useActiveScope, useActiveSessions, useAgent, useAgentRouteParams, useBuildVersion,
+  useActiveScope, useActiveSessions, useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
 } from "hooks";
 import { AGENT_STATUS } from "common";
 import { BuildCoverage } from "types/build-coverage";
@@ -30,7 +30,8 @@ const Message = styled.div`
 `;
 
 export const MultiProgressBar = () => {
-  const { agentId, buildVersion } = useAgentRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useAgentPluginRouteParams();
   const node = useRef<HTMLDivElement>(null);
   const { width } = useElementSize(node);
   const { status } = useAgent(agentId) || {};

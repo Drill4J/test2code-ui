@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { useParams, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   Menu, Icons, Status, Stub, Table,
 } from "@drill4j/ui-kit";
@@ -25,7 +25,9 @@ import tw, { styled } from "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
+import {
+  useActiveScope, useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+} from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { getModalPath, getPagePath } from "common";
@@ -33,7 +35,8 @@ import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
 
 export const AllScopes = () => {
-  const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
+  const { agentId = "" } = useAgentRouteParams();
+  const { buildVersion } = useAgentPluginRouteParams();
   const { push } = useHistory();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const activeScope = useActiveScope();
@@ -70,7 +73,7 @@ export const AllScopes = () => {
                 }: any) => (
                   <Link
                     tw="font-bold text-14 leading-20 cursor-pointer"
-                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id } })}
+                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id, buildVersion } })}
                     data-test="scopes-list:scope-name"
                   >
                     <div className="link text-ellipsis" title={value}>{value}</div>

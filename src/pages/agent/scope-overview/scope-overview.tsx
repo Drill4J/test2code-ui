@@ -41,7 +41,7 @@ export const ScopeOverview = () => {
 
   return (
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
-      ? <Redirect to={{ pathname: getPagePath({ name: "test2code" }) }} />
+      ? <Redirect to={{ pathname: getPagePath({ name: "overview", params: { buildVersion } }) }} />
       : (
         <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />

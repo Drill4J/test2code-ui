@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { AGENT_STATUS } from "common/constants";
 import {
-  useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+  useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
@@ -33,8 +33,8 @@ import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
-  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
-
+  const { agentId = "" } = useAgentRouteParams();
+  const { buildVersion } = useAgentPluginRouteParams();
   const { buildVersion: activeBuildVersion = "", status: agentStatus } = useAgent(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
@@ -120,7 +120,7 @@ export const CoveragePluginHeader = () => {
       >
         {risksCount > 0 ? (
           <Count
-            to={getPagePath({ name: "risks" })}
+            to={getPagePath({ name: "risks", params: { buildVersion } })}
             className="flex items-center w-full"
             data-test="action-section:count:risks"
           >
@@ -142,7 +142,7 @@ export const CoveragePluginHeader = () => {
       >
         {previousBuildTests.length > 0 ? (
           <Count
-            to={getPagePath({ name: "testsToRun" })}
+            to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
             className="flex items-center w-full"
             data-test="action-section:count:tests-to-run"
           >

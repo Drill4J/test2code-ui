@@ -24,16 +24,15 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion } from "hooks";
 import { getModalPath, getPagePath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
   const scope = useBuildVersion<ActiveScope>("/active-scope");
-  const {
-    agentId = "", pluginId = "",
-  } = useAgentRouteParams();
+  const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { buildVersion } = useAgentPluginRouteParams();
   const { testTypes: activeSessionTest = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -99,7 +98,7 @@ export const FinishScopeModal = () => {
               onError: setErrorMessage,
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             isScopeInfoPage && !scope?.sessionsFinished &&
-                  push(getPagePath({ name: "test2code" }));
+                  push(getPagePath({ name: "overview", params: { buildVersion } }));
             setLoading(false);
           }}
         >

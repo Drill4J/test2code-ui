@@ -16,9 +16,9 @@
 import { matchPath, useLocation } from "react-router-dom";
 import { agentDashboardPath, agentPluginPath } from "../router";
 
-export const useAgentRouteParams = (): { agentId: string; buildVersion: string; pluginId: string } => {
+export const useAgentRouteParams = (): { agentId: string; pluginId: string } => {
   const { pathname } = useLocation();
-  const { params: { buildVersion = "", agentId = "", pluginId = "" } = {} } = matchPath<{
-    agentId?: string; buildVersion?: string; pluginId: string }>(pathname, { path: [agentPluginPath, agentDashboardPath] }) || {};
-  return { buildVersion, agentId, pluginId };
+  const { params: { agentId = "", pluginId = "" } = {} } = matchPath<{
+    agentId?: string; pluginId: string }>(pathname, { path: [agentPluginPath, agentDashboardPath] }) || {};
+  return { agentId, pluginId };
 };

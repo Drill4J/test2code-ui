@@ -21,48 +21,56 @@ import "twin.macro";
 import { getPagePath, routes } from "common";
 import { Modals } from "components";
 import { TableActionsProvider } from "@drill4j/ui-kit";
+import { useAgent } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
 
-export const Agent = () => (
-  <div tw="flex flex-col w-full h-full">
-    <div>
-      <Switch>
-        <Route
-          exact
-          path={getAgentRoutePath("/")}
-          render={() => <Redirect to={getPagePath({ name: "test2code" })} />}
-        />
-        <Route
-          path={getAgentRoutePath(routes.test2code)}
-          component={BuildOverview}
-        />
-        <Route
-          path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
-          component={ScopeOverview}
-        />
-        <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
-        <Route
-          path={getAgentRoutePath(routes.risks)}
-          render={() => (
-            <TableActionsProvider>
-              <RisksPage />
-            </TableActionsProvider>
-          )}
-        />
-        <Route
-          path={getAgentRoutePath(routes.testsToRun)}
-          render={() => (
-            <TableActionsProvider>
-              <TestsToRun />
-            </TableActionsProvider>
-          )}
-        />
-      </Switch>
+export const Agent = () => {
+  const { buildVersion } = useAgent();
+
+  if (!buildVersion) {
+    return null;
+  }
+  return (
+    <div tw="flex flex-col w-full h-full">
+      <div>
+        <Switch>
+          <Route
+            exact
+            path={getAgentRoutePath("/")}
+            render={() => <Redirect to={getPagePath({ name: "overview", params: { buildVersion } })} />}
+          />
+          <Route
+            path={getAgentRoutePath(routes.overview)}
+            component={BuildOverview}
+          />
+          <Route
+            path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
+            component={ScopeOverview}
+          />
+          <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+          <Route
+            path={getAgentRoutePath(routes.risks)}
+            render={() => (
+              <TableActionsProvider>
+                <RisksPage />
+              </TableActionsProvider>
+            )}
+          />
+          <Route
+            path={getAgentRoutePath(routes.testsToRun)}
+            render={() => (
+              <TableActionsProvider>
+                <TestsToRun />
+              </TableActionsProvider>
+            )}
+          />
+        </Switch>
+      </div>
+      <Modals />
     </div>
-    <Modals />
-  </div>
-);
+  );
+};

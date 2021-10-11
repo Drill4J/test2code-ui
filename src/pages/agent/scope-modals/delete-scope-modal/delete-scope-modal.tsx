@@ -23,13 +23,14 @@ import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion } from "hooks";
 import { ActiveSessions } from "types/active-sessions";
 import { getModalPath, getPagePath } from "common";
 import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { buildVersion } = useAgentPluginRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
   const { push, location: { pathname = "" } } = useHistory();
@@ -104,7 +105,7 @@ export const DeleteScopeModal = () => {
                           sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
                           closeModal();
                           scope?.id && pathname.includes(scope.id)
-                          && push(getPagePath({ name: "test2code" }));
+                          && push(getPagePath({ name: "overview", params: { buildVersion } }));
                         },
                         onError: setErrorMessage,
                       })(scope as ActiveScope);
