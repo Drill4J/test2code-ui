@@ -48,7 +48,9 @@ export const TestsList = ({ associatedTests }: Props) => {
     }
   };
 
-  const { filteredData, setFilter } = useFilter(getTests(), (filter) => (value) => value.includes(filter));
+  const { filteredData, setFilter } = useFilter(
+    getTests(), (filter) => (value) => value.toLowerCase().includes(filter.toLowerCase()),
+  );
 
   return (
     <div tw="flex flex-col h-full overflow-y-auto">

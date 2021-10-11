@@ -13,9 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, {
-  useCallback, useEffect, useRef, useState,
-} from "react";
+import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
   convertToSingleSpaces,
@@ -26,7 +24,6 @@ import "twin.macro";
 import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion, useFilter } from "hooks";
-import { useAsyncDebounce } from "react-table";
 import { CoverageRateIcon } from "../coverage-rate-icon";
 
 interface Props {
@@ -39,7 +36,9 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
   const data = useBuildVersion<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${selectedSection}`,
   ) || [];
-  const { filteredData, setFilter } = useFilter(data, (filter) => (value) => Boolean(value.name?.includes(filter)));
+  const { filteredData, setFilter } = useFilter(
+    data, (filter) => (value) => Boolean(value.name?.toLowerCase().includes(filter.toLowerCase())),
+  );
 
   const node = useRef<HTMLDivElement>(null);
   const { height: methodsListHeight } = useElementSize(node);
@@ -75,7 +74,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
         <div tw="flex flex-col h-full text-14">
           <div
             ref={node}
-            style={{ height: "calc(100% - 40px)" }}
+            style={{ height: "calc(100% - 65px)" }}
           >
             <VirtualList
               style={{ paddingBottom: "32px" }}
