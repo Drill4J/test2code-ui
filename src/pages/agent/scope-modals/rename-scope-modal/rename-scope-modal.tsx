@@ -84,7 +84,7 @@ export const RenameScopeModal = () => {
                   type="submit"
                   disabled={isSubmitting || !dirty || !isValid}
                 >
-                  {isSubmitting ? <Spinner disabled /> : "Save"}
+                  {isSubmitting ? <Spinner /> : "Save"}
                 </Button>
                 <Button secondary size="large" onClick={closeModal}>
                   Cancel

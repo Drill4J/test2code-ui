@@ -112,7 +112,7 @@ export const DeleteScopeModal = () => {
                     }}
                     data-test="delete-scope-modal:confirm-delete-button"
                   >
-                    {loading ? <Spinner disabled /> : "Yes, Delete Scope"}
+                    {loading ? <Spinner /> : "Yes, Delete Scope"}
                   </Button>
                   <Button
                     secondary
