@@ -13,16 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useRef, useState } from "react";
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Dropdown, Icons, useElementSize,
+  convertToSingleSpaces,
+  Dropdown, Icons, Inputs, useElementSize,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
-import { useBuildVersion } from "hooks";
+import { useBuildVersion, useFilter } from "hooks";
+import { useAsyncDebounce } from "react-table";
 import { CoverageRateIcon } from "../coverage-rate-icon";
 
 interface Props {
@@ -32,18 +36,24 @@ interface Props {
 
 export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
   const [selectedSection, setSelectedSection] = useState<keyof MethodCounts>("all");
-  const methods = useBuildVersion<MethodsDetails[]>(
+  const data = useBuildVersion<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${selectedSection}`,
   ) || [];
+  const { filteredData, setFilter } = useFilter(data, (filter) => (value) => Boolean(value.name?.includes(filter)));
+
   const node = useRef<HTMLDivElement>(null);
   const { height: methodsListHeight } = useElementSize(node);
   const selectedMethodsCount = getMethodsCount(summary?.methodCounts, selectedSection) || 0;
-  const methodsCount = methods.length || selectedMethodsCount;
-  const isShowSceleton = !Object.keys(summary).length || (Number(selectedMethodsCount) > 0 && methods.length === 0);
+  const methodsCount = filteredData.length || selectedMethodsCount;
+  const isShowSceleton = !Object.keys(summary).length || (Number(selectedMethodsCount) > 0 && filteredData.length === 0);
 
   return (
     <div tw="flex-col h-full overflow-hidden">
       <div tw="mx-6 py-4 leading-32 text-14 text-blue-default font-bold border-b border-monochrome-medium-tint">
+        <Inputs.Search
+          onChange={({ target: { value = "" } }: any) => setFilter(convertToSingleSpaces(value))}
+          placeholder="Search methods by name"
+        />
         <Dropdown
           items={[
             { value: "all", label: "All methods" },
@@ -75,8 +85,8 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
               renderItem={({ index, style }) => (!isShowSceleton ? (
                 <div
                   tw="flex flex-col justify-center pl-6 pr-6 text-12"
-                  key={`${methods[index]?.name}${index}`}
-                  style={style as Record<symbol, string>}
+                  key={`${filteredData[index]?.name}${index}`}
+                  style={style as any}
                   data-test="covered-methods-list:item"
                 >
                   <div className="flex items-center w-full h-20px">
@@ -84,25 +94,25 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                       <Icons.Function tw="h-4" />
                       <div
                         tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
-                        title={methods[index]?.name as string}
+                        title={filteredData[index]?.name as string}
                       >
-                        {methods[index]?.name}
+                        {filteredData[index]?.name}
                       </div>
                     </div>
-                    <CoverageRateIcon tw="h-4" coverageRate={methods[index]?.coverageRate} />
+                    <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />
                   </div>
                   <div
                     tw="max-w-280px ml-8 text-monochrome-default text-12 text-ellipsis"
-                    title={methods[index]?.ownerClass}
+                    title={filteredData[index]?.ownerClass}
                   >
-                    {methods[index]?.ownerClass}
+                    {filteredData[index]?.ownerClass}
                   </div>
                 </div>
               ) : (
                 <div
                   tw="flex flex-col justify-center pl-6 pr-6 text-12"
                   key={index}
-                  style={style as Record<symbol, string>}
+                  style={style as any}
                 >
                   <div tw="flex space-x-2 animate-pulse">
                     <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />

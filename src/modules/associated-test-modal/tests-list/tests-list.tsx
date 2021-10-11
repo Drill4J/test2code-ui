@@ -15,9 +15,12 @@
  */
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
-import { Icons, Dropdown } from "@drill4j/ui-kit";
+import {
+  Icons, Dropdown, convertToSingleSpaces, Inputs,
+} from "@drill4j/ui-kit";
 import { useElementSize } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
+import { useFilter } from "hooks";
 
 interface Props {
   associatedTests: { testsMap: Record<string, string[]>; assocTestsCount: number; };
@@ -44,11 +47,16 @@ export const TestsList = ({ associatedTests }: Props) => {
         return [...autoTests, ...manualTests];
     }
   };
-  const tests = getTests();
+
+  const { filteredData, setFilter } = useFilter(getTests(), (filter) => (value) => value.includes(filter));
 
   return (
     <div tw="flex flex-col h-full overflow-y-auto">
-      <div tw="mx-6 my-4 text-14 text-blue-default font-bold">
+      <div tw="space-y-2 mx-6 my-4 text-14 text-blue-default font-bold">
+        <Inputs.Search
+          onChange={({ target: { value = "" } }: any) => setFilter(convertToSingleSpaces(value))}
+          placeholder="Search tests by name"
+        />
         <Dropdown
           tw="my-4 mx-6"
           items={[
@@ -65,19 +73,24 @@ export const TestsList = ({ associatedTests }: Props) => {
           <VirtualList
             itemSize={56}
             height={Math.floor(testsListHeight)}
-            itemCount={tests.length || associatedTests.assocTestsCount}
+            itemCount={filteredData.length || associatedTests.assocTestsCount}
             renderItem={({ index, style }) => (
-              <TestItem key={tests[index]} style={style as Record<symbol, string>} data-test="associated-tests-list:item">
-                {tests.length > 0 && (
+              <TestItem key={filteredData[index]} style={style as any} data-test="associated-tests-list:item">
+                {filteredData.length > 0 && (
                   <>
                     <div tw="flex flex-row items-center h-5">
                       <Icons.Test tw="flex self-center min-w-12px min-h-16px" />
-                      <div tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black" title={tests[index]}>{tests[index]}</div>
+                      <div
+                        tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black"
+                        title={filteredData[index]}
+                      >
+                        {filteredData[index]}
+                      </div>
                     </div>
                     <div tw="text-ellipsis pl-7 text-12 text-monochrome-default" title="&ndash;">&ndash;</div>
                   </>
                 )}
-                {Object.keys(associatedTests.testsMap).length === 0 && (
+                {(Object.keys(associatedTests.testsMap).length === 0 || filteredData.length === 0) && (
                   <div tw="flex space-x-2 animate-pulse">
                     <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
                     <div tw="flex-1 space-y-4 py-1">
