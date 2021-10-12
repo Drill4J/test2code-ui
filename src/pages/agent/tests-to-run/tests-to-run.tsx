@@ -43,7 +43,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     items: testsToRun = [],
     filteredCount = 0,
     totalCount = 0,
-  } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search }) || {};
+  } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
   const { buildVersion, agentId } = useAgentRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
