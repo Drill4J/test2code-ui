@@ -24,20 +24,19 @@ import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
-import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
+import {
+  useAgent, useBuildVersion, usePreviousBuildCoverage,
+} from "hooks";
 
-const BuildInfo = styled.div`
-  ${tw`grid items-center`}
-  & {
-    grid-template-columns: max-content 1fr;
-  }
-`;
+interface Props {
+  pluginPagePath: string;
+}
 
-export const CoverageSection = () => {
-  const { agentId = "" } = useAgentRouteParams();
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+export const CoverageSection = ({ pluginPagePath }: Props) => {
+  const { buildVersion = "" } = useAgent();
+  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent", { buildVersion }) || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary") || {};
+  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
   const {
     all: {
       total: allMethodsTotalCount = 0,
@@ -99,7 +98,7 @@ export const CoverageSection = () => {
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
                   tw="inline-block whitespace-nowrap font-bold link leading-16 no-underline"
-                  to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
+                  to={`${pluginPagePath}/builds/${buildVersion}/overview`}
                   title={`Build ${previousBuildVersion}`}
                   style={{ maxWidth: "230px" }}
                 >
@@ -114,3 +113,10 @@ export const CoverageSection = () => {
     </div>
   );
 };
+
+const BuildInfo = styled.div`
+  ${tw`grid items-center`}
+  & {
+    grid-template-columns: max-content 1fr;
+  }
+`;

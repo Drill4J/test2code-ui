@@ -23,10 +23,11 @@ import { BuildCoverage } from "types/build-coverage";
 import { TestTypes } from "types/test-types";
 import { capitalize, convertToPercentage } from "@drill4j/common-utils";
 import { TestsInfo } from "types/tests-info";
-import { useBuildVersion } from "hooks";
+import { useAgent, useBuildVersion } from "hooks";
 
 export const TestsSection = () => {
-  const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
+  const { buildVersion = "" } = useAgent();
+  const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage", { buildVersion }) || {};
   const totalCoveredMethodCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
   const testsInfo: TestsInfo = byTestType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
   const tooltipData = {
