@@ -50,7 +50,7 @@ export const ActionsPanel = ({
           onClick={handleSubmit}
           data-test="sessions-management-pane:start-session-button"
         >
-          {submitting ? <Spinner disabled /> : "Start Session"}
+          {submitting ? <Spinner /> : "Start Session"}
         </Button>
       ) : (
         <Button

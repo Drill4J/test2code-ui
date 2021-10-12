@@ -14,29 +14,24 @@
  * limitations under the License.
  */
 import React from "react";
-import { Link, useParams } from "react-router-dom";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { BuildMethodsCard } from "components";
 import { Methods } from "types/methods";
 import { ActiveScope } from "types/active-scope";
-import { useActiveSessions, useBuildVersion } from "hooks";
+import {
+  useActiveSessions, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+} from "hooks";
 import { ScopeCoverageInfo } from "../scope-coverage-info";
 import { MethodsTable } from "../../methods-table";
 
 export const ScopeMethodsInfo = () => {
-  const {
-    pluginId = "", agentId = "", buildVersion = "", scopeId = "",
-  } = useParams<{
-    pluginId: string;
-    agentId: string;
-    buildVersion: string;
-    scopeId: string
-  }>();
+  const { agentId } = useAgentRouteParams();
+  const { scopeId, buildVersion } = useAgentPluginRouteParams();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
-    all, new: newMethods, modified, risks,
+    all, new: newMethods, modified,
   } = useBuildVersion<Methods>(`/build/scopes/${scope?.id}/methods`) || {};
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion) || [];
 
@@ -54,32 +49,12 @@ export const ScopeMethodsInfo = () => {
             totalCount={newMethods?.total}
             covered={newMethods?.covered}
             label="NEW"
-          >
-            {Boolean(risks?.new) && (
-              <Link
-                tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${scopeId}/risks-modal/?filter=new`}
-                data-test="project-methods-cards:link-button:new:risks"
-              >
-                {risks?.new} risks
-              </Link>
-            )}
-          </BuildMethodsCard>
+          />
           <BuildMethodsCard
             totalCount={modified?.total}
             covered={modified?.covered}
             label="MODIFIED"
-          >
-            {Boolean(risks?.modified) && (
-              <Link
-                tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${scopeId}/risks-modal/?filter=modified`}
-                data-test="project-methods-cards:link-button:modified:risks"
-              >
-                {risks?.modified} risks
-              </Link>
-            )}
-          </BuildMethodsCard>
+          />
         </div>
       </div>
       <TableActionsProvider>

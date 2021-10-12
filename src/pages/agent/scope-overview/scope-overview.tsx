@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import {
-  Redirect, useParams,
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Icons, Tab } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
+import {
+  useActiveScope, useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+} from "hooks";
 import { getPagePath } from "common";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
@@ -29,9 +29,8 @@ import { ScopeTestsInfo } from "./scope-tests-info";
 
 export const ScopeOverview = () => {
   const [activeTab, setActiveTab] = useState("methods");
-  const {
-    scopeId = "", buildVersion = "", agentId = "",
-  } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
+  const { agentId } = useAgentRouteParams();
+  const { scopeId, buildVersion } = useAgentPluginRouteParams();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
 

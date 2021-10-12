@@ -131,7 +131,7 @@ export const QualityGatePane = () => {
                       type="submit"
                       data-test="quality-gate-pane:save-button"
                     >
-                      {isSubmitting ? <Spinner disabled /> : "Save"}
+                      {isSubmitting ? <Spinner /> : "Save"}
                     </Button>
                   )}
                 {configured && isEditing && (

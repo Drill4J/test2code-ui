@@ -19,9 +19,7 @@ import {
 } from "@drill4j/ui-kit";
 import { AgentStatus } from "@drill4j/types-admin";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import {
-  Link, useHistory, useParams,
-} from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AGENT_STATUS } from "common/constants";
@@ -47,8 +45,7 @@ interface Props {
 export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const { push } = useHistory();
   const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
-  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
+  const { buildVersion, scopeId } = useAgentPluginRouteParams();
   const activeSessionsQuantity = useActiveSessions("Agent", agentId, buildVersion)?.length;
   const {
     name = "", active = false, enabled = false, started = 0, finished = 0,

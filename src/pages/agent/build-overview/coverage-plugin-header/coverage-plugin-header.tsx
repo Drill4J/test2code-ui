@@ -28,7 +28,6 @@ import {
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
-import { useSwitchBuild } from "contexts";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
@@ -40,7 +39,6 @@ export const CoveragePluginHeader = () => {
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
-  const switchBuild = useSwitchBuild();
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
@@ -59,15 +57,15 @@ export const CoveragePluginHeader = () => {
         <div>Parent build:</div>
         {previousBuildVersion
           ? (
-            <div
+            <Link
+              to={getPagePath({ name: "overview", params: { buildVersion: previousBuildVersion } })}
               className="flex link"
-              onClick={() => switchBuild(previousBuildVersion, "/")}
               title={previousBuildVersion}
             >
               <Typography.MiddleEllipsis>
                 <span tw="whitespace-nowrap" data-test="header:parent-build-version">{previousBuildVersion}</span>
               </Typography.MiddleEllipsis>
-            </div>
+            </Link>
           ) : <span>&ndash;</span>}
       </BaselinePanel>
       {activeBuildVersion === buildVersion && agentStatus === AGENT_STATUS.ONLINE && (

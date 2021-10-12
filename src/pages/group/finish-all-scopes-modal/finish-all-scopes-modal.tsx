@@ -104,7 +104,7 @@ export const FinishAllScopesModal = ({ agentsCount }: Props) => {
                 setLoading(false);
               }}
             >
-              {loading ? <Spinner disabled /> : "Finish all scopes"}
+              {loading ? <Spinner /> : "Finish all scopes"}
             </Button>
             <Button secondary size="large" onClick={() => closeModal()}>
               Cancel

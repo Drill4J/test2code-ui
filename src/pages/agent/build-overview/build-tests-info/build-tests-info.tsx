@@ -15,13 +15,14 @@
  */
 import React from "react";
 import tw, { styled } from "twin.macro";
-import { useParams } from "react-router-dom";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 
 import { BuildTestsCard } from "components";
 import { TestTypeSummary } from "types/test-type-summary";
 import { TestsInfo } from "types/tests-info";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
+import {
+  useActiveScope, useAgent, useAgentRouteParams, useBuildVersion,
+} from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { ActiveScopeInfo } from "modules";
 import { ActiveBuildTestsInfo } from "./active-build-tests-info";
@@ -50,7 +51,7 @@ const Cards = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 export const BuildTestsInfo = () => {
-  const { agentId = "" } = useParams<{ agentId: string; }>();
+  const { agentId } = useAgentRouteParams();
   const testsByType = useBuildVersion<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
   const testsInfo: TestsInfo = testsByType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
   const scope = useActiveScope();

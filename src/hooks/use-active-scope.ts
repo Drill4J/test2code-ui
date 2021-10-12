@@ -17,11 +17,13 @@ import { useState, useEffect } from "react";
 
 import { test2CodePluginSocket } from "common";
 import { ActiveScope } from "types/active-scope";
-import { useParams } from "react-router-dom";
 import { useAgent } from "./use-agent";
+import { useAgentRouteParams } from "./use-agent-route-params";
+import { useAgentPluginRouteParams } from "./use-agent-plugin-route-params";
 
 export function useActiveScope(): ActiveScope | null {
-  const { agentId = "", buildVersion = "" } = useParams<{agentId?: string, buildVersion?: string}>();
+  const { agentId = "" } = useAgentRouteParams();
+  const { buildVersion = "" } = useAgentPluginRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const [data, setData] = useState<ActiveScope | null>(null);
   const isActiveBuildVersion = buildVersion === activeBuildVersion;

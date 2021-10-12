@@ -27,11 +27,11 @@ interface Routes {
 // after the build version we should have some text because single spa broken if path end on "."
 export const routes = {
   overview: "/builds/:buildVersion/overview",
-  scopeMethods: "/builds/:buildVersion/overview/scopes/:scopeId",
-  scopeTests: "/builds/:buildVersion/overview/scopes/:scopeId",
-  testsToRun: "/builds/:buildVersion/overview/tests-to-tun",
-  allScopes: "/builds/:buildVersion/overview/scopes",
-  risks: "/builds/:buildVersion/overview/risks",
+  scopeMethods: "/builds/:buildVersion/scopes/:scopeId",
+  scopeTests: "/builds/:buildVersion/scopes/:scopeId",
+  testsToRun: "/builds/:buildVersion/tests-to-tun",
+  allScopes: "/builds/:buildVersion/scopes",
+  risks: "/builds/:buildVersion/risks",
 };
 
 export const router = createRouter<Routes>(routes);

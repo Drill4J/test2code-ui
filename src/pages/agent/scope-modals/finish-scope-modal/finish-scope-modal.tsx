@@ -177,7 +177,7 @@ function getFinishScopeButtonContent({
   loading, hasTests, hasActiveSessions, forceFinish,
 }: any): React.ReactNode {
   if (loading) {
-    return <Spinner disabled />;
+    return <Spinner />;
   }
 
   if (hasTests) {
