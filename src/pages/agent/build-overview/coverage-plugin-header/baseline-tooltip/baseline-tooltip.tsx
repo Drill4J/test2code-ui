@@ -37,14 +37,14 @@ export const BaselineTooltip = () => {
 
   return (
     <Tooltip message={<div tw="text-center">{info}</div>} position="top-center">
-      <Link to={getModalPath({ name: "baselineBuildModal" })} data-test="mark-as-baseline-flag">
-        <FlagWrapper
-          active={Boolean(isActiveBuild && previousBuildVersion)}
-          disabled={disabled}
-        >
+      <FlagWrapper
+        active={Boolean(isActiveBuild && previousBuildVersion)}
+        disabled={disabled}
+      >
+        <Link to={getModalPath({ name: "baselineBuildModal" })} data-test="mark-as-baseline-flag">
           <Flag />
-        </FlagWrapper>
-      </Link>
+        </Link>
+      </FlagWrapper>
     </Tooltip>
   );
 };
