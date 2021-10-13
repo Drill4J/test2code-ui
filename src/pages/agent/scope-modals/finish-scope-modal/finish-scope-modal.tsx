@@ -98,8 +98,10 @@ export const FinishScopeModal = () => {
               },
               onError: setErrorMessage,
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
-            isScopeInfoPage && !scope?.sessionsFinished &&
-                  push(getPagePath({ name: "test2code" }));
+            if (isScopeInfoPage &&
+                ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
+              push(getPagePath({ name: "test2code" }));
+            }
             setLoading(false);
           }}
         >
