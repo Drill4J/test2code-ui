@@ -24,7 +24,7 @@ import tw, { styled } from "twin.macro";
 
 import { AGENT_STATUS } from "common/constants";
 import {
-  useActiveSessions, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+  useActiveSessions, useTestToCodeParams, useAgentParams, useBuildVersion,
 } from "hooks";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
@@ -44,8 +44,8 @@ interface Props {
 
 export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const { push } = useHistory();
-  const { agentId } = useAgentRouteParams();
-  const { buildVersion, scopeId } = useAgentPluginRouteParams();
+  const { agentId } = useAgentParams();
+  const { buildVersion, scopeId } = useTestToCodeParams();
   const activeSessionsQuantity = useActiveSessions("Agent", agentId, buildVersion)?.length;
   const {
     name = "", active = false, enabled = false, started = 0, finished = 0,

@@ -26,7 +26,7 @@ import tw, { styled } from "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
 import {
-  useActiveScope, useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+  useActiveScope, useAgent, useTestToCodeParams, useAgentParams, useBuildVersion,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
@@ -35,8 +35,8 @@ import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
 
 export const AllScopes = () => {
-  const { agentId = "" } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { agentId = "" } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
   const { push } = useHistory();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const activeScope = useActiveScope();

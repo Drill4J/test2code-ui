@@ -21,7 +21,7 @@ import tw, { styled } from "twin.macro";
 
 import { DATA_VISUALIZATION_COLORS } from "common/constants";
 import { TestsInfo } from "types/tests-info";
-import { useAgentPluginRouteParams } from "hooks";
+import { useTestToCodeParams } from "hooks";
 
 interface Props {
   testsInfo: TestsInfo;
@@ -54,7 +54,7 @@ export const ActiveBuildTestsInfo = ({ testsInfo }: Props) => {
   const autoTestsBarWidth = (autoTestsCount / testsExecuted) * width;
   const manualTestsBarWidth = (manualTestsCount / testsExecuted) * width;
   const minBarWidth = 4;
-  const { scopeId } = useAgentPluginRouteParams();
+  const { scopeId } = useTestToCodeParams();
 
   return (
     <div tw="text-12 leading-16 text-monochrome-default" ref={ref}>

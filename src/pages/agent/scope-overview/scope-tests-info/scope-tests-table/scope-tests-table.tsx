@@ -18,12 +18,12 @@ import { FilterList } from "@drill4j/types-admin/dist";
 import { useTableActionsState } from "@drill4j/ui-kit";
 
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { useAgentPluginRouteParams, useBuildVersion } from "hooks";
+import { useTestToCodeParams, useBuildVersion } from "hooks";
 import { TestDetails } from "../../../tests-table";
 
 export const ScopeTestsTable = () => {
   const { search } = useTableActionsState();
-  const { scopeId } = useAgentPluginRouteParams();
+  const { scopeId } = useTestToCodeParams();
   const tests = useBuildVersion<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`, { filters: search, output: "LIST" }) || {};
 
   return (

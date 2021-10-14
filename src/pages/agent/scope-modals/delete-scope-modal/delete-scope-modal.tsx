@@ -23,14 +23,14 @@ import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion } from "hooks";
+import { useTestToCodeParams, useAgentParams, useBuildVersion } from "hooks";
 import { ActiveSessions } from "types/active-sessions";
 import { getModalPath, getPagePath } from "common";
 import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
-  const { agentId = "", pluginId = "" } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { agentId = "", pluginId = "" } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
   const { push, location: { pathname = "" } } = useHistory();

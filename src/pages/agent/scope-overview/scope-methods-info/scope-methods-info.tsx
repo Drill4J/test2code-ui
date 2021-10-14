@@ -21,14 +21,14 @@ import { BuildMethodsCard } from "components";
 import { Methods } from "types/methods";
 import { ActiveScope } from "types/active-scope";
 import {
-  useActiveSessions, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+  useActiveSessions, useTestToCodeParams, useAgentParams, useBuildVersion,
 } from "hooks";
 import { ScopeCoverageInfo } from "../scope-coverage-info";
 import { MethodsTable } from "../../methods-table";
 
 export const ScopeMethodsInfo = () => {
-  const { agentId } = useAgentRouteParams();
-  const { scopeId, buildVersion } = useAgentPluginRouteParams();
+  const { agentId } = useAgentParams();
+  const { scopeId, buildVersion } = useTestToCodeParams();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     all, new: newMethods, modified,

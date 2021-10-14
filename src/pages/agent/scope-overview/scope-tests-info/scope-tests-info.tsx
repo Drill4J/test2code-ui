@@ -20,12 +20,12 @@ import "twin.macro";
 import { BuildTestsCard } from "components";
 import { TestsInfo } from "types/tests-info";
 import { BuildCoverage } from "types/build-coverage";
-import { useAgentPluginRouteParams, useBuildVersion } from "hooks";
+import { useTestToCodeParams, useBuildVersion } from "hooks";
 import { ActiveBuildTestsInfo } from "../../build-overview/build-tests-info/active-build-tests-info";
 import { ScopeTestsTable } from "./scope-tests-table";
 
 export const ScopeTestsInfo = () => {
-  const { scopeId } = useAgentPluginRouteParams();
+  const { scopeId } = useTestToCodeParams();
   const { byTestType = [] } = useBuildVersion<BuildCoverage>(`/build/scopes/${scopeId}/coverage`) || {};
   const testsInfo: TestsInfo = byTestType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
 

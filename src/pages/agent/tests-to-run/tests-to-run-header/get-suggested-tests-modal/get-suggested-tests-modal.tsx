@@ -20,10 +20,10 @@ import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
 import { useCloseModal } from "@drill4j/common-hooks";
-import { useAgentRouteParams } from "hooks";
+import { useAgentParams } from "hooks";
 
 export const GetSuggestedTestsModal = () => {
-  const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { agentId = "", pluginId = "" } = useAgentParams();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     const timeout = setTimeout(() => setCopied(false), 5000);

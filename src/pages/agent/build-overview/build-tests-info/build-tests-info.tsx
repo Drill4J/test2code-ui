@@ -21,7 +21,7 @@ import { BuildTestsCard } from "components";
 import { TestTypeSummary } from "types/test-type-summary";
 import { TestsInfo } from "types/tests-info";
 import {
-  useActiveScope, useAgent, useAgentRouteParams, useBuildVersion,
+  useActiveScope, useAgent, useAgentParams, useBuildVersion,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { ActiveScopeInfo } from "modules";
@@ -51,7 +51,7 @@ const Cards = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 export const BuildTestsInfo = () => {
-  const { agentId } = useAgentRouteParams();
+  const { agentId } = useAgentParams();
   const testsByType = useBuildVersion<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
   const testsInfo: TestsInfo = testsByType.reduce((test, testType) => ({ ...test, [testType.type]: testType }), {});
   const scope = useActiveScope();

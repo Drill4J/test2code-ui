@@ -28,7 +28,7 @@ import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
 import {
-  useBuildVersion, useAgent, useAgentRouteParams, useAgentPluginRouteParams,
+  useBuildVersion, useAgent, useAgentParams, useTestToCodeParams,
 } from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
@@ -47,8 +47,8 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     totalCount = 0,
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
-  const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { agentId } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};

@@ -18,12 +18,12 @@ import { useState, useEffect } from "react";
 import { test2CodePluginSocket } from "common";
 import { ActiveScope } from "types/active-scope";
 import { useAgent } from "./use-agent";
-import { useAgentRouteParams } from "./use-agent-route-params";
-import { useAgentPluginRouteParams } from "./use-agent-plugin-route-params";
+import { useAgentParams } from "./use-agent-params";
+import { useTestToCodeParams } from "./use-test-to-code-params";
 
 export function useActiveScope(): ActiveScope | null {
-  const { agentId = "" } = useAgentRouteParams();
-  const { buildVersion = "" } = useAgentPluginRouteParams();
+  const { agentId = "" } = useAgentParams();
+  const { buildVersion = "" } = useTestToCodeParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const [data, setData] = useState<ActiveScope | null>(null);
   const isActiveBuildVersion = buildVersion === activeBuildVersion;

@@ -20,7 +20,7 @@ import {
 import tw, { styled } from "twin.macro";
 
 import {
-  useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+  useAgent, useTestToCodeParams, useAgentParams, useBuildVersion,
 } from "hooks";
 import { Baseline } from "types/baseline";
 import { useCloseModal } from "@drill4j/common-hooks";
@@ -39,8 +39,8 @@ const ActionButton = styled(Button)(({ isBaseline }: {isBaseline: boolean}) => [
 
 export const BaselineBuildModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { pluginId = "", agentId = "" } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { pluginId = "", agentId = "" } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;

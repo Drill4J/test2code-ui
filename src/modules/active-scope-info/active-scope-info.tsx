@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { getModalPath, getPagePath } from "common";
-import { useActiveSessions, useAgentPluginRouteParams, useAgentRouteParams } from "hooks";
+import { useActiveSessions, useTestToCodeParams, useAgentParams } from "hooks";
 
 interface Props {
   scope: ActiveScope | null;
@@ -34,8 +34,8 @@ const Content = styled.div`
 `;
 
 export const ActiveScopeInfo = ({ scope }: Props) => {
-  const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { agentId } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const {
     id: scopeId = "",

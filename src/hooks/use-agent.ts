@@ -15,9 +15,9 @@
  */
 import { Agent } from "@drill4j/types-admin";
 import { useAdminConnection } from "./use-admin-connection";
-import { useAgentRouteParams } from "./use-agent-route-params";
+import { useAgentParams } from "./use-agent-params";
 
 export const useAgent = (id?:string) => {
-  const { agentId = "" } = useAgentRouteParams();
+  const { agentId = "" } = useAgentParams();
   return useAdminConnection<Agent>(`/api/agents/${id || agentId}`) || {};
 };

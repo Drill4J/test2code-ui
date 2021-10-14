@@ -21,7 +21,7 @@ import "twin.macro";
 
 import { getPagePath } from "common";
 import { PreviousBuildInfo } from "../previous-build-info-types";
-import { useAgentPluginRouteParams } from "../../../../../hooks";
+import { useTestToCodeParams } from "../../../../../hooks";
 
 interface Props {
   buildCodeCoverage: number;
@@ -31,7 +31,7 @@ interface Props {
 export const BuildCoverageInfo = ({
   buildCodeCoverage, previousBuildInfo: { previousBuildVersion = "", previousBuildCodeCoverage = 0 } = {},
 }: Props) => {
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { buildVersion } = useTestToCodeParams();
   const buildDiff = percentFormatter(buildCodeCoverage) - percentFormatter(previousBuildCodeCoverage);
   return (
     <div tw="w-full h-full text-12 leading-16 text-monochrome-default">

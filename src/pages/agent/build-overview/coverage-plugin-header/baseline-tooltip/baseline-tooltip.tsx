@@ -21,15 +21,15 @@ import { Icons, Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import {
-  useAgent, useAgentPluginRouteParams, useAgentRouteParams, useBuildVersion,
+  useAgent, useTestToCodeParams, useAgentParams, useBuildVersion,
 } from "hooks";
 import { Baseline } from "types/baseline";
 import { ParentBuild } from "types/parent-build";
 import { getModalPath } from "common";
 
 export const BaselineTooltip = () => {
-  const { agentId = "" } = useAgentRouteParams();
-  const { buildVersion } = useAgentPluginRouteParams();
+  const { agentId = "" } = useAgentParams();
+  const { buildVersion } = useTestToCodeParams();
 
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};

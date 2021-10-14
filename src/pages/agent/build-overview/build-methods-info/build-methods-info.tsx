@@ -24,7 +24,7 @@ import { ActiveScopeInfo } from "modules";
 import { Methods } from "types/methods";
 import { BuildCoverage } from "types/build-coverage";
 import {
-  useActiveScope, useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+  useActiveScope, useAgent, useAgentParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
 import { getModalPath } from "common";
@@ -52,7 +52,7 @@ const ActiveBuildTestsBar = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 export const BuildMethodsInfo = () => {
-  const { agentId = "" } = useAgentRouteParams();
+  const { agentId = "" } = useAgentParams();
   const scope = useActiveScope();
   const {
     all, new: newMethods, modified, deleted, risks,
