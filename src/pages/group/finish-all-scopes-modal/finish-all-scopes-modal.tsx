@@ -14,33 +14,32 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
+import axios from "axios";
 import {
-  Button, Popup, GeneralAlerts, Spinner,
+  Button, Popup, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required,
 } from "@drill4j/ui-kit";
 import { useCloseModal } from "@drill4j/common-hooks";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { useActiveSessions, useGroupRouteParams } from "hooks";
+import { useActiveSessions, useGroupData, useGroupRouteParams } from "hooks";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { getGroupModalPath } from "common";
+import { ScopeSummary, ServiceGroupSummary } from "types";
 import { finishAllScopes } from "./finish-all-scopes";
+import { renameScope } from "../../agent/api";
 
-interface Props {
-  agentsCount: number;
-}
+const validate = (formValues: {hasNewName: boolean}) => composeValidators(
+  formValues.hasNewName ? required("scopesName") : () => undefined,
+  formValues.hasNewName ? sizeLimit({
+    name: "scopesName", alias: "Scopes Name", min: 1, max: 64,
+  }) : () => undefined,
+)(formValues);
 
-const Instructions = styled.div`
-  ${tw`mt-2`}
-  & > *::before {
-    ${tw`mx-4`}
-    content: '\\2022';
-  }
-`;
-
-export const FinishAllScopesModal = ({ agentsCount }: Props) => {
+export const FinishAllScopesModal = () => {
+  const { groupId } = useGroupRouteParams();
+  const { summaries: agentsSummaries = [] } = useGroupData<ServiceGroupSummary>("/group/summary", groupId) || {};
   const [errorMessage, setErrorMessage] = useState("");
-  const { groupId = "" } = useGroupRouteParams();
   const activeSessions = useActiveSessions("ServiceGroup", groupId) || [];
   const [loading, setLoading] = useState(false);
   const closeModal = useCloseModal("/finish-all-scopes-modal");
@@ -76,7 +75,7 @@ export const FinishAllScopesModal = ({ agentsCount }: Props) => {
         <div tw="mt-4 mx-6 mb-6 text-14 leading-24">
           <span>
             You are about to finish active scopes of all
-            {` ${agentsCount} `}
+            {` ${agentsSummaries.length} `}
             service group agents.
           </span>
           <Instructions>
@@ -84,13 +83,33 @@ export const FinishAllScopesModal = ({ agentsCount }: Props) => {
             <div>Empty scopes will be deleted</div>
             <div>New scopes will be started automatically</div>
           </Instructions>
-          <div className="flex items-center w-full mt-6">
-            <Button
-              tw="flex justify-center items-center gap-x-1 w-36 h-8 mr-4 px-4 text-14 font-bold"
-              primary
-              disabled={activeSessions.length > 0 || loading}
-              onClick={async () => {
-                setLoading(true);
+          <Formik
+            initialValues={{ hasNewName: false, scopesName: "" }}
+            validate={validate}
+            onSubmit={async ({ hasNewName, scopesName = "" }: any) => {
+              setLoading(true);
+              let hasError = false;
+              if (hasNewName) {
+                try {
+                  const scopes = await Promise.allSettled(agentsSummaries.map(({ id = "", buildVersion }): Promise<ScopeSummary> => axios
+                    .get(`/plugins/test2code/active-scope?agentId=${id}&buildVersion=${buildVersion}&type=AGENT`)));
+
+                  const scopesIds = scopes?.map(({ value: { data: { id = "" } = {} } = {} }: any) => id);
+
+                  await Promise.allSettled(agentsSummaries.map(({ id: agentId = "" }, i) =>
+                    renameScope(agentId, "test2code",
+                      {
+                        onError: (msg: string) => {
+                          setErrorMessage(msg);
+                          hasError = true;
+                        },
+                      })({ id: scopesIds[i], name: scopesName } as ScopeSummary)));
+                } catch (e) {
+                  setErrorMessage(e.message || "Rename scopes failed");
+                  hasError = true;
+                }
+              }
+              if (!hasError) {
                 await finishAllScopes(groupId, {
                   onSuccess: () => {
                     sendNotificationEvent({
@@ -101,17 +120,53 @@ export const FinishAllScopesModal = ({ agentsCount }: Props) => {
                   },
                   onError: setErrorMessage,
                 })({ prevScopeEnabled: true, savePrevScope: true });
-                setLoading(false);
-              }}
-            >
-              {loading ? <Spinner /> : "Finish all scopes"}
-            </Button>
-            <Button secondary size="large" onClick={() => closeModal()}>
-              Cancel
-            </Button>
-          </div>
+              }
+              setLoading(false);
+            }}
+          >
+            {({ values: { hasNewName }, isValid }) => (
+              <Form>
+                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
+                  <Field
+                    type="checkbox"
+                    name="hasNewName"
+                  >
+                    {({ field }: any) => (<Checkbox field={field} />)}
+                  </Field>
+                  <span tw="text-monochrome-black">Rename all scopes</span>
+                </label>
+                <Field
+                  name="scopesName"
+                  placeholder="Enter new scopes name"
+                  component={Fields.Input}
+                  disabled={!hasNewName || loading}
+                />
+                <div className="flex items-center w-full mt-6">
+                  <Button
+                    tw="flex justify-center items-center gap-x-1 w-36 h-8 mr-4 px-4 text-14 font-bold"
+                    primary
+                    disabled={activeSessions.length > 0 || loading || !isValid}
+                    type="submit"
+                  >
+                    {loading ? <Spinner /> : "Finish all scopes"}
+                  </Button>
+                  <Button secondary size="large" type="button" onClick={() => closeModal()}>
+                    Cancel
+                  </Button>
+                </div>
+              </Form>
+            )}
+          </Formik>
         </div>
       </div>
     </Popup>
   );
 };
+
+const Instructions = styled.div`
+  ${tw`mt-2`}
+  & > *::before {
+    ${tw`mx-4`}
+    content: '\\2022';
+  }
+`;
