@@ -94,7 +94,7 @@ export const FinishAllScopesModal = () => {
                   const scopes = await Promise.allSettled(agentsSummaries.map(({ id = "", buildVersion }): Promise<ScopeSummary> => axios
                     .get(`/plugins/test2code/active-scope?agentId=${id}&buildVersion=${buildVersion}&type=AGENT`)));
 
-                  const scopesIds = scopes.map(({ value: { data: { id } } }: any) => id);
+                  const scopesIds = scopes?.map(({ value: { data: { id = "" } = {} } = {} }: any) => id);
 
                   await Promise.allSettled(agentsSummaries.map(({ id: agentId = "" }, i) =>
                     renameScope(agentId, "test2code",
