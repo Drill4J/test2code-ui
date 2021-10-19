@@ -16,7 +16,6 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Tooltip, Typography } from "@drill4j/ui-kit";
-import tw, { styled } from "twin.macro";
 
 import { percentFormatter } from "@drill4j/common-utils";
 import { BuildSummary } from "types/build-summary";
@@ -93,7 +92,7 @@ export const CoverageSection = ({ pluginPagePath }: Props) => {
         )}
         additionalInfo={(
           Boolean(buildDiff) && !isFirstBuild && scopeCount > 0 && (
-            <BuildInfo>
+            <div tw="grid items-center grid-cols-[max-content 1fr]">
               <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
@@ -107,16 +106,9 @@ export const CoverageSection = ({ pluginPagePath }: Props) => {
                   </span>
                 </NavLink>
               </Typography.MiddleEllipsis>
-            </BuildInfo>
+            </div>
           ))}
       />
     </div>
   );
 };
-
-const BuildInfo = styled.div`
-  ${tw`grid items-center`}
-  & {
-    grid-template-columns: max-content 1fr;
-  }
-`;
