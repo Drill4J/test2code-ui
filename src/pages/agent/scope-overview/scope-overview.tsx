@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import {
-  Redirect, useParams,
-} from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { Icons, Tab } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
+import {
+  useActiveScope, useAgent, useTestToCodeParams, useAgentParams, useBuildVersion,
+} from "hooks";
 import { getPagePath } from "common";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
@@ -29,9 +29,8 @@ import { ScopeTestsInfo } from "./scope-tests-info";
 
 export const ScopeOverview = () => {
   const [activeTab, setActiveTab] = useState("methods");
-  const {
-    scopeId = "", buildVersion = "", agentId = "",
-  } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
+  const { agentId } = useAgentParams();
+  const { scopeId, buildVersion } = useTestToCodeParams();
   const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
 
@@ -41,7 +40,7 @@ export const ScopeOverview = () => {
 
   return (
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
-      ? <Redirect to={{ pathname: getPagePath({ name: "test2code" }) }} />
+      ? <Redirect to={{ pathname: getPagePath({ name: "overview", params: { buildVersion } }) }} />
       : (
         <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />

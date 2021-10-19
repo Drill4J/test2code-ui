@@ -21,10 +21,13 @@ import { capitalize, convertToPercentage } from "@drill4j/common-utils";
 import { TESTS_TO_RUN_TYPES_COLOR } from "common/constants";
 import { BuildSummary } from "types/build-summary";
 import { TestTypes } from "types/test-types";
-import { useBuildVersion } from "hooks";
+import { useAgent, useBuildVersion } from "hooks";
 
 export const TestsToRunSection = () => {
-  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary") || {};
+  const { buildVersion = "" } = useAgent();
+  const {
+    testsToRun: { count = 0, byType: testsToRunByType = {} } = {},
+  } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
   const tooltipData = {
     auto: {
       count: testsToRunByType?.AUTO,

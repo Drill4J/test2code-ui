@@ -22,19 +22,19 @@ import tw, { styled } from "twin.macro";
 import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
-import { getGroupModalPath, routes as agentRoutes } from "common";
+import { getGroupModalPath } from "common";
+import { Agent } from "@drill4j/types-admin";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";
 import { TestToCodeCell } from "./test-to-code-cell";
 import { TestToCodeHeaderCell } from "./test-to-code-header-cell";
 
 export interface GroupRootComponentProps {
-  getAgentPluginPath: (props: { agentId: string; buildVersion: string; path?: string}) => string;
   getAgentDashboardPath: (props: { agentId: string; buildVersion: string; }) => string;
-  getAgentSettingsPath: (agentId: string) => string;
+  openSettingsPanel: (agent: Agent) => void;
 }
 
-export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashboardPath }: GroupRootComponentProps) => {
+export const Group = ({ openSettingsPanel, getAgentDashboardPath }: GroupRootComponentProps) => {
   const { groupId } = useGroupRouteParams();
   const { summaries = [], aggregated } = useGroupData<ServiceGroupSummary>("/group/summary", groupId) || {};
   const serviceGroupSummaries = summaries.map((agentSummary) => ({
@@ -88,7 +88,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
             <TestToCodeCell
               value={value?.count}
               name="tests-to-run"
-              link={getAgentPluginPath({ buildVersion, agentId, path: agentRoutes.testsToRun })}
+              link={`/agents/${agentId}/plugins/test2code/builds/${buildVersion}/tests-to-tun`} // TODO need to get path from someone func
             />
           )}
           HeaderCell={() => (
@@ -101,7 +101,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
         />
         <ListColumn
           name="actions"
-          Cell={({ item: { id: agentId = "" } }) => (
+          Cell={({ item }) => (
             <MenuWrapper>
               <Menu
                 testContext="test-to-code-plugin:actions:cell"
@@ -111,7 +111,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     icon: "BuildList",
                     onClick: () => null,
                     Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={`/agents/${agentId}/builds`}>{children}</Link>
+                      <Link to={`/agents/${item?.agentId}/builds`}>{children}</Link>
                     ),
                   },
                   {
@@ -119,9 +119,9 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     icon: "Settings",
                     onClick: () => null,
                     Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={getAgentSettingsPath(agentId)}>
+                      <span onClick={() => openSettingsPanel(item)}>
                         {children}
-                      </Link>
+                      </span>
                     ),
                   },
                 ]}

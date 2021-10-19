@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 import React from "react";
-import { useParams } from "react-router-dom";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { useTableActionsState } from "@drill4j/ui-kit";
+
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { useBuildVersion } from "hooks";
+import { useTestToCodeParams, useBuildVersion } from "hooks";
 import { TestDetails } from "../../../tests-table";
 
 export const ScopeTestsTable = () => {
   const { search } = useTableActionsState();
-  const { scopeId = "" } = useParams<{ scopeId: string }>();
+  const { scopeId } = useTestToCodeParams();
   const tests = useBuildVersion<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`, { filters: search, output: "LIST" }) || {};
 
   return (

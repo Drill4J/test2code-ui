@@ -19,6 +19,7 @@ export { useServiceGroup } from "./use-service-group";
 export { useAgent } from "./use-agent";
 export { useActiveScope } from "./use-active-scope";
 export { useActiveSessions } from "./use-active-sessions";
-export { useAgentRouteParams } from "./use-agent-route-params";
+export { useAgentParams } from "./use-agent-params";
 export { useGroupData } from "./use-group-data";
 export { useGroupRouteParams } from "./use-group-route-params";
+export { useTestToCodeParams } from "./use-test-to-code-params";

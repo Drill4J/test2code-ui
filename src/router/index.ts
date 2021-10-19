@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-export const agentPluginPath = "/agents/:agentId/builds/:buildVersion/dashboard/:pluginId";
-export const groupPluginPath = "/agents/group/:groupId/dashboard/:pluginId";
-export const agentDashboardPath = "/agents/:agentId/builds/:buildVersion/dashboard";
-export const groupDashboardPath = "/agents/group/:groupId/dashboard";
+export const agentPluginPath = "/agents/:agentId/plugins/:pluginId";
+export const groupPluginPath = "/groups/:groupId/plugins/:pluginId";
+export const agentDashboardPath = "/agents/:agentId";
+export const groupDashboardPath = "/groups/:groupId";
 
 export const getAgentRoutePath = (path: string) => (path.startsWith("/")
   ? `${agentPluginPath}${path}`

@@ -16,11 +16,11 @@
 import { useEffect, useState } from "react";
 
 import { test2CodePluginSocket } from "common/connections";
-import { useAgentRouteParams } from "./use-agent-route-params";
+import { useAgentParams } from "./use-agent-params";
 
 export function usePreviousBuildCoverage<T>(build: string): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { agentId = "" } = useAgentRouteParams();
+  const { agentId = "" } = useAgentParams();
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);

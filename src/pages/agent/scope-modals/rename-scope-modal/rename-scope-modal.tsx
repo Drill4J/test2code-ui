@@ -27,7 +27,7 @@ import { ActiveScope } from "types/active-scope";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
 import { renameScope } from "../../api";
-import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
+import { useAgentParams, useBuildVersion } from "../../../../hooks";
 
 const validateScope = composeValidators(
   required("name", "Scope Name"),
@@ -37,7 +37,7 @@ const validateScope = composeValidators(
 );
 
 export const RenameScopeModal = () => {
-  const { agentId = "", pluginId = "" } = useAgentRouteParams();
+  const { agentId = "", pluginId = "" } = useAgentParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope") || {};
   const [errorMessage, setErrorMessage] = useState("");
@@ -84,7 +84,7 @@ export const RenameScopeModal = () => {
                   type="submit"
                   disabled={isSubmitting || !dirty || !isValid}
                 >
-                  {isSubmitting ? <Spinner disabled /> : "Save"}
+                  {isSubmitting ? <Spinner /> : "Save"}
                 </Button>
                 <Button secondary size="large" onClick={closeModal}>
                   Cancel

@@ -26,7 +26,7 @@ import {
   ConditionSetting,
   ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentParams, useBuildVersion } from "hooks";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
@@ -43,7 +43,7 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
 )(formValues);
 
 export const QualityGatePane = () => {
-  const { pluginId = "", agentId = "" } = useAgentRouteParams();
+  const { pluginId = "", agentId = "" } = useAgentParams();
   const [isEditing, setIsEditing] = useState(false);
   const { generalAlertMessage, showGeneralAlertMessage } = useGeneralAlertMessage();
   const closeModal = useCloseModal("/quality-gate");
@@ -131,7 +131,7 @@ export const QualityGatePane = () => {
                       type="submit"
                       data-test="quality-gate-pane:save-button"
                     >
-                      {isSubmitting ? <Spinner disabled /> : "Save"}
+                      {isSubmitting ? <Spinner /> : "Save"}
                     </Button>
                   )}
                 {configured && isEditing && (

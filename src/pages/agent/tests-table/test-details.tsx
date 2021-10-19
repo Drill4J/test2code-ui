@@ -25,7 +25,7 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";
-import { useAgent, useAgentRouteParams } from "hooks";
+import { useAgent, useAgentParams } from "hooks";
 import { getModalPath } from "../../../common";
 
 interface Props {
@@ -36,7 +36,7 @@ interface Props {
 export const TestDetails = ({
   tests: { items: tests = [], filteredCount = 0 },
 }: Props) => {
-  const { agentId } = useAgentRouteParams();
+  const { agentId } = useAgentParams();
   const { status } = useAgent(agentId);
   const { search } = useTableActionsState();
   const [searchQuery] = search;

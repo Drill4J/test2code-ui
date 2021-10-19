@@ -13,4 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useSwitchBuild, SwitchBuildContext } from "./switch-build-context";
+import { matchPath, useLocation } from "react-router-dom";
+import { agentDashboardPath, agentPluginPath } from "../router";
+
+export const useAgentParams = (): { agentId: string; pluginId: string } => {
+  const { pathname } = useLocation();
+  const { params: { agentId = "", pluginId = "" } = {} } = matchPath<{
+    agentId?: string; pluginId: string }>(pathname, { path: [agentPluginPath, agentDashboardPath] }) || {};
+  return { agentId, pluginId };
+};

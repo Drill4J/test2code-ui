@@ -21,6 +21,7 @@ import "twin.macro";
 
 import { getPagePath } from "common";
 import { PreviousBuildInfo } from "../previous-build-info-types";
+import { useTestToCodeParams } from "../../../../../hooks";
 
 interface Props {
   buildCodeCoverage: number;
@@ -30,6 +31,7 @@ interface Props {
 export const BuildCoverageInfo = ({
   buildCodeCoverage, previousBuildInfo: { previousBuildVersion = "", previousBuildCodeCoverage = 0 } = {},
 }: Props) => {
+  const { buildVersion } = useTestToCodeParams();
   const buildDiff = percentFormatter(buildCodeCoverage) - percentFormatter(previousBuildCodeCoverage);
   return (
     <div tw="w-full h-full text-12 leading-16 text-monochrome-default">
@@ -37,7 +39,7 @@ export const BuildCoverageInfo = ({
         <div tw="font-bold" data-test="build-coverage-info:title">BUILD COVERAGE</div>
         <NavLink
           className="link font-bold leading-16 no-underline"
-          to={getPagePath({ name: "allScopes" })}
+          to={getPagePath({ name: "allScopes", params: { buildVersion } })}
           data-test="build-coverage-info:all-scopes-link"
         >
           All scopes

@@ -31,7 +31,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   <BrowserRouter>
     <Route path={agentDashboardPath}>
       <PluginCard pluginLink={pluginPagePath}>
-        <CoverageSection />
+        <CoverageSection pluginPagePath={pluginPagePath} />
         <TestsSection />
         <RisksSection />
         <TestsToRunSection />
