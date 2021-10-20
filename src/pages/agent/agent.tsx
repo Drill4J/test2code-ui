@@ -33,20 +33,20 @@ export const Agent = () => (
       <Switch>
         <Route
           exact
-          path={getAgentRoutePath("/")}
+          path={`*${getAgentRoutePath("/")}`}
           render={() => <Redirect to={getPagePath({ name: "test2code" })} />}
         />
         <Route
-          path={getAgentRoutePath(routes.test2code)}
+          path={`*${getAgentRoutePath(routes.test2code)}`}
           component={BuildOverview}
         />
         <Route
-          path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
+          path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)].map((route) => `*${route}`)}
           component={ScopeOverview}
         />
-        <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route path={`*${getAgentRoutePath(routes.allScopes)}`} component={AllScopes} />
         <Route
-          path={getAgentRoutePath(routes.risks)}
+          path={`*${getAgentRoutePath(routes.risks)}`}
           render={() => (
             <TableActionsProvider>
               <RisksPage />
@@ -54,7 +54,7 @@ export const Agent = () => (
           )}
         />
         <Route
-          path={getAgentRoutePath(routes.testsToRun)}
+          path={`*${getAgentRoutePath(routes.testsToRun)}`}
           render={() => (
             <TableActionsProvider>
               <TestsToRun />

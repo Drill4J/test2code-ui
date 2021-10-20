@@ -29,7 +29,7 @@ export interface AgentHudProps {
 
 export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => (
   <BrowserRouter>
-    <Route path={agentDashboardPath}>
+    <Route path={`*${agentDashboardPath}`}>
       <PluginCard pluginLink={pluginPagePath}>
         <CoverageSection />
         <TestsSection />

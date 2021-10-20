@@ -110,7 +110,7 @@ const GroupHUDLifecycle = singleSpaReact({
   ReactDOM,
   rootComponent: (props: GroupHudProps) => (
     <BrowserRouter>
-      <Route path={groupDashboardPath}>
+      <Route path={`*${groupDashboardPath}`}>
         <Test2CodeServiceGroupHUD {...props} />
       </Route>
     </BrowserRouter>

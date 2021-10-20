@@ -45,4 +45,4 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string =>
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
-  `${window.location.pathname.split("/").slice(0, 7).join("/")}${getPage(router, name, params)}`;
+  `${window.location.pathname.split("test2code")[0]}test2code${getPage(router, name, params)}`;
