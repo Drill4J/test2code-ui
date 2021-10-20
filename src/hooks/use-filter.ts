@@ -17,19 +17,22 @@ import { useEffect, useState } from "react";
 import { useAsyncDebounce } from "react-table";
 
 export function useFilter<T>(data: T[], predicate: (filter: string) => (value: T) => boolean) {
+  const [isProcessing, setIsProcessing] = useState(false);
   const [filteredData, setFilteredData] = useState<T[]>([]);
   const [filter, setFilter] = useState("");
 
   const onFilter = useAsyncDebounce(() => {
     setFilteredData(data.filter(predicate(filter)));
+    setIsProcessing(false);
   }, 500);
 
   useEffect(() => {
-    if (data.length) {
-      setFilteredData(data);
-      onFilter();
-    }
+    setFilteredData((prevData) => (prevData.length > 0 ? prevData : data));
+    setIsProcessing(true);
+    onFilter();
   }, [data.length, filter]);
 
-  return { filteredData, setFilter };
+  return {
+    filter, filteredData, setFilter, isProcessing,
+  };
 }
