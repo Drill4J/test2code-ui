@@ -4,10 +4,25 @@
 
 @layer base {
   body {
-    font-family: "OpenSans", sans-serif;
+    font-family: 'OpenSans', sans-serif;
   }
 
   button:focus {
     outline: none;
+  }
+
+  .custom-scroll::-webkit-scrollbar {
+    max-width: 16px;
+    max-height: 16px;
+  }
+
+  .custom-scroll::-webkit-scrollbar-thumb {
+    border: 4px solid rgba(27, 27, 27, 0.94);
+    border-radius: 9999px;
+    background-color: #81868b;
+  }
+
+  .custom-scroll::-webkit-scrollbar-track {
+    background-color: transparent;
   }
 }

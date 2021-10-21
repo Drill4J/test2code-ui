@@ -100,8 +100,9 @@ export const BaselineBuildModal = () => {
                 closeModal();
               }}
               disabled={(!isConfirmed && !isBaseline) || isLoading}
+              data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
             >
-              {isLoading && <Spinner disabled />}
+              {isLoading && <Spinner />}
               {!isLoading && isBaseline && "Unset as Baseline"}
               {!isLoading && !isBaseline && "Set as Baseline"}
             </ActionButton>

@@ -31,13 +31,13 @@ export const BuildOverview = () => {
     <>
       <CoveragePluginHeader />
       <div tw="flex mb-4 border-b border-monochrome-medium-tint">
-        <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")}>
+        <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")} data-test="build-overview:tab:build-methods">
           <TabIconWrapper>
             <Icons.Function />
           </TabIconWrapper>
           Build methods
         </Tab>
-        <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")}>
+        <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")} data-test="build-overview:tab:build-tests">
           <TabIconWrapper>
             <Icons.Test width={16} />
           </TabIconWrapper>

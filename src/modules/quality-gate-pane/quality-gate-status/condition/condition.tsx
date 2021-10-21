@@ -32,7 +32,7 @@ export const Condition = ({
   const title = {
     coverage: "Build coverage",
     risks: "Risks",
-    testsToRun: "Suggested “Tests to run” executed",
+    testsToRun: "Tests to run",
   };
   return (
     <div tw="flex">

@@ -45,7 +45,14 @@ export const AssociatedTestModal = () => {
       <div tw="flex flex-col h-full">
         <div tw="flex items-center min-h-64px pl-6 text-18 leading-24">
           <span tw="text-monochrome-black">Associated tests</span>
-          {tests.length ? <div tw="ml-2 font-light text-monochrome-default">{tests.length}</div>
+          {tests.length ? (
+            <div
+              tw="ml-2 font-light text-monochrome-default"
+              data-test="associated-test-pane:tests-count"
+            >
+              {tests.length}
+            </div>
+          )
             : <div tw="ml-2"><div tw="h-4 bg-monochrome-medium-tint rounded" /></div>}
         </div>
         <ItemInfo

@@ -20,7 +20,7 @@ export function finishScope(
   pluginId: string,
   { onSuccess, onError }: { onSuccess?: () => void; onError?: (message: string) => void } = {},
 ) {
-  return async (params: { prevScopeEnabled: boolean; savePrevScope: boolean }): Promise<void> => {
+  return async (params: { prevScopeEnabled: boolean; savePrevScope: boolean, forceFinish: boolean }): Promise<void> => {
     try {
       await axios.post(`/agents/${agentId}/plugins/${pluginId}/dispatch-action`, {
         type: "SWITCH_ACTIVE_SCOPE",
