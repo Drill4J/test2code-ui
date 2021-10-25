@@ -4,7 +4,7 @@
   "version": "0.1.0-58",
   "main": "dist",
   "scripts": {
-    "start": "npm run tailwind:css && webpack serve --port 8080",
+    "start": "npm run tailwind:css && webpack serve --port 8034",
     "start:standalone": "npm run tailwind:css && webpack serve --env standalone",
     "build": "npm run tailwind:css && webpack --mode=production",
     "analyze": "webpack --mode=production --env analyze",
