@@ -48,9 +48,6 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
     value: key, label: `${capitalize(key)} (${value.length})`,
   }));
 
-  const noTestsFound = filteredData.length === 0 && !isProcessing && tests.length > 0;
-  const isShowSceleton = Object.keys(associatedTests).length === 0 || isProcessing;
-
   return (
     <div tw="flex flex-col h-full overflow-y-auto">
       <div tw="space-y-3 px-6 pt-3 pb-2 text-14 text-blue-default font-bold border-b border-monochrome-medium-tint">
@@ -73,7 +70,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
       </div>
       <div tw="flex flex-col flex-grow overflow-y-auto">
         <div ref={node} style={{ height: "100%" }}>
-          {noTestsFound && tests.length > 0
+          {filteredData.length === 0 && !isProcessing
             ? (
               <div tw="grid place-items-center py-22 text-monochrome-default">
                 <Icons.Test width={80} height={80} tw="text-monochrome-medium-tint" />
@@ -89,7 +86,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
                 itemCount={filteredData.length || testsCount}
                 renderItem={({ index, style }) => (
                   <TestItem key={filteredData[index]} style={style as any} data-test="associated-tests-list:item">
-                    {!isShowSceleton
+                    {filteredData.length > 0 && !isProcessing
                       ? (
                         <>
                           <div tw="flex flex-row items-center h-5">
