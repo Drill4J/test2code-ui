@@ -48,6 +48,9 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
     value: key, label: `${capitalize(key)} (${value.length})`,
   }));
 
+  const noTestsFound = filteredData.length === 0 && !isProcessing && tests.length > 0;
+  const isShowSceleton = Object.keys(associatedTests).length === 0 || isProcessing;
+
   return (
     <div tw="flex flex-col h-full overflow-y-auto">
       <div tw="space-y-3 px-6 pt-3 pb-2 text-14 text-blue-default font-bold border-b border-monochrome-medium-tint">
@@ -70,7 +73,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
       </div>
       <div tw="flex flex-col flex-grow overflow-y-auto">
         <div ref={node} style={{ height: "100%" }}>
-          {filteredData.length === 0 && !isProcessing && tests.length > 0
+          {noTestsFound && tests.length > 0
             ? (
               <div tw="grid place-items-center py-22 text-monochrome-default">
                 <Icons.Test width={80} height={80} tw="text-monochrome-medium-tint" />
@@ -86,31 +89,32 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
                 itemCount={filteredData.length || testsCount}
                 renderItem={({ index, style }) => (
                   <TestItem key={filteredData[index]} style={style as any} data-test="associated-tests-list:item">
-                    {filteredData.length > 0 && !isProcessing && (
-                      <>
-                        <div tw="flex flex-row items-center h-5">
-                          <Icons.Test tw="flex self-center min-w-12px min-h-16px" />
-                          <div
-                            tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black"
-                            title={filteredData[index]}
-                          >
-                            {filteredData[index]}
+                    {!isShowSceleton
+                      ? (
+                        <>
+                          <div tw="flex flex-row items-center h-5">
+                            <Icons.Test tw="flex self-center min-w-12px min-h-16px" />
+                            <div
+                              tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black"
+                              title={filteredData[index]}
+                            >
+                              {filteredData[index]}
+                            </div>
+                          </div>
+                          <div tw="text-ellipsis pl-7 text-12 text-monochrome-default" title="&ndash;">&ndash;</div>
+                        </>
+                      )
+                      : (
+                        <div tw="flex space-x-2 animate-pulse">
+                          <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
+                          <div tw="flex-1 space-y-4 py-1">
+                            <div tw="space-y-2">
+                              <div tw="h-4 bg-monochrome-medium-tint rounded" />
+                              <div tw="h-3 bg-monochrome-medium-tint rounded" />
+                            </div>
                           </div>
                         </div>
-                        <div tw="text-ellipsis pl-7 text-12 text-monochrome-default" title="&ndash;">&ndash;</div>
-                      </>
-                    )}
-                    {(Object.keys(associatedTests).length === 0 || isProcessing) && (
-                      <div tw="flex space-x-2 animate-pulse">
-                        <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
-                        <div tw="flex-1 space-y-4 py-1">
-                          <div tw="space-y-2">
-                            <div tw="h-4 bg-monochrome-medium-tint rounded" />
-                            <div tw="h-3 bg-monochrome-medium-tint rounded" />
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                      )}
                   </TestItem>
                 )}
               />
