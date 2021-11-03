@@ -84,9 +84,9 @@ export const FinishAllScopesModal = () => {
             <div>New scopes will be started automatically</div>
           </Instructions>
           <Formik
-            initialValues={{ hasNewName: false, scopesName: "" }}
+            initialValues={{ hasNewName: false, ignoreScope: false, scopesName: "" }}
             validate={validate}
-            onSubmit={async ({ hasNewName, scopesName = "" }: any) => {
+            onSubmit={async ({ hasNewName, ignoreScope, scopesName = "" }: any) => {
               setLoading(true);
               let hasError = false;
               if (hasNewName) {
@@ -119,7 +119,7 @@ export const FinishAllScopesModal = () => {
                     closeModal();
                   },
                   onError: setErrorMessage,
-                })({ prevScopeEnabled: true, savePrevScope: true });
+                })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
               }
               setLoading(false);
             }}
@@ -134,6 +134,15 @@ export const FinishAllScopesModal = () => {
                     {({ field }: any) => (<Checkbox field={field} />)}
                   </Field>
                   <span tw="text-monochrome-black">Rename all scopes</span>
+                </label>
+                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
+                  <Field
+                    type="checkbox"
+                    name="ignoreScope"
+                  >
+                    {({ field }: any) => (<Checkbox field={field} />)}
+                  </Field>
+                  <span tw="text-monochrome-black">Ignore all scopes in build stats</span>
                 </label>
                 <Field
                   name="scopesName"
