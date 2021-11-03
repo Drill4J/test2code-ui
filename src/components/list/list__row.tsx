@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { memo } from "react";
 import "twin.macro";
 
 import { getPropertyByPath } from "@drill4j/common-utils";
@@ -27,7 +27,7 @@ interface Props {
   testContext?: string;
 }
 
-export const ListRow = ({
+export const ListRow = memo(({
   item, columns, style, testContext,
 }: Props) => (
   <div tw="grid items-center h-20 border-b border-monochrome-medium-tint" style={style} data-test={`${testContext}:list-row`}>
@@ -43,4 +43,4 @@ export const ListRow = ({
       );
     })}
   </div>
-);
+));

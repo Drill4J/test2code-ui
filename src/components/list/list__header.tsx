@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
-import { nanoid } from "nanoid";
+import React, { memo } from "react";
 import "twin.macro";
 
 import { ColumnProps } from "./list-types";
@@ -24,14 +23,14 @@ interface Props {
   style: { [key: string]: string };
 }
 
-export const ListHeader = ({ columns, style }: Props) => (
+export const ListHeader = memo(({ columns, style }: Props) => (
   <div tw="grid items-center h-20 border-b border-monochrome-medium-tint" style={style}>
     {columns.map((column) => {
       const DefaultHeaderCell = ({ column: { label } }: { column: ColumnProps }) => (
         <div>{label}</div>
       );
       const HeaderCell = column.HeaderCell || DefaultHeaderCell;
-      return <HeaderCell column={column} key={nanoid()} />;
+      return <HeaderCell column={column} />;
     })}
   </div>
-);
+));

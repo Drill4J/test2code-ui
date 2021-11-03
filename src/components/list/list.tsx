@@ -13,7 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Children, ComponentType, ReactElement } from "react";
+import React, {
+  Children, ComponentType, ReactElement, memo,
+} from "react";
 import { nanoid } from "nanoid";
 import "twin.macro";
 
@@ -33,7 +35,7 @@ interface Props {
   testContext?: string;
 }
 
-export const List = ({
+export const List = memo(({
   data = [], children, gridTemplateColumns, testContext,
 }: Props) => {
   const columns = Children.map(children, (column) => column && column.props);
@@ -64,4 +66,4 @@ export const List = ({
       ))}
     </div>
   );
-};
+});

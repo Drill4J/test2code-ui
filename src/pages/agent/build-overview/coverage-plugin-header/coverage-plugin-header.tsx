@@ -129,7 +129,7 @@ export const CoveragePluginHeader = () => {
               {risksCount}
               <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
             </Count>
-          ) : <span>&ndash;</span>}
+          ) : <span data-test="action-section:no-value:risks">&ndash;</span>}
       </ActionSection>
       <ActionSection
         label="tests to run"
