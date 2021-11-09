@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import React from "react";
-import { Link } from "react-router-dom";
 import { ParentBuild } from "@drill4j/types-admin";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
@@ -27,7 +26,6 @@ import {
   useActiveScope, useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
 import { AGENT_STATUS } from "common/constants";
-import { getModalPath } from "common";
 import { PreviousBuildInfo } from "./previous-build-info-types";
 import { BuildCoverageInfo } from "./build-coverage-info";
 import { ActiveBuildCoverageInfo } from "./active-build-coverage-info";
@@ -100,13 +98,9 @@ export const BuildMethodsInfo = () => {
             label="NEW"
           >
             {Boolean(risks?.new) && (
-              <Link
-                tw="link"
-                to={getModalPath({ name: "risks", params: { filter: "new" } })}
-                data-test="build-project-methods:link-button:new:risks"
-              >
+              <span data-test="build-project-methods:link-button:new:risks">
                 {risks?.new} risks
-              </Link>
+              </span>
             )}
           </BuildMethodsCard>
           <BuildMethodsCard
@@ -115,13 +109,9 @@ export const BuildMethodsInfo = () => {
             label="MODIFIED"
           >
             {Boolean(risks?.modified) && (
-              <Link
-                tw="link"
-                to={getModalPath({ name: "risks", params: { filter: "modified" } })}
-                data-test="build-project-methods:link-button:modified:risks"
-              >
+              <span data-test="build-project-methods:link-button:modified:risks">
                 {risks?.modified} risks
-              </Link>
+              </span>
             )}
           </BuildMethodsCard>
         </Cards>

@@ -32,7 +32,6 @@ export const RisksPage = () => {
     filteredCount = 0,
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
   const notCoveredRisksCount = risks.filter(({ coverage = 0 }) => coverage === 0).length;
-
   return (
     <div>
       <RisksPageHeader
