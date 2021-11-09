@@ -129,20 +129,20 @@ export const FinishAllScopesModal = () => {
                 <label tw="flex items-center gap-x-2 my-2 text-blue-default">
                   <Field
                     type="checkbox"
-                    name="hasNewName"
-                  >
-                    {({ field }: any) => (<Checkbox field={field} />)}
-                  </Field>
-                  <span tw="text-monochrome-black">Rename all scopes</span>
-                </label>
-                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
-                  <Field
-                    type="checkbox"
                     name="ignoreScope"
                   >
                     {({ field }: any) => (<Checkbox field={field} />)}
                   </Field>
                   <span tw="text-monochrome-black">Ignore all scopes in build stats</span>
+                </label>
+                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
+                  <Field
+                    type="checkbox"
+                    name="hasNewName"
+                  >
+                    {({ field }: any) => (<Checkbox field={field} />)}
+                  </Field>
+                  <span tw="text-monochrome-black">Rename all scopes</span>
                 </label>
                 <Field
                   name="scopesName"
