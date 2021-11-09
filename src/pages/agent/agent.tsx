@@ -48,7 +48,11 @@ export const Agent = () => (
         <Route
           path={getAgentRoutePath(routes.risks)}
           render={() => (
-            <TableActionsProvider>
+            <TableActionsProvider defaultState={{
+              search: [],
+              sort: [{ field: "coverage", order: "ASC" }],
+            }}
+            >
               <RisksPage />
             </TableActionsProvider>
           )}
