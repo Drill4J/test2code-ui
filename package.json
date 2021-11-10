@@ -1,7 +1,7 @@
 {
   "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
-  "version": "0.1.0-59-custom-test-type.7",
+  "version": "0.1.0-59-custom-test-type.8",
   "main": "dist",
   "scripts": {
     "start": "npm run tailwind:css && webpack serve --port 8080",
