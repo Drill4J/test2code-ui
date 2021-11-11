@@ -72,18 +72,18 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
     };
   }, [summaries.length]);
 
-  const groupScopesEnabled = Object.values(groupScopes).flat().every(({ enabled }) => enabled);
-
-  const ignoreGroupScopes = async () => {
+  const toggleGroupScopes = async (enabled: boolean) => {
     try {
-      await Promise.allSettled(Object.keys(groupScopes).map((agentId) => groupScopes[agentId].map((scope) =>
-        axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
-          type: "TOGGLE_SCOPE",
-          payload: { scopeId: scope.id },
-        }))));
+      await Promise.allSettled(Object.keys(groupScopes).map((agentId) => groupScopes[agentId]
+        .filter((scope) => scope.enabled === enabled)
+        .map((scope) =>
+          axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+            type: "TOGGLE_SCOPE",
+            payload: { scopeId: scope.id },
+          }))));
       sendNotificationEvent({
         type: "SUCCESS",
-        text: `Group scopes has been ${groupScopesEnabled ? "ignored" : "included"} in build stats.`,
+        text: `Group scopes have been ${enabled ? "ignored" : "included"} in build stats.`,
       });
     } catch (error) {
       sendNotificationEvent({
@@ -197,9 +197,14 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     ),
                   },
                   {
-                    label: `${groupScopesEnabled ? "Ignore" : "Include"} in stats`,
-                    icon: groupScopesEnabled ? "EyeCrossed" : "Eye",
-                    onClick: ignoreGroupScopes,
+                    label: "Ignore in stats",
+                    icon: "EyeCrossed",
+                    onClick: () => toggleGroupScopes(true),
+                  },
+                  {
+                    label: "Include in stats",
+                    icon: "Eye",
+                    onClick: () => toggleGroupScopes(false),
                   },
                   {
                     label: "Sessions Management",
