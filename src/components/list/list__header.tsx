@@ -30,7 +30,7 @@ export const ListHeader = memo(({ columns, style }: Props) => (
         <div>{label}</div>
       );
       const HeaderCell = column.HeaderCell || DefaultHeaderCell;
-      return <HeaderCell column={column} />;
+      return <HeaderCell column={column} key={column.name} />;
     })}
   </div>
 ));

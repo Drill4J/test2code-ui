@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 import React, {
-  Children, ComponentType, ReactElement, memo,
+  Children, ComponentType, ReactElement,
 } from "react";
-import { nanoid } from "nanoid";
 import "twin.macro";
 
 import { ListRow } from "./list__row";
@@ -35,10 +34,11 @@ interface Props {
   testContext?: string;
 }
 
-export const List = memo(({
+export const List = ({
   data = [], children, gridTemplateColumns, testContext,
 }: Props) => {
   const columns = Children.map(children, (column) => column && column.props);
+
   return (
     <div
       tw="grid items-center"
@@ -57,7 +57,7 @@ export const List = memo(({
           item={item}
           columns={columns}
           index={index}
-          key={nanoid()}
+          key={item.id as string}
           style={{
             gridTemplateColumns: gridTemplateColumns || `repeat(${columns.length}, 1fr)`,
           }}
@@ -66,4 +66,4 @@ export const List = memo(({
       ))}
     </div>
   );
-});
+};
