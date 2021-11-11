@@ -42,22 +42,42 @@ export const TestDetails = ({
   const [searchQuery] = search;
 
   return (
-    <div tw="flex flex-col" data-test="test-details:table-wrapper">
-      <>
-        <Table
-          isDefaulToggleSortBy
-          filteredCount={filteredCount}
-          placeholder="Search tests by name"
-          data={tests}
-          withSearch
-          columns={[{
-            Header: "Name",
-            accessor: "testName",
-            Cell: ({ row }: any) => (
-              <Cells.Compound cellName={row.original.name} cellAdditionalInfo="&ndash;" icon={<Icons.Test height={16} width={16} />} />
-            ),
+    <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
+      <Table
+        isDefaulToggleSortBy
+        filteredCount={filteredCount}
+        placeholder="Search tests by name"
+        data={tests}
+        columns={[
+          {
+            Header: "Engine",
+            accessor: "details.testName.engine",
             textAlign: "left",
-            width: "56%",
+            filterable: true,
+          },
+          {
+            Header: "Class Name",
+            accessor: "details.testName.className",
+            textAlign: "left",
+            filterable: true,
+          },
+          {
+            Header: "Class Params",
+            accessor: "details.testName.classParams",
+            textAlign: "left",
+            filterable: true,
+          },
+          {
+            Header: "Method",
+            accessor: "details.testName.method",
+            textAlign: "left",
+            filterable: true,
+          },
+          {
+            Header: "Method Params",
+            accessor: "details.testName.methodParams",
+            textAlign: "left",
+            filterable: true,
           },
           {
             Header: "Test type",
@@ -68,7 +88,6 @@ export const TestDetails = ({
               </>
             ),
             textAlign: "left",
-            width: "10%",
           },
           {
             Header: "Status",
@@ -82,13 +101,11 @@ export const TestDetails = ({
               </Cells.TestStatus>
             ),
             textAlign: "left",
-            width: "7%",
           },
           {
             Header: "Coverage, %",
             accessor: "coverage.percentage",
             Cell: Cells.Coverage,
-            width: "7%",
           },
           {
             Header: "Methods covered",
@@ -104,16 +121,13 @@ export const TestDetails = ({
                 </Link>
               </Cells.Clickable>
             ),
-            width: "10%",
           },
           {
             Header: "Duration",
             accessor: "details.duration",
             Cell: Cells.Duration,
-            width: "10%",
           }]}
-        />
-      </>
+      />
       {!tests.length && !searchQuery?.value && (
         <Stub
           icon={<Icons.Test height={104} width={107} />}

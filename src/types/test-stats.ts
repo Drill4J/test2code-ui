@@ -13,7 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+interface TestName {
+  engine: string;
+  className: string;
+  classParams: string;
+  method: string;
+  methodParams: string;
+}
+
 export interface TestStats {
   duration?: number;
   status?: "PASSED" | "FAILED" | "ERROR" | "SKIPPED";
+  testName?: TestName;
 }
