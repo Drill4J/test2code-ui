@@ -73,7 +73,7 @@ export const TestsList = ({ associatedTests }: Props) => {
       </div>
       <div tw="flex flex-col flex-grow overflow-y-auto">
         <div ref={node} style={{ height: "100%" }}>
-          {filteredData.length === 0 && !isProcessing
+          {filteredData.length === 0 && !isProcessing && tests.length !== 0
             ? (
               <div tw="grid place-items-center py-22 text-monochrome-default">
                 <Icons.Test width={80} height={80} tw="text-monochrome-medium-tint" />
@@ -86,10 +86,10 @@ export const TestsList = ({ associatedTests }: Props) => {
                 style={{ height: "100%", padding: "8px 0" }}
                 itemSize={56}
                 height={Math.floor(testsListHeight)}
-                itemCount={filteredData.length || associatedTests.assocTestsCount}
+                itemCount={filteredData.length || tests.length}
                 renderItem={({ index, style }) => (
                   <TestItem key={filteredData[index]} style={style as any} data-test="associated-tests-list:item">
-                    {filteredData.length > 0 && !isProcessing
+                    {(filteredData.length > 0 && !isProcessing) || tests.length === 0
                       ? (
                         <>
                           <div tw="flex flex-row items-center h-5">

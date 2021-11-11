@@ -81,7 +81,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
             ref={node}
             style={{ height: "calc(100% - 90px)" }}
           >
-            {filteredData.length === 0 && !isProcessing
+            {filteredData.length === 0 && !isProcessing && selectedMethodsCount !== 0
               ? (
                 <div tw="grid place-items-center py-22 text-monochrome-default">
                   <Icons.Function width={80} height={80} tw="text-monochrome-medium-tint" />
@@ -96,7 +96,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                   height={Math.ceil(methodsListHeight)}
                   itemCount={methodsCount}
                   renderItem={({ index, style }) => (
-                    filteredData.length > 0 && !isProcessing
+                    (filteredData.length > 0 && !isProcessing) || selectedMethodsCount === 0
                       ? (
                         <div
                           tw="flex flex-col justify-center pl-6 pr-6 text-12"

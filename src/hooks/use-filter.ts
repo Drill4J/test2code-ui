@@ -31,7 +31,7 @@ export function useFilter<T>(data: T[], predicate: (filter: string) => (value: T
     setFilteredData((prevData) => (prevData.length > 0 ? prevData : data));
     if (data.length > 0) {
       onFilter();
-    }
+    } else setFilteredData([]);
   }, [data.length, filter]);
 
   return {
