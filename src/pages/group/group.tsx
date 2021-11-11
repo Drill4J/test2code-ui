@@ -29,7 +29,6 @@ import { useGroupData, useGroupRouteParams } from "hooks";
 
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { ScopeSummary } from "types";
-import { toggleScope } from "pages/agent/api";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";
 import { TestToCodeCell } from "./test-to-code-cell";
@@ -53,7 +52,9 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
 
   useEffect(() => {
     function handleDataChange(newGroupScopes: ScopeSummary[], agentId: string) {
-      setGroupScopes((prevGroupScopes) => ({ ...prevGroupScopes, [agentId]: newGroupScopes }));
+      if (Array.isArray(newGroupScopes)) {
+        setGroupScopes((prevGroupScopes) => ({ ...prevGroupScopes, [agentId]: newGroupScopes }));
+      }
     }
 
     const unsubscribe = summaries.map(({ id: agentId = "", buildVersion = "" }) => test2CodePluginSocket.subscribe(
