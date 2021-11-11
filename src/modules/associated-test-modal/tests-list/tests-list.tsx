@@ -86,7 +86,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
                 itemCount={filteredData.length || testsCount}
                 renderItem={({ index, style }) => (
                   <TestItem key={filteredData[index]} style={style as any} data-test="associated-tests-list:item">
-                    {filteredData.length > 0 && !isProcessing
+                    {(filteredData.length > 0 && !isProcessing) || testsCount === 0
                       ? (
                         <>
                           <div tw="flex flex-row items-center h-5">
