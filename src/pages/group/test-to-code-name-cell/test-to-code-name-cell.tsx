@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import { Typography } from "@drill4j/ui-kit";
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
@@ -33,7 +33,7 @@ const Name = styled(Link)`
   ${tw`w-max link font-bold text-14`}
 `;
 
-export const TestToCodeNameCell = ({ name, additionalInformation, link }: Props) => (
+export const TestToCodeNameCell = memo(({ name, additionalInformation, link }: Props) => (
   <Content>
     <div tw="text-ellipsis text-blue-default">
       <Name
@@ -54,4 +54,4 @@ export const TestToCodeNameCell = ({ name, additionalInformation, link }: Props)
       </Typography.MiddleEllipsis>
     </div>
   </Content>
-);
+));
