@@ -46,7 +46,6 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
   const { height: methodsListHeight } = useElementSize(node);
   const selectedMethodsCount = getMethodsCount(summary?.methodCounts, selectedSection) || 0;
   const methodsCount = filteredData.length || selectedMethodsCount;
-  const isShowSceleton = !Object.keys(summary).length || (Number(selectedMethodsCount) > 0 && filteredData.length === 0);
 
   return (
     <div tw="flex-col h-full overflow-hidden">
@@ -82,7 +81,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
             ref={node}
             style={{ height: "calc(100% - 90px)" }}
           >
-            {filteredData.length === 0 && !isProcessing && selectedMethodsCount > 0
+            {filteredData.length === 0 && !isProcessing && selectedMethodsCount !== 0
               ? (
                 <div tw="grid place-items-center py-22 text-monochrome-default">
                   <Icons.Function width={80} height={80} tw="text-monochrome-medium-tint" />
@@ -96,51 +95,52 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                   itemSize={56}
                   height={Math.ceil(methodsListHeight)}
                   itemCount={methodsCount}
-                  renderItem={({ index, style }) => (!isShowSceleton && !isProcessing
-                    ? (
-                      <div
-                        tw="flex flex-col justify-center pl-6 pr-6 text-12"
-                        key={`${filteredData[index]?.name}${index}`}
-                        style={style as any}
-                        data-test="covered-methods-list:item"
-                      >
-                        <div className="flex items-center w-full h-20px">
-                          <div className="flex items-center w-full gap-4">
-                            <Icons.Function tw="h-4" />
-                            <div
-                              tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
-                              title={filteredData[index]?.name as string}
-                            >
-                              {filteredData[index]?.name}
-                            </div>
-                          </div>
-                          <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />
-                        </div>
+                  renderItem={({ index, style }) => (
+                    (filteredData.length > 0 && !isProcessing) || selectedMethodsCount === 0
+                      ? (
                         <div
-                          tw="max-w-280px ml-8 text-monochrome-default text-12 text-ellipsis"
-                          title={filteredData[index]?.ownerClass}
+                          tw="flex flex-col justify-center pl-6 pr-6 text-12"
+                          key={`${filteredData[index]?.name}${index}`}
+                          style={style as any}
+                          data-test="covered-methods-list:item"
                         >
-                          {filteredData[index]?.ownerClass}
+                          <div className="flex items-center w-full h-20px">
+                            <div className="flex items-center w-full gap-4">
+                              <Icons.Function tw="h-4" />
+                              <div
+                                tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
+                                title={filteredData[index]?.name as string}
+                              >
+                                {filteredData[index]?.name}
+                              </div>
+                            </div>
+                            <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />
+                          </div>
+                          <div
+                            tw="max-w-280px ml-8 text-monochrome-default text-12 text-ellipsis"
+                            title={filteredData[index]?.ownerClass}
+                          >
+                            {filteredData[index]?.ownerClass}
+                          </div>
                         </div>
-                      </div>
-                    )
-                    : (
-                      <div
-                        tw="flex flex-col justify-center pl-6 pr-6 text-12"
-                        key={index}
-                        style={style as any}
-                      >
-                        <div tw="flex space-x-2 animate-pulse">
-                          <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
-                          <div tw="flex-1 space-y-4 py-1">
-                            <div tw="space-y-2">
-                              <div tw="h-4 bg-monochrome-medium-tint rounded" />
-                              <div tw="h-3 bg-monochrome-medium-tint rounded" />
+                      )
+                      : (
+                        <div
+                          tw="flex flex-col justify-center pl-6 pr-6 text-12"
+                          key={index}
+                          style={style as any}
+                        >
+                          <div tw="flex space-x-2 animate-pulse">
+                            <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
+                            <div tw="flex-1 space-y-4 py-1">
+                              <div tw="space-y-2">
+                                <div tw="h-4 bg-monochrome-medium-tint rounded" />
+                                <div tw="h-3 bg-monochrome-medium-tint rounded" />
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    )
+                      )
                   )}
                 />
               )}
