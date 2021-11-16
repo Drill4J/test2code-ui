@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Children, ComponentType, ReactElement } from "react";
-import { nanoid } from "nanoid";
+import React, {
+  Children, ComponentType, ReactElement,
+} from "react";
 import "twin.macro";
 
 import { ListRow } from "./list__row";
@@ -37,6 +38,7 @@ export const List = ({
   data = [], children, gridTemplateColumns, testContext,
 }: Props) => {
   const columns = Children.map(children, (column) => column && column.props);
+
   return (
     <div
       tw="grid items-center"
@@ -55,7 +57,7 @@ export const List = ({
           item={item}
           columns={columns}
           index={index}
-          key={nanoid()}
+          key={item.id as string}
           style={{
             gridTemplateColumns: gridTemplateColumns || `repeat(${columns.length}, 1fr)`,
           }}

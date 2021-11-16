@@ -48,7 +48,13 @@ export const CoveredMethodsByTestSidebar = () => {
       <div tw="flex flex-col h-full">
         <header tw="flex gap-2 items-center h-16 pl-6 pr-6 leading-32 border-b border-monochrome-light-tint">
           <div tw="text-20 text-monochrome-black">Covered methods</div>
-          <div tw="text-monochrome-default text-16 leading-24" style={{ height: "20px" }}>{params?.coveredMethods}</div>
+          <div
+            tw="text-monochrome-default text-16 leading-24"
+            style={{ height: "20px" }}
+            data-test="covered-methods-by-test-sidebar:methods-count"
+          >
+            {params?.coveredMethods}
+          </div>
         </header>
         <section tw="h-20 pt-2 pb-2 pr-6 pl-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
           <div tw="flex items-center w-full gap-4">

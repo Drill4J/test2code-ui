@@ -204,7 +204,7 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col">
+    <div tw="flex flex-col" data-test="methods-table">
       <Table
         columns={columns}
         data={coverageByPackages}

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { memo } from "react";
 import { Icons } from "@drill4j/ui-kit";
 import { spacesToDashes } from "@drill4j/common-utils";
 import { Link } from "react-router-dom";
@@ -30,7 +30,7 @@ const Value = styled.span(({ clickable }: {clickable: boolean}) => [
   clickable && tw`cursor-pointer hover:text-blue-default active:text-blue-shade`,
 ]);
 
-export const TestToCodeHeaderCell = ({
+export const TestToCodeHeaderCell = memo(({
   label, value, path,
 }: Props) => (
   <div>
@@ -48,4 +48,4 @@ export const TestToCodeHeaderCell = ({
       </Value>
     </div>
   </div>
-);
+));

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { Icons, Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
@@ -31,7 +31,7 @@ const Value = styled(Link)(({ name }: { name: string }) => [
     : tw`pointer-events-none`,
 ]);
 
-export const TestToCodeCell = ({
+export const TestToCodeCell = memo(({
   value, link, name,
 }: Props) => (
   <div>
@@ -52,4 +52,4 @@ export const TestToCodeCell = ({
       </Value>
     </div>
   </div>
-);
+));

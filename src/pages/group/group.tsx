@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 import { Menu } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
@@ -128,37 +128,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
               />
             </MenuWrapper>
           )}
-          HeaderCell={() => (
-            <MenuWrapper>
-              <Menu
-                testContext="test-to-code-plugin:header-cell:actions"
-                items={[
-                  {
-                    label: "Finish all scopes",
-                    icon: "Check",
-                    onClick: () => null,
-                    Content: ({ children }: { children: JSX.Element }) => (
-                      <Link
-                        to={getGroupModalPath({ name: "finishAllScopes" })}
-                      >
-                        {children}
-                      </Link>
-                    ),
-                  },
-                  {
-                    label: "Sessions Management",
-                    icon: "ManageSessions",
-                    onClick: () => null,
-                    Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={getGroupModalPath({ name: "sessionManagement" })}>
-                        {children}
-                      </Link>
-                    ),
-                  },
-                ]}
-              />
-            </MenuWrapper>
-          )}
+          HeaderCell={MenuHeaderCell}
         />
       </List>
       <Modals />
@@ -169,3 +139,38 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
 const MenuWrapper = styled.div`
   ${tw`flex justify-end mr-4`}
 `;
+
+const MenuHeaderCell = () => {
+  const items = useMemo(() => [
+    {
+      label: "Finish all scopes",
+      icon: "Check",
+      onClick: () => null,
+      Content: ({ children }: { children: JSX.Element }) => (
+        <Link
+          to={getGroupModalPath({ name: "finishAllScopes" })}
+        >
+          {children}
+        </Link>
+      ),
+    },
+    {
+      label: "Sessions Management",
+      icon: "ManageSessions",
+      onClick: () => null,
+      Content: ({ children }: { children: JSX.Element }) => (
+        <Link to={getGroupModalPath({ name: "sessionManagement" })}>
+          {children}
+        </Link>
+      ),
+    },
+  ] as any[], []);
+  return (
+    <MenuWrapper>
+      <Menu
+        testContext="test-to-code-plugin:header-cell:actions"
+        items={items}
+      />
+    </MenuWrapper>
+  );
+};

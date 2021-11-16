@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { memo } from "react";
 import { Tooltip } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
 import "twin.macro";
@@ -22,7 +22,7 @@ interface Props {
   value?: number;
 }
 
-export const TestToCodeCoverageCell = ({ value = 0 }: Props) => (
+export const TestToCodeCoverageCell = memo(({ value = 0 }: Props) => (
   <div>
     <div tw="pl-4">
       <div tw="flex items-center w-full text-20 text-monochrome-black" data-test="dashboard-coverage-cell:value">
@@ -40,4 +40,4 @@ export const TestToCodeCoverageCell = ({ value = 0 }: Props) => (
       </div>
     </div>
   </div>
-);
+));
