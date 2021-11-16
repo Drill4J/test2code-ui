@@ -15,10 +15,10 @@
  */
 interface TestName {
   engine: string;
-  className: string;
-  classParams: string;
-  method: string;
-  methodParams: string;
+  name: string;
+  params: string;
+  path: string;
+  pathParams: string;
 }
 
 export interface TestStats {

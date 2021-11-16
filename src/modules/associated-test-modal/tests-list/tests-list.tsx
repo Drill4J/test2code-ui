@@ -16,7 +16,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Icons, Dropdown, convertToSingleSpaces, Inputs, capitalize,
+  Icons, Dropdown, convertToSingleSpaces, Inputs, capitalize, Cells,
 } from "@drill4j/ui-kit";
 import { useElementSize } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
@@ -95,7 +95,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
                               tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black"
                               title={filteredData[index]}
                             >
-                              {filteredData[index]}
+                              <Cells.Highlight text={filteredData[index]} searchWords={[query]} />
                             </div>
                           </div>
                           <div tw="text-ellipsis pl-7 text-12 text-monochrome-default" title="&ndash;">&ndash;</div>

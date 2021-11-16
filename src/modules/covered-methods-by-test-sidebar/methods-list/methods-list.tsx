@@ -16,6 +16,7 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
+  Cells,
   convertToSingleSpaces,
   Dropdown, Icons, Inputs, useElementSize,
 } from "@drill4j/ui-kit";
@@ -111,7 +112,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                                 tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
                                 title={filteredData[index]?.name as string}
                               >
-                                {filteredData[index]?.name}
+                                <Cells.Highlight text={filteredData[index]?.name} searchWords={[query]} />
                               </div>
                             </div>
                             <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />

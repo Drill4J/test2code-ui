@@ -47,35 +47,27 @@ export const TestDetails = ({
         isDefaulToggleSortBy
         filteredCount={filteredCount}
         placeholder="Search tests by name"
-        data={tests}
+        data={tests.map((test) =>
+          ({
+            ...test,
+            details: {
+              ...test.details,
+              testName: {
+                name: `${test.details.testName?.name}.${test.details.testName?.params}`,
+                path: `${test.details.testName?.engine}.${test.details.testName?.path}.${test.details.testName?.pathParams}`,
+              },
+            },
+          }))}
         columns={[
           {
-            Header: "Engine",
-            accessor: "details.testName.engine",
+            Header: "Name",
+            accessor: "details.testName.name",
             textAlign: "left",
             filterable: true,
           },
           {
-            Header: "Class Name",
-            accessor: "details.testName.className",
-            textAlign: "left",
-            filterable: true,
-          },
-          {
-            Header: "Class Params",
-            accessor: "details.testName.classParams",
-            textAlign: "left",
-            filterable: true,
-          },
-          {
-            Header: "Method",
-            accessor: "details.testName.method",
-            textAlign: "left",
-            filterable: true,
-          },
-          {
-            Header: "Method Params",
-            accessor: "details.testName.methodParams",
+            Header: "Path",
+            accessor: "details.testName.path",
             textAlign: "left",
             filterable: true,
           },
