@@ -26,6 +26,11 @@ export interface AgentHudProps {
   customProps: { pluginPagePath: string; }
 }
 
+const testsDataStub = [
+  { type: "Auto", testCount: 0, coverage: 0 },
+  { type: "Manual", testCount: 0, coverage: 0 },
+];
+
 export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => {
   const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary") || {};
   const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
@@ -37,21 +42,64 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   const buildTestsToRun = Object.entries(testsToRunByType)
     .reduce((acc, [testType, testCount]) => [...acc, { type: testType, testCount }], [] as TestType[]);
 
-  const buildTestTypes = byTestType.map((data) => data.type);
-  const buildTestToTunTypes = Object.keys(testsToRunByType);
-  const testsColors = addColors([...buildTestTypes, ...buildTestToTunTypes]);
-
-  return (
-    <PluginCard pluginLink={pluginPagePath}>
-      <CoverageSection />
+  let testSection;
+  let testToRunSection;
+  if (buildTestsByType.length === 0 && buildTestsToRun.length === 0) {
+    const testsColors = addColors(["Auto", "Manual"]);
+    testSection = (
+      <TestsSection
+        data={testsDataStub}
+        totalCoveredMethodCount={totalCoveredMethodCount}
+        testsColors={testsColors}
+        finishedScopesCount={finishedScopesCount}
+      />
+    );
+    testToRunSection = <TestsToRunSection data={testsDataStub} testsColors={testsColors} testsToRunCount={count} />;
+  } else if (buildTestsByType.length > 0 && buildTestsToRun.length > 0) {
+    const buildTestTypes = byTestType.map((data) => data.type);
+    const buildTestToTunTypes = Object.keys(testsToRunByType);
+    const testsColors = addColors([...buildTestTypes, ...buildTestToTunTypes]);
+    testSection = (
       <TestsSection
         data={buildTestsByType}
         totalCoveredMethodCount={totalCoveredMethodCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
+    );
+    testToRunSection = <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />;
+  } else if (buildTestsByType.length > 0) {
+    const data = buildTestsByType;
+    const testsColors = addColors(byTestType.map((test) => test.type));
+    testSection = (
+      <TestsSection
+        data={data}
+        totalCoveredMethodCount={totalCoveredMethodCount}
+        testsColors={testsColors}
+        finishedScopesCount={finishedScopesCount}
+      />
+    );
+    testToRunSection = <TestsToRunSection data={data} testsColors={testsColors} testsToRunCount={count} />;
+  } else {
+    const data = buildTestsToRun;
+    const testsColors = addColors(Object.keys(testsToRunByType));
+    testSection = (
+      <TestsSection
+        data={data}
+        totalCoveredMethodCount={totalCoveredMethodCount}
+        testsColors={testsColors}
+        finishedScopesCount={finishedScopesCount}
+      />
+    );
+    testToRunSection = <TestsToRunSection data={data} testsColors={testsColors} testsToRunCount={count} />;
+  }
+
+  return (
+    <PluginCard pluginLink={pluginPagePath}>
+      <CoverageSection />
+      {testSection}
       <RisksSection />
-      <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />
+      {testToRunSection}
     </PluginCard>
   );
 };
