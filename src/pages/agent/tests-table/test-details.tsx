@@ -41,33 +41,52 @@ export const TestDetails = ({
   const { search } = useTableActionsState();
   const [searchQuery] = search;
 
+  const concatPath = (engine?: string, path?: string) => {
+    if (!engine && !path) return "";
+    if (!engine) return path;
+
+    return `${engine}.${path}`;
+  };
+
+  const concatName = (name: string, classParams?: string, methodParams?: string) => {
+    if (name && classParams && methodParams) return `${name}.${classParams}.${methodParams}`;
+    if (name && classParams) return `${name}.${classParams}`;
+    if (name && methodParams) return `${name}.${methodParams}`;
+
+    return name;
+  };
+  const testTransform = () => tests.map((test) =>
+    ({
+      ...test,
+      overview: {
+        ...test.overview,
+        details: {
+          ...test.overview.details,
+          name: concatName(
+            test.overview.details?.testName || test.name,
+            test.overview.details?.params?.classParams, test.overview.details?.params?.methodParams,
+          ),
+          path: concatPath(test.overview.details?.engine, test.overview.details?.path),
+        },
+      },
+    }));
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
       <Table
         isDefaulToggleSortBy
         filteredCount={filteredCount}
         placeholder="Search tests by name"
-        data={tests.map((test) =>
-          ({
-            ...test,
-            details: {
-              ...test.details,
-              testName: {
-                name: `${test.details.testName?.name}.${test.details.testName?.params}`,
-                path: `${test.details.testName?.engine}.${test.details.testName?.path}.${test.details.testName?.pathParams}`,
-              },
-            },
-          }))}
+        data={testTransform()}
         columns={[
           {
             Header: "Name",
-            accessor: "details.testName.name",
+            accessor: "overview.details.name",
             textAlign: "left",
             filterable: true,
           },
           {
             Header: "Path",
-            accessor: "details.testName.path",
+            accessor: "overview.details.path",
             textAlign: "left",
             filterable: true,
           },
@@ -83,7 +102,7 @@ export const TestDetails = ({
           },
           {
             Header: "Status",
-            accessor: "details.result",
+            accessor: "overview.result",
             Cell: ({ value }: any) => (
               <Cells.TestStatus
                 tw="inline"
@@ -116,7 +135,7 @@ export const TestDetails = ({
           },
           {
             Header: "Duration",
-            accessor: "details.duration",
+            accessor: "overview.duration",
             Cell: Cells.Duration,
           }]}
         stub={

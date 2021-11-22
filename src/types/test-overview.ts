@@ -13,16 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-interface TestName {
-  engine: string;
-  name: string;
-  params: string;
-  path: string;
-  pathParams: string;
+
+interface Metadata {
+  [key: string]: string | undefined;
 }
 
-export interface TestStats {
+interface Params {
+  methodParams?: string;
+  classParams?: string;
+}
+
+interface Details {
+  engine?: string;
+  path?: string;
+  testName?: string;
+  params?: Params;
+  metadata?: Metadata;
+}
+
+export interface TestOverview {
   duration?: number;
-  status?: "PASSED" | "FAILED" | "ERROR" | "SKIPPED";
-  testName?: TestName;
+  result?: "PASSED" | "FAILED" | "ERROR" | "SKIPPED";
+  details?: Details;
 }
