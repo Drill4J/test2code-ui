@@ -76,15 +76,13 @@ export const RisksTable = ({ data, filteredCount }: Props) => {
       withSearch
       filteredCount={filteredCount}
       placeholder="Search methods by name"
-      stub={
-        data.length === 0 && (
-          <Stub
-            icon={<Icons.Package height={104} width={107} />}
-            title="No results found"
-            message="Try adjusting your search or filter to find what you are looking for."
-          />
-        )
-      }
+      stub={(
+        <Stub
+          icon={<Icons.Package height={104} width={107} />}
+          title="No results found"
+          message="Try adjusting your search or filter to find what you are looking for."
+        />
+      )}
     />
   );
 };

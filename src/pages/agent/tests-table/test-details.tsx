@@ -119,23 +119,26 @@ export const TestDetails = ({
             accessor: "details.duration",
             Cell: Cells.Duration,
           }]}
+        stub={
+          searchQuery?.value
+            ? (
+              <Stub
+                icon={<Icons.Test height={104} width={107} />}
+                title="No results found"
+                message="Try adjusting your search or filter to find what you are looking for."
+              />
+            )
+            : (
+              <Stub
+                icon={<Icons.Test height={104} width={107} />}
+                title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
+                message={status === AGENT_STATUS.BUSY
+                  ? "It may take a few seconds."
+                  : "Information about project tests will appear after the first launch of tests."}
+              />
+            )
+        }
       />
-      {!tests.length && !searchQuery?.value && (
-        <Stub
-          icon={<Icons.Test height={104} width={107} />}
-          title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
-          message={status === AGENT_STATUS.BUSY
-            ? "It may take a few seconds."
-            : "Information about project tests will appear after the first launch of tests."}
-        />
-      )}
-      {!filteredCount && searchQuery?.value && (
-        <Stub
-          icon={<Icons.Test height={104} width={107} />}
-          title="No results found"
-          message="Try adjusting your search or filter to find what you are looking for."
-        />
-      )}
     </div>
   );
 };
