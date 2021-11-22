@@ -13,22 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 import {
   Icons, Stub, Table, TableElements, useTableActionsState, Cells,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useExpanded, useTable } from "react-table";
 import "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
+import { useQueryParams } from "@drill4j/common-hooks";
+import { Search } from "@drill4j/types-admin/index";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
+import { addQueryParamsToPath } from "../../../utils";
 
 interface Props {
   topic: string;
@@ -42,10 +45,27 @@ export const MethodsTable = ({
   showCoverageIcon,
 }: Props) => {
   const { search, sort } = useTableActionsState();
+  const { push } = useHistory();
+
+  useEffect(() => {
+    const [searchParams] = search;
+    searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
+    return () => {
+      push(addQueryParamsToPath({})); // clear
+    };
+  }, [search]);
+
+  const { searchField = "", searchValue = "" } = useQueryParams<{searchField?: string, searchValue?: string}>();
+  const searchState: Search[] = useMemo(() => ((searchField && searchValue) ? [{
+    field: searchField,
+    value: searchValue,
+    op: "CONTAINS",
+  }] : []), [searchField, searchValue]);
+
   const {
     items: coverageByPackages = [],
     filteredCount = 0,
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: search, orderBy: sort, output: "LIST" }) ||
+  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: searchState, orderBy: sort, output: "LIST" }) ||
   {};
 
   const columns = [

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 import React from "react";
-import { ParentBuild } from "@drill4j/types-admin";
+import { ParentBuild, Search } from "@drill4j/types-admin";
 import { TableActionsProvider } from "@drill4j/ui-kit";
+import { useQueryParams } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
 import { BuildMethodsCard } from "components";
@@ -64,6 +65,13 @@ export const BuildMethodsInfo = () => {
   const { percentage: buildCodeCoverage = 0 } = buildCoverage;
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
+
+  const { searchField = "", searchValue = "" } = useQueryParams<{searchField?: string, searchValue?: string}>();
+  const searchState: Search[] = (searchField && searchValue) ? [{
+    field: searchField,
+    value: searchValue,
+    op: "CONTAINS",
+  }] : [];
 
   return (
     <>

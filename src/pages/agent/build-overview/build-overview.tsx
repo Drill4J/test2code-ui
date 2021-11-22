@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Icons, Tab } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
+import { useQueryParams } from "@drill4j/common-hooks";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
@@ -27,6 +28,14 @@ const TabIconWrapper = styled.div`
 
 export const BuildOverview = () => {
   const [activeTab, setActiveTab] = useState("methods");
+  const { searchField, searchValue } = useQueryParams<{searchField?: string, searchValue?: string}>();
+
+  useEffect(() => {
+    if (searchField && searchValue) {
+      setActiveTab("methods");
+    }
+  }, [searchField, searchValue]);
+
   return (
     <>
       <CoveragePluginHeader />

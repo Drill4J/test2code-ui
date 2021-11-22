@@ -25,7 +25,9 @@ import "twin.macro";
 import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion, useFilter } from "hooks";
+import { Link } from "react-router-dom";
 import { CoverageRateIcon } from "../coverage-rate-icon";
+import { addQueryParamsToPath } from "../../../utils";
 
 interface Props {
   summary: MethodsCoveredByTestSummary;
@@ -96,53 +98,63 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                   itemSize={56}
                   height={Math.ceil(methodsListHeight)}
                   itemCount={methodsCount}
-                  renderItem={({ index, style }) => (
-                    (filteredData.length > 0 && !isProcessing) || selectedMethodsCount === 0
-                      ? (
-                        <div
-                          tw="flex flex-col justify-center pl-6 pr-6 text-12"
-                          key={`${filteredData[index]?.name}${index}`}
-                          style={style as any}
-                          data-test="covered-methods-list:item"
-                        >
-                          <div className="flex items-center w-full h-20px">
-                            <div className="flex items-center w-full gap-4">
-                              <Icons.Function tw="h-4" />
-                              <div
-                                tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
-                                title={filteredData[index]?.name as string}
-                              >
-                                <Cells.Highlight text={filteredData[index]?.name} searchWords={[query]} />
-                              </div>
-                            </div>
-                            <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />
-                          </div>
+                  renderItem={({ index, style }) => {
+                    const ownerClass = (filteredData[index]?.ownerClass || "").split("/");
+                    const ownerClassName = ownerClass.pop() || "";
+                    const ownerClassPath = ownerClass.join("/");
+                    return (
+                      (filteredData.length > 0 && !isProcessing) || selectedMethodsCount === 0
+                        ? (
                           <div
-                            tw="max-w-280px ml-8 text-monochrome-default text-12 text-ellipsis"
-                            title={filteredData[index]?.ownerClass}
+                            tw="flex flex-col justify-center pl-6 pr-6 text-12"
+                            key={`${filteredData[index]?.name}${index}`}
+                            style={style as any}
+                            data-test="covered-methods-list:item"
                           >
-                            {filteredData[index]?.ownerClass}
+                            <div className="flex items-center w-full h-20px">
+                              <div className="flex items-center w-full gap-4">
+                                <Icons.Function tw="h-4" />
+                                <Link
+                                  to={addQueryParamsToPath({
+                                    searchField: "name",
+                                    searchValue: ownerClassPath,
+                                    ownerClassName,
+                                  })}
+                                  tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
+                                  title={filteredData[index]?.name as string}
+                                >
+                                  <Cells.Highlight text={filteredData[index]?.name} searchWords={[query]} />
+                                </Link>
+                              </div>
+                              <CoverageRateIcon tw="h-4" coverageRate={filteredData[index]?.coverageRate} />
+                            </div>
+                            <div
+                              tw="max-w-280px ml-8 text-monochrome-default text-12 text-ellipsis"
+                              title={filteredData[index]?.ownerClass}
+                            >
+                              {filteredData[index]?.ownerClass}
+                            </div>
                           </div>
-                        </div>
-                      )
-                      : (
-                        <div
-                          tw="flex flex-col justify-center pl-6 pr-6 text-12"
-                          key={index}
-                          style={style as any}
-                        >
-                          <div tw="flex space-x-2 animate-pulse">
-                            <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
-                            <div tw="flex-1 space-y-4 py-1">
-                              <div tw="space-y-2">
-                                <div tw="h-4 bg-monochrome-medium-tint rounded" />
-                                <div tw="h-3 bg-monochrome-medium-tint rounded" />
+                        )
+                        : (
+                          <div
+                            tw="flex flex-col justify-center pl-6 pr-6 text-12"
+                            key={index}
+                            style={style as any}
+                          >
+                            <div tw="flex space-x-2 animate-pulse">
+                              <div tw="rounded-full bg-monochrome-medium-tint h-6 w-6" />
+                              <div tw="flex-1 space-y-4 py-1">
+                                <div tw="space-y-2">
+                                  <div tw="h-4 bg-monochrome-medium-tint rounded" />
+                                  <div tw="h-3 bg-monochrome-medium-tint rounded" />
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      )
-                  )}
+                        )
+                    );
+                  }}
                 />
               )}
           </div>

@@ -43,6 +43,7 @@ export const CoveredMethodsByTestSidebar = () => {
   ) || {};
   const showSceleton = !Object.keys(summary).length;
   const closeModal = useCloseModal("/covered-methods-modal");
+
   return (
     <Modal isOpen onToggle={closeModal}>
       <div tw="flex flex-col h-full">

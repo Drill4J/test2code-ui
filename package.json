@@ -25,7 +25,6 @@
     "@babel/preset-react": "^7.12.7",
     "@babel/preset-typescript": "^7.12.7",
     "@babel/runtime": "^7.12.5",
-    "babel-plugin-styled-components": "1.13.3",
     "@drill4j/types-admin": "^1.0.1",
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
@@ -79,7 +78,8 @@
     "webpack-config-single-spa-react-ts": "^3.0.0",
     "webpack-config-single-spa-ts": "^3.0.0",
     "webpack-dev-server": "^4.0.0-beta.0",
-    "webpack-merge": "^5.4.0"
+    "webpack-merge": "^5.4.0",
+    "babel-plugin-styled-components": "1.13.3"
   },
   "dependencies": {
     "@babel/plugin-transform-react-jsx": "^7.14.3",
@@ -87,7 +87,7 @@
     "@drill4j/common-utils": "1.0.0",
     "@drill4j/send-notification-event": "1.0.0",
     "@drill4j/socket": "0.1.17",
-    "@drill4j/ui-kit": "^0.1.171",
+    "@drill4j/ui-kit": "0.1.171",
     "@types/react": "^17.0.1",
     "axios": "^0.21.1",
     "babel-plugin-macros": "^3.1.0",

@@ -19,7 +19,8 @@ import {
   capitalize, Cells, Icons, Stub, Table,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
-import { getModalPath } from "common";
+import { getModalPath, getPagePath } from "common";
+import queryString from "querystring";
 import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
@@ -32,9 +33,28 @@ export const RisksTable = ({ data, filteredCount }: Props) => {
     {
       Header: "Name",
       accessor: "name",
-      Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {} }: any) => (
-        <Cells.Compound cellName={value} cellAdditionalInfo={ownerClass} icon={<Icons.Function />} />
-      ),
+      Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {} }: any) => {
+        const ownerClassArray = ownerClass.split("/");
+        const ownerClassName = ownerClassArray.pop() || "";
+        const ownerClassPath = ownerClassArray.join("/");
+        return (
+          <Cells.Compound
+            cellName={(
+              <Link
+                to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({
+                  searchField: "name",
+                  searchValue: ownerClassPath,
+                  ownerClassName,
+                })}`}
+              >
+                {value}
+              </Link>
+            )}
+            cellAdditionalInfo={ownerClass}
+            icon={<Icons.Function />}
+          />
+        );
+      },
       width: "50%",
       textAlign: "left",
     },
