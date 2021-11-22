@@ -51,7 +51,8 @@ export const Agent = () => (
             <TableActionsProvider defaultState={{
               search: [],
               sort: [{ field: "coverage", order: "ASC" }],
-            }}
+              expandedRows: [],
+            } as any}
             >
               <RisksPage />
             </TableActionsProvider>

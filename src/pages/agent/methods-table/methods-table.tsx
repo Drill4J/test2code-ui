@@ -55,7 +55,8 @@ export const MethodsTable = ({
     };
   }, [search]);
 
-  const { searchField = "", searchValue = "" } = useQueryParams<{searchField?: string, searchValue?: string}>();
+  const { searchField = "", searchValue = "", ownerClassName = "" } = useQueryParams<{
+    searchField?: string; searchValue?: string; ownerClassName?: string}>();
   const searchState: Search[] = useMemo(() => ((searchField && searchValue) ? [{
     field: searchField,
     value: searchValue,
@@ -180,14 +181,23 @@ export const MethodsTable = ({
       useBuildVersion<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
-    const { rows, prepareRow } = useTable(
+    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === ownerClassName));
+    const strngifiedClasses = JSON.stringify(classes);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { rows, prepareRow, toggleRowExpanded } = useTable(
       {
         columns: useMemo(() => columns as any, []),
-        data: useMemo(() => classes, [JSON.stringify(classes)]),
+        data: useMemo(() => classes, [strngifiedClasses]),
         getSubRows: (row) => row.methods || [],
       },
       useExpanded,
     );
+    const defaultExpandedRow = rows.find((row) => row.original.id === defaultExpandedClass?.id);
+
+    useEffect(() => {
+      defaultExpandedRow?.id && toggleRowExpanded(defaultExpandedRow?.id);
+    }, [strngifiedClasses]);
 
     return (
       <>

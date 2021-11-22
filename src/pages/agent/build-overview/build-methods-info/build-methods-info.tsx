@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { ParentBuild, Search } from "@drill4j/types-admin";
+import { ParentBuild } from "@drill4j/types-admin";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import { useQueryParams } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
@@ -66,12 +66,7 @@ export const BuildMethodsInfo = () => {
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
 
-  const { searchField = "", searchValue = "" } = useQueryParams<{searchField?: string, searchValue?: string}>();
-  const searchState: Search[] = (searchField && searchValue) ? [{
-    field: searchField,
-    value: searchValue,
-    op: "CONTAINS",
-  }] : [];
+  const { searchValue = "", ownerClassName = "" } = useQueryParams<{ownerClassName?: string, searchValue?: string}>();
 
   return (
     <>
@@ -129,7 +124,7 @@ export const BuildMethodsInfo = () => {
           </div>
         )}
       </Info>
-      <TableActionsProvider>
+      <TableActionsProvider defaultState={{ sort: [], search: [], expandedRows: ownerClassName ? [searchValue] : [] } as any}>
         <MethodsTable
           topic="/build/coverage/packages"
           classesTopicPrefix="build"

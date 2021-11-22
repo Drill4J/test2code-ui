@@ -102,6 +102,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                     const ownerClass = (filteredData[index]?.ownerClass || "").split("/");
                     const ownerClassName = ownerClass.pop() || "";
                     const ownerClassPath = ownerClass.join("/");
+
                     return (
                       (filteredData.length > 0 && !isProcessing) || selectedMethodsCount === 0
                         ? (
