@@ -16,12 +16,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "@drill4j/ui-kit";
 import axios from "axios";
 
 import { Agent, Group } from "pages";
 import { SwitchBuildContext } from "contexts";
-import { Route } from "react-router";
+
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
 import { agentDashboardPath, groupDashboardPath } from "./router";

@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { matchPath, useLocation } from "@drill4j/ui-kit";
-import { groupDashboardPath, groupPluginPath } from "../router";
+import queryString from "querystring";
 
-export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {
-  const { pathname } = useLocation();
-  const { params: { groupId = "", pluginId = "" } = {} } = matchPath<{
-    groupId?: string; pluginId: string }>(pathname, { path: [groupPluginPath, groupDashboardPath] }) || {};
-  return { groupId, pluginId };
+export const removeQueryParams = (params: string[]) => {
+  const { pathname, search } = window.location;
+  const filteredSearchParams = Object.entries(queryString.parse(search.slice(1)))
+    .filter(([key]) => !params.includes(key)); // remove ? from serach
+  return `${pathname}?${queryString.stringify(Object.fromEntries(filteredSearchParams))}`;
 };

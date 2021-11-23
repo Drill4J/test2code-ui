@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from "react";
-import { Icons, Tab } from "@drill4j/ui-kit";
+import { Icons, Tab, useQueryParams } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { useQueryParams } from "@drill4j/common-hooks";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";

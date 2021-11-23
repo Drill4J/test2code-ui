@@ -15,8 +15,7 @@
  */
 import React from "react";
 import tw, { styled } from "twin.macro";
-import { useParams } from "react-router-dom";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+import { useParams, TableActionsProvider } from "@drill4j/ui-kit";
 
 import { BuildTestsCard } from "components";
 import { TestTypeSummary } from "types/test-type-summary";

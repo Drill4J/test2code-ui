@@ -17,8 +17,9 @@ import React, { useMemo, useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
   Icons, Dropdown, convertToSingleSpaces, Inputs, capitalize, Cells,
+  useElementSize,
 } from "@drill4j/ui-kit";
-import { useElementSize } from "@drill4j/common-hooks";
+
 import tw, { styled } from "twin.macro";
 import { useFilter } from "hooks";
 

@@ -16,10 +16,11 @@
 import React from "react";
 import {
   Icons, Legend, Stub, Table, useTableActionsState, Cells,
+  Link,
 } from "@drill4j/ui-kit";
 import { capitalize } from "@drill4j/common-utils";
 import { FilterList } from "@drill4j/types-admin";
-import { Link } from "react-router-dom";
+
 import "twin.macro";
 
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";

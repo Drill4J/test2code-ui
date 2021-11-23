@@ -15,23 +15,24 @@
  */
 import React, { useCallback, useEffect, useMemo } from "react";
 import {
-  Icons, Stub, Table, TableElements, useTableActionsState, Cells,
+  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
+  Link, useHistory,
+  useQueryParams,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
-import { Link, useHistory } from "react-router-dom";
+
 import { useExpanded, useTable } from "react-table";
 import "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
-import { useQueryParams } from "@drill4j/common-hooks";
+
 import { Search } from "@drill4j/types-admin/index";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
-import { addQueryParamsToPath } from "../../../utils";
 
 interface Props {
   topic: string;
@@ -51,7 +52,7 @@ export const MethodsTable = ({
     const [searchParams] = search;
     searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
     return () => {
-      push(addQueryParamsToPath({})); // clear
+      push(removeQueryParamsFromPath(["searchField", "searchValue", "ownerClassName"]));
     };
   }, [search]);
 

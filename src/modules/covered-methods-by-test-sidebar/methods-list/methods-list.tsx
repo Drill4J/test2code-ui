@@ -19,13 +19,14 @@ import {
   Cells,
   convertToSingleSpaces,
   Dropdown, Icons, Inputs, useElementSize,
+  Link,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion, useFilter } from "hooks";
-import { Link } from "react-router-dom";
+
 import { CoverageRateIcon } from "../coverage-rate-icon";
 import { addQueryParamsToPath } from "../../../utils";
 

@@ -16,8 +16,9 @@
 import React from "react";
 import {
   Icons, Stub, Table, useTableActionsState, Cells,
+  Link,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
+
 import "twin.macro";
 
 import { capitalize } from "@drill4j/common-utils";

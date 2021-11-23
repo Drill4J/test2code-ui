@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { Children, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { Link } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 interface Props {

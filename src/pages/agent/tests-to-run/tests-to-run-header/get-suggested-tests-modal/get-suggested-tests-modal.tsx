@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from "react";
-import { Button, Icons, Popup } from "@drill4j/ui-kit";
+import {
+  Button, Icons, Popup, useCloseModal,
+} from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
-import { useCloseModal } from "@drill4j/common-hooks";
 import { useAgentRouteParams } from "hooks";
 
 export const GetSuggestedTestsModal = () => {

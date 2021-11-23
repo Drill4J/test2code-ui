@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useTableActionsState } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
-import { useTableActionsState } from "@drill4j/ui-kit";
+
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { useBuildVersion } from "hooks";
 import { TestDetails } from "../../../tests-table";

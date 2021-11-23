@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import React from "react";
-import { useParams } from "react-router-dom";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+import { useParams, TableActionsProvider } from "@drill4j/ui-kit";
+
 import "twin.macro";
 
 import { BuildTestsCard } from "components";

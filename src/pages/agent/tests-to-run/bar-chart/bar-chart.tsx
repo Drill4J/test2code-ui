@@ -15,12 +15,12 @@
  */
 import React, { useEffect, useRef, useState } from "react";
 import { nanoid } from "nanoid";
-import { Typography, convertToPercentage } from "@drill4j/ui-kit";
+import { Typography, convertToPercentage, useElementSize } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { useBuildVersion } from "hooks";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
-import { useElementSize } from "@drill4j/common-hooks";
+
 import { Chart } from "./chart";
 
 interface Props {
