@@ -18,7 +18,7 @@ import React, {
 } from "react";
 import {
   Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
-  Link, useHistory, useQueryParams, Typography,
+  Link, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
@@ -125,11 +125,9 @@ export const MethodsTable = ({
             <Cells.Compound
               key={value}
               cellName={packageName === value ? (
-                <Typography.Highlighter
-                  highlightStyle={{ backgroundColor: "#FFE74C" }}
-                  searchWords={[value]}
-                  autoEscape
-                  textToHighlight={value}
+                <Cells.Highlight
+                  text={value}
+                  searchWords={[packageName]}
                 />
               ) : value}
               cellAdditionalInfo={row.original.decl}
@@ -207,7 +205,7 @@ export const MethodsTable = ({
     const defaultExpandedRow = rows.find((row) => row.original.id === defaultExpandedClass?.id);
 
     useEffect(() => {
-      defaultExpandedRow?.id && toggleRowExpanded(defaultExpandedRow?.id);
+      defaultExpandedRow?.id && toggleRowExpanded(defaultExpandedRow.id);
     }, [strngifiedClasses]);
 
     return (

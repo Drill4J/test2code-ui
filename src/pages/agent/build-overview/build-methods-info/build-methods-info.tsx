@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useMemo } from "react";
+import React from "react";
 import { ParentBuild } from "@drill4j/types-admin";
-import { TableActionsProvider, useQueryParams } from "@drill4j/ui-kit";
 
 import tw, { styled } from "twin.macro";
 

@@ -40,7 +40,7 @@ export const Agent = () => (
         />
         <Route
           path={getAgentRoutePath(routes.test2code)}
-          component={() => <BuildOverview />}
+          component={BuildOverview}
         />
         <Route
           path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
