@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import { ParentBuild } from "@drill4j/types-admin";
 import { TableActionsProvider, useQueryParams } from "@drill4j/ui-kit";
 
@@ -66,7 +66,13 @@ export const BuildMethodsInfo = () => {
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
 
-  const { searchValue = "", ownerClassName = "" } = useQueryParams<{ownerClassName?: string, searchValue?: string}>();
+  const { ownerClass = "" } = useQueryParams<{ownerClass?: string}>();
+
+  const defaultState = useMemo(() => ({
+    sort: [],
+    search: [],
+    expandedRows: ownerClass ? [ownerClass.slice(0, ownerClass.lastIndexOf("/"))] : [],
+  }), [ownerClass]);
 
   return (
     <>
@@ -124,7 +130,7 @@ export const BuildMethodsInfo = () => {
           </div>
         )}
       </Info>
-      <TableActionsProvider defaultState={{ sort: [], search: [], expandedRows: ownerClassName ? [searchValue] : [] } as any}>
+      <TableActionsProvider defaultState={defaultState as any}>
         <MethodsTable
           topic="/build/coverage/packages"
           classesTopicPrefix="build"

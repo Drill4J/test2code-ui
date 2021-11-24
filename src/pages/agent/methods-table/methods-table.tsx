@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, {
+  useCallback, useEffect, useMemo,
+} from "react";
 import {
   Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
-  Link, useHistory,
-  useQueryParams,
+  Link, useHistory, useQueryParams, Typography,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
@@ -52,17 +53,18 @@ export const MethodsTable = ({
     const [searchParams] = search;
     searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
     return () => {
-      push(removeQueryParamsFromPath(["searchField", "searchValue", "ownerClassName"]));
+      push(removeQueryParamsFromPath(["ownerClass", "packageName", "searchField", "searchValue"]));
     };
   }, [search]);
 
-  const { searchField = "", searchValue = "", ownerClassName = "" } = useQueryParams<{
-    searchField?: string; searchValue?: string; ownerClassName?: string}>();
-  const searchState: Search[] = useMemo(() => ((searchField && searchValue) ? [{
-    field: searchField,
+  const { searchValue = "", ownerClass = "", packageName = "" } = useQueryParams<{
+    ownerClass?: string; packageName?: string; searchValue?: string; }>();
+  const ownerClassName = ownerClass.slice(ownerClass.lastIndexOf("/") + 1);
+  const searchState: Search[] = useMemo(() => (searchValue ? [{
+    field: "name",
     value: searchValue,
     op: "CONTAINS",
-  }] : []), [searchField, searchValue]);
+  }] : []), [searchValue]);
 
   const {
     items: coverageByPackages = [],
@@ -121,7 +123,14 @@ export const MethodsTable = ({
           <div tw="pl-13">
             <Cells.Compound
               key={value}
-              cellName={value}
+              cellName={packageName === value ? (
+                <Typography.Highlighter
+                  highlightStyle={{ backgroundColor: "#FFE74C" }}
+                  searchWords={[value]}
+                  autoEscape
+                  textToHighlight={value}
+                />
+              ) : value}
               cellAdditionalInfo={row.original.decl}
               icon={<Icons.Function />}
             />
@@ -206,7 +215,11 @@ export const MethodsTable = ({
           prepareRow(row);
           const rowProps = row.getRowProps();
           return (
-            <TableElements.TR {...rowProps} isExpanded={row.isExpanded}>
+            <TableElements.TR
+              {...rowProps}
+              isExpanded={row.isExpanded}
+              id={row?.original?.name}
+            >
               {row.cells.map((cell: any) => (
                 <td
                   {...cell.getCellProps()}

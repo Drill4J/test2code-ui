@@ -15,8 +15,7 @@
  */
 import React from "react";
 import {
-  Modal, useCloseModal, matchPath, useLocation,
-  useQueryParams,
+  Modal, matchPath, useLocation, useQueryParams, useCloseModal,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
