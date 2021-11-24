@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 import React from "react";
-import { Route, Switch, Redirect } from "react-router";
+import {
+  Route, Switch, Redirect, TableActionsProvider,
+} from "@drill4j/ui-kit";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 
 import { getPagePath, routes } from "common";
 import { Modals } from "components";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
@@ -51,7 +53,8 @@ export const Agent = () => (
             <TableActionsProvider defaultState={{
               search: [],
               sort: [{ field: "coverage", order: "ASC" }],
-            }}
+              expandedRows: [],
+            } as any}
             >
               <RisksPage />
             </TableActionsProvider>

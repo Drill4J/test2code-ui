@@ -16,10 +16,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {
-  Button, Popup, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required,
+  Button, Popup, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required, useCloseModal,
+  Link,
 } from "@drill4j/ui-kit";
-import { useCloseModal } from "@drill4j/common-hooks";
-import { Link } from "react-router-dom";
+
 import tw, { styled } from "twin.macro";
 
 import { useActiveSessions, useGroupData, useGroupRouteParams } from "hooks";
@@ -129,20 +129,20 @@ export const FinishAllScopesModal = () => {
                 <label tw="flex items-center gap-x-2 my-2 text-blue-default">
                   <Field
                     type="checkbox"
-                    name="hasNewName"
-                  >
-                    {({ field }: any) => (<Checkbox field={field} />)}
-                  </Field>
-                  <span tw="text-monochrome-black">Rename all scopes</span>
-                </label>
-                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
-                  <Field
-                    type="checkbox"
                     name="ignoreScope"
                   >
                     {({ field }: any) => (<Checkbox field={field} />)}
                   </Field>
                   <span tw="text-monochrome-black">Ignore all scopes in build stats</span>
+                </label>
+                <label tw="flex items-center gap-x-2 my-2 text-blue-default">
+                  <Field
+                    type="checkbox"
+                    name="hasNewName"
+                  >
+                    {({ field }: any) => (<Checkbox field={field} />)}
+                  </Field>
+                  <span tw="text-monochrome-black">Rename all scopes</span>
                 </label>
                 <Field
                   name="scopesName"

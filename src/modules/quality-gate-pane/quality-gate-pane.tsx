@@ -16,10 +16,10 @@
 import React, { useState } from "react";
 import {
   Button, Modal, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
-  Form, Formik,
+  Form, Formik, useCloseModal,
+  useGeneralAlertMessage,
 } from "@drill4j/ui-kit";
 
-import { useCloseModal, useGeneralAlertMessage } from "@drill4j/common-hooks";
 import tw, { styled } from "twin.macro";
 
 import {

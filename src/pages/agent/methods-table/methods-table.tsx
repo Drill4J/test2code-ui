@@ -13,19 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useMemo } from "react";
+import React, {
+  useCallback, useEffect, useMemo,
+} from "react";
 import {
-  Icons, Stub, Table, TableElements, useTableActionsState, Cells,
+  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
+  Link, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
-import { Link } from "react-router-dom";
+
 import { useExpanded, useTable } from "react-table";
 import "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
+
+import { Search } from "@drill4j/types-admin/index";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
@@ -42,10 +47,29 @@ export const MethodsTable = ({
   showCoverageIcon,
 }: Props) => {
   const { search, sort } = useTableActionsState();
+  const { push } = useHistory();
+
+  useEffect(() => {
+    const [searchParams] = search;
+    searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
+    return () => {
+      push(removeQueryParamsFromPath(["ownerClass", "packageName", "searchField", "searchValue"]));
+    };
+  }, [search]);
+
+  const { searchValue = "", ownerClass = "", packageName = "" } = useQueryParams<{
+    ownerClass?: string; packageName?: string; searchValue?: string; }>();
+  const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
+  const ownerClassName = ownerClass.slice(ownerClass.lastIndexOf("/") + 1);
+  const searchState: Search[] = useMemo(() => (searchValue ? [{
+    field: "name",
+    value: searchValue,
+    op: "CONTAINS",
+  }] : []), [searchValue]);
+
   const {
     items: coverageByPackages = [],
-    filteredCount = 0,
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: search, orderBy: sort, output: "LIST" }) ||
+  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: searchState, orderBy: sort, output: "LIST" }) ||
   {};
 
   const columns = [
@@ -79,6 +103,7 @@ export const MethodsTable = ({
     {
       Header: "Name",
       accessor: "name",
+      filterable: true,
       Cell: ({ value = "" }: any) => (
         <NameCell
           icon={<Icons.Package />}
@@ -99,7 +124,12 @@ export const MethodsTable = ({
           <div tw="pl-13">
             <Cells.Compound
               key={value}
-              cellName={value}
+              cellName={packageName === value ? (
+                <Cells.Highlight
+                  text={value}
+                  searchWords={[packageName]}
+                />
+              ) : value}
               cellAdditionalInfo={row.original.decl}
               icon={<Icons.Function />}
             />
@@ -160,14 +190,23 @@ export const MethodsTable = ({
       useBuildVersion<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
-    const { rows, prepareRow } = useTable(
+    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === ownerClassName));
+    const strngifiedClasses = JSON.stringify(classes);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    const { rows, prepareRow, toggleRowExpanded } = useTable(
       {
         columns: useMemo(() => columns as any, []),
-        data: useMemo(() => classes, [JSON.stringify(classes)]),
+        data: useMemo(() => classes, [strngifiedClasses]),
         getSubRows: (row) => row.methods || [],
       },
       useExpanded,
     );
+    const defaultExpandedRow = rows.find((row) => row.original.id === defaultExpandedClass?.id);
+
+    useEffect(() => {
+      defaultExpandedRow?.id && toggleRowExpanded(defaultExpandedRow.id);
+    }, [strngifiedClasses]);
 
     return (
       <>
@@ -175,7 +214,11 @@ export const MethodsTable = ({
           prepareRow(row);
           const rowProps = row.getRowProps();
           return (
-            <TableElements.TR {...rowProps} isExpanded={row.isExpanded}>
+            <TableElements.TR
+              {...rowProps}
+              isExpanded={row.isExpanded}
+              id={row?.original?.name}
+            >
               {row.cells.map((cell: any) => (
                 <td
                   {...cell.getCellProps()}
@@ -204,24 +247,22 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col" data-test="methods-table">
+    <div tw="flex flex-col pt-8" data-test="methods-table">
+      <div tw="mb-3 text-monochrome-default text-14 leading-24 uppercase">Application Packages</div>
       <Table
+        defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
         data={coverageByPackages}
-        filteredCount={filteredCount}
-        placeholder="Search packages by name"
         renderRowSubComponent={renderRowSubComponent}
         columnsDependency={columnsDependency}
-        withSearch
-        stub={
-          coverageByPackages.length === 0 && (
-            <Stub
-              icon={<Icons.Package height={104} width={107} />}
-              title="No results found"
-              message="Try adjusting your search or filter to find what you are looking for."
-            />
-          )
-        }
+        isDefaultExpanded={(original: any) => original?.name === ownerClassPath}
+        stub={(
+          <Stub
+            icon={<Icons.Package height={104} width={107} />}
+            title="No results found"
+            message="Try adjusting your search or filter to find what you are looking for."
+          />
+        )}
       />
     </div>
   );

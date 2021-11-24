@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 import React, { memo } from "react";
-import { Link } from "react-router-dom";
-import { Icons, Tooltip } from "@drill4j/ui-kit";
+import { Link, Icons, Tooltip } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 interface Props {

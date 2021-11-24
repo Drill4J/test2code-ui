@@ -13,7 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export interface TestStats {
-  duration?: number;
-  status?: "PASSED" | "FAILED" | "ERROR" | "SKIPPED";
-}
+export { transformTests } from "./transform-tests";

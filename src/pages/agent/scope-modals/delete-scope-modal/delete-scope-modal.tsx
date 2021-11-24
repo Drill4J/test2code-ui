@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Popup, GeneralAlerts, Spinner,
+  useHistory, Link,
+  Button, Popup, GeneralAlerts, Spinner, useCloseModal,
+  useQueryParams,
 } from "@drill4j/ui-kit";
+
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
-import { useCloseModal, useQueryParams } from "@drill4j/common-hooks";
+
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
@@ -36,7 +38,7 @@ export const DeleteScopeModal = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
-  const closeModal = useCloseModal("/delete-scope-modal");
+  const closeModal = useCloseModal("/delete-scope-modal", ["scopeId"]);
 
   return (
     <Popup

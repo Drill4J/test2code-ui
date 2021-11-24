@@ -15,8 +15,7 @@
  */
 import React from "react";
 import tw, { styled } from "twin.macro";
-import { useParams } from "react-router-dom";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+import { useParams, TableActionsProvider } from "@drill4j/ui-kit";
 
 import { BuildTestsCard } from "components";
 import { TestTypeSummary } from "types/test-type-summary";
@@ -41,11 +40,10 @@ const ActiveBuildTestsBar = styled.div<{isShowActiveScopeInfo?: boolean}>`
 `;
 
 const Cards = styled.div<{isShowActiveScopeInfo?: boolean}>`
-  ${tw`grid gap-2 gap-y-8 col-start-1 lg:grid-cols-2`}
-  ${({ isShowActiveScopeInfo }) => !isShowActiveScopeInfo && tw`col-span-2 grid-cols-2`}
-
+  ${tw`flex gap-2 flex-col lg:flex-row col-start-1 lg:grid-cols-2`}
+  ${({ isShowActiveScopeInfo }) => !isShowActiveScopeInfo && tw`col-span-2`}
   & > div {
-    ${({ isShowActiveScopeInfo }) => isShowActiveScopeInfo && tw`h-full`}
+    ${({ isShowActiveScopeInfo }) => isShowActiveScopeInfo && tw`lg:h-full`}
   }
 `;
 
@@ -64,8 +62,7 @@ export const BuildTestsInfo = () => {
           <ActiveBuildTestsInfo testsInfo={testsInfo} />
         </ActiveBuildTestsBar>
         <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
-          <BuildTestsCard label="AUTO" testTypeSummary={testsInfo.AUTO} />
-          <BuildTestsCard label="MANUAL" testTypeSummary={testsInfo.MANUAL} />
+          {testsByType.map(({ type, summary }) => <BuildTestsCard label={type} testTypeSummary={summary} />)}
         </Cards>
         {isShowActiveScopeInfo && (
           <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">

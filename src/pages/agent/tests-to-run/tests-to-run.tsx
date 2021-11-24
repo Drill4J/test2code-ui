@@ -16,10 +16,11 @@
 import React from "react";
 import {
   Icons, Legend, Stub, Table, useTableActionsState, Cells,
+  Link,
 } from "@drill4j/ui-kit";
 import { capitalize } from "@drill4j/common-utils";
 import { FilterList } from "@drill4j/types-admin";
-import { Link } from "react-router-dom";
+
 import "twin.macro";
 
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";
@@ -27,6 +28,7 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
+import { transformTests } from "utils";
 import { useBuildVersion, useAgent, useAgentRouteParams } from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
@@ -41,7 +43,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
     items: testsToRun = [],
-    filteredCount = 0,
     totalCount = 0,
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
@@ -97,76 +98,71 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         </span>
         <div>
           <Table
-            isDefaulToggleSortBy
-            filteredCount={filteredCount}
-            placeholder="Search tests by name"
-            data={testsToRun}
-            withSearch
-            columns={[{
-              Header: "Name",
-              accessor: "name",
-              Cell: ({ value }: any) => (
-                <Cells.Compound cellName={value} cellAdditionalInfo="&ndash;" icon={<Icons.Test height={16} width={16} />} />
-              ),
-              textAlign: "left",
-              width: "50%",
-            },
-            {
-              Header: "Test type",
-              accessor: "type",
-              Cell: ({ value }: any) => (
-                <>
-                  {capitalize(value)}
-                </>
-              ),
-              textAlign: "left",
-              width: "10%",
-            },
-            {
-              Header: "State",
-              accessor: "details.result",
-              Cell: ({ row: { original: { toRun } } }: any) => (
-                <span tw="leading-64">
-                  {toRun
-                    ? "To run"
-                    : <span tw="font-bold text-green-default">Done</span>}
-                </span>
-              ),
-              textAlign: "left",
-              width: "10%",
-            },
-            {
-              Header: "Coverage, %",
-              accessor: "coverage.percentage",
-              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
-              width: "10%",
-            },
-            {
-              Header: "Methods covered",
-              accessor: "coverage.methodCount.covered",
-              Cell: ({
-                value,
-                row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
-              }: any) => (
-                toRun ? null : (
-                  <Cells.Clickable
-                    tw="inline"
-                    disabled={!value}
-                  >
-                    <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-                      {value}
-                    </Link>
-                  </Cells.Clickable>
-                )
-              ),
-              width: "10%",
-            },
-            {
-              Header: "Duration",
-              accessor: "details.duration",
-              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-              width: "10%",
-            }]}
+            data={transformTests(testsToRun)}
+            columns={[
+              {
+                Header: "Name",
+                accessor: "overview.details.name",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Path",
+                accessor: "overview.details.path",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Test type",
+                accessor: "type",
+                Cell: ({ value }: any) => (
+                  <>
+                    {capitalize(value)}
+                  </>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "State",
+                accessor: "overview.result",
+                Cell: ({ row: { original: { toRun } } }: any) => (
+                  <span tw="leading-64">
+                    {toRun
+                      ? "To run"
+                      : <span tw="font-bold text-green-default">Done</span>}
+                  </span>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "Coverage, %",
+                accessor: "coverage.percentage",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+              },
+              {
+                Header: "Methods covered",
+                accessor: "coverage.methodCount.covered",
+                Cell: ({
+                  value,
+                  row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
+                }: any) => (
+                  toRun ? null : (
+                    <Cells.Clickable
+                      tw="inline"
+                      disabled={!value}
+                    >
+                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+                        {value}
+                      </Link>
+                    </Cells.Clickable>
+                  )
+                ),
+              },
+              {
+                Header: "Duration",
+                accessor: "overview.duration",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+              }]}
           />
         </div>
       </div>

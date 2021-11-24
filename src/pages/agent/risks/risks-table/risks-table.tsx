@@ -17,9 +17,12 @@ import React from "react";
 import { Risk } from "types";
 import {
   capitalize, Cells, Icons, Stub, Table,
+  Link,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
-import { getModalPath } from "common";
+import "twin.macro";
+
+import { getModalPath, getPagePath } from "common";
+import queryString from "querystring";
 import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
@@ -27,13 +30,24 @@ interface Props {
   filteredCount: number;
 }
 
-export const RisksTable = ({ data, filteredCount }: Props) => {
+export const RisksTable = ({ data }: Props) => {
   const columns = [
     {
       Header: "Name",
       accessor: "name",
       Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {} }: any) => (
-        <Cells.Compound cellName={value} cellAdditionalInfo={ownerClass} icon={<Icons.Function />} />
+        <Cells.Compound
+          cellName={(
+            <Link
+              tw="link"
+              to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
+            >
+              {value}
+            </Link>
+          )}
+          cellAdditionalInfo={ownerClass}
+          icon={<Icons.Function />}
+        />
       ),
       width: "50%",
       textAlign: "left",
@@ -73,18 +87,13 @@ export const RisksTable = ({ data, filteredCount }: Props) => {
     <Table
       data={data}
       columns={columns}
-      withSearch
-      filteredCount={filteredCount}
-      placeholder="Search methods by name"
-      stub={
-        data.length === 0 && (
-          <Stub
-            icon={<Icons.Package height={104} width={107} />}
-            title="No results found"
-            message="Try adjusting your search or filter to find what you are looking for."
-          />
-        )
-      }
+      stub={(
+        <Stub
+          icon={<Icons.Package height={104} width={107} />}
+          title="No results found"
+          message="Try adjusting your search or filter to find what you are looking for."
+        />
+      )}
     />
   );
 };

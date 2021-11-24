@@ -15,13 +15,12 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Popup, Checkbox, Spinner,
+  Button, Popup, Checkbox, Spinner, useCloseModal,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
-import { useCloseModal } from "@drill4j/common-hooks";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { toggleBaseline } from "../api";
 

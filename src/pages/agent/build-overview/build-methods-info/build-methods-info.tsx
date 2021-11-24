@@ -15,7 +15,7 @@
  */
 import React from "react";
 import { ParentBuild } from "@drill4j/types-admin";
-import { TableActionsProvider } from "@drill4j/ui-kit";
+
 import tw, { styled } from "twin.macro";
 
 import { BuildMethodsCard } from "components";
@@ -121,13 +121,11 @@ export const BuildMethodsInfo = () => {
           </div>
         )}
       </Info>
-      <TableActionsProvider>
-        <MethodsTable
-          topic="/build/coverage/packages"
-          classesTopicPrefix="build"
-          showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
-        />
-      </TableActionsProvider>
+      <MethodsTable
+        topic="/build/coverage/packages"
+        classesTopicPrefix="build"
+        showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
+      />
     </>
   );
 };

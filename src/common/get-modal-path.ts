@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import * as queryString from "querystring";
+import { addQueryParamsToPath } from "@drill4j/ui-kit";
 import { agentModalsNames } from "../components";
 
 interface Routes {
@@ -50,7 +51,5 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 }
 
 export const getModalPath = <AppPages extends Routes,
-  PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string => {
-  const { pathname } = window.location;
-  return `${pathname}?${queryString.stringify({ activeModal: modalsRoutes[name], ...params } as queryString.ParsedUrlQueryInput)}`;
-};
+  PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>)
+: string => addQueryParamsToPath({ activeModal: modalsRoutes[name], ...params });

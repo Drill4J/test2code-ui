@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 import React from "react";
-import { Modal } from "@drill4j/ui-kit";
-import { useQueryParams, useCloseModal } from "@drill4j/common-hooks";
-import { matchPath, useLocation } from "react-router-dom";
+import {
+  Modal, matchPath, useLocation, useQueryParams, useCloseModal,
+} from "@drill4j/ui-kit";
+
 import "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
@@ -39,7 +40,8 @@ export const AssociatedTestModal = () => {
   } = associatedTests;
   const testsMap = tests.reduce((acc, { type = "", name = "" }) =>
     ({ ...acc, [type]: acc[type] ? [...acc[type], name] : [name] }), {} as { [testType: string]: string[] });
-  const closeModal = useCloseModal("/associated-tests-modal");
+  const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
+
   return (
     <Modal isOpen onToggle={closeModal}>
       <div tw="flex flex-col h-full">
@@ -61,7 +63,7 @@ export const AssociatedTestModal = () => {
           methodName={methodName}
           treeLevel={Number(params?.treeLevel)}
         />
-        <TestsList associatedTests={{ testsMap, assocTestsCount: tests.length }} />
+        <TestsList associatedTests={testsMap} testsCount={tests.length} />
       </div>
     </Modal>
   );

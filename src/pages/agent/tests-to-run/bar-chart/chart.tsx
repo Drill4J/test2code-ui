@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import React from "react";
-import { Tooltip } from "@drill4j/ui-kit";
-import { useIntersection } from "@drill4j/common-hooks";
+import { Tooltip, useIntersection } from "@drill4j/ui-kit";
+
 import { getDuration, percentFormatter } from "@drill4j/common-utils";
 import { nanoid } from "nanoid";
 import tw, { styled } from "twin.macro";

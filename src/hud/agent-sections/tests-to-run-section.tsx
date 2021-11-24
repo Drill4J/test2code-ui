@@ -16,46 +16,37 @@
 import React from "react";
 import { Tooltip } from "@drill4j/ui-kit";
 
-import { SingleBar, DashboardSection, SectionTooltip } from "components";
+import { SingleBar, DashboardSection } from "components";
 import { capitalize, convertToPercentage } from "@drill4j/common-utils";
-import { TESTS_TO_RUN_TYPES_COLOR } from "common/constants";
-import { BuildSummary } from "types/build-summary";
-import { TestTypes } from "types/test-types";
-import { useBuildVersion } from "hooks";
+import { SectionTooltip, TestType } from "./section-tooltip";
 
-export const TestsToRunSection = () => {
-  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary") || {};
-  const tooltipData = {
-    auto: {
-      count: testsToRunByType?.AUTO,
-      color: TESTS_TO_RUN_TYPES_COLOR.AUTO,
-    },
-    manual: {
-      count: testsToRunByType?.MANUAL,
-      color: TESTS_TO_RUN_TYPES_COLOR.MANUAL,
-    },
-  };
+interface Props {
+  testsColors: Record<string, string>;
+  data: TestType[];
+  testsToRunCount?: number;
+}
 
-  return (
-    <DashboardSection
-      label="Tests to run"
-      info={count}
-      graph={(
-        <Tooltip message={<SectionTooltip data={tooltipData} hideValue />}>
-          <div className="flex items-center w-full">
-            {Object.keys(TESTS_TO_RUN_TYPES_COLOR).map((testType) => (
-              <SingleBar
-                key={testType}
-                width={64}
-                height={128}
-                color={TESTS_TO_RUN_TYPES_COLOR[testType as TestTypes]}
-                percent={convertToPercentage(testsToRunByType[testType as TestTypes], count)}
-                icon={capitalize(testType)}
-              />
-            ))}
-          </div>
-        </Tooltip>
-      )}
-    />
-  );
-};
+export const TestsToRunSection = ({ testsColors, data, testsToRunCount = 0 }: Props) => (
+  <DashboardSection
+    label="Tests to run"
+    info={testsToRunCount}
+    graph={(
+      <Tooltip message={<SectionTooltip data={data} hideValue testsColors={testsColors} />}>
+        <div className="flex items-center w-full">
+          {data.map(({
+            testCount = 0, type = "",
+          }) => (
+            <SingleBar
+              key={type}
+              width={64}
+              height={128}
+              color={testsColors[type]}
+              percent={convertToPercentage(testCount, testsToRunCount)}
+              icon={capitalize(type)}
+            />
+          ))}
+        </div>
+      </Tooltip>
+    )}
+  />
+);

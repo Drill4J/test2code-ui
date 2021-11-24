@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 import React, { useRef } from "react";
-import { Legend, Tooltip } from "@drill4j/ui-kit";
+import {
+  Legend, Tooltip, useParams, useElementSize,
+} from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
-import { useElementSize } from "@drill4j/common-hooks";
-import { useParams } from "react-router-dom";
+
 import tw, { styled } from "twin.macro";
 
 import { DATA_VISUALIZATION_COLORS } from "common/constants";

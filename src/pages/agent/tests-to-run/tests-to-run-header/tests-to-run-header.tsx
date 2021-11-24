@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import React from "react";
-import { Button, Typography } from "@drill4j/ui-kit";
+import { Button, Typography, useHistory } from "@drill4j/ui-kit";
 import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/common-utils";
-import { useHistory } from "react-router-dom";
+
 import tw, { styled } from "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";

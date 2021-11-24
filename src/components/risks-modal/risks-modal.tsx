@@ -16,10 +16,11 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Icons, Modal, Dropdown,
+  Icons, Modal, Dropdown, useQueryParams,
+  useCloseModal, useElementSize,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
-import { useQueryParams, useCloseModal, useElementSize } from "@drill4j/common-hooks";
+
 import { useBuildVersion } from "hooks";
 import { Risk } from "types";
 
@@ -51,7 +52,7 @@ export const RisksModal = () => {
   };
 
   return (
-    <Modal isOpen onToggle={useCloseModal("/risks-modal")}>
+    <Modal isOpen onToggle={useCloseModal("/risks-modal", ["filter"])}>
       <div className="flex flex-col h-full">
         <Header>
           <Icons.Test height={20} width={18} viewBox="0 0 18 20" />

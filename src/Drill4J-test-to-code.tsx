@@ -16,15 +16,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route } from "@drill4j/ui-kit";
 import axios from "axios";
 
 import { Agent, Group } from "pages";
 import { SwitchBuildContext } from "contexts";
-import { Route } from "react-router";
+
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
-import { groupDashboardPath } from "./router";
+import { agentDashboardPath, groupDashboardPath } from "./router";
 import { routes } from "./common";
 import pkj from "../package.json";
 
@@ -90,7 +90,13 @@ export const AgentPlugin = {
 export const AgentHUDLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: Test2CodeAgentHUD,
+  rootComponent: (props) => (
+    <BrowserRouter>
+      <Route path={agentDashboardPath}>
+        <Test2CodeAgentHUD {...props} />
+      </Route>
+    </BrowserRouter>
+  ),
   errorBoundary: ErrorBoundary,
 });
 
