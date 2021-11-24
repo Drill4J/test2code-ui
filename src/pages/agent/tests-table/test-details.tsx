@@ -26,6 +26,7 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 import { AGENT_STATUS } from "common/constants";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { useAgent, useAgentRouteParams } from "hooks";
+import { transformTests } from "utils";
 import { getModalPath } from "../../../common";
 
 interface Props {
@@ -41,42 +42,13 @@ export const TestDetails = ({
   const { search } = useTableActionsState();
   const [searchQuery] = search;
 
-  const concatPath = (engine?: string, path?: string) => {
-    if (!engine && !path) return "";
-    if (!engine) return path;
-
-    return `${engine}.${path}`;
-  };
-
-  const concatName = (name: string, classParams?: string, methodParams?: string) => {
-    if (name && classParams && methodParams) return `${name}.${classParams}.${methodParams}`;
-    if (name && classParams) return `${name}.${classParams}`;
-    if (name && methodParams) return `${name}.${methodParams}`;
-
-    return name;
-  };
-  const testTransform = () => tests.map((test) =>
-    ({
-      ...test,
-      overview: {
-        ...test.overview,
-        details: {
-          ...test.overview.details,
-          name: concatName(
-            test.overview.details?.testName || test.name,
-            test.overview.details?.params?.classParams, test.overview.details?.params?.methodParams,
-          ),
-          path: concatPath(test.overview.details?.engine, test.overview.details?.path),
-        },
-      },
-    }));
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
       <Table
         isDefaulToggleSortBy
         filteredCount={filteredCount}
         placeholder="Search tests by name"
-        data={testTransform()}
+        data={transformTests(tests)}
         columns={[
           {
             Header: "Name",

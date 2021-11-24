@@ -27,6 +27,7 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
+import { transformTests } from "utils";
 import { useBuildVersion, useAgent, useAgentRouteParams } from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
@@ -55,36 +56,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { AUTO } = previousBuildTests
     .reduce((test, testType) => ({ ...test, [testType.type]: testType }), {}) as TestsInfo;
   const previousBuildAutoTestsCount = AUTO?.summary?.testCount || 0;
-
-  const concatPath = (engine?: string, path?: string) => {
-    if (!engine && !path) return "";
-    if (!engine) return path;
-
-    return `${engine}.${path}`;
-  };
-
-  const concatName = (name: string, classParams?: string, methodParams?: string) => {
-    if (name && classParams && methodParams) return `${name}.${classParams}.${methodParams}`;
-    if (name && classParams) return `${name}.${classParams}`;
-    if (name && methodParams) return `${name}.${methodParams}`;
-
-    return name;
-  };
-  const testTransform = () => testsToRun.map((test) =>
-    ({
-      ...test,
-      overview: {
-        ...test.overview,
-        details: {
-          ...test.overview.details,
-          name: concatName(
-            test.overview.details?.testName || test.name,
-            test.overview.details?.params?.classParams, test.overview.details?.params?.methodParams,
-          ),
-          path: concatPath(test.overview.details?.engine, test.overview.details?.path),
-        },
-      },
-    }));
 
   return (
     <div tw="flex flex-col gap-4">
@@ -130,7 +101,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
             isDefaulToggleSortBy
             filteredCount={filteredCount}
             placeholder="Search tests by name"
-            data={testTransform()}
+            data={transformTests(testsToRun)}
             columns={[
               {
                 Header: "Name",
