@@ -252,7 +252,7 @@ export const MethodsTable = ({
     <div tw="flex flex-col pt-8">
       <div tw="mb-3 text-monochrome-default text-14 leading-24 uppercase">Application Packages</div>
       <Table
-        defaultFilters={[{ id: "Name", value: "mod" }]}
+        defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
         data={coverageByPackages}
         renderRowSubComponent={renderRowSubComponent}
