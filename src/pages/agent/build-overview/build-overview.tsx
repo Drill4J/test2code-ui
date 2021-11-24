@@ -27,13 +27,13 @@ const TabIconWrapper = styled.div`
 
 export const BuildOverview = () => {
   const [activeTab, setActiveTab] = useState("methods");
-  const { searchField, searchValue } = useQueryParams<{searchField?: string, searchValue?: string}>();
+  const { ownerClass, packageName } = useQueryParams<{ownerClass?: string, packageName?: string}>();
 
   useEffect(() => {
-    if (searchField && searchValue) {
+    if (ownerClass && packageName) {
       setActiveTab("methods");
     }
-  }, [searchField, searchValue]);
+  }, [ownerClass, packageName]);
 
   return (
     <>

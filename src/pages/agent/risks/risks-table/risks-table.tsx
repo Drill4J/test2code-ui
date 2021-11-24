@@ -19,6 +19,7 @@ import {
   capitalize, Cells, Icons, Stub, Table,
   Link,
 } from "@drill4j/ui-kit";
+import "twin.macro";
 
 import { getModalPath, getPagePath } from "common";
 import queryString from "querystring";
@@ -29,7 +30,7 @@ interface Props {
   filteredCount: number;
 }
 
-export const RisksTable = ({ data, filteredCount }: Props) => {
+export const RisksTable = ({ data }: Props) => {
   const columns = [
     {
       Header: "Name",
@@ -38,6 +39,7 @@ export const RisksTable = ({ data, filteredCount }: Props) => {
         <Cells.Compound
           cellName={(
             <Link
+              tw="link"
               to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
             >
               {value}
@@ -85,9 +87,6 @@ export const RisksTable = ({ data, filteredCount }: Props) => {
     <Table
       data={data}
       columns={columns}
-      withSearch
-      filteredCount={filteredCount}
-      placeholder="Search methods by name"
       stub={(
         <Stub
           icon={<Icons.Package height={104} width={107} />}

@@ -36,7 +36,7 @@ interface Props {
 }
 
 export const TestDetails = ({
-  tests: { items: tests = [], filteredCount = 0 },
+  tests: { items: tests = [] },
 }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { status } = useAgent(agentId);
@@ -46,9 +46,6 @@ export const TestDetails = ({
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
       <Table
-        isDefaulToggleSortBy
-        filteredCount={filteredCount}
-        placeholder="Search tests by name"
         data={transformTests(tests)}
         columns={[
           {

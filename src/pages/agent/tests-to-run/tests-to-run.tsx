@@ -43,7 +43,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
     items: testsToRun = [],
-    filteredCount = 0,
     totalCount = 0,
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
@@ -99,9 +98,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         </span>
         <div>
           <Table
-            isDefaulToggleSortBy
-            filteredCount={filteredCount}
-            placeholder="Search tests by name"
             data={transformTests(testsToRun)}
             columns={[
               {

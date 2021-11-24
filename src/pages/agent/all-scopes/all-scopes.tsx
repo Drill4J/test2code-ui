@@ -79,8 +79,6 @@ export const AllScopes = () => {
       {scopesData.length > 0
         ? (
           <Table
-            withSearch={false}
-            isDefaulToggleSortBy
             data={scopesData}
             columnsDependency={[isActiveBuildVersion, activeScope?.coverage.percentage, activeScopeTestsType.length, byTestType.length]}
             columns={[

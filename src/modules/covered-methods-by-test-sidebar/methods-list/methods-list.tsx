@@ -19,7 +19,7 @@ import {
   Cells,
   convertToSingleSpaces,
   Dropdown, Icons, Inputs, useElementSize,
-  Link, addQueryParamsToPath,
+  Link, useLocation,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
@@ -27,6 +27,7 @@ import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion, useFilter } from "hooks";
 
+import queryString from "querystring";
 import { CoverageRateIcon } from "../coverage-rate-icon";
 
 interface Props {
@@ -35,6 +36,7 @@ interface Props {
 }
 
 export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
+  const { pathname } = useLocation();
   const [selectedSection, setSelectedSection] = useState<keyof MethodCounts>("all");
   const data = useBuildVersion<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${selectedSection}`,
@@ -111,11 +113,11 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                             <div className="flex items-center w-full gap-4">
                               <Icons.Function tw="h-4" />
                               <Link
-                                to={`${addQueryParamsToPath({
+                                to={`${pathname}?${queryString.stringify({
                                   ownerClass: filteredData[index]?.ownerClass || "",
                                   packageName: filteredData[index]?.name || "",
                                 })}`}
-                                tw="max-w-280px text-monochrome-black text-14 text-ellipsis"
+                                tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
                                 title={filteredData[index]?.name as string}
                               >
                                 <Cells.Highlight text={filteredData[index]?.name} searchWords={[query]} />

@@ -66,14 +66,6 @@ export const BuildMethodsInfo = () => {
   const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
 
-  const { ownerClass = "" } = useQueryParams<{ownerClass?: string}>();
-
-  const defaultState = useMemo(() => ({
-    sort: [],
-    search: [],
-    expandedRows: ownerClass ? [ownerClass.slice(0, ownerClass.lastIndexOf("/"))] : [],
-  }), [ownerClass]);
-
   return (
     <>
       <Info>
@@ -130,13 +122,11 @@ export const BuildMethodsInfo = () => {
           </div>
         )}
       </Info>
-      <TableActionsProvider defaultState={defaultState as any}>
-        <MethodsTable
-          topic="/build/coverage/packages"
-          classesTopicPrefix="build"
-          showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
-        />
-      </TableActionsProvider>
+      <MethodsTable
+        topic="/build/coverage/packages"
+        classesTopicPrefix="build"
+        showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
+      />
     </>
   );
 };

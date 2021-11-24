@@ -59,6 +59,7 @@ export const MethodsTable = ({
 
   const { searchValue = "", ownerClass = "", packageName = "" } = useQueryParams<{
     ownerClass?: string; packageName?: string; searchValue?: string; }>();
+  const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
   const ownerClassName = ownerClass.slice(ownerClass.lastIndexOf("/") + 1);
   const searchState: Search[] = useMemo(() => (searchValue ? [{
     field: "name",
@@ -68,7 +69,6 @@ export const MethodsTable = ({
 
   const {
     items: coverageByPackages = [],
-    filteredCount = 0,
   } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: searchState, orderBy: sort, output: "LIST" }) ||
   {};
 
@@ -103,6 +103,7 @@ export const MethodsTable = ({
     {
       Header: "Name",
       accessor: "name",
+      filterable: true,
       Cell: ({ value = "" }: any) => (
         <NameCell
           icon={<Icons.Package />}
@@ -248,15 +249,15 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col">
+    <div tw="flex flex-col pt-8">
+      <div tw="mb-3 text-monochrome-default text-14 leading-24 uppercase">Application Packages</div>
       <Table
+        defaultFilters={[{ id: "Name", value: "mod" }]}
         columns={columns}
         data={coverageByPackages}
-        filteredCount={filteredCount}
-        placeholder="Search packages by name"
         renderRowSubComponent={renderRowSubComponent}
         columnsDependency={columnsDependency}
-        withSearch
+        isDefaultExpanded={(original: any) => original?.name === ownerClassPath}
         stub={(
           <Stub
             icon={<Icons.Package height={104} width={107} />}
