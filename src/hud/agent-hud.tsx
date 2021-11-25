@@ -21,6 +21,7 @@ import {
 import { useBuildVersion } from "../hooks";
 import { BuildCoverage, BuildSummary } from "../types";
 import { TestType } from "./agent-sections/section-tooltip";
+import { addColors } from "./add-colors";
 
 export interface AgentHudProps {
   customProps: { pluginPagePath: string; }
@@ -35,7 +36,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary") || {};
   const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
 
-  const totalCoveredMethodCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
+  const totalTestsCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
   const buildTestsByType = byTestType
     .reduce((acc, { type, summary: { testCount, coverage } }) => [...acc, { type, testCount, coverage: coverage?.percentage }],
       [] as TestType[]);
@@ -49,7 +50,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     testSection = (
       <TestsSection
         data={testsDataStub}
-        totalCoveredMethodCount={totalCoveredMethodCount}
+        totalTestsCount={totalTestsCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
@@ -62,7 +63,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     testSection = (
       <TestsSection
         data={buildTestsByType}
-        totalCoveredMethodCount={totalCoveredMethodCount}
+        totalTestsCount={totalTestsCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
@@ -74,7 +75,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     testSection = (
       <TestsSection
         data={buildTestsByType}
-        totalCoveredMethodCount={totalCoveredMethodCount}
+        totalTestsCount={totalTestsCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
@@ -86,7 +87,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     testSection = (
       <TestsSection
         data={stubData}
-        totalCoveredMethodCount={totalCoveredMethodCount}
+        totalTestsCount={totalTestsCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
@@ -103,25 +104,3 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     </PluginCard>
   );
 };
-function addColors(tests: string[]) {
-  const colors = [
-    "#D599FF",
-    "#88E2F3",
-    "#F0876F",
-    "#A3D381",
-    "#E677C3",
-    "#EE7785",
-    "#5FEDCE",
-    "#FF7FA8",
-    "#E79B5F",
-    "#6B7EED",
-    "#FF9291",
-    "#D6AF5C",
-    "#B878DC",
-    "#FFA983",
-    "#BFC267",
-    "#83E1A5",
-    "#EDD78E",
-  ];
-  return tests.reduce((acc, testType, i) => ({ ...acc, [testType]: colors[i] }), {});
-}

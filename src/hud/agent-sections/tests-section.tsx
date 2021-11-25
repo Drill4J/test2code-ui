@@ -24,16 +24,16 @@ import { SectionTooltip, TestType } from "./section-tooltip";
 interface Props {
   testsColors: Record<string, string>;
   data: TestType[];
-  totalCoveredMethodCount: number;
+  totalTestsCount: number;
   finishedScopesCount?: number;
 }
 
 export const TestsSection = ({
-  data, testsColors, totalCoveredMethodCount, finishedScopesCount,
+  data, testsColors, totalTestsCount, finishedScopesCount,
 }:Props) => (
   <DashboardSection
     label="Tests"
-    info={totalCoveredMethodCount}
+    info={totalTestsCount}
     additionalInfo={`${finishedScopesCount} scopes`}
     graph={(
       <Tooltip message={<SectionTooltip data={data} testsColors={testsColors} />}>
@@ -44,7 +44,7 @@ export const TestsSection = ({
               width={64}
               height={128}
               color={testsColors[type]}
-              percent={convertToPercentage(testCount || 0, totalCoveredMethodCount)}
+              percent={convertToPercentage(testCount || 0, totalTestsCount)}
               icon={capitalize(type)}
             />
           ))}
