@@ -16,21 +16,16 @@
 import React from "react";
 import { PluginCard } from "./plugin-card";
 import {
-  CoverageSection, RisksSection, TestsSection, TestsToRunSection,
+  CoverageSection, RisksSection,
 } from "./agent-sections";
 import { useBuildVersion } from "../hooks";
 import { BuildCoverage, BuildSummary } from "../types";
 import { TestType } from "./agent-sections/section-tooltip";
-import { addColors } from "./add-colors";
+import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
 
 export interface AgentHudProps {
   customProps: { pluginPagePath: string; }
 }
-
-const testsDataStub = [
-  { type: "Auto", testCount: 0, coverage: 0 },
-  { type: "Manual", testCount: 0, coverage: 0 },
-];
 
 export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => {
   const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary") || {};
@@ -43,57 +38,13 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   const buildTestsToRun = Object.entries(testsToRunByType)
     .reduce((acc, [testType, testCount]) => [...acc, { type: testType, testCount }], [] as TestType[]);
 
-  let testSection;
-  let testToRunSection;
-  if (buildTestsByType.length === 0 && buildTestsToRun.length === 0) {
-    const testsColors = addColors(["Auto", "Manual"]);
-    testSection = (
-      <TestsSection
-        data={testsDataStub}
-        totalTestsCount={totalTestsCount}
-        testsColors={testsColors}
-        finishedScopesCount={finishedScopesCount}
-      />
-    );
-    testToRunSection = <TestsToRunSection data={testsDataStub} testsColors={testsColors} testsToRunCount={count} />;
-  } else if (buildTestsByType.length > 0 && buildTestsToRun.length > 0) {
-    const buildTestTypes = byTestType.map((data) => data.type);
-    const buildTestToTunTypes = Object.keys(testsToRunByType);
-    const testsColors = addColors([...buildTestTypes, ...buildTestToTunTypes]);
-    testSection = (
-      <TestsSection
-        data={buildTestsByType}
-        totalTestsCount={totalTestsCount}
-        testsColors={testsColors}
-        finishedScopesCount={finishedScopesCount}
-      />
-    );
-    testToRunSection = <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />;
-  } else if (buildTestsByType.length > 0) {
-    const stubData = buildTestsByType.map((test) => ({ ...test, coverage: 0, testCount: 0 }));
-    const testsColors = addColors(byTestType.map((test) => test.type));
-    testSection = (
-      <TestsSection
-        data={buildTestsByType}
-        totalTestsCount={totalTestsCount}
-        testsColors={testsColors}
-        finishedScopesCount={finishedScopesCount}
-      />
-    );
-    testToRunSection = <TestsToRunSection data={stubData} testsColors={testsColors} testsToRunCount={count} />;
-  } else {
-    const stubData = buildTestsToRun.map((test) => ({ ...test, coverage: 0, testCount: 0 }));
-    const testsColors = addColors(Object.keys(testsToRunByType));
-    testSection = (
-      <TestsSection
-        data={stubData}
-        totalTestsCount={totalTestsCount}
-        testsColors={testsColors}
-        finishedScopesCount={finishedScopesCount}
-      />
-    );
-    testToRunSection = <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />;
-  }
+  const { testSection, testToRunSection } = getTestsAndTests2RunSections({
+    tests: buildTestsByType,
+    tests2Run: buildTestsToRun,
+    testsToRunCount: count,
+    finishedScopesCount,
+    totalTestsCount,
+  });
 
   return (
     <PluginCard pluginLink={pluginPagePath}>
