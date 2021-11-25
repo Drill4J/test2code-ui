@@ -69,29 +69,29 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     );
     testToRunSection = <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />;
   } else if (buildTestsByType.length > 0) {
-    const data = buildTestsByType;
+    const stubData = buildTestsByType.map((test) => ({ ...test, coverage: 0, testCount: 0 }));
     const testsColors = addColors(byTestType.map((test) => test.type));
     testSection = (
       <TestsSection
-        data={data}
+        data={buildTestsByType}
         totalCoveredMethodCount={totalCoveredMethodCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
     );
-    testToRunSection = <TestsToRunSection data={data} testsColors={testsColors} testsToRunCount={count} />;
+    testToRunSection = <TestsToRunSection data={stubData} testsColors={testsColors} testsToRunCount={count} />;
   } else {
-    const data = buildTestsToRun;
+    const stubData = buildTestsToRun.map((test) => ({ ...test, coverage: 0, testCount: 0 }));
     const testsColors = addColors(Object.keys(testsToRunByType));
     testSection = (
       <TestsSection
-        data={data}
+        data={stubData}
         totalCoveredMethodCount={totalCoveredMethodCount}
         testsColors={testsColors}
         finishedScopesCount={finishedScopesCount}
       />
     );
-    testToRunSection = <TestsToRunSection data={data} testsColors={testsColors} testsToRunCount={count} />;
+    testToRunSection = <TestsToRunSection data={buildTestsToRun} testsColors={testsColors} testsToRunCount={count} />;
   }
 
   return (
