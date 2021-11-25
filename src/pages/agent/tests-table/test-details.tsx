@@ -15,8 +15,7 @@
  */
 import React from "react";
 import {
-  Icons, Stub, Table, useTableActionsState, Cells,
-  Link,
+  Icons, Stub, Table, Cells, Link,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
@@ -40,8 +39,6 @@ export const TestDetails = ({
 }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { status } = useAgent(agentId);
-  const { search } = useTableActionsState();
-  const [searchQuery] = search;
 
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
@@ -109,7 +106,7 @@ export const TestDetails = ({
             Cell: Cells.Duration,
           }]}
         stub={
-          searchQuery?.value
+          tests.length > 0
             ? (
               <Stub
                 icon={<Icons.Test height={104} width={107} />}
