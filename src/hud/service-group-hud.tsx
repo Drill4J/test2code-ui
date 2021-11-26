@@ -19,8 +19,10 @@ import { useGroupRouteParams, useServiceGroup } from "hooks";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { PluginCard } from "./plugin-card";
 import {
-  CoverageSection, RisksSection, TestsSection, TestsToRunSection,
+  CoverageSection, RisksSection,
 } from "./service-group-sections";
+import { TestType } from "./agent-sections/section-tooltip";
+import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
 
 export interface GroupHudProps {
   customProps: { pluginPagePath: string; }
@@ -39,12 +41,27 @@ export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudPro
     } = {},
   } = useServiceGroup<ServiceGroupSummary>("/group/summary", groupId, "test2code") || {};
 
+  const { count: testsToRunCount = 0 } = testsToRun;
+  const { byType = {} } = testsToRun;
+  const groupTests: TestType[] = tests
+    .map(({ type, summary: { testCount, coverage: { percentage } = {} } }) => ({ type, testCount, coverage: percentage }));
+  const totalTestsCount = groupTests.reduce((acc, { testCount = 0 }) => acc + testCount, 0);
+  const testsToRunByType = Object.entries(byType).map(([testType, testCount]) => ({ type: testType, testCount }));
+
+  const { testSection, testToRunSection } = getTestsAndTests2RunSections({
+    finishedScopesCount: scopeCount,
+    tests2Run: testsToRunByType,
+    tests: groupTests,
+    testsToRunCount,
+    totalTestsCount,
+  });
+
   return (
     <PluginCard pluginLink={pluginPagePath}>
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
-      <TestsSection testsType={tests} scopeCount={scopeCount} />
+      {testSection}
       <RisksSection risks={riskCounts} />
-      <TestsToRunSection testsToRun={testsToRun} />
+      {testToRunSection}
     </PluginCard>
   );
 };
