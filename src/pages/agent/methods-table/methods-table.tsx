@@ -104,10 +104,11 @@ export const MethodsTable = ({
       Header: "Name",
       accessor: "name",
       filterable: true,
-      Cell: ({ value = "" }: any) => (
+      isCustomCell: true,
+      Cell: ({ value = "", state }: any) => (
         <NameCell
           icon={<Icons.Package />}
-          value={value}
+          value={<Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />}
           testContext="package"
         />
       ),

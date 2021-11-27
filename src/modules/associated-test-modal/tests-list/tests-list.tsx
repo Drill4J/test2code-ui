@@ -95,6 +95,7 @@ export const TestsList = ({ associatedTests, testsCount }: Props) => {
                             <div
                               tw="text-ellipsis ml-4 text-14 leading-20 text-monochrome-black"
                               title={filteredData[index]}
+                              data-test="associated-tests-list:item:test-name"
                             >
                               <Cells.Highlight text={filteredData[index]} searchWords={[query]} />
                             </div>
