@@ -151,8 +151,9 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
           )}
         />
         <ListColumn
+          name="actions"
           Cell={({ item: { id: agentId = "" } }) => (
-            <MenuWrapper key="menu">
+            <MenuWrapper>
               <Menu
                 testContext="test-to-code-plugin:actions:cell"
                 items={[
