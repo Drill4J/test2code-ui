@@ -701,11 +701,6 @@ button:focus {
   margin: 1.5rem;
 }
 
-.mx-1 {
-  margin-left: 0.25rem;
-  margin-right: 0.25rem;
-}
-
 .mx-6 {
   margin-left: 1.5rem;
   margin-right: 1.5rem;
@@ -760,14 +755,6 @@ button:focus {
   margin-right: 0.5rem;
 }
 
-.mt-4 {
-  margin-top: 1rem;
-}
-
-.mr-4 {
-  margin-right: 1rem;
-}
-
 .ml-8 {
   margin-left: 2rem;
 }
@@ -780,6 +767,10 @@ button:focus {
   margin-top: 0.75rem;
 }
 
+.mt-4 {
+  margin-top: 1rem;
+}
+
 .mt-6 {
   margin-top: 1.5rem;
 }
@@ -788,12 +779,12 @@ button:focus {
   margin-bottom: 0.75rem;
 }
 
-.ml-2 {
-  margin-left: 0.5rem;
-}
-
 .mt-auto {
   margin-top: auto;
+}
+
+.mr-4 {
+  margin-right: 1rem;
 }
 
 .ml-4 {
@@ -806,6 +797,10 @@ button:focus {
 
 .mb-2 {
   margin-bottom: 0.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
 }
 
 .mt-2 {
@@ -876,22 +871,26 @@ button:focus {
   height: 5rem;
 }
 
-.h-16 {
-  height: 4rem;
-}
-
 .h-full {
   height: 100%;
 }
 
-.h-10 {
-  height: 2.5rem;
+.h-16 {
+  height: 4rem;
 }
 
 .h-fit {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+}
+
+.h-10 {
+  height: 2.5rem;
+}
+
+.h-\[630px\] {
+  height: 630px;
 }
 
 .h-4 {
@@ -922,20 +921,20 @@ button:focus {
   height: 12rem;
 }
 
-.min-h-40px {
-  min-height: 40px;
+.min-h-80px {
+  min-height: 80px;
 }
 
 .min-h-64px {
   min-height: 64px;
 }
 
-.min-h-80px {
-  min-height: 80px;
-}
-
 .min-h-16px {
   min-height: 16px;
+}
+
+.min-h-40px {
+  min-height: 40px;
 }
 
 .w-full {
@@ -946,18 +945,6 @@ button:focus {
   width: 50%;
 }
 
-.w-97 {
-  width: 25rem;
-}
-
-.w-70 {
-  width: 17.5rem;
-}
-
-.w-80 {
-  width: 20rem;
-}
-
 .w-2 {
   width: 0.5rem;
 }
@@ -966,8 +953,16 @@ button:focus {
   width: 6.75rem;
 }
 
+.w-80 {
+  width: 20rem;
+}
+
 .w-68 {
   width: 17rem;
+}
+
+.w-\[960px\] {
+  width: 960px;
 }
 
 .w-16 {
@@ -1006,6 +1001,10 @@ button:focus {
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+}
+
+.w-97 {
+  width: 25rem;
 }
 
 .w-43 {
@@ -1111,6 +1110,10 @@ button:focus {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .grid-rows-2 {
   grid-template-rows: repeat(2, minmax(0, 1fr));
 }
@@ -1163,16 +1166,16 @@ button:focus {
   justify-content: space-between;
 }
 
-.gap-2 {
-  gap: 0.5rem;
-}
-
 .gap-4 {
   gap: 1rem;
 }
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-8 {
@@ -1228,16 +1231,16 @@ button:focus {
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
-.space-y-3 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-y-reverse: 0;
-  margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
-  margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
-}
-
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
   margin-left: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+.space-y-3 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
 }
 
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {
@@ -1266,10 +1269,6 @@ button:focus {
 
 .overflow-x-hidden {
   overflow-x: hidden;
-}
-
-.overflow-y-hidden {
-  overflow-y: hidden;
 }
 
 .whitespace-nowrap {
@@ -1337,11 +1336,6 @@ button:focus {
 .border-monochrome-shade {
   --tw-border-opacity: 1;
   border-color: rgba(88, 98, 109, var(--tw-border-opacity));
-}
-
-.border-monochrome-light-tint {
-  --tw-border-opacity: 1;
-  border-color: rgba(248, 249, 251, var(--tw-border-opacity));
 }
 
 .border-monochrome-black {
@@ -1425,6 +1419,11 @@ button:focus {
   padding-right: 1.5rem;
 }
 
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
+
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -1453,11 +1452,6 @@ button:focus {
 .px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
-}
-
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
 }
 
 .px-12 {
@@ -1497,12 +1491,16 @@ button:focus {
   padding-bottom: 1.5rem;
 }
 
-.pl-7 {
-  padding-left: 1.75rem;
+.pt-5 {
+  padding-top: 1.25rem;
 }
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pl-7 {
+  padding-left: 1.75rem;
 }
 
 .pl-8 {
@@ -1515,10 +1513,6 @@ button:focus {
 
 .pl-4 {
   padding-left: 1rem;
-}
-
-.pt-5 {
-  padding-top: 1.25rem;
 }
 
 .pb-1 {
@@ -1695,11 +1689,6 @@ button:focus {
   color: rgba(227, 230, 232, var(--tw-text-opacity));
 }
 
-.text-monochrome-dark-tint {
-  --tw-text-opacity: 1;
-  color: rgba(164, 172, 179, var(--tw-text-opacity));
-}
-
 .text-orange-default {
   --tw-text-opacity: 1;
   color: rgba(245, 166, 35, var(--tw-text-opacity));
@@ -1761,6 +1750,10 @@ button:focus {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.first-letter\:uppercase::first-letter {
+  text-transform: uppercase;
 }
 
 .hover\:border:hover {

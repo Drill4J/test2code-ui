@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, Cells, Icons, Stub, Table,
+  capitalize, Cells, Icons, Stub, Table, Tooltip,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -41,23 +41,37 @@ export const RisksTable = ({ data }: Props) => {
           cellName={value}
           cellAdditionalInfo={ownerClass}
           icon={<Icons.Function />}
+          link={(
+            <Link
+              to={getPagePath({
+                name: "test2code",
+                queryParams: {
+                  activeTab: "methods",
+                  tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),
+                  methodName: value,
+                  methodOwnerClass: ownerClass,
+                  methodDesc: desc,
+                },
+              })}
+              tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+              title={value}
+              target="_blank"
+            >
+              <Tooltip
+                position="top-center"
+                message={(
+                  <div tw="flex gap-x-2">
+                    <span>Navigate to method in Application package</span>
+                    <Icons.NewWindow />
+                  </div>
+                )}
+              >
+                <Icons.NewWindow />
+              </Tooltip>
+            </Link>
+          )}
         >
-          <Link
-            tw="link"
-            to={getPagePath({
-              name: "test2code",
-              queryParams: {
-                activeTab: "methods",
-                tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),
-                methodName: value,
-                methodOwnerClass: ownerClass,
-                methodDesc: desc,
-              },
-            })}
-            target="_blank"
-          >
-            <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
-          </Link>
+          <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
         </Cells.Compound>
       ),
       width: "50%",
@@ -87,7 +101,13 @@ export const RisksTable = ({ data }: Props) => {
           disabled={!value}
           tw="inline"
         >
-          <Link to={getModalPath({ name: "associatedTests", params: { testId: row.original.id, treeLevel: "1" } })}>{value}</Link>
+          <Link to={getModalPath({
+            name: "associatedTests",
+            params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+          })}
+          >
+            {value}
+          </Link>
         </Cells.Clickable>
       ),
       width: "144px",

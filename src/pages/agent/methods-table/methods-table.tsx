@@ -39,22 +39,6 @@ interface Props {
   showCoverageIcon: boolean;
 }
 
-const disappear = keyframes`
-  0%{
-    background-color: #fffbe5;
-  }
-  75% {
-    background-color: #fffbe5;
-  }
-  100% {
-    background-color: #ffffff;
-  }
-`;
-
-const TableRow = styled(TableElements.TR)`
-  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && css`animation: ${disappear} 4s ease-in`};
-`;
-
 export const MethodsTable = ({
   classesTopicPrefix,
   topic,
@@ -179,7 +163,13 @@ export const MethodsTable = ({
           tw="inline"
         >
           {value ? (
-            <Link to={getModalPath({ name: "associatedTests", params: { testId: row.original.id, treeLevel: "1" } })}>{value}</Link>
+            <Link to={getModalPath({
+              name: "associatedTests",
+              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+            })}
+            >
+              {value}
+            </Link>
           ) : (
             "n/a"
           )}
@@ -277,3 +267,19 @@ export const MethodsTable = ({
     </div>
   );
 };
+
+const disappear = keyframes`
+  0%{
+    background-color: #fffbe5;
+  }
+  75% {
+    background-color: #fffbe5;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+`;
+
+const TableRow = styled(TableElements.TR)`
+  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && css`animation: ${disappear} 4s ease-in`};
+`;
