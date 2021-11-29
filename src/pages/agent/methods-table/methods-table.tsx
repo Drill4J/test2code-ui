@@ -248,9 +248,10 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col pt-8" data-test="methods-table">
-      <div tw="mb-3 text-monochrome-default text-14 leading-24 uppercase">Application Packages</div>
+    <div tw="flex flex-col pt-11" data-test="methods-table">
       <Table
+        name="Application Packages"
+        resultName="packages"
         defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
         data={coverageByPackages}
