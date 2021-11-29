@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, Menu } from "@drill4j/ui-kit";
 
 import { percentFormatter } from "@drill4j/common-utils";
@@ -153,7 +153,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
         <ListColumn
           name="actions"
           Cell={({ item: { id: agentId = "" } }) => (
-            <MenuWrapper>
+            <MenuWrapper key="menu">
               <Menu
                 testContext="test-to-code-plugin:actions:cell"
                 items={[
@@ -179,47 +179,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
               />
             </MenuWrapper>
           )}
-          HeaderCell={() => (
-            <MenuWrapper>
-              <Menu
-                testContext="test-to-code-plugin:header-cell:actions"
-                items={[
-                  {
-                    label: "Finish all scopes",
-                    icon: "Check",
-                    onClick: () => null,
-                    Content: ({ children }: { children: JSX.Element }) => (
-                      <Link
-                        to={getGroupModalPath({ name: "finishAllScopes" })}
-                      >
-                        {children}
-                      </Link>
-                    ),
-                  },
-                  {
-                    label: "Ignore in stats",
-                    icon: "EyeCrossed",
-                    onClick: () => toggleGroupScopes(true),
-                  },
-                  {
-                    label: "Include in stats",
-                    icon: "Eye",
-                    onClick: () => toggleGroupScopes(false),
-                  },
-                  {
-                    label: "Sessions Management",
-                    icon: "ManageSessions",
-                    onClick: () => null,
-                    Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={getGroupModalPath({ name: "sessionManagement" })}>
-                        {children}
-                      </Link>
-                    ),
-                  },
-                ]}
-              />
-            </MenuWrapper>
-          )}
+          HeaderCell={() => <MenuHeaderCell toggleGroupScopes={toggleGroupScopes} />}
         />
       </List>
       <Modals />
@@ -227,6 +187,55 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
   );
 };
 
-const MenuWrapper = styled.div`
+const MenuWrapper = styled.div` 
   ${tw`flex justify-end mr-4`}
 `;
+
+interface MenuHeaderCellProps {
+  toggleGroupScopes: (value: boolean) => void
+}
+
+const MenuHeaderCell = ({ toggleGroupScopes }: MenuHeaderCellProps) => {
+  const items = useMemo(() => [
+    {
+      label: "Finish all scopes",
+      icon: "Check",
+      onClick: () => null,
+      Content: ({ children }: { children: JSX.Element }) => (
+        <Link
+          to={getGroupModalPath({ name: "finishAllScopes" })}
+        >
+          {children}
+        </Link>
+      ),
+    },
+    {
+      label: "Ignore in stats",
+      icon: "EyeCrossed",
+      onClick: () => toggleGroupScopes(true),
+    },
+    {
+      label: "Include in stats",
+      icon: "Eye",
+      onClick: () => toggleGroupScopes(false),
+    },
+    {
+      label: "Sessions Management",
+      icon: "ManageSessions",
+      onClick: () => null,
+      Content: ({ children }: { children: JSX.Element }) => (
+        <Link to={getGroupModalPath({ name: "sessionManagement" })}>
+          {children}
+        </Link>
+      ),
+    },
+  ] as any[], []);
+  return (
+    <MenuWrapper>
+      <Menu
+        testContext="test-to-code-plugin:header-cell:actions"
+        items={items}
+      />
+    </MenuWrapper>
+  );
+};

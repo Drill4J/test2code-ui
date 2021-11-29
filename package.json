@@ -1,10 +1,10 @@
 {
   "name": "@drill4j/test2code-ui",
   "license": "Apache-2.0",
-  "version": "0.1.0-70",
+  "version": "0.1.0-71",
   "main": "dist",
   "scripts": {
-    "start": "npm run tailwind:css && webpack serve --port 8080",
+    "start": "npm run tailwind:css && webpack serve --port 8034",
     "start:standalone": "npm run tailwind:css && webpack serve --env standalone",
     "build": "npm run tailwind:css && webpack --mode=production",
     "analyze": "webpack --mode=production --env analyze",
