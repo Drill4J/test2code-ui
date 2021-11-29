@@ -35,19 +35,21 @@ export const RisksTable = ({ data }: Props) => {
     {
       Header: "Name",
       accessor: "name",
-      Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {} }: any) => (
+      filterable: true,
+      isCustomCell: true,
+      Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {}, state }: any) => (
         <Cells.Compound
-          cellName={(
-            <Link
-              tw="link"
-              to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
-            >
-              {value}
-            </Link>
-          )}
+          cellName={value}
           cellAdditionalInfo={ownerClass}
           icon={<Icons.Function />}
-        />
+        >
+          <Link
+            tw="link"
+            to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
+          >
+            <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+          </Link>
+        </Cells.Compound>
       ),
       width: "50%",
       textAlign: "left",
@@ -85,6 +87,8 @@ export const RisksTable = ({ data }: Props) => {
 
   return (
     <Table
+      name="ALL RISK METHODS"
+      resultName="risk methods"
       data={data}
       columns={columns}
       stub={(

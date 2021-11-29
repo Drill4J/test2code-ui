@@ -33,16 +33,15 @@ export const RisksPage = () => {
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
   const notCoveredRisksCount = risks.filter(({ coverage = 0 }) => coverage === 0).length;
   return (
-    <div>
+    <div tw="space-y-6">
       <RisksPageHeader
         buildVersion={buildVersion}
         previousBuildVersion={previousBuildVersion}
         notCoveredRisksCount={notCoveredRisksCount}
       />
-      <div tw="mt-6 mb-2  font-bold text-12 leading-16 text-monochrome-default" data-test="risks-list:table-title">
-        ALL RISK METHODS ({risks.length})
+      <div>
+        <RisksTable data={risks} filteredCount={filteredCount} />
       </div>
-      <RisksTable data={risks} filteredCount={filteredCount} />
     </div>
   );
 };
