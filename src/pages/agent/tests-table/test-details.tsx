@@ -119,11 +119,11 @@ export const TestDetails = ({
           : "Information about project tests will appear after the first launch of tests."}
       />
     )), [tests.length]);
-  const data = useMemo(() => transformTests(tests), [JSON.stringify(tests)]);
+
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
       <Table
-        data={data}
+        data={transformTests(tests)}
         columns={columns}
         stub={stub}
       />
