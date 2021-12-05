@@ -46,6 +46,7 @@ export const RisksTable = ({ data }: Props) => {
           <Link
             tw="link"
             to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
+            target="_blank"
           >
             <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
           </Link>

@@ -119,6 +119,7 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                                 })}`}
                                 tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
                                 title={filteredData[index]?.name as string}
+                                target="_blank"
                               >
                                 <Cells.Highlight text={filteredData[index]?.name} searchWords={[query]} />
                               </Link>
