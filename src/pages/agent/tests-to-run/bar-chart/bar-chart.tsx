@@ -166,7 +166,7 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
           />
         )).reverse()}
       </YAxis>
-      <ChartBlock>
+      <ChartBlock data-test="bar-charts">
         <CartesianLayout
           style={{
             height: `${CHART_HEIGHT_PX}px`,

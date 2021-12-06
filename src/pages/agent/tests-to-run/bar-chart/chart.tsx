@@ -109,7 +109,7 @@ export const Chart = ({
         )
       }
     >
-      <div ref={firstChartRef}>
+      <div ref={firstChartRef} data-test="bar-chart">
         <GroupedBars
           bordered={Boolean(total) && !isAllAutoTestsDone}
           hasUncompletedTests={hasUncompletedTests}
@@ -138,6 +138,7 @@ export const Chart = ({
               }
             >
               <Bar
+                data-test="bar-chart:time-saved-chart"
                 type={buildVersion !== activeBuildVersion ? "saved" : undefined}
                 style={{
                   height: `${savedTimeHeight}px`,
@@ -150,7 +151,7 @@ export const Chart = ({
           )}
           {Boolean(!total) && (
             <Tooltip message={isVisibleFirstChart && "No Auto Tests suggested to run in this build"}>
-              <NoTestsToRunBar style={{ height: `${savedTimeHeight}px` }}>No Auto
+              <NoTestsToRunBar style={{ height: `${savedTimeHeight}px` }} data-test="bar-chart:no-tests-chart">No Auto
                 tests
               </NoTestsToRunBar>
             </Tooltip>
@@ -171,6 +172,7 @@ export const Chart = ({
           >
             <div ref={secondChartRef}>
               <Bar
+                data-test="bar-chart:duration-chart"
                 type={buildVersion !== activeBuildVersion ? durationType : "active"}
                 style={{ height: `${durationHeight}px` }}
               />
