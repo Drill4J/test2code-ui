@@ -99,7 +99,7 @@ export const BaselineBuildModal = () => {
                 }
                 closeModal();
               }}
-              disabled={(!isConfirmed && !isBaseline) || isLoading || status === AGENT_STATUS.OFFLINE}
+              disabled={(!isConfirmed && !isBaseline) || isLoading || status !== AGENT_STATUS.ONLINE}
               data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
             >
               {isLoading && <Spinner />}
