@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, {
-  useCallback, useEffect, useMemo,
+  useCallback, useEffect, useMemo, useRef,
 } from "react";
 import {
   Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
@@ -112,8 +112,17 @@ export const MethodsTable = ({
           testContext="package"
         />
       ),
-      SubCell: ({ value = "", row }: any) =>
-        (row.canExpand ? (
+      SubCell: ({ value = "", row }: any) => {
+        const ref = useRef<HTMLDivElement>(null);
+        useEffect(() => {
+          if (value === packageName) {
+            ref?.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "end",
+            });
+          }
+        }, []);
+        return (row.canExpand ? (
           <div tw="pl-8">
             <NameCell
               icon={<Icons.Class />}
@@ -122,7 +131,7 @@ export const MethodsTable = ({
             />
           </div>
         ) : (
-          <div tw="pl-13">
+          <div tw="pl-13" ref={ref}>
             <Cells.Compound
               key={value}
               cellName={packageName === value ? (
@@ -135,7 +144,8 @@ export const MethodsTable = ({
               icon={<Icons.Function />}
             />
           </div>
-        )),
+        ));
+      },
       textAlign: "left",
       width: "50%",
     },
