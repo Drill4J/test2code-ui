@@ -19,6 +19,7 @@ import {
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
+import { AGENT_STATUS } from "common";
 import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
@@ -37,7 +38,7 @@ const ActionButton = styled(Button)(({ isBaseline }: {isBaseline: boolean}) => [
 export const BaselineBuildModal = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { pluginId = "", agentId = "", buildVersion = "" } = useAgentRouteParams();
-  const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
+  const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const [isConfirmed, setIsConfirmed] = useState(isBaseline);
@@ -98,7 +99,7 @@ export const BaselineBuildModal = () => {
                 }
                 closeModal();
               }}
-              disabled={(!isConfirmed && !isBaseline) || isLoading}
+              disabled={(!isConfirmed && !isBaseline) || isLoading || status !== AGENT_STATUS.ONLINE}
               data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
             >
               {isLoading && <Spinner />}
