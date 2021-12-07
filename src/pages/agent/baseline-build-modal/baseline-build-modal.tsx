@@ -69,7 +69,11 @@ export const BaselineBuildModal = () => {
           </Message>
           {!isBaseline && (
             <Message tw="flex gap-2 w-full text-blue-default">
-              <Checkbox checked={isConfirmed} onChange={() => setIsConfirmed(!isConfirmed)} />
+              <Checkbox
+                data-test={`${isBaseline ? "unset" : "set"}-as-baseline:conformation-checkbox`}
+                checked={isConfirmed}
+                onChange={() => setIsConfirmed(!isConfirmed)}
+              />
               <span tw="text-monochrome-black">
                 I understand that it’s necessary to run all tests to determine the number of suggested tests.
               </span>
