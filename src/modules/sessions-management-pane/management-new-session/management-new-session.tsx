@@ -25,13 +25,15 @@ interface Props {
   serviceGroupId: string;
   hasGlobalSession: boolean;
   setFieldError: (field: string, errorMsg: string) => void;
+  setErrors: (fields: { [field: string]: string }) => void;
 }
 
 export const ManagementNewSession = ({
-  agentId, serviceGroupId, hasGlobalSession, setFieldError,
+  agentId, serviceGroupId, hasGlobalSession, setFieldError, setErrors,
 }: Props) => {
   useEffect(() => {
     setFieldError("sessionId", "");
+    setErrors({});
   }, []);
 
   return (
