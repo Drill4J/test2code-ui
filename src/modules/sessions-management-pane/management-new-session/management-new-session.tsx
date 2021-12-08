@@ -29,7 +29,7 @@ interface Props {
   agentId: string;
   serviceGroupId: string;
   hasGlobalSession: boolean;
-  setFieldError: any;
+  setFieldError: (field: string, errorMsg: string) => void;
 }
 
 export const ManagementNewSession = ({
