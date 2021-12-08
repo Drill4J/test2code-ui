@@ -40,7 +40,7 @@ interface Props {
   agentType?: string;
 }
 
-const columnsForTable = [
+const columns = [
   {
     Header: "Name",
     accessor: "overview.details.name",
@@ -182,7 +182,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         <div>
           <Table
             data={transformTests(testsToRun)}
-            columns={columnsForTable}
+            columns={columns}
             stub={stub}
           />
         </div>
