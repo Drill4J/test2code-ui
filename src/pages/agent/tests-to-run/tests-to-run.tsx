@@ -174,11 +174,9 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         />
       )}
       <div>
-        <span tw="text-12 leading-32 font-bold text-monochrome-default uppercase" data-test="tests-to-run-list:table-title">
-          all suggested tests ({totalCount})
-        </span>
         <div>
           <Table
+            name={`All suggested tests (${totalCount})`}
             data={transformTests(testsToRun)}
             columns={columns}
             stub={stub}

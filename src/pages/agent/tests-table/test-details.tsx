@@ -123,6 +123,7 @@ export const TestDetails = ({
   return (
     <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
       <Table
+        name="Application tests"
         data={transformTests(tests)}
         columns={columns}
         stub={stub}
