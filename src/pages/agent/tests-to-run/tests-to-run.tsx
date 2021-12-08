@@ -135,10 +135,8 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     : (
       <Stub
         icon={<Icons.Test height={104} width={107} />}
-        title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
-        message={status === AGENT_STATUS.BUSY
-          ? "It may take a few seconds."
-          : "Information about project tests will appear after the first launch of tests."}
+        title="No suggested tests"
+        message="There is no information about the suggested to run tests in this build."
       />
     )), [testsToRun.length]);
 
