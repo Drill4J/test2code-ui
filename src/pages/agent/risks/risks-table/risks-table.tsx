@@ -99,6 +99,10 @@ export const RisksTable = ({ data }: Props) => {
           message="Try adjusting your search or filter to find what you are looking for."
         />
       )}
+      defaultSortBy={[{
+        id: "coverage",
+        desc: false,
+      }]}
     />
   );
 };
