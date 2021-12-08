@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Icons, Legend, Stub, Table, useTableActionsState, Cells,
   Link,
@@ -24,6 +24,7 @@ import { FilterList } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";
+import { AGENT_STATUS } from "common/constants";
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
@@ -39,6 +40,71 @@ interface Props {
   agentType?: string;
 }
 
+const columns = [
+  {
+    Header: "Name",
+    accessor: "overview.details.name",
+    textAlign: "left",
+    filterable: true,
+  },
+  {
+    Header: "Path",
+    accessor: "overview.details.path",
+    textAlign: "left",
+    filterable: true,
+  },
+  {
+    Header: "Test type",
+    accessor: "type",
+    Cell: ({ value }: any) => (
+      <>
+        {capitalize(value)}
+      </>
+    ),
+    textAlign: "left",
+  },
+  {
+    Header: "State",
+    accessor: "overview.result",
+    Cell: ({ row: { original: { toRun } } }: any) => (
+      <span tw="leading-64">
+        {toRun
+          ? "To run"
+          : <span tw="font-bold text-green-default">Done</span>}
+      </span>
+    ),
+    textAlign: "left",
+  },
+  {
+    Header: "Coverage, %",
+    accessor: "coverage.percentage",
+    Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+  },
+  {
+    Header: "Methods covered",
+    accessor: "coverage.methodCount.covered",
+    Cell: ({
+      value,
+      row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
+    }: any) => (
+      toRun ? null : (
+        <Cells.Clickable
+          tw="inline"
+          disabled={!value}
+        >
+          <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+            {value}
+          </Link>
+        </Cells.Clickable>
+      )
+    ),
+  },
+  {
+    Header: "Duration",
+    accessor: "overview.duration",
+    Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+  }];
+
 export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
@@ -47,6 +113,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
   const { buildVersion, agentId } = useAgentRouteParams();
+  const { status } = useAgent(agentId);
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};
@@ -56,6 +123,22 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { AUTO } = previousBuildTests
     .reduce((test, testType) => ({ ...test, [testType.type]: testType }), {}) as TestsInfo;
   const previousBuildAutoTestsCount = AUTO?.summary?.testCount || 0;
+
+  const stub = useMemo(() => (testsToRun.length > 0
+    ? (
+      <Stub
+        icon={<Icons.Test height={104} width={107} />}
+        title="No results found"
+        message="Try adjusting your search or filter to find what you are looking for."
+      />
+    )
+    : (
+      <Stub
+        icon={<Icons.Test height={104} width={107} />}
+        title="No suggested tests"
+        message="There is no information about the suggested to run tests in this build."
+      />
+    )), [testsToRun.length]);
 
   return (
     <div tw="flex flex-col gap-4">
@@ -99,70 +182,8 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         <div>
           <Table
             data={transformTests(testsToRun)}
-            columns={[
-              {
-                Header: "Name",
-                accessor: "overview.details.name",
-                textAlign: "left",
-                filterable: true,
-              },
-              {
-                Header: "Path",
-                accessor: "overview.details.path",
-                textAlign: "left",
-                filterable: true,
-              },
-              {
-                Header: "Test type",
-                accessor: "type",
-                Cell: ({ value }: any) => (
-                  <>
-                    {capitalize(value)}
-                  </>
-                ),
-                textAlign: "left",
-              },
-              {
-                Header: "State",
-                accessor: "overview.result",
-                Cell: ({ row: { original: { toRun } } }: any) => (
-                  <span tw="leading-64">
-                    {toRun
-                      ? "To run"
-                      : <span tw="font-bold text-green-default">Done</span>}
-                  </span>
-                ),
-                textAlign: "left",
-              },
-              {
-                Header: "Coverage, %",
-                accessor: "coverage.percentage",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
-              },
-              {
-                Header: "Methods covered",
-                accessor: "coverage.methodCount.covered",
-                Cell: ({
-                  value,
-                  row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
-                }: any) => (
-                  toRun ? null : (
-                    <Cells.Clickable
-                      tw="inline"
-                      disabled={!value}
-                    >
-                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-                        {value}
-                      </Link>
-                    </Cells.Clickable>
-                  )
-                ),
-              },
-              {
-                Header: "Duration",
-                accessor: "overview.duration",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-              }]}
+            columns={columns}
+            stub={stub}
           />
         </div>
       </div>
