@@ -174,7 +174,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         />
       )}
       <div>
-        <div>
+        <div tw="flex flex-col pt-8">
           <Table
             name={`All suggested tests (${totalCount})`}
             data={transformTests(testsToRun)}
