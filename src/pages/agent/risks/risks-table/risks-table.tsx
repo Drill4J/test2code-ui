@@ -22,7 +22,6 @@ import {
 import "twin.macro";
 
 import { getModalPath, getPagePath } from "common";
-import queryString from "querystring";
 import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
@@ -45,7 +44,7 @@ export const RisksTable = ({ data }: Props) => {
         >
           <Link
             tw="link"
-            to={`${getPagePath({ name: "test2code" })}?${queryString.stringify({ ownerClass, packageName: value })}`}
+            to={getPagePath({ name: "test2code", queryParams: { activeTab: "methods", ownerClass, packageName: value } })}
             target="_blank"
           >
             <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />

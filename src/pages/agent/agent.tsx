@@ -36,7 +36,7 @@ export const Agent = () => (
         <Route
           exact
           path={getAgentRoutePath("/")}
-          render={() => <Redirect to={getPagePath({ name: "test2code" })} />}
+          render={() => <Redirect to={getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } })} />}
         />
         <Route
           path={getAgentRoutePath(routes.test2code)}
@@ -54,7 +54,7 @@ export const Agent = () => (
               search: [],
               sort: [{ field: "coverage", order: "ASC" }],
               expandedRows: [],
-            } as any}
+            }}
             >
               <RisksPage />
             </TableActionsProvider>

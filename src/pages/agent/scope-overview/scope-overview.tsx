@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
+import React from "react";
 import {
   Redirect, useParams,
-  Icons, Tab,
+  Icons, Tab, useQueryParams, useHistory, addQueryParamsToPath,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
@@ -29,7 +29,9 @@ import { ScopeMethodsInfo } from "./scope-methods-info";
 import { ScopeTestsInfo } from "./scope-tests-info";
 
 export const ScopeOverview = () => {
-  const [activeTab, setActiveTab] = useState("methods");
+  const { activeTab } = useQueryParams<{activeTab?: string; }>();
+  const { push } = useHistory();
+
   const {
     scopeId = "", buildVersion = "", agentId = "",
   } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
@@ -42,19 +44,19 @@ export const ScopeOverview = () => {
 
   return (
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
-      ? <Redirect to={{ pathname: getPagePath({ name: "test2code" }) }} />
+      ? <Redirect to={{ pathname: getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }) }} />
       : (
         <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
           <div tw="flex flex-col items-center w-full">
             <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
-              <Tab active={activeTab === "methods"} onClick={() => setActiveTab("methods")}>
+              <Tab active={activeTab === "methods"} onClick={() => push(addQueryParamsToPath({ activeTab: "methods" }))}>
                 <div tw="flex items-center mr-2 text-monochrome-black">
                   <Icons.Function />
                 </div>
                 Scope methods
               </Tab>
-              <Tab active={activeTab === "tests"} onClick={() => setActiveTab("tests")}>
+              <Tab active={activeTab === "tests"} onClick={() => push(addQueryParamsToPath({ activeTab: "tests" }))}>
                 <div tw="flex items-center mr-2 text-monochrome-black">
                   <Icons.Test width={16} />
                 </div>

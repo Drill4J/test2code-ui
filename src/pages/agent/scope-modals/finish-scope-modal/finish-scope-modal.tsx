@@ -100,7 +100,7 @@ export const FinishScopeModal = () => {
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
                 ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
-              push(getPagePath({ name: "test2code" }));
+              push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
             }
             setLoading(false);
           }}
