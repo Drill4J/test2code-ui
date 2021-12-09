@@ -240,7 +240,7 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col pt-11" data-test="methods-table">
+    <div tw="flex flex-col pt-8" data-test="methods-table">
       <Table
         name="Application Packages"
         resultName="packages"
