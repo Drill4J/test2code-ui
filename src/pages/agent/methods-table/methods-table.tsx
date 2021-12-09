@@ -240,7 +240,11 @@ export const MethodsTable = ({
   );
 
   return (
+<<<<<<< HEAD
     <div tw="flex flex-col mt-8" data-test="methods-table">
+=======
+    <div tw="flex flex-col pt-8" data-test="methods-table">
+>>>>>>> 1896d86 (fix: padding top of methods and test tables)
       <Table
         defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
