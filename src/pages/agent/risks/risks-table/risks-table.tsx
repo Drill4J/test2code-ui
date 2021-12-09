@@ -44,7 +44,15 @@ export const RisksTable = ({ data }: Props) => {
         >
           <Link
             tw="link"
-            to={getPagePath({ name: "test2code", queryParams: { activeTab: "methods", ownerClass, packageName: value } })}
+            to={getPagePath({
+              name: "test2code",
+              queryParams: {
+                activeTab: "methods",
+                tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),
+                methodName: value,
+                ownerClass,
+              },
+            })}
             target="_blank"
           >
             <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />

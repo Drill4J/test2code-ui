@@ -113,23 +113,23 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                             <div className="flex items-center w-full gap-4">
                               <Icons.Function tw="h-4" />
                               <Link
-                                to={scopeId
-                                  ? getPagePath({
-                                    name: "scopeMethods",
-                                    params: { scopeId },
-                                    queryParams: {
-                                      ownerClass: filteredData[index]?.ownerClass || "",
-                                      packageName: filteredData[index]?.name || "",
-                                      activeTab: "methods",
-                                    },
-                                  }) : getPagePath({
-                                    name: "test2code",
-                                    queryParams: {
-                                      activeTab: "methods",
-                                      ownerClass: filteredData[index]?.ownerClass || "",
-                                      packageName: filteredData[index]?.name || "",
-                                    },
-                                  })}
+                                to={() => {
+                                  const { ownerClass = "", name = "" } = filteredData[index];
+                                  const queryParams = {
+                                    methodName: name,
+                                    ownerClass,
+                                    activeTab: "methods",
+                                    tableState: JSON.stringify({
+                                      filters: [{
+                                        id: "name",
+                                        value: ownerClass.slice(0, ownerClass.lastIndexOf("/")),
+                                      }],
+                                    }),
+                                  };
+                                  return scopeId
+                                    ? getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams })
+                                    : getPagePath({ name: "test2code", queryParams });
+                                }}
                                 tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
                                 title={filteredData[index]?.name as string}
                                 target="_blank"

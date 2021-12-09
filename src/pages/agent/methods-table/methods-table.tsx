@@ -48,28 +48,17 @@ export const MethodsTable = ({
 }: Props) => {
   const { search, sort } = useTableActionsState();
   const { push } = useHistory();
-
-  useEffect(() => {
-    const [searchParams] = search;
-    searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
-    return () => {
-      push(removeQueryParamsFromPath(["ownerClass", "packageName", "searchField", "searchValue"]));
-    };
+  const { ownerClass = "", methodName = "" } = useQueryParams<{
+    ownerClass?: string; methodName?: string; }>();
+  useEffect(() => () => {
+    push(removeQueryParamsFromPath(["ownerClass", "methodName"]));
   }, [search]);
 
-  const { searchValue = "", ownerClass = "", packageName = "" } = useQueryParams<{
-    ownerClass?: string; packageName?: string; searchValue?: string; }>();
   const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
-  const ownerClassName = ownerClass.slice(ownerClass.lastIndexOf("/") + 1);
-  const searchState: Search[] = useMemo(() => (searchValue ? [{
-    field: "name",
-    value: searchValue,
-    op: "CONTAINS",
-  }] : []), [searchValue]);
 
   const {
     items: coverageByPackages = [],
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: searchState, orderBy: sort, output: "LIST" }) ||
+  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { orderBy: sort, output: "LIST" }) ||
   {};
 
   const columns = [
@@ -115,7 +104,7 @@ export const MethodsTable = ({
       SubCell: ({ value = "", row }: any) => {
         const ref = useRef<HTMLDivElement>(null);
         useEffect(() => {
-          if (value === packageName) {
+          if (value === methodName) {
             ref?.current?.scrollIntoView({
               behavior: "smooth",
               block: "end",
@@ -134,10 +123,10 @@ export const MethodsTable = ({
           <div tw="pl-13" ref={ref}>
             <Cells.Compound
               key={value}
-              cellName={packageName === value ? (
+              cellName={methodName === value ? (
                 <Cells.Highlight
                   text={value}
-                  searchWords={[packageName]}
+                  searchWords={[methodName]}
                 />
               ) : value}
               cellAdditionalInfo={row.original.decl}
@@ -201,7 +190,7 @@ export const MethodsTable = ({
       useBuildVersion<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
-    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === ownerClassName));
+    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === methodName));
     const strngifiedClasses = JSON.stringify(classes);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
