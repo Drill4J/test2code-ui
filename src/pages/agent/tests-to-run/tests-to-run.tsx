@@ -39,6 +39,15 @@ interface Props {
   agentType?: string;
 }
 
+const renderProps = {
+  header: (title: string, pageLength: number, dataLength: number) => (
+    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+      <div tw="uppercase font-bold">{`${title} (${pageLength})`}</div>
+      <div />
+    </div>
+  ),
+};
+
 export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
@@ -111,7 +120,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
       <div>
         <div tw="flex flex-col mt-8">
           <Table
-            name={`All suggested tests (${totalCount})`}
+            name="All suggested tests"
             data={transformTests(testsToRun)}
             stub={stub}
             columns={[
