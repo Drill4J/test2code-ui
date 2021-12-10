@@ -29,15 +29,6 @@ interface Props {
   filteredCount: number;
 }
 
-const renderProps = {
-  header: (title: string, pageLength: number, dataLength: number) => (
-    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-      <div tw="uppercase font-bold">{`${title} (${pageLength})`}</div>
-      <div>{`Displaying ${pageLength} of ${dataLength} methods`}</div>
-    </div>
-  ),
-};
-
 export const RisksTable = ({ data }: Props) => {
   const columns = [
     {
@@ -104,8 +95,6 @@ export const RisksTable = ({ data }: Props) => {
 
   return (
     <Table
-      name="All risks methods"
-      resultName="risk methods"
       data={data}
       columns={columns}
       stub={(
@@ -119,7 +108,12 @@ export const RisksTable = ({ data }: Props) => {
         id: "coverage",
         desc: false,
       }]}
-      {...renderProps}
+      renderHeader={(currentCount: number, totalCount: number) => (
+        <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+          <div tw="uppercase font-bold">{`All risks methods (${currentCount})`}</div>
+          <div>{`Displaying ${currentCount} of ${totalCount} methods`}</div>
+        </div>
+      )}
     />
   );
 };

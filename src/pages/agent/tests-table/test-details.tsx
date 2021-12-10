@@ -96,15 +96,6 @@ const columns = [
     Cell: Cells.Duration,
   }];
 
-const renderProps = {
-  header: (title: string, pageLength: number, dataLength: number) => (
-    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-      <div tw="uppercase font-bold">{title}</div>
-      <div>{`Displaying ${pageLength} of ${dataLength} tests`}</div>
-    </div>
-  ),
-};
-
 export const TestDetails = ({
   tests: { items: tests = [] },
 }: Props) => {
@@ -132,11 +123,15 @@ export const TestDetails = ({
   return (
     <div tw="flex flex-col pt-8" data-test="test-details:table-wrapper">
       <Table
-        name="Application tests"
         data={transformTests(tests)}
         columns={columns}
         stub={stub}
-        {...renderProps}
+        renderHeader={(currentCount: number, totalCount: number) => (
+          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+            <div tw="uppercase font-bold">Application tests</div>
+            <div>{`Displaying ${currentCount} of ${totalCount} tests`}</div>
+          </div>
+        )}
       />
     </div>
   );

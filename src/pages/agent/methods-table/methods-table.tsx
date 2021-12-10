@@ -43,15 +43,6 @@ const TableRow = styled(TableElements.TR)`
   ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && tw`!bg-yellow-light-tint hover:!bg-monochrome-light-tint`}
 `;
 
-const renderProps = {
-  header: (title: string, pageLength: number, dataLength: number) => (
-    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-      <div tw="uppercase font-bold">{title}</div>
-      <div>{`Displaying ${pageLength} of ${dataLength} packages`}</div>
-    </div>
-  ),
-};
-
 export const MethodsTable = ({
   classesTopicPrefix,
   topic,
@@ -251,8 +242,6 @@ export const MethodsTable = ({
   return (
     <div tw="flex flex-col pt-8" data-test="methods-table">
       <Table
-        name="Application Packages"
-        resultName="packages"
         defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
         data={coverageByPackages}
@@ -266,7 +255,12 @@ export const MethodsTable = ({
             message="Try adjusting your search or filter to find what you are looking for."
           />
         )}
-        {...renderProps}
+        renderHeader={(currentCount: number, totalCount: number): JSX.Element => (
+          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+            <div tw="uppercase font-bold">Application Packages</div>
+            <div>{`Displaying ${currentCount} of ${totalCount} packages`}</div>
+          </div>
+        )}
       />
     </div>
   );
