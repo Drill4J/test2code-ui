@@ -126,7 +126,7 @@ export const TestDetails = ({
         data={transformTests(tests)}
         columns={columns}
         stub={stub}
-        renderHeader={({ currentCount, totalCount }) => (
+        renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
           <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
             <div tw="uppercase font-bold">Application tests</div>
             <div>{`Displaying ${currentCount} of ${totalCount} tests`}</div>
