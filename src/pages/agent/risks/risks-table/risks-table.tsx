@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { Risk, TestCoverageInfo } from "types";
+import { Risk } from "types";
 import {
   capitalize, Cells, Icons, Stub, Table,
 } from "@drill4j/ui-kit";
@@ -22,8 +22,6 @@ import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { getModalPath, getPagePath } from "common";
-import { useBuildVersion } from "hooks";
-import { FilterList } from "@drill4j/types-admin";
 import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
@@ -41,10 +39,6 @@ const renderProps = {
 };
 
 export const RisksTable = ({ data }: Props) => {
-  const {
-    items: testsToRun = [],
-    totalCount = 0,
-  } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/risks", { output: "LIST" }) || {};
   const columns = [
     {
       Header: "Name",
