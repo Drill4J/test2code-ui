@@ -96,6 +96,15 @@ const columns = [
     Cell: Cells.Duration,
   }];
 
+const renderProps = {
+  header: (title: string, pageLength: number, dataLength: number) => (
+    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+      <div tw="uppercase font-bold">{title}</div>
+      <div>{`Displaying ${pageLength} of ${dataLength} tests`}</div>
+    </div>
+  ),
+};
+
 export const TestDetails = ({
   tests: { items: tests = [] },
 }: Props) => {
