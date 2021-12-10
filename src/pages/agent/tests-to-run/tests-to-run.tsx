@@ -39,70 +39,14 @@ interface Props {
   agentType?: string;
 }
 
-const columns = [
-  {
-    Header: "Name",
-    accessor: "overview.details.name",
-    textAlign: "left",
-    filterable: true,
-  },
-  {
-    Header: "Path",
-    accessor: "overview.details.path",
-    textAlign: "left",
-    filterable: true,
-  },
-  {
-    Header: "Test type",
-    accessor: "type",
-    Cell: ({ value }: any) => (
-      <>
-        {capitalize(value)}
-      </>
-    ),
-    textAlign: "left",
-  },
-  {
-    Header: "State",
-    accessor: "overview.result",
-    Cell: ({ row: { original: { toRun } } }: any) => (
-      <span tw="leading-64">
-        {toRun
-          ? "To run"
-          : <span tw="font-bold text-green-default">Done</span>}
-      </span>
-    ),
-    textAlign: "left",
-  },
-  {
-    Header: "Coverage, %",
-    accessor: "coverage.percentage",
-    Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
-  },
-  {
-    Header: "Methods covered",
-    accessor: "coverage.methodCount.covered",
-    Cell: ({
-      value,
-      row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
-    }: any) => (
-      toRun ? null : (
-        <Cells.Clickable
-          tw="inline"
-          disabled={!value}
-        >
-          <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-            {value}
-          </Link>
-        </Cells.Clickable>
-      )
-    ),
-  },
-  {
-    Header: "Duration",
-    accessor: "overview.duration",
-    Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-  }];
+const renderProps = {
+  header: (title: string, pageLength: number, dataLength: number) => (
+    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+      <div tw="uppercase font-bold">{`${title} (${pageLength})`}</div>
+      <div />
+    </div>
+  ),
+};
 
 export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
@@ -176,10 +120,74 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
       <div>
         <div tw="flex flex-col pt-8">
           <Table
-            name={`All suggested tests (${totalCount})`}
+            name="All suggested tests"
             data={transformTests(testsToRun)}
-            columns={columns}
             stub={stub}
+            columns={[
+              {
+                Header: "Name",
+                accessor: "overview.details.name",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Path",
+                accessor: "overview.details.path",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Test type",
+                accessor: "type",
+                Cell: ({ value }: any) => (
+                  <>
+                    {capitalize(value)}
+                  </>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "State",
+                accessor: "overview.result",
+                Cell: ({ row: { original: { toRun } } }: any) => (
+                  <span tw="leading-64">
+                    {toRun
+                      ? "To run"
+                      : <span tw="font-bold text-green-default">Done</span>}
+                  </span>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "Coverage, %",
+                accessor: "coverage.percentage",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+              },
+              {
+                Header: "Methods covered",
+                accessor: "coverage.methodCount.covered",
+                Cell: ({
+                  value,
+                  row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
+                }: any) => (
+                  toRun ? null : (
+                    <Cells.Clickable
+                      tw="inline"
+                      disabled={!value}
+                    >
+                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+                        {value}
+                      </Link>
+                    </Cells.Clickable>
+                  )
+                ),
+              },
+              {
+                Header: "Duration",
+                accessor: "overview.duration",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+              }]}
+            {...renderProps}
           />
         </div>
       </div>
