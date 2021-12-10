@@ -109,7 +109,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         />
       )}
       <div>
-        <div tw="flex flex-col pt-8">
+        <div tw="flex flex-col mt-8">
           <Table
             data={transformTests(testsToRun)}
             stub={stub}
@@ -178,9 +178,8 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
               }]}
             renderHeader={(currentCount: number) => (
-              <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+              <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
                 <div tw="uppercase font-bold">{`All suggested tests (${currentCount})`}</div>
-                <div />
               </div>
             )}
           />

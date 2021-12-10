@@ -121,7 +121,7 @@ export const TestDetails = ({
     )), [tests.length]);
 
   return (
-    <div tw="flex flex-col pt-8" data-test="test-details:table-wrapper">
+    <div tw="flex flex-col mt-8" data-test="test-details:table-wrapper">
       <Table
         data={transformTests(tests)}
         columns={columns}
