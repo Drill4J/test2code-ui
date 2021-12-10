@@ -31,6 +31,15 @@ interface Props {
   filteredCount: number;
 }
 
+const renderProps = {
+  header: (title: string, pageLength: number, dataLength: number) => (
+    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+      <div tw="uppercase font-bold">{`${title} (${pageLength})`}</div>
+      <div>{`Displaying ${pageLength} of ${dataLength} methods`}</div>
+    </div>
+  ),
+};
+
 export const RisksTable = ({ data }: Props) => {
   const {
     items: testsToRun = [],
@@ -101,7 +110,7 @@ export const RisksTable = ({ data }: Props) => {
 
   return (
     <Table
-      name={`All risks methods (${totalCount})`}
+      name="All risks methods"
       resultName="risk methods"
       data={data}
       columns={columns}
@@ -116,6 +125,7 @@ export const RisksTable = ({ data }: Props) => {
         id: "coverage",
         desc: false,
       }]}
+      {...renderProps}
     />
   );
 };
