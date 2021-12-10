@@ -43,15 +43,6 @@ const TableRow = styled(TableElements.TR)`
   ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && tw`!bg-yellow-light-tint hover:!bg-monochrome-light-tint`}
 `;
 
-const renderProps = {
-  header: (title: string, pageLength: number, dataLength: number) => (
-    <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-      <div tw="uppercase font-bold">{title}</div>
-      <div>{`Displaying ${pageLength} of ${dataLength} packages`}</div>
-    </div>
-  ),
-};
-
 export const MethodsTable = ({
   classesTopicPrefix,
   topic,
