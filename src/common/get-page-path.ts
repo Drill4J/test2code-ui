@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { createRouter, getPagePath as getPage } from "nanostores";
+import * as queryString from "querystring";
 
 interface Routes {
   test2code: void;
@@ -40,9 +41,16 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   params?: AppPages[PageName] extends void ? void : Record<AppPages[PageName], string>;
+  queryParams?: Record<string, string>
 }
 
-export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({ name, params }: Path<PageName, AppPages>): string =>
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  `${window.location.pathname.split("/").slice(0, 7).join("/")}${getPage(router, name, params)}`;
+export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({
+  name,
+  params, queryParams,
+}: Path<PageName, AppPages>): string => {
+  const path = `${window.location.pathname.split("test2code")[0]}test2code${getPage(router, name as any, params as any)}`;
+  if (queryParams) {
+    return `${path}?${queryString.stringify(queryParams)}`;
+  }
+  return path;
+};

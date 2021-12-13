@@ -1378,6 +1378,11 @@ button:focus {
   background-color: rgba(227, 230, 232, var(--tw-bg-opacity));
 }
 
+.\!bg-yellow-light-tint {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(255, 251, 229, var(--tw-bg-opacity)) !important;
+}
+
 .bg-monochrome-white {
   --tw-bg-opacity: 1;
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
@@ -1765,6 +1770,11 @@ button:focus {
 
 .hover\:border:hover {
   border-width: 1px;
+}
+
+.hover\:\!bg-monochrome-light-tint:hover {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgba(248, 249, 251, var(--tw-bg-opacity)) !important;
 }
 
 .hover\:bg-opacity-100:hover {

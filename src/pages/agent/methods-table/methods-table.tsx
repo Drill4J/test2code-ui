@@ -17,20 +17,19 @@ import React, {
   useCallback, useEffect, useMemo, useRef,
 } from "react";
 import {
-  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
+  Icons, Stub, Table, TableElements, Cells, removeQueryParamsFromPath,
   Link, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { useExpanded, useTable } from "react-table";
-import "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
 
-import { Search } from "@drill4j/types-admin/index";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
@@ -41,35 +40,27 @@ interface Props {
   showCoverageIcon: boolean;
 }
 
+const TableRow = styled(TableElements.TR)`
+  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && tw`!bg-yellow-light-tint hover:!bg-monochrome-light-tint`}
+`;
+
 export const MethodsTable = ({
   classesTopicPrefix,
   topic,
   showCoverageIcon,
 }: Props) => {
-  const { search, sort } = useTableActionsState();
   const { push } = useHistory();
+  const { ownerClass = "", methodName = "" } = useQueryParams<{
+    ownerClass?: string; methodName?: string; }>();
+  useEffect(() => () => {
+    push(removeQueryParamsFromPath(["ownerClass", "methodName"]));
+  }, []);
 
-  useEffect(() => {
-    const [searchParams] = search;
-    searchParams && push(addQueryParamsToPath({ searchField: searchParams.field, searchValue: searchParams.value }));
-    return () => {
-      push(removeQueryParamsFromPath(["ownerClass", "packageName", "searchField", "searchValue"]));
-    };
-  }, [search]);
-
-  const { searchValue = "", ownerClass = "", packageName = "" } = useQueryParams<{
-    ownerClass?: string; packageName?: string; searchValue?: string; }>();
   const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
-  const ownerClassName = ownerClass.slice(ownerClass.lastIndexOf("/") + 1);
-  const searchState: Search[] = useMemo(() => (searchValue ? [{
-    field: "name",
-    value: searchValue,
-    op: "CONTAINS",
-  }] : []), [searchValue]);
 
   const {
     items: coverageByPackages = [],
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { filters: searchState, orderBy: sort, output: "LIST" }) ||
+  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { output: "LIST" }) ||
   {};
 
   const columns = [
@@ -115,7 +106,7 @@ export const MethodsTable = ({
       SubCell: ({ value = "", row }: any) => {
         const ref = useRef<HTMLDivElement>(null);
         useEffect(() => {
-          if (value === packageName) {
+          if (value === methodName) {
             ref?.current?.scrollIntoView({
               behavior: "smooth",
               block: "end",
@@ -134,12 +125,7 @@ export const MethodsTable = ({
           <div tw="pl-13" ref={ref}>
             <Cells.Compound
               key={value}
-              cellName={packageName === value ? (
-                <Cells.Highlight
-                  text={value}
-                  searchWords={[packageName]}
-                />
-              ) : value}
+              cellName={value}
               cellAdditionalInfo={row.original.decl}
               icon={<Icons.Function />}
             />
@@ -201,7 +187,7 @@ export const MethodsTable = ({
       useBuildVersion<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
-    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === ownerClassName));
+    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === methodName));
     const strngifiedClasses = JSON.stringify(classes);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -225,8 +211,9 @@ export const MethodsTable = ({
           prepareRow(row);
           const rowProps = row.getRowProps();
           return (
-            <TableElements.TR
+            <TableRow
               {...rowProps}
+              isHighlighted={!row.canExpand && row.original.name === methodName}
               isExpanded={row.isExpanded}
               id={row?.original?.name}
             >
@@ -240,7 +227,7 @@ export const MethodsTable = ({
                   {cell.render(cell.column.SubCell ? "SubCell" : "Cell")}
                 </td>
               ))}
-            </TableElements.TR>
+            </TableRow>
           );
         })}
       </>

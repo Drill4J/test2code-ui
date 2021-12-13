@@ -96,7 +96,7 @@ export const AllScopes = () => {
                 }: any) => (
                   <Link
                     tw="font-bold text-14 leading-20 cursor-pointer"
-                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id } })}
+                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id }, queryParams: { activeTab: "methods" } })}
                     data-test="scopes-list:scope-name"
                   >
                     <div className="link text-ellipsis" title={value}>{value}</div>

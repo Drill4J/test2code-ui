@@ -24,7 +24,6 @@ import { FilterList } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";
-import { AGENT_STATUS } from "common/constants";
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
@@ -113,7 +112,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
   const { buildVersion, agentId } = useAgentRouteParams();
-  const { status } = useAgent(agentId);
   const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};

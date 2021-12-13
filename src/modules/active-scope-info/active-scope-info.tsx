@@ -66,7 +66,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
       <div className="flex flex-col items-start justify-between w-full gap-y-3 mt-6 font-bold leading-20">
         <Link
           className="link"
-          to={getPagePath({ name: "scopeMethods", params: { scopeId } })}
+          to={getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams: { activeTab: "methods" } })}
           data-test="active-scope-info:scope-details-link"
         >
           Scope Details
