@@ -15,13 +15,14 @@
  */
 import React from "react";
 import {
-  addQueryParamsToPath, Icons, Tab, useHistory, useQueryParams,
+  Icons, Tab, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
+import { getPagePath } from "../../../common";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2 text-monochrome-black`}
@@ -37,7 +38,7 @@ export const BuildOverview = () => {
       <div tw="flex mb-4 border-b border-monochrome-medium-tint">
         <Tab
           active={activeTab === "methods"}
-          onClick={() => push(addQueryParamsToPath({ activeTab: "methods" }))}
+          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }))}
           data-test="build-overview:tab:build-methods"
         >
           <TabIconWrapper>
@@ -47,7 +48,7 @@ export const BuildOverview = () => {
         </Tab>
         <Tab
           active={activeTab === "tests"}
-          onClick={() => push(addQueryParamsToPath({ activeTab: "tests" }))}
+          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "tests" } }))}
           data-test="build-overview:tab:build-tests"
         >
           <TabIconWrapper>

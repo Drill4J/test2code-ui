@@ -16,7 +16,7 @@
 import React from "react";
 import {
   Redirect, useParams,
-  Icons, Tab, useQueryParams, useHistory, addQueryParamsToPath,
+  Icons, Tab, useQueryParams, useHistory,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
@@ -50,13 +50,27 @@ export const ScopeOverview = () => {
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
           <div tw="flex flex-col items-center w-full">
             <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
-              <Tab active={activeTab === "methods"} onClick={() => push(addQueryParamsToPath({ activeTab: "methods" }))}>
+              <Tab
+                active={activeTab === "methods"}
+                onClick={() => push(getPagePath({
+                  name: "scopeMethods",
+                  params: { scopeId },
+                  queryParams: { activeTab: "methods" },
+                }))}
+              >
                 <div tw="flex items-center mr-2 text-monochrome-black">
                   <Icons.Function />
                 </div>
                 Scope methods
               </Tab>
-              <Tab active={activeTab === "tests"} onClick={() => push(addQueryParamsToPath({ activeTab: "tests" }))}>
+              <Tab
+                active={activeTab === "tests"}
+                onClick={() => push(getPagePath({
+                  name: "scopeTests",
+                  params: { scopeId },
+                  queryParams: { activeTab: "tests" },
+                }))}
+              >
                 <div tw="flex items-center mr-2 text-monochrome-black">
                   <Icons.Test width={16} />
                 </div>
