@@ -17,20 +17,19 @@ import React, {
   useCallback, useEffect, useMemo, useRef,
 } from "react";
 import {
-  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath, addQueryParamsToPath,
+  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath,
   Link, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { useExpanded, useTable } from "react-table";
-import "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
 
-import { Search } from "@drill4j/types-admin/index";
 import { NameCell } from "./name-cell";
 import { CoverageCell } from "./coverage-cell";
 import { getModalPath } from "../../../common";
@@ -40,6 +39,10 @@ interface Props {
   classesTopicPrefix: string;
   showCoverageIcon: boolean;
 }
+
+const TableRow = styled(TableElements.TR)`
+  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && tw`!bg-yellow-light-tint hover:!bg-monochrome-light-tint`}
+`;
 
 export const MethodsTable = ({
   classesTopicPrefix,
@@ -123,12 +126,7 @@ export const MethodsTable = ({
           <div tw="pl-13" ref={ref}>
             <Cells.Compound
               key={value}
-              cellName={methodName === value ? (
-                <Cells.Highlight
-                  text={value}
-                  searchWords={[methodName]}
-                />
-              ) : value}
+              cellName={value}
               cellAdditionalInfo={row.original.decl}
               icon={<Icons.Function />}
             />
@@ -214,8 +212,9 @@ export const MethodsTable = ({
           prepareRow(row);
           const rowProps = row.getRowProps();
           return (
-            <TableElements.TR
+            <TableRow
               {...rowProps}
+              isHighlighted={!row.canExpand && row.original.name === methodName}
               isExpanded={row.isExpanded}
               id={row?.original?.name}
             >
@@ -229,7 +228,7 @@ export const MethodsTable = ({
                   {cell.render(cell.column.SubCell ? "SubCell" : "Cell")}
                 </td>
               ))}
-            </TableElements.TR>
+            </TableRow>
           );
         })}
       </>
