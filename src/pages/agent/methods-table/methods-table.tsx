@@ -17,7 +17,7 @@ import React, {
   useCallback, useEffect, useMemo, useRef,
 } from "react";
 import {
-  Icons, Stub, Table, TableElements, useTableActionsState, Cells, removeQueryParamsFromPath,
+  Icons, Stub, Table, TableElements, Cells, removeQueryParamsFromPath,
   Link, useHistory, useQueryParams,
 } from "@drill4j/ui-kit";
 
@@ -49,19 +49,18 @@ export const MethodsTable = ({
   topic,
   showCoverageIcon,
 }: Props) => {
-  const { search, sort } = useTableActionsState();
   const { push } = useHistory();
   const { ownerClass = "", methodName = "" } = useQueryParams<{
     ownerClass?: string; methodName?: string; }>();
   useEffect(() => () => {
     push(removeQueryParamsFromPath(["ownerClass", "methodName"]));
-  }, [search]);
+  }, []);
 
   const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
 
   const {
     items: coverageByPackages = [],
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { orderBy: sort, output: "LIST" }) ||
+  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { output: "LIST" }) ||
   {};
 
   const columns = [

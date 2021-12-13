@@ -19,10 +19,10 @@ import {
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
+import { getPagePath } from "common";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
-import { getPagePath } from "../../../common";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2 text-monochrome-black`}

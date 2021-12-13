@@ -26,9 +26,8 @@ import "twin.macro";
 import { MethodsDetails } from "types/methods-details";
 import { MethodCounts, MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
 import { useBuildVersion, useFilter, useTestToCodeParams } from "hooks";
-
+import { getPagePath } from "common";
 import { CoverageRateIcon } from "../coverage-rate-icon";
-import { getPagePath } from "../../../common";
 
 interface Props {
   summary: MethodsCoveredByTestSummary;
