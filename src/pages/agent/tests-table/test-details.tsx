@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 import {
-  Icons, Stub, Table, Cells, Link,
+  Icons, Stub, Table, Cells, Link, percentFormatter,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
