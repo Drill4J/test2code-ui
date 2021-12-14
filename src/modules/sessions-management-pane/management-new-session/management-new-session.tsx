@@ -15,7 +15,7 @@
  */
 import React, { useEffect } from "react";
 import {
-  Field, FormGroup, GeneralAlerts, Icons, Tooltip, Fields, Checkbox,
+  Field, FormGroup, GeneralAlerts, Icons, Tooltip, Fields, Checkbox, useFormikContext,
 } from "@drill4j/ui-kit";
 import { NavLink } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -24,13 +24,12 @@ interface Props {
   agentId: string;
   serviceGroupId: string;
   hasGlobalSession: boolean;
-  setFieldError: (field: string, errorMsg: string) => void;
-  setErrors: (fields: { [field: string]: string }) => void;
 }
 
 export const ManagementNewSession = ({
-  agentId, serviceGroupId, hasGlobalSession, setFieldError, setErrors,
+  agentId, serviceGroupId, hasGlobalSession,
 }: Props) => {
+  const { setErrors, setFieldError } = useFormikContext();
   useEffect(() => {
     setFieldError("sessionId", "");
     setErrors({});
