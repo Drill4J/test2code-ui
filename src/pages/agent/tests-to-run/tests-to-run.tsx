@@ -177,7 +177,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 accessor: "overview.duration",
                 Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
               }]}
-            renderHeader={({ currentCount }) => (
+            renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
                 <div tw="uppercase font-bold">{`All suggested tests (${currentCount})`}</div>
               </div>
