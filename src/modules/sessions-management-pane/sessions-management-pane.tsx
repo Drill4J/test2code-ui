@@ -84,7 +84,7 @@ export const SessionsManagementPane = () => {
         validate={validateManageSessionsPane}
       >
         {({
-          handleSubmit, isSubmitting, isValid, setFieldError,
+          handleSubmit, isSubmitting, isValid,
         }) => (
           <Form tw="flex flex-col h-full">
             <div
@@ -103,7 +103,6 @@ export const SessionsManagementPane = () => {
                 agentId={agentId}
                 serviceGroupId={groupId}
                 hasGlobalSession={hasGlobalSession}
-                setFieldError={setFieldError}
               />
             )}
             {!isNewSession && activeSessions.length > 0 && (
