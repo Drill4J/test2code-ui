@@ -28,7 +28,7 @@ module.exports = (webpackConfigEnv, argv) => {
   });
 
   return merge(defaultConfig, {
-    externals: ["single-spa", "@drill4j/ui-kit", "react", "react-dom"],
+    externals: ["single-spa", "@drill4j/ui-kit", "react", "react-dom", "react-router-dom"],
     plugins: [
       new Dotenv({
         path: "./.env.local",

@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 import React from "react";
-import {
-  Route, Switch, Redirect, TableActionsProvider,
-} from "@drill4j/ui-kit";
+import { TableActionsProvider } from "@drill4j/ui-kit";
+import { Route, Switch, Redirect } from "react-router-dom";
 import { getAgentRoutePath } from "router";
 import "twin.macro";
 

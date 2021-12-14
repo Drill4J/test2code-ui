@@ -16,8 +16,8 @@
 import React, { useMemo } from "react";
 import {
   Icons, Legend, Stub, Table, useTableActionsState, Cells,
-  Link,
 } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import { capitalize } from "@drill4j/common-utils";
 import { FilterList } from "@drill4j/types-admin";
 

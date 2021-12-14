@@ -15,11 +15,10 @@
  */
 import React, { useState } from "react";
 import {
-  useHistory, Link,
   Button, Popup, GeneralAlerts, Spinner, useCloseModal,
   useQueryParams,
 } from "@drill4j/ui-kit";
-
+import { useHistory, Link } from "react-router-dom";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
 import "twin.macro";

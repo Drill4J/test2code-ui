@@ -15,10 +15,9 @@
  */
 import React from "react";
 import {
-  Redirect, useParams,
-  Icons, Tab, useQueryParams, useHistory,
+  Icons, Tab, useQueryParams,
 } from "@drill4j/ui-kit";
-
+import { useHistory, Redirect, useParams } from "react-router-dom";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";

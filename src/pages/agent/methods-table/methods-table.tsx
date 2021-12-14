@@ -18,9 +18,9 @@ import React, {
 } from "react";
 import {
   Icons, Stub, Table, TableElements, Cells, removeQueryParamsFromPath,
-  Link, useHistory, useQueryParams,
+  useQueryParams,
 } from "@drill4j/ui-kit";
-
+import { Link, useHistory } from "react-router-dom";
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { useExpanded, useTable } from "react-table";

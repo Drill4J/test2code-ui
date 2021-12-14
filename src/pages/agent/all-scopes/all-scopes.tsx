@@ -15,10 +15,9 @@
  */
 import React from "react";
 import {
-  useParams, Link, useHistory,
   Menu, Icons, Status, Stub, Table, capitalize,
 } from "@drill4j/ui-kit";
-
+import { useParams, Link, useHistory } from "react-router-dom";
 import {
   percentFormatter, dateFormatter, timeFormatter, transformObjectsArrayToObject,
 } from "@drill4j/common-utils";

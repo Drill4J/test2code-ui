@@ -15,8 +15,9 @@
  */
 import React from "react";
 import {
-  Button, Icons, Menu, SessionIndicator, Link, useHistory, useParams,
+  Button, Icons, Menu, SessionIndicator,
 } from "@drill4j/ui-kit";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { AgentStatus } from "@drill4j/types-admin";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 

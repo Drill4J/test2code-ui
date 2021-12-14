@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { Link, Menu } from "@drill4j/ui-kit";
-
+import { Menu } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 import axios from "axios";
