@@ -17,7 +17,7 @@ import { useState, useEffect } from "react";
 
 import { test2CodePluginSocket } from "common";
 import { ActiveScope } from "types/active-scope";
-import { useParams } from "@drill4j/ui-kit";
+import { useParams } from "react-router-dom";
 import { useAgent } from "./use-agent";
 
 export function useActiveScope(): ActiveScope | null {

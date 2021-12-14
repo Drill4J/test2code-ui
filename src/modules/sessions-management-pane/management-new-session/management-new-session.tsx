@@ -15,14 +15,9 @@
  */
 import React, { useEffect } from "react";
 import {
-  Field,
-  FormGroup,
-  GeneralAlerts,
-  Icons,
-  Tooltip, Fields, Checkbox,
-  NavLink,
+  Field, FormGroup, GeneralAlerts, Icons, Tooltip, Fields, Checkbox,
 } from "@drill4j/ui-kit";
-
+import { NavLink } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 interface Props {

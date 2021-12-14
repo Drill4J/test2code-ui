@@ -15,10 +15,9 @@
  */
 import React from "react";
 import {
-  Link,
   Button, Icons, Tooltip, Typography,
 } from "@drill4j/ui-kit";
-
+import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";

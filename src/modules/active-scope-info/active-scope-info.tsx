@@ -15,10 +15,9 @@
  */
 import React from "react";
 import {
-  Link, useHistory,
   Button, Icons, SessionIndicator,
 } from "@drill4j/ui-kit";
-
+import { Link, useHistory } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 

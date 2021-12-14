@@ -15,9 +15,9 @@
  */
 import React from "react";
 import {
-  Modal, matchPath, useLocation, useQueryParams, useCloseModal,
+  Modal, useQueryParams, useCloseModal,
 } from "@drill4j/ui-kit";
-
+import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";

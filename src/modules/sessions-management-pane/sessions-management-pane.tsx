@@ -15,16 +15,10 @@
  */
 import React from "react";
 import {
-  Form, Formik,
-  Modal, GeneralAlerts, Icons, composeValidators,
-  sizeLimit,
-  required,
-  handleFieldErrors,
-  Stub,
-  matchPath, useLocation,
-  useCloseModal, useGeneralAlertMessage,
+  Form, Formik, Modal, GeneralAlerts, Icons, composeValidators, sizeLimit,
+  required, handleFieldErrors, Stub, useCloseModal, useGeneralAlertMessage,
 } from "@drill4j/ui-kit";
-
+import { matchPath, useLocation } from "react-router-dom";
 import { Message } from "@drill4j/types-admin";
 import "twin.macro";
 

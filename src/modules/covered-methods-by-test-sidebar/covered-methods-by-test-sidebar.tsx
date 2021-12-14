@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 import React from "react";
-import {
-  matchPath, useLocation, Modal, useCloseModal,
-  useQueryParams,
-} from "@drill4j/ui-kit";
-
+import { Modal, useCloseModal, useQueryParams } from "@drill4j/ui-kit";
+import { matchPath, useLocation } from "react-router-dom";
 import { capitalize } from "@drill4j/common-utils";
 
 import tw, { styled } from "twin.macro";

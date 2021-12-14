@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Typography, Link } from "@drill4j/ui-kit";
+import { Typography } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import React, { memo } from "react";
 import tw, { styled } from "twin.macro";
 

@@ -16,11 +16,9 @@
 import React, { useRef, useState } from "react";
 import VirtualList from "react-tiny-virtual-list";
 import {
-  Cells,
-  convertToSingleSpaces,
-  Dropdown, Icons, Inputs, useElementSize,
-  Link,
+  Cells, convertToSingleSpaces, Dropdown, Icons, Inputs, useElementSize,
 } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { MethodsDetails } from "types/methods-details";

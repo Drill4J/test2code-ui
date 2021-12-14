@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 import React, { memo } from "react";
-import { Icons, Link } from "@drill4j/ui-kit";
+import { Icons } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import { spacesToDashes } from "@drill4j/common-utils";
 
 import tw, { styled } from "twin.macro";

@@ -15,8 +15,9 @@
  */
 import React from "react";
 import {
-  Icons, Tab, useHistory, useQueryParams,
+  Icons, Tab, useQueryParams,
 } from "@drill4j/ui-kit";
+import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { getPagePath } from "common";

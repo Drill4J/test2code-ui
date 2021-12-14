@@ -16,7 +16,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import singleSpaReact from "single-spa-react";
-import { BrowserRouter, Route } from "@drill4j/ui-kit";
+import { BrowserRouter, Route } from "react-router-dom";
 import axios from "axios";
 
 import { Agent, Group } from "pages";

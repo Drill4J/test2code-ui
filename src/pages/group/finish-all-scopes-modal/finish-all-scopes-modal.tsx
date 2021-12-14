@@ -17,9 +17,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import {
   Button, Popup, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required, useCloseModal,
-  Link,
 } from "@drill4j/ui-kit";
-
+import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { useActiveSessions, useGroupData, useGroupRouteParams } from "hooks";

@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
+import { useHistory, Link } from "react-router-dom";
 import {
-  useHistory, Link,
   Button, Icons, Popup, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal,
 } from "@drill4j/ui-kit";
-
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import tw, { styled } from "twin.macro";
 

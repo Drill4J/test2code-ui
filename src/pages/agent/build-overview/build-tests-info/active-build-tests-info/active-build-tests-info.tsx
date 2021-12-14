@@ -15,8 +15,9 @@
  */
 import React, { useRef } from "react";
 import {
-  Legend, Tooltip, useParams, useElementSize,
+  Legend, Tooltip, useElementSize,
 } from "@drill4j/ui-kit";
+import { useParams } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 
 import tw, { styled } from "twin.macro";
