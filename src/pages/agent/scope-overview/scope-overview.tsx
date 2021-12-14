@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import {
-  Icons, Tab, useQueryParams,
-} from "@drill4j/ui-kit";
+import { Icons, Tab, useQueryParams } from "@drill4j/ui-kit";
 import { useHistory, Redirect, useParams } from "react-router-dom";
 import "twin.macro";
 
