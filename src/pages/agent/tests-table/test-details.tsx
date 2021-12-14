@@ -121,11 +121,17 @@ export const TestDetails = ({
     )), [tests.length]);
 
   return (
-    <div tw="flex flex-col mt-12" data-test="test-details:table-wrapper">
+    <div tw="flex flex-col mt-8" data-test="test-details:table-wrapper">
       <Table
         data={transformTests(tests)}
         columns={columns}
         stub={stub}
+        renderHeader={(currentCount: number, totalCount: number) => (
+          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+            <div tw="uppercase font-bold">Application tests</div>
+            <div>{`Displaying ${currentCount} of ${totalCount} tests`}</div>
+          </div>
+        )}
       />
     </div>
   );

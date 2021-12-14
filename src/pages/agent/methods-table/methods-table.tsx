@@ -240,10 +240,8 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col pt-11" data-test="methods-table">
+    <div tw="flex flex-col mt-8" data-test="methods-table">
       <Table
-        name="Application Packages"
-        resultName="packages"
         defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}
         data={coverageByPackages}
@@ -256,6 +254,12 @@ export const MethodsTable = ({
             title="No results found"
             message="Try adjusting your search or filter to find what you are looking for."
           />
+        )}
+        renderHeader={(currentCount: number, totalCount: number): JSX.Element => (
+          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+            <div tw="uppercase font-bold">Application Packages</div>
+            <div>{`Displaying ${currentCount} of ${totalCount} packages`}</div>
+          </div>
         )}
       />
     </div>

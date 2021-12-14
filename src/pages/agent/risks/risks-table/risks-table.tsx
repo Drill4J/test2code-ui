@@ -95,8 +95,6 @@ export const RisksTable = ({ data }: Props) => {
 
   return (
     <Table
-      name="ALL RISK METHODS"
-      resultName="risk methods"
       data={data}
       columns={columns}
       stub={(
@@ -110,6 +108,12 @@ export const RisksTable = ({ data }: Props) => {
         id: "coverage",
         desc: false,
       }]}
+      renderHeader={(currentCount: number, totalCount: number) => (
+        <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+          <div tw="uppercase font-bold">{`All risks methods (${currentCount})`}</div>
+          <div>{`Displaying ${currentCount} of ${totalCount} methods`}</div>
+        </div>
+      )}
     />
   );
 };
