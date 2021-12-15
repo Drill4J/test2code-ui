@@ -255,7 +255,7 @@ export const MethodsTable = ({
             message="Try adjusting your search or filter to find what you are looking for."
           />
         )}
-        renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }): JSX.Element => (
+        renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
           <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
             <div tw="uppercase font-bold">Application Packages</div>
             <div>{`Displaying ${currentCount} of ${totalCount} packages`}</div>
