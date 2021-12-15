@@ -17,7 +17,9 @@
 const plugin = require("tailwindcss/plugin");
 
 module.exports = {
-  content: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  purge: ["./src/**/*.{js,jsx,ts,tsx}", "./public/index.html"],
+  darkMode: false,
+  mode: "jit",
   theme: {
     extend: {
       spacing: {
@@ -181,6 +183,12 @@ module.exports = {
       ...theme("colors"),
       "current-color": "currentColor",
     }),
+  },
+  variants: {
+    extend: {
+      backgroundColor: ["checked"],
+      borderColor: ["checked"],
+    },
   },
   plugins: [
     plugin(({ addUtilities }) => {
