@@ -43,7 +43,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
     items: testsToRun = [],
-    totalCount = 0,
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
   const { buildVersion, agentId } = useAgentRouteParams();
@@ -179,7 +178,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
               }]}
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
-                <div tw="uppercase font-bold">{`All suggested tests (${currentCount})`}</div>
+                <div tw="uppercase font-bold" data-test="tests-to-run-list:table-title">{`All suggested tests (${currentCount})`}</div>
               </div>
             )}
           />
