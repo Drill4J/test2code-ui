@@ -46,8 +46,10 @@ export const AllScopes = () => {
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
   const isActiveBuildVersion = (activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE);
   const { coverage: { byTestType: activeScopeTestsType = [] } = {} } = activeScope || {};
+
   const testsColumns = [
     ...byTestType,
+    ...activeScopeTestsType,
     ...Array.from(new Set(scopes.map(({ coverage: { byTestType: finishedScopeTestsType = [] } = {} }) => finishedScopeTestsType))).flat(),
   ].reduce((acc: string[], item) => (acc.includes(item.type) ? acc : [...acc, item.type]), [])
     .map((type) => ({
@@ -81,7 +83,12 @@ export const AllScopes = () => {
         ? (
           <Table
             data={scopesData}
-            columnsDependency={[isActiveBuildVersion, activeScope?.coverage.percentage, activeScopeTestsType.length, byTestType.length]}
+            columnsDependency={[
+              isActiveBuildVersion,
+              activeScope?.coverage.percentage,
+              activeScopeTestsType.length,
+              byTestType.length, scopes.length,
+            ]}
             columns={[
               {
                 Header: "Name",
