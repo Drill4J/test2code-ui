@@ -21,9 +21,9 @@ import {
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import { FilterList } from "@drill4j/types-admin/dist";
-
+import { keyframes, css } from "styled-components";
 import { useExpanded, useTable } from "react-table";
-import tw, { styled } from "twin.macro";
+import { styled } from "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
@@ -39,8 +39,20 @@ interface Props {
   showCoverageIcon: boolean;
 }
 
+const disappear = keyframes`
+  0%{
+    background-color: #fffbe5;
+  }
+  75% {
+    background-color: #fffbe5;
+  }
+  100% {
+    background-color: #ffffff;
+  }
+`;
+
 const TableRow = styled(TableElements.TR)`
-  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && tw`!bg-yellow-light-tint hover:!bg-monochrome-light-tint`}
+  ${({ isHighlighted }: {isHighlighted: boolean}) => isHighlighted && css`animation: ${disappear} 4s ease-in`};
 `;
 
 export const MethodsTable = ({
