@@ -60,10 +60,10 @@ export const MethodsTable = ({
   topic,
   showCoverageIcon,
 }: Props) => {
-  const { ownerClass = "", methodName = "" } = useQueryParams<{
-    ownerClass?: string; methodName?: string; }>();
+  const { methodOwnerClass = "", methodName = "", methodDesc = "" } = useQueryParams<{
+    methodOwnerClass?: string; methodName?: string; methodDesc?: string; }>();
 
-  const ownerClassPath = ownerClass.slice(0, ownerClass.lastIndexOf("/"));
+  const ownerClassPath = methodOwnerClass.slice(0, methodOwnerClass.lastIndexOf("/"));
 
   const {
     items: coverageByPackages = [],
@@ -220,7 +220,7 @@ export const MethodsTable = ({
           return (
             <TableRow
               {...rowProps}
-              isHighlighted={!row.canExpand && row.original.name === methodName}
+              isHighlighted={!row.canExpand && row.original.name === methodName && row.original.desc === methodDesc}
               isExpanded={row.isExpanded}
               id={row?.original?.name}
             >

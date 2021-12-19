@@ -36,7 +36,7 @@ export const RisksTable = ({ data }: Props) => {
       accessor: "name",
       filterable: true,
       isCustomCell: true,
-      Cell: ({ value = "", row: { original: { ownerClass = "" } = {} } = {}, state }: any) => (
+      Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (
         <Cells.Compound
           cellName={value}
           cellAdditionalInfo={ownerClass}
@@ -50,7 +50,8 @@ export const RisksTable = ({ data }: Props) => {
                 activeTab: "methods",
                 tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),
                 methodName: value,
-                ownerClass,
+                methodOwnerClass: ownerClass,
+                methodDesc: desc,
               },
             })}
             target="_blank"

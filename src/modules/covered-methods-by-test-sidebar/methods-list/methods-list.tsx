@@ -111,10 +111,11 @@ export const MethodsList = ({ topicCoveredMethodsByTest, summary }: Props) => {
                               <Icons.Function tw="h-4" />
                               <Link
                                 to={() => {
-                                  const { ownerClass = "", name = "" } = filteredData[index];
+                                  const { ownerClass = "", name = "", desc = "" } = filteredData[index];
                                   const queryParams = {
                                     methodName: name,
-                                    ownerClass,
+                                    methodOwnerClass: ownerClass,
+                                    methodDesc: desc,
                                     activeTab: "methods",
                                     tableState: JSON.stringify({
                                       filters: [{
