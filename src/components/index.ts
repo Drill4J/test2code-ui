@@ -17,7 +17,6 @@ export { DashboardSection } from "./dashboard-section";
 export { SectionTooltip } from "./section-tooltip";
 export { SingleBar } from "./single-bar";
 export { CoverageSectionTooltip } from "./coverage-section-tooltip";
-export { RisksModal } from "./risks-modal";
 export { BuildMethodsCard, BuildTestsCard } from "./cards";
 export { adminUrl, TestsToRunUrl, getTestsToRunURL } from "./tests-to-run-url";
 export { Column as ListColumn, List } from "./list";

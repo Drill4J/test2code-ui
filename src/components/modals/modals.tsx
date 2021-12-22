@@ -17,12 +17,11 @@ import React from "react";
 import { useQueryParams } from "@drill4j/ui-kit";
 
 import {
-  AssociatedTestModal, CoveredMethodsByTestSidebar, QualityGatePane, SessionsManagementPaneProvider,
+  AssociatedTestModal, CoveredMethodsModal, QualityGatePane, SessionsManagementPaneProvider,
 } from "modules";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "pages/agent/scope-modals";
 import { BaselineBuildModal } from "pages/agent/baseline-build-modal";
 import { GetSuggestedTestsModal } from "pages/agent/tests-to-run/tests-to-run-header/get-suggested-tests-modal";
-import { RisksModal } from "../risks-modal";
 import { FinishAllScopesModal } from "../../pages/group/finish-all-scopes-modal";
 import { TestsToRunModal } from "../tests-to-run-modal";
 
@@ -31,7 +30,6 @@ export const agentModalsNames = {
   FINISH_SCOPE: "FINISH_SCOPE",
   DELETE_SCOPE: "DELETE_SCOPE",
   SESSION_MANAGEMENT: "SESSION_MANAGEMENT",
-  RISKS_PANE: "RISKS_PANE",
   ASSOCIATED_TESTS: "ASSOCIATED_TESTS",
   COVERED_METHODS: "COVERED_METHODS",
   QUALITY_GATE: "QUALITY_GATE",
@@ -48,9 +46,8 @@ const modals: Record<ModalsType, any> = {
   DELETE_SCOPE: DeleteScopeModal,
   FINISH_SCOPE: FinishScopeModal,
   RENAME_SCOPE: RenameScopeModal,
-  RISKS_PANE: RisksModal,
   ASSOCIATED_TESTS: AssociatedTestModal,
-  COVERED_METHODS: CoveredMethodsByTestSidebar,
+  COVERED_METHODS: CoveredMethodsModal,
   QUALITY_GATE: QualityGatePane,
   BASELINE_BUILD: BaselineBuildModal,
   GET_SUGGESTED_TESTS: GetSuggestedTestsModal,

@@ -13,4 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { TestsList } from "./tests-list";
+export { CoveredMethodsModal } from "./covered-methods-modal";

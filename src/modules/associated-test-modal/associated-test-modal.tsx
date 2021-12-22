@@ -15,15 +15,13 @@
  */
 import React from "react";
 import {
-  Modal, useQueryParams, useCloseModal,
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub,
 } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
-import "twin.macro";
+import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion } from "hooks";
-import { ItemInfo } from "./item-info";
-import { TestsList } from "./tests-list";
 import { routes } from "../../common";
 import { agentPluginPath } from "../../router";
 
@@ -32,39 +30,131 @@ export const AssociatedTestModal = () => {
   const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
     path: `${agentPluginPath}${routes.scopeMethods}`,
   }) || {};
-  const params = useQueryParams<{testId?: string; treeLevel?: number}>();
+  const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
+
+  const isSkeleton = Object.keys(associatedTests).length === 0;
+
   const {
     tests = [], packageName = "", className: testClassName = "", methodName = "",
   } = associatedTests;
-  const testsMap = tests.reduce((acc, { type = "", name = "" }) =>
-    ({ ...acc, [type]: acc[type] ? [...acc[type], name] : [name] }), {} as { [testType: string]: string[] });
+
   const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
 
   return (
-    <Modal isOpen onToggle={closeModal}>
-      <div tw="flex flex-col h-full">
-        <div tw="flex items-center min-h-64px pl-6 text-18 leading-24">
-          <span tw="text-monochrome-black">Associated tests</span>
-          {tests.length ? (
-            <div
-              tw="ml-2 font-light text-monochrome-default"
-              data-test="associated-test-pane:tests-count"
-            >
-              {tests.length}
-            </div>
-          )
-            : <div tw="ml-2"><div tw="h-4 bg-monochrome-medium-tint rounded" /></div>}
+    <Popup
+      isOpen
+      onToggle={closeModal}
+      header={(
+        <div tw="text-20 w-[960px] space-x-2"><span>Associated Tests</span>
+          <span tw="text-monochrome-default">
+            {Number(params.testsCount)}
+          </span>
         </div>
-        <ItemInfo
-          packageName={packageName}
-          testClassName={testClassName}
-          methodName={methodName}
-          treeLevel={Number(params?.treeLevel)}
-        />
-        <TestsList associatedTests={testsMap} testsCount={tests.length} />
+      )}
+      type="info"
+      closeOnFadeClick
+    >
+      <div tw="w-[1024px]">
+        <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
+          <MethodInfoLabel>Package</MethodInfoLabel>
+          <MethodInfoLabel>Class</MethodInfoLabel>
+          <MethodInfoLabel>Method</MethodInfoLabel>
+          <MethodInfoValue
+            skeleton={isSkeleton}
+            title={packageName}
+            data-test="associated-tests-modal:package-name"
+          >
+            {isSkeleton ? "" : packageName || "-"}
+          </MethodInfoValue>
+          <MethodInfoValue
+            skeleton={isSkeleton}
+            title={testClassName}
+            data-test="associated-tests-modal:test-class-name"
+          >
+            {isSkeleton ? "" : testClassName || "-"}
+          </MethodInfoValue>
+          <MethodInfoValue
+            skeleton={isSkeleton}
+            title={methodName}
+            data-test="associated-tests-modal:method-name"
+          >
+            {isSkeleton ? "" : methodName || "-"}
+          </MethodInfoValue>
+        </div>
+        <div tw="px-6 pb-4">
+          <VirtualizedTable
+            renderHeader={({ currentCount }: { currentCount: number }) => (
+              <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
+                <div tw="font-bold uppercase">tests</div>
+                <div>{`Displaying ${currentCount} of ${Number(params.testsCount)} rows`}</div>
+              </div>
+            )}
+            gridTemplateColumns="400px 456px auto"
+            data={tests}
+            listHeight={630}
+            listItemSize={40}
+            initialRowsCount={Number(params.testsCount)}
+            stub={(
+              <Stub
+                tw="h-[630px]"
+                icon={<Icons.Test height={104} width={107} />}
+                title="No results found"
+                message="Try adjusting your search or filter to find what you are looking for."
+              />
+            )}
+            columns={
+              [
+                {
+                  Header: "Name",
+                  accessor: "name",
+                  textAlign: "left",
+                  filterable: true,
+                  isCustomCell: true,
+                  width: "100%",
+                  Cell: ({ value = "", state }: any) => (value
+                    ? (
+                      <Cells.Compound
+                        cellName={value}
+                        icon={<Icons.Test />}
+                      >
+                        <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                      </Cells.Compound>
+                    )
+                    : <Skeleton withIcon />),
+                },
+                {
+                  Header: "Path",
+                  accessor: "path",
+                  textAlign: "left",
+                  filterable: true,
+                  isCustomCell: true,
+                  width: "100%",
+                  Cell: ({ value = "-", state }: any) => (value
+                    ? <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                    : <Skeleton />),
+                },
+                {
+                  Header: "Type",
+                  Cell: ({ value = "" }) => (value ? <span tw="lowercase first-letter:uppercase">{value}</span> : <Skeleton />),
+                  accessor: "type",
+                  textAlign: "left",
+                  width: "100%",
+                },
+              ]
+            }
+          />
+        </div>
       </div>
-    </Modal>
+    </Popup>
   );
 };
+
+const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 font-bold text-monochrome-black`);
+
+const MethodInfoValue = styled.div(({ skeleton }: { skeleton?: boolean }) =>
+  [
+    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase first-letter:uppercase`,
+    skeleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
+  ]);

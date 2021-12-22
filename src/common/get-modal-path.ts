@@ -25,7 +25,7 @@ interface Routes {
   deleteScope: "scopeId";
   finishScope: "scopeId";
   risks: "filter";
-  associatedTests: "testId" | "treeLevel";
+  associatedTests: "testId" | "treeLevel" | "testsCount";
   coveredMethods: "testId" | "coveredMethods";
 }
 
@@ -34,7 +34,6 @@ export const modalsRoutes: Record<string, keyof typeof agentModalsNames> = {
   renameScope: "RENAME_SCOPE",
   deleteScope: "DELETE_SCOPE",
   finishScope: "FINISH_SCOPE",
-  risks: "RISKS_PANE",
   associatedTests: "ASSOCIATED_TESTS",
   coveredMethods: "COVERED_METHODS",
   qualityGate: "QUALITY_GATE",
