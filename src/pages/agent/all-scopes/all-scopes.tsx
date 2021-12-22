@@ -15,13 +15,13 @@
  */
 import React from "react";
 import {
-  Menu, Icons, Status, Stub, Table, capitalize,
+  Menu, Icons, Status, Stub, Table, capitalize, Cells,
 } from "@drill4j/ui-kit";
 import { useParams, Link, useHistory } from "react-router-dom";
 import {
   percentFormatter, dateFormatter, timeFormatter, transformObjectsArrayToObject,
 } from "@drill4j/common-utils";
-import tw, { styled } from "twin.macro";
+import tw from "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
@@ -70,15 +70,18 @@ export const AllScopes = () => {
           </div>
         );
       },
-      width: "120px",
+      width: "20%",
     }));
 
   return (
-    <div tw="flex flex-col w-full h-full">
-      <Title>
-        All Scopes
-        <span tw="text-monochrome-default">{scopesData.length}</span>
-      </Title>
+    <div>
+      <div tw="py-8 space-x-2 text-24 leading-32">
+        <span>All Scopes</span>
+        <span tw="text-monochrome-default font-light">
+          {scopesData.length}
+        </span>
+      </div>
+      <div tw="absolute left-20 w-[calc(100% + 48px)] h-1px bg-monochrome-medium-tint" />
       {scopesData.length > 0
         ? (
           <Table
@@ -89,12 +92,31 @@ export const AllScopes = () => {
               activeScopeTestsType.length,
               byTestType.length, scopes.length,
             ]}
+            defaultSortBy={[{
+              id: "started",
+              desc: false,
+            }]}
+            renderHeader={({ currentCount, totalCount }) => (
+              <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-9 pb-3">
+                <div tw="font-bold uppercase">Scopes List</div>
+                <div>{`Displaying ${currentCount} of ${totalCount} scopes`}</div>
+              </div>
+            )}
+            stub={(
+              <Stub
+                icon={<Icons.Scope height={104} width={107} />}
+                title="No results found"
+                message="Try adjusting your search or filter to find what you are looking for."
+              />
+            )}
             columns={[
               {
                 Header: "Name",
                 accessor: "name",
+                filterable: true,
+                isCustomCell: true,
                 Cell: ({
-                  value = "", row: {
+                  value = "", state, row: {
                     original: {
                       id = "", started = 0, active = false, enabled = false, finished = 0,
                     } = {},
@@ -105,7 +127,9 @@ export const AllScopes = () => {
                     to={getPagePath({ name: "scopeMethods", params: { scopeId: id }, queryParams: { activeTab: "methods" } })}
                     data-test="scopes-list:scope-name"
                   >
-                    <div className="link text-ellipsis" title={value}>{value}</div>
+                    <div className="link text-ellipsis" title={value}>
+                      <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                    </div>
                     <div css={[
                       tw`flex gap-x-2 items-center w-full text-12`,
                       active && tw`text-green-default`,
@@ -118,7 +142,7 @@ export const AllScopes = () => {
                   </Link>
                 ),
                 textAlign: "left",
-                width: "40%",
+                width: "60%",
               },
               {
                 Header: "Started",
@@ -134,7 +158,7 @@ export const AllScopes = () => {
                   </>
                 ),
                 textAlign: "left",
-                width: "100px",
+                width: "20%",
               },
               {
                 Header: "Coverage",
@@ -144,7 +168,7 @@ export const AllScopes = () => {
                     {`${percentFormatter(original?.coverage?.percentage)}%`}
                   </div>
                 ),
-                width: "100px",
+                width: "20%",
               },
               ...testsColumns,
               {
@@ -218,8 +242,3 @@ export const AllScopes = () => {
     </div>
   );
 };
-
-const Title = styled.div`
-  ${tw`flex items-center gap-x-2 w-full h-20 border-b border-monochrome-medium-tint`}
-  ${tw`font-light text-24 leading-32 text-monochrome-black`}
-`;
