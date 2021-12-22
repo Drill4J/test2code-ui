@@ -25,12 +25,10 @@ jobs:
           echo ::set-output name=tag::$(grep '"version"' package.json | cut -d '"' -f 4 | head -n 1)
       - name: Trigger autotests
         run: |
-          curl -H "Authorization: token $ACCESS_TOKEN" \
+          curl -H `Authorization: token ${{ secrets.VEE_TABLE_TOKEN }}` \
                -H 'Accept: application/vnd.github.everest-preview+json' \
                "https://api.github.com/repos/Drill4J/e2e/dispatches" \
-               -d '{ "event_type": "run_test", "client_payload": { ${{ github.event.repository.name }}: ${{ steps.get_version.outputs.tag }} } }'
-        env:
-          ACCESS_TOKEN: ${{ secrets.VEE_TABLE_TOKEN }}
+               -d `{ "event_type": "run_test", "client_payload": { "${{ github.event.repository.name }}": "${{ steps.get_version.outputs.tag }}" } }`
       # place this action LAST
       - uses: Drill4J/vee-table@0.0.0
         with:
