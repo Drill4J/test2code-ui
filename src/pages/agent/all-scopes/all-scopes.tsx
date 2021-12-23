@@ -160,7 +160,7 @@ export const AllScopes = () => {
                 ),
                 textAlign: "left",
                 width: "20%",
-                sortType: "datetime",
+                sortType: "number",
               },
               {
                 Header: "Coverage",
