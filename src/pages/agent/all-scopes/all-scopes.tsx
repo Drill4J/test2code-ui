@@ -163,11 +163,11 @@ export const AllScopes = () => {
                 sortType: "number",
               },
               {
-                Header: "Coverage",
-                accessor: "coverage",
+                Header: "Coverage, %",
+                accessor: "coverage.percentage",
                 Cell: ({ row: { original = {} } = {} }: any) => (
                   <div tw="text-20 leading-32 my-6 text-monochrome-black" data-test="scopes-list:coverage">
-                    {`${percentFormatter(original?.coverage?.percentage)}%`}
+                    {percentFormatter(original?.coverage?.percentage)}
                   </div>
                 ),
                 width: "20%",
