@@ -91,6 +91,7 @@ export const RisksTable = ({ data }: Props) => {
         <CoverageCell value={value} showCoverageIcon />
       ),
       width: "147px",
+      sortType: "number",
     },
     {
       Header: "Associated Tests",
@@ -111,6 +112,7 @@ export const RisksTable = ({ data }: Props) => {
         </Cells.Clickable>
       ),
       width: "144px",
+      sortType: "number",
     },
   ];
 

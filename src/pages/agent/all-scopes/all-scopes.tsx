@@ -71,6 +71,7 @@ export const AllScopes = () => {
         );
       },
       width: "20%",
+      sortType: "number",
     }));
 
   return (
@@ -159,6 +160,7 @@ export const AllScopes = () => {
                 ),
                 textAlign: "left",
                 width: "20%",
+                sortType: "datetime",
               },
               {
                 Header: "Coverage",
@@ -169,6 +171,7 @@ export const AllScopes = () => {
                   </div>
                 ),
                 width: "20%",
+                sortType: "number",
               },
               ...testsColumns,
               {

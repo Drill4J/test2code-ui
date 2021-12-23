@@ -665,6 +665,10 @@ button:focus {
   bottom: 1.5rem;
 }
 
+.left-20 {
+  left: 5rem;
+}
+
 .top-2\.5 {
   top: 0.625rem;
 }
@@ -903,6 +907,10 @@ button:focus {
 
 .h-5 {
   height: 1.25rem;
+}
+
+.h-1px {
+  height: 1px;
 }
 
 .h-6 {
@@ -1372,6 +1380,11 @@ button:focus {
   padding-bottom: 1rem;
 }
 
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
 .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
@@ -1425,6 +1438,10 @@ button:focus {
 
 .pb-3 {
   padding-bottom: 0.75rem;
+}
+
+.pt-9 {
+  padding-top: 2.25rem;
 }
 
 .pl-8 {
