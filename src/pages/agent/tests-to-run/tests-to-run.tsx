@@ -151,6 +151,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 Header: "Coverage, %",
                 accessor: "coverage.percentage",
                 Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+                sortType: "number",
               },
               {
                 Header: "Methods covered",
@@ -175,6 +176,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 Header: "Duration",
                 accessor: "overview.duration",
                 Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+                sortType: "number",
               }]}
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">

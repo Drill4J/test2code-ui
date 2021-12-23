@@ -142,16 +142,19 @@ export const MethodsTable = ({
         <CoverageCell value={value} showCoverageIcon={showCoverageIcon} />
       ),
       width: "15%",
+      sortType: "number",
     },
     {
       Header: "Methods total",
       accessor: "totalMethodsCount",
       width: "10%",
+      sortType: "number",
     },
     {
       Header: "Methods covered",
       accessor: "coveredMethodsCount",
       width: "15%",
+      sortType: "number",
     },
     {
       Header: "Associated tests",
@@ -176,6 +179,7 @@ export const MethodsTable = ({
         </Cells.Clickable>
       ),
       width: "10%",
+      sortType: "number",
     },
   ];
 

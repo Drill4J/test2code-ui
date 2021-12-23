@@ -74,10 +74,12 @@ const columns = [
     Header: "Coverage, %",
     accessor: "coverage.percentage",
     Cell: Cells.Coverage,
+    sortType: "number",
   },
   {
     Header: "Methods covered",
     accessor: "coverage.methodCount.covered",
+    sortType: "number",
     Cell: ({ value, row: { original: { id = "", coverage: { methodCount: { covered = 0 } = {} } = {} } = {} } = {} }: any) => (
       <Cells.Clickable
         tw="inline"
@@ -94,6 +96,7 @@ const columns = [
     Header: "Duration",
     accessor: "overview.duration",
     Cell: Cells.Duration,
+    sortType: "number",
   }];
 
 export const TestDetails = ({
