@@ -44,13 +44,24 @@ export const CoveredMethodsModal = () => {
     `${topicCoveredMethodsByTest}/${summary.id}/methods/all`,
   ) || [];
 
+  const headerHeight = 64;
+  const methodInfoHeight = 78;
+
   return (
     <Popup
       isOpen
       onToggle={closeModal}
-      header={
-        <div tw="text-20 w-[960px]">Covered Methods <span tw="text-monochrome-default">{params.coveredMethods}</span></div>
-      }
+      header={(
+        <div tw="text-20 w-[960px]">
+          Covered Methods
+          <span
+            tw="text-monochrome-default"
+            data-test="covered-methods-modal:methods-count"
+          >
+            {params.coveredMethods}
+          </span>
+        </div>
+      )}
       type="info"
       closeOnFadeClick
     >
@@ -61,13 +72,13 @@ export const CoveredMethodsModal = () => {
           <MethodInfoValue
             sceleton={showSceleton}
             title={summary?.testName}
-            data-test="covered-methods-by-test-sidebar:test-name"
+            data-test="covered-methods-modal:test-name"
           >
             {summary?.testName}
           </MethodInfoValue>
           <MethodInfoValue
             sceleton={showSceleton}
-            data-test="covered-methods-by-test-sidebar:test-type"
+            data-test="covered-methods-modal:test-type"
           >
             {summary?.testType}
           </MethodInfoValue>
@@ -82,7 +93,7 @@ export const CoveredMethodsModal = () => {
             )}
             gridTemplateColumns="677px 115px auto"
             data={methods}
-            listHeight={630}
+            listHeight={(window.innerHeight * 0.8) - headerHeight - methodInfoHeight}
             initialRowsCount={Number(params.coveredMethods)}
             stub={(
               <Stub
@@ -104,6 +115,7 @@ export const CoveredMethodsModal = () => {
                   Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (value
                     ? (
                       <Cells.Compound
+                        data-test="covered-methods-modal:list:methods:name"
                         cellName={value}
                         cellAdditionalInfo={ownerClass}
                         icon={<Icons.Function />}

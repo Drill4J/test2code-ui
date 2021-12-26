@@ -42,6 +42,9 @@ export const AssociatedTestModal = () => {
 
   const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
 
+  const headerHeight = 64;
+  const packageInfoHeight = 78;
+
   return (
     <Popup
       isOpen
@@ -64,7 +67,7 @@ export const AssociatedTestModal = () => {
           <MethodInfoValue
             skeleton={isSkeleton}
             title={packageName}
-            data-test="associated-tests-modal:package-name"
+            data-test="associated-tests:package-name"
           >
             {isSkeleton ? "" : packageName || "-"}
           </MethodInfoValue>
@@ -93,7 +96,7 @@ export const AssociatedTestModal = () => {
             )}
             gridTemplateColumns="400px 456px auto"
             data={tests}
-            listHeight={630}
+            listHeight={(window.innerHeight * 0.8) - headerHeight - packageInfoHeight}
             listItemSize={40}
             initialRowsCount={Number(params.testsCount)}
             stub={(
@@ -119,7 +122,11 @@ export const AssociatedTestModal = () => {
                         cellName={value}
                         icon={<Icons.Test />}
                       >
-                        <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                        <Cells.Highlight
+                          text={value}
+                          searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                          data-test="associated-tests:test:name"
+                        />
                       </Cells.Compound>
                     )
                     : <Skeleton withIcon />),
