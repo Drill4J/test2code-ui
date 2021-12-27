@@ -51,3 +51,4 @@ export type { TestTypes } from "./test-types";
 export type { TestsInfo } from "./tests-info";
 export type { TestsToRunSummary } from "./tests-to-run-summary";
 export type { TestsToRun } from "./tests-to-run";
+export type { TestDetails } from "./test-details";

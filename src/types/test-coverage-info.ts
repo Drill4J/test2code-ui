@@ -15,13 +15,13 @@
  */
 import { Coverage } from "./coverage";
 import { TestOverview } from "./test-overview";
+import { TestDetails } from "./test-details";
 
 export interface TestCoverageInfo {
-  id: string;
-  type: string;
-  name: string;
-  toRun: boolean;
-  coverage: Coverage;
-  overview: TestOverview;
-  [key: string]: string | boolean | Coverage | TestOverview;
+  id?: string;
+  type?: string;
+  name?: TestDetails;
+  toRun?: boolean;
+  coverage?: Coverage;
+  overview?: TestOverview;
 }

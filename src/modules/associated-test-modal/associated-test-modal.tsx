@@ -22,8 +22,9 @@ import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion } from "hooks";
-import { routes } from "../../common";
-import { agentPluginPath } from "../../router";
+import { concatPath, concatName } from "utils/transform-tests";
+import { routes } from "common";
+import { agentPluginPath } from "router";
 
 export const AssociatedTestModal = () => {
   const { pathname } = useLocation();
@@ -95,7 +96,14 @@ export const AssociatedTestModal = () => {
               </div>
             )}
             gridTemplateColumns="400px 456px auto"
-            data={tests}
+            data={tests.map((test) => ({
+              ...test,
+              details: {
+                ...test.details,
+                testName: concatName(test?.details?.testName, test?.details?.params?.methodParams),
+                path: concatPath(test?.details?.path, test?.details?.params?.classParams),
+              },
+            }))}
             listHeight={(window.innerHeight * 0.8) - headerHeight - packageInfoHeight}
             listItemSize={40}
             initialRowsCount={Number(params.testsCount)}
@@ -111,7 +119,7 @@ export const AssociatedTestModal = () => {
               [
                 {
                   Header: "Name",
-                  accessor: "name",
+                  accessor: "details.testName",
                   textAlign: "left",
                   filterable: true,
                   isCustomCell: true,
@@ -133,7 +141,7 @@ export const AssociatedTestModal = () => {
                 },
                 {
                   Header: "Path",
-                  accessor: "path",
+                  accessor: "details.path",
                   textAlign: "left",
                   filterable: true,
                   isCustomCell: true,

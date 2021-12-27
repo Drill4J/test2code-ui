@@ -13,18 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TestDetails } from "./test-details";
-
-export interface MethodCounts {
-  all?: number;
-  new?: number;
-  modified?: number;
-  unaffected?: number;
-}
-
-export interface MethodsCoveredByTestSummary {
-  id?: string;
-  testName?: TestDetails;
-  testType?: string;
-  methodCounts?: MethodCounts;
+export interface TestDetails {
+  engine?: string;
+  path?: string;
+  testName?: string;
+  params?: Record<string, string>;
+  metadata?: Record<string, string>;
 }
