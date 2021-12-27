@@ -47,7 +47,7 @@ export const getTestsAndTests2RunSections = ({
     );
     testToRunSection = <TestsToRunSection data={testsDataStub} testsColors={testsColors} testsToRunCount={testsToRunCount} />;
   } else if (tests.length > 0 && tests2Run.length > 0) {
-    const testsColors = addColors([...tests2Run, ...tests].map(({ type = "" }) => type));
+    const testsColors = addColors(Array.from(new Set([...tests2Run, ...tests].map(({ type = "" }) => type))));
     testSection = (
       <TestsSection
         data={tests}
