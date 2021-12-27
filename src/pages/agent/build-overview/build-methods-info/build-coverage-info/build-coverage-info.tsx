@@ -58,7 +58,7 @@ export const BuildCoverageInfo = ({
           </span>
         )}
       </div>
-      <MainProgressBar type="primary" value={`${buildCodeCoverage}%`} />
+      <MainProgressBar type="primary" percentage={buildCodeCoverage} />
       <ProgressBarLegends />
     </div>
   );

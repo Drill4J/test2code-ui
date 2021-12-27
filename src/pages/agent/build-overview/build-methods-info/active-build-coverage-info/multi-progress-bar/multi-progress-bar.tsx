@@ -58,7 +58,7 @@ export const MultiProgressBar = () => {
               </Message>
             )}
           >
-            <MainProgressBar value={`${Number(buildCoverage?.percentage) * (width / 100)}px`} testContext="build-coverage" />
+            <MainProgressBar percentage={Number(buildCoverage?.percentage)} testContext="build-coverage" />
           </Tooltip>
           <div
             tw="flex absolute bottom-1/2 transform translate-y-1/2"
@@ -79,8 +79,8 @@ export const MultiProgressBar = () => {
                 style={{ width: `${overlappingCode * (width / 100)}px`, transform: "scale(-1)" }}
               >
                 {active
-                  ? <StripedProgressBar type="secondary" value={`${overlappingCode * (width / 100)}px`} />
-                  : <AdditionalProgressBar type="secondary" value={`${overlappingCode * (width / 100)}px`} />}
+                  ? <StripedProgressBar type="secondary" percentage={overlappingCode} />
+                  : <AdditionalProgressBar type="secondary" percentage={overlappingCode} />}
               </div>
             </Tooltip>
             <Tooltip
@@ -91,15 +91,17 @@ export const MultiProgressBar = () => {
                 </Message>
               )}
             >
-              {active
-                ? <StripedProgressBar type="primary" value={`${uniqueCodeCoverage * (width / 100)}px`} />
-                : (
-                  <AdditionalProgressBar
-                    type="primary"
-                    value={`${uniqueCodeCoverage * (width / 100)}px`}
-                    testContext="unique-code-progress-bar"
-                  />
-                )}
+              <div style={{ width: `${width}px` }}>
+                {active
+                  ? <StripedProgressBar type="primary" percentage={uniqueCodeCoverage} />
+                  : (
+                    <AdditionalProgressBar
+                      type="primary"
+                      percentage={uniqueCodeCoverage}
+                      testContext="unique-code-progress-bar"
+                    />
+                  )}
+              </div>
             </Tooltip>
           </div>
         </>

@@ -48,7 +48,7 @@ export const ScopeCoverageInfo = ({ scope }: Props) => {
           {`${percentFormatter(uniqueCodeCoverage)}%`}
         </span>&nbsp;of new coverage
       </div>
-      <MainProgressBar type="primary" value={`${coveragePercentage}%`} />
+      <MainProgressBar type="primary" percentage={coveragePercentage} />
       <ProgressBarLegends />
     </div>
   );
