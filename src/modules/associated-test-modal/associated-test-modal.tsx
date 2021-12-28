@@ -17,20 +17,14 @@ import React from "react";
 import {
   useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion } from "hooks";
+import { useBuildVersion, useTestToCodeParams } from "hooks";
 import { concatPath, concatName } from "utils/transform-tests";
-import { routes } from "common";
-import { agentPluginPath } from "router";
 
 export const AssociatedTestModal = () => {
-  const { pathname } = useLocation();
-  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
-    path: `${agentPluginPath}${routes.scopeMethods}`,
-  }) || {};
+  const { scopeId } = useTestToCodeParams();
   const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};

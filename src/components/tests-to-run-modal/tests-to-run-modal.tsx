@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Icons, Dropdown, Modal,
-  useCloseModal,
+  useCloseModal, capitalize,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 
@@ -24,10 +24,13 @@ import tw from "twin.macro";
 
 import { useGroupData, useGroupRouteParams } from "hooks";
 import { PLUGIN_ID } from "common";
+import { TestDetails } from "types";
 import { getTestsToRunURL, TestsToRunUrl } from "../tests-to-run-url";
+import { concatName } from "../../utils/transform-tests";
 
 interface TestToRun {
-  name?: string;
+  id?: string;
+  details?: TestDetails;
 }
 
 interface GroupedTestToRun {
@@ -45,19 +48,21 @@ export const TestsToRunModal = () => {
 
   const { groupId = "" } = useGroupRouteParams();
   const { byType: testsToRun = {} } = useGroupData<GroupedTestToRun>("/group/data/tests-to-run", groupId) || {};
-  const allTests = Object.values(testsToRun).reduce((acc, tests) => [...acc, ...tests], []);
-  const [selectedFilter, setSelectedFilter] = useState("all");
+  const allTests = useMemo(() => Object.values(testsToRun).reduce((acc, value) => [...acc, ...value], []), [testsToRun]);
+  const [selectedTestsType, setSelectedTestsType] = useState("all");
   const getSelectedTests = () => {
-    switch (selectedFilter) {
-      case "manual":
-        return testsToRun.MANUAL;
-      case "auto":
-        return testsToRun.AUTO;
-      default:
+    switch (selectedTestsType) {
+      case "all":
         return allTests;
+      default:
+        return testsToRun[selectedTestsType];
     }
   };
   const closeModal = useCloseModal("/tests-to-run-modal");
+
+  const dropdownItems = Object.entries(testsToRun).map(([key, value]) => ({
+    value: key, label: `${capitalize(key)} (${value.length})`,
+  }));
 
   return (
     <Modal isOpen onToggle={closeModal}>
@@ -100,21 +105,17 @@ export const TestsToRunModal = () => {
               tw="mt-3 ml-6 text-blue-default"
               items={[
                 { value: "all", label: "All test types" },
-                { value: "manual", label: `Manual tests (${(testsToRun.MANUAL || []).length})` },
-                {
-                  value: "auto",
-                  label: `Auto tests (${(testsToRun.AUTO || []).length})`,
-                },
+                ...dropdownItems,
               ]}
-              onChange={(value : any) => setSelectedFilter(String(value))}
-              value={selectedFilter}
+              onChange={(value) => setSelectedTestsType(String(value))}
+              value={selectedTestsType}
             />
           </div>
           <div tw="text-14 mt-4 px-6 space-y-4">
-            {(getSelectedTests() || []).map((test) => (
-              <div tw="flex items-center gap-x-4" key={test.name} data-test="tests-to-run-modal:tests-list:test">
+            {(getSelectedTests() || []).map(({ id = "", details }) => (
+              <div tw="flex items-center gap-x-4" key={id} data-test="tests-to-run-modal:tests-list:test">
                 <Icons.Test tw="flex items-center min-w-16px" />
-                <div tw="break-all">{test.name}</div>
+                <div tw="break-all">{concatName(details?.testName, details?.params?.methodParams)}</div>
               </div>
             ))}
           </div>

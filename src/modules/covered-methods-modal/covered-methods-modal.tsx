@@ -24,7 +24,7 @@ import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summa
 import { useBuildVersion, useTestToCodeParams } from "hooks";
 import { getPagePath } from "common";
 import { MethodsDetails } from "types";
-import { concatName } from "../../utils/transform-tests";
+import { concatName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
   const { scopeId } = useTestToCodeParams();
