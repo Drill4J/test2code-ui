@@ -24,6 +24,7 @@ import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summa
 import { useBuildVersion, useTestToCodeParams } from "hooks";
 import { getPagePath } from "common";
 import { MethodsDetails } from "types";
+import { concatName } from "../../utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
   const { scopeId } = useTestToCodeParams();
@@ -42,6 +43,8 @@ export const CoveredMethodsModal = () => {
 
   const headerHeight = 64;
   const methodInfoHeight = 78;
+  const testName = concatName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
+  const testPath = concatName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
 
   return (
     <Popup
@@ -62,17 +65,26 @@ export const CoveredMethodsModal = () => {
       closeOnFadeClick
     >
       <div tw="w-[1024px]">
-        <div tw="grid grid-cols-2 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
+        <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
           <MethodInfoLabel>Test Name</MethodInfoLabel>
+          <MethodInfoLabel>Path</MethodInfoLabel>
           <MethodInfoLabel>Test Type</MethodInfoLabel>
           <MethodInfoValue
             sceleton={showSceleton}
-            title={testSummary?.testName?.testName}
+            title={testName}
             data-test="covered-methods-modal:test-name"
           >
-            {testSummary?.testName?.testName}
+            {testName}
           </MethodInfoValue>
           <MethodInfoValue
+            sceleton={showSceleton}
+            title={testPath}
+            data-test="covered-methods-modal:test-name"
+          >
+            {testPath}
+          </MethodInfoValue>
+          <MethodInfoValue
+            tw="lowercase first-letter:uppercase"
             sceleton={showSceleton}
             data-test="covered-methods-modal:test-type"
           >
@@ -166,10 +178,7 @@ export const CoveredMethodsModal = () => {
                 },
                 {
                   Header: "Coverage, %",
-                  Cell: ({ value = 0 }) => {
-                    console.log(value);
-                    return value ? <Cells.CoverageProgress value={value} /> : <Skeleton />;
-                  },
+                  Cell: ({ value = 0 }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
                   accessor: "coverage",
                   textAlign: "right",
                   width: "100%",
@@ -187,6 +196,6 @@ const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 fo
 
 const MethodInfoValue = styled.div(({ sceleton }: { sceleton?: boolean }) =>
   [
-    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase first-letter:uppercase`,
+    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis`,
     sceleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
   ]);
