@@ -51,8 +51,8 @@ export const CoveredMethodsModal = () => {
       isOpen
       onToggle={closeModal}
       header={(
-        <div tw="text-20 w-[960px]">
-          Covered Methods
+        <div tw="text-20 space-x-2 w-[960px]">
+          <span>Covered Methods</span>
           <span
             tw="text-monochrome-default"
             data-test="covered-methods-modal:methods-count"
