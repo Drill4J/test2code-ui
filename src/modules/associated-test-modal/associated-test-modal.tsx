@@ -128,6 +128,7 @@ export const AssociatedTestModal = () => {
                   Cell: ({ value = "", state, row }: any) => (value
                     ? (
                       <Cells.Compound
+                        cellName={value}
                         icon={<Icons.Test />}
                         link={(
                           <Link
