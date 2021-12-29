@@ -15,7 +15,11 @@
  */
 import React, { useRef } from "react";
 import {
+<<<<<<< HEAD
   useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, Tooltip,
+=======
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton,
+>>>>>>> 1406325 (refactor: copy button in tables)
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -164,17 +168,13 @@ export const AssociatedTestModal = () => {
                           </Link>
                         )}
                       >
-                        <div tw="flex gap-x-2 items-center">
-                          <CellComponents.Name
-                            data-test="compound-cell:name"
-                            title={value}
-                          >
-                            <Cells.Highlight
-                              text={value}
-                              searchWords={state.filters.map((filter: {value: string}) => filter.value)}
-                              data-test="associated-tests:test:name"
-                            />
-                          </CellComponents.Name>
+                        <div tw="flex items-center gap-x-2">
+                          <Cells.Highlight
+                            text={value}
+                            searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                            data-test="associated-tests:test:name"
+                          />
+                          <CopyButton text={value} />
                         </div>
                       </Cells.Compound>
                     )

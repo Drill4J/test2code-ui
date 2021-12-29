@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, CellComponents, Cells, Icons, Stub, Table, Tooltip, CopyButton,
+  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -38,17 +38,10 @@ export const RisksTable = ({ data }: Props) => {
       isCustomCell: true,
       Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (
         <Cells.Compound
+          cellName={value}
+          cellAdditionalInfo={ownerClass}
           icon={<Icons.Function />}
-        >
-          <div tw="flex gap-x-2 items-center">
-            <CellComponents.Name
-              data-test="compound-cell:name"
-              title={value}
-              bold={!!ownerClass}
-            >
-              <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
-            </CellComponents.Name>
-            <CopyButton text={value} />
+          link={(
             <Link
               to={getPagePath({
                 name: "test2code",
@@ -76,8 +69,12 @@ export const RisksTable = ({ data }: Props) => {
                 <Icons.NewWindow />
               </Tooltip>
             </Link>
+          )}
+        >
+          <div tw="flex items-center gap-x-2">
+            <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+            <CopyButton text={value} />
           </div>
-          <CellComponents.AdditionalInfo info={ownerClass} />
         </Cells.Compound>
       ),
       width: "50%",
