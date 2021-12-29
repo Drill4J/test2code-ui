@@ -24,7 +24,7 @@ import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summa
 import { useBuildVersion, useTestToCodeParams } from "hooks";
 import { getPagePath } from "common";
 import { MethodsDetails } from "types";
-import { concatName } from "utils/transform-tests";
+import { concatTestName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
   const { scopeId } = useTestToCodeParams();
@@ -43,8 +43,8 @@ export const CoveredMethodsModal = () => {
 
   const headerHeight = 64;
   const methodInfoHeight = 78;
-  const testName = concatName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
-  const testPath = concatName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
+  const testName = concatTestName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
+  const testPath = concatTestName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
 
   return (
     <Popup

@@ -21,7 +21,7 @@ import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion, useTestToCodeParams } from "hooks";
-import { concatPath, concatName } from "utils/transform-tests";
+import { concatTestPath, concatTestName } from "utils/transform-tests";
 
 export const AssociatedTestModal = () => {
   const { scopeId } = useTestToCodeParams();
@@ -94,8 +94,8 @@ export const AssociatedTestModal = () => {
               ...test,
               details: {
                 ...test.details,
-                testName: concatName(test?.details?.testName, test?.details?.params?.methodParams),
-                path: concatPath(test?.details?.path, test?.details?.params?.classParams),
+                testName: concatTestName(test?.details?.testName, test?.details?.params?.methodParams),
+                path: concatTestPath(test?.details?.path, test?.details?.params?.classParams),
               },
             }))}
             listHeight={(window.innerHeight * 0.8) - headerHeight - packageInfoHeight}

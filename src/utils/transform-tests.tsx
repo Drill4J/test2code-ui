@@ -15,14 +15,14 @@
  */
 import { TestCoverageInfo } from "types";
 
-export const concatPath = (path?: string, classParams?: string) => {
+export const concatTestPath = (path?: string, classParams?: string) => {
   if (!classParams && !path) return "";
   if (!classParams) return path;
 
   return `${path}${classParams}`;
 };
 
-export const concatName = (
+export const concatTestName = (
   name?: string,
   methodParams?: string,
 ) => {
@@ -38,11 +38,11 @@ export const transformTests = (tests: TestCoverageInfo[]) =>
       ...test.overview,
       details: {
         ...test?.overview?.details,
-        name: concatName(
+        name: concatTestName(
           test?.overview?.details?.testName || test?.name?.testName,
           test?.overview?.details?.params?.methodParams,
         ),
-        path: concatPath(
+        path: concatTestPath(
           test?.overview?.details?.path,
           test?.overview?.details?.params?.classParams,
         ),

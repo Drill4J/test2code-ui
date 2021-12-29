@@ -15,8 +15,7 @@
  */
 import React, { useState, useEffect, useMemo } from "react";
 import {
-  Icons, Dropdown, Modal,
-  useCloseModal, capitalize,
+  Icons, Dropdown, Modal, useCloseModal, capitalize, useCopy,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 
@@ -25,8 +24,8 @@ import tw from "twin.macro";
 import { useGroupData, useGroupRouteParams } from "hooks";
 import { PLUGIN_ID } from "common";
 import { TestDetails } from "types";
+import { concatTestName } from "utils/transform-tests";
 import { getTestsToRunURL, TestsToRunUrl } from "../tests-to-run-url";
-import { concatName } from "../../utils/transform-tests";
 
 interface TestToRun {
   id?: string;
@@ -39,13 +38,7 @@ interface GroupedTestToRun {
 }
 
 export const TestsToRunModal = () => {
-  const [copied, setCopied] = useState(false);
-  useEffect(() => {
-    const timeout = setTimeout(() => setCopied(false), 5000);
-    copied && timeout;
-    return () => clearTimeout(timeout);
-  }, [copied]);
-
+  const { copied, setCopied } = useCopy({ delay: 5000 });
   const { groupId = "" } = useGroupRouteParams();
   const { byType: testsToRun = {} } = useGroupData<GroupedTestToRun>("/group/data/tests-to-run", groupId) || {};
   const allTests = useMemo(() => Object.values(testsToRun).reduce((acc, value) => [...acc, ...value], []), [testsToRun]);
@@ -112,10 +105,10 @@ export const TestsToRunModal = () => {
             />
           </div>
           <div tw="text-14 mt-4 px-6 space-y-4">
-            {(getSelectedTests() || []).map(({ id = "", details }) => (
+            {getSelectedTests().map(({ id = "", details }) => (
               <div tw="flex items-center gap-x-4" key={id} data-test="tests-to-run-modal:tests-list:test">
                 <Icons.Test tw="flex items-center min-w-16px" />
-                <div tw="break-all">{concatName(details?.testName, details?.params?.methodParams)}</div>
+                <div tw="break-all">{concatTestName(details?.testName, details?.params?.methodParams)}</div>
               </div>
             ))}
           </div>
