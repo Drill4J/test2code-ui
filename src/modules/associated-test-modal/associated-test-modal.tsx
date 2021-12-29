@@ -128,7 +128,6 @@ export const AssociatedTestModal = () => {
                   Cell: ({ value = "", state, row }: any) => (value
                     ? (
                       <Cells.Compound
-                        cellName={value}
                         icon={<Icons.Test />}
                         link={(
                           <Link
@@ -169,6 +168,7 @@ export const AssociatedTestModal = () => {
                           </Link>
                         )}
                       >
+<<<<<<< HEAD
                         <div tw="flex items-center gap-x-2">
                           <Cells.Highlight
                             text={value}
@@ -176,6 +176,19 @@ export const AssociatedTestModal = () => {
                             data-test="associated-tests:test:name"
                           />
                           <CopyButton text={value} />
+=======
+                        <div tw="flex gap-x-2 items-center">
+                          <CellComponents.Name
+                            data-test="compound-cell:name"
+                            title={value}
+                          >
+                            <Cells.Highlight
+                              text={value}
+                              searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                              data-test="associated-tests:test:name"
+                            />
+                          </CellComponents.Name>
+>>>>>>> 3599329 (fix: rewrite compound cell)
                         </div>
                       </Cells.Compound>
                     )
