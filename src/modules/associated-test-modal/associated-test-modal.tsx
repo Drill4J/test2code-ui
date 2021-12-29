@@ -15,13 +15,15 @@
  */
 import React from "react";
 import {
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub,
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
 import { useBuildVersion, useTestToCodeParams } from "hooks";
 import { concatTestPath, concatTestName } from "utils/transform-tests";
+import { Link } from "react-router-dom";
+import { getPagePath } from "../../common";
 
 export const AssociatedTestModal = () => {
   const { scopeId } = useTestToCodeParams();
@@ -118,11 +120,49 @@ export const AssociatedTestModal = () => {
                   filterable: true,
                   isCustomCell: true,
                   width: "100%",
-                  Cell: ({ value = "", state }: any) => (value
+                  Cell: ({ value = "", state, row }: any) => (value
                     ? (
                       <Cells.Compound
                         cellName={value}
                         icon={<Icons.Test />}
+                        link={(
+                          <Link
+                            to={() => {
+                              const queryParams = {
+                                activeTab: "tests",
+                                tableState: JSON.stringify({
+                                  filters: [
+                                    {
+                                      id: "overview.details.name",
+                                      value: row.original.details.testName,
+                                    },
+                                    {
+                                      id: "overview.details.path",
+                                      value: row.original.details.path,
+                                    }],
+                                }),
+                              };
+                              return scopeId
+                                ? getPagePath({ name: "scopeTests", params: { scopeId }, queryParams })
+                                : getPagePath({ name: "test2code", queryParams });
+                            }}
+                            tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+                            title={value}
+                            target="_blank"
+                          >
+                            <Tooltip
+                              position="top-center"
+                              message={(
+                                <div tw="flex gap-x-2">
+                                  <span>Navigate to Application tests</span>
+                                  <Icons.NewWindow />
+                                </div>
+                              )}
+                            >
+                              <Icons.NewWindow />
+                            </Tooltip>
+                          </Link>
+                        )}
                       >
                         <Cells.Highlight
                           text={value}
