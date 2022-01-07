@@ -17,43 +17,43 @@ import React, { useRef } from "react";
 import {
   Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
-import { useBuildVersion } from "hooks";
-import { getPagePath, routes } from "common";
-import { agentPluginPath } from "router";
+import { useBuildVersion, useTestToCodeParams } from "hooks";
+import { getPagePath } from "common";
 import { MethodsDetails } from "types";
+import { concatTestName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
-  const { pathname } = useLocation();
-  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
-    path: `${agentPluginPath}${routes.scopeTests}`,
-  }) || {};
+  const { scopeId } = useTestToCodeParams();
 
   const params = useQueryParams<{testId?: string; coveredMethods?: number}>();
   const topicCoveredMethodsByTest = scopeId ? `/build/scopes/${scopeId}/tests` : "/build/tests";
-  const summary = useBuildVersion<MethodsCoveredByTestSummary>(
+  const testSummary = useBuildVersion<MethodsCoveredByTestSummary>(
     `${topicCoveredMethodsByTest}/${params?.testId}/methods/summary`,
   ) || {};
-  const showSceleton = !Object.keys(summary).length;
+  const showSceleton = !Object.keys(testSummary).length;
   const closeModal = useCloseModal("/covered-methods-modal", ["testId", "coveredMethods"]);
 
-  const methods = useBuildVersion<MethodsDetails[]>(
-    `${topicCoveredMethodsByTest}/${summary.id}/methods/all`,
+  const coveredMethods = useBuildVersion<MethodsDetails[]>(
+    `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
+
   const { height: documentHeight } = useElementSize(useRef(document.documentElement));
   const headerHeight = 64;
   const methodInfoHeight = 78;
+  const testName = concatTestName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
+  const testPath = concatTestName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
 
   return (
     <Popup
       isOpen
       onToggle={closeModal}
       header={(
-        <div tw="text-20 w-[960px]">
-          Covered Methods
+        <div tw="text-20 space-x-2 w-[960px]">
+          <span>Covered Methods</span>
           <span
             tw="text-monochrome-default"
             data-test="covered-methods-modal:methods-count"
@@ -66,21 +66,30 @@ export const CoveredMethodsModal = () => {
       closeOnFadeClick
     >
       <div tw="w-[1024px]">
-        <div tw="grid grid-cols-2 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
+        <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
           <MethodInfoLabel>Test Name</MethodInfoLabel>
+          <MethodInfoLabel>Path</MethodInfoLabel>
           <MethodInfoLabel>Test Type</MethodInfoLabel>
           <MethodInfoValue
             sceleton={showSceleton}
-            title={summary?.testName}
+            title={testName}
             data-test="covered-methods-modal:test-name"
           >
-            {summary?.testName}
+            {testName}
           </MethodInfoValue>
           <MethodInfoValue
             sceleton={showSceleton}
+            title={testPath}
+            data-test="covered-methods-modal:test-name"
+          >
+            {testPath}
+          </MethodInfoValue>
+          <MethodInfoValue
+            tw="lowercase first-letter:uppercase"
+            sceleton={showSceleton}
             data-test="covered-methods-modal:test-type"
           >
-            {summary?.testType}
+            {testSummary?.testType}
           </MethodInfoValue>
         </div>
         <div tw="px-6 pb-4">
@@ -92,7 +101,7 @@ export const CoveredMethodsModal = () => {
               </div>
             )}
             gridTemplateColumns="677px 115px auto"
-            data={methods}
+            data={coveredMethods}
             listHeight={(documentHeight * 0.75) - headerHeight - methodInfoHeight}
             initialRowsCount={Number(params.coveredMethods)}
             stub={(
@@ -170,7 +179,7 @@ export const CoveredMethodsModal = () => {
                 },
                 {
                   Header: "Coverage, %",
-                  Cell: ({ value = "" }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
+                  Cell: ({ value = 0 }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
                   accessor: "coverage",
                   textAlign: "right",
                   width: "100%",
@@ -188,6 +197,6 @@ const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 fo
 
 const MethodInfoValue = styled.div(({ sceleton }: { sceleton?: boolean }) =>
   [
-    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase first-letter:uppercase`,
+    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis`,
     sceleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
   ]);

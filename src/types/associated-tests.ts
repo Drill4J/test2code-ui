@@ -13,11 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { TestOverview } from "./test-overview";
+import { TestDetails } from "./test-details";
+
+interface TypedTest {
+  type?: string;
+  details?: TestDetails;
+}
 
 export interface AssociatedTests {
   id?: string;
-  tests?: Array<{ name?: string; type?: string; stats?: TestOverview }>;
+  tests?: TypedTest[];
   className?: string;
   methodName?: string;
   packageName?: string;

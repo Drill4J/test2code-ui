@@ -15,21 +15,18 @@
  */
 import React, { useRef } from "react";
 import {
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize,
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, Tooltip,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion } from "hooks";
-import { routes } from "../../common";
-import { agentPluginPath } from "../../router";
+import { useBuildVersion, useTestToCodeParams } from "hooks";
+import { concatTestPath, concatTestName } from "utils/transform-tests";
+import { Link } from "react-router-dom";
+import { getPagePath } from "../../common";
 
 export const AssociatedTestModal = () => {
-  const { pathname } = useLocation();
-  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
-    path: `${agentPluginPath}${routes.scopeMethods}`,
-  }) || {};
+  const { scopeId } = useTestToCodeParams();
   const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
@@ -96,7 +93,14 @@ export const AssociatedTestModal = () => {
               </div>
             )}
             gridTemplateColumns="400px 456px auto"
-            data={tests}
+            data={tests.map((test) => ({
+              ...test,
+              details: {
+                ...test.details,
+                testName: concatTestName(test?.details?.testName, test?.details?.params?.methodParams),
+                path: concatTestPath(test?.details?.path, test?.details?.params?.classParams),
+              },
+            }))}
             listHeight={(documentHeight * 0.75) - headerHeight - packageInfoHeight}
             listItemSize={40}
             initialRowsCount={Number(params.testsCount)}
@@ -112,16 +116,54 @@ export const AssociatedTestModal = () => {
               [
                 {
                   Header: "Name",
-                  accessor: "name",
+                  accessor: "details.testName",
                   textAlign: "left",
                   filterable: true,
                   isCustomCell: true,
                   width: "100%",
-                  Cell: ({ value = "", state }: any) => (value
+                  Cell: ({ value = "", state, row }: any) => (value
                     ? (
                       <Cells.Compound
                         cellName={value}
                         icon={<Icons.Test />}
+                        link={(
+                          <Link
+                            to={() => {
+                              const queryParams = {
+                                activeTab: "tests",
+                                tableState: JSON.stringify({
+                                  filters: [
+                                    {
+                                      id: "overview.details.name",
+                                      value: row.original.details.testName,
+                                    },
+                                    {
+                                      id: "overview.details.path",
+                                      value: row.original.details.path,
+                                    }],
+                                }),
+                              };
+                              return scopeId
+                                ? getPagePath({ name: "scopeTests", params: { scopeId }, queryParams })
+                                : getPagePath({ name: "test2code", queryParams });
+                            }}
+                            tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+                            title={value}
+                            target="_blank"
+                          >
+                            <Tooltip
+                              position="top-center"
+                              message={(
+                                <div tw="flex gap-x-2">
+                                  <span>Navigate to Application tests</span>
+                                  <Icons.NewWindow />
+                                </div>
+                              )}
+                            >
+                              <Icons.NewWindow />
+                            </Tooltip>
+                          </Link>
+                        )}
                       >
                         <Cells.Highlight
                           text={value}
@@ -134,7 +176,7 @@ export const AssociatedTestModal = () => {
                 },
                 {
                   Header: "Path",
-                  accessor: "path",
+                  accessor: "details.path",
                   textAlign: "left",
                   filterable: true,
                   isCustomCell: true,
