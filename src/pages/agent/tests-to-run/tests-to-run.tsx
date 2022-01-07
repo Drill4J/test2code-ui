@@ -56,7 +56,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     .reduce((test, testType) => ({ ...test, [testType.type]: testType }), {}) as TestsInfo;
   const previousBuildAutoTestsCount = AUTO?.summary?.testCount || 0;
 
-  const stub = useMemo(() => (testsToRun.length > 0
+  const tableStub = useMemo(() => (testsToRun.length > 0
     ? (
       <Stub
         icon={<Icons.Test height={104} width={107} />}
@@ -111,7 +111,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         <div tw="flex flex-col mt-8">
           <Table
             data={transformTests(testsToRun)}
-            stub={stub}
+            stub={tableStub}
             columns={[
               {
                 Header: "Name",
@@ -139,7 +139,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                 Header: "State",
                 accessor: "overview.result",
                 Cell: ({ row: { original: { toRun } } }: any) => (
-                  <span tw="leading-64">
+                  <span tw="leading-64" title={toRun ? "To run" : "Done"}>
                     {toRun
                       ? "To run"
                       : <span tw="font-bold text-green-default">Done</span>}
@@ -186,13 +186,6 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
           />
         </div>
       </div>
-      {!testsToRun.length && (
-        <Stub
-          icon={<Icons.Test tw="text-monochrome-medium-tint" width={80} height={80} />}
-          title="No suggested tests"
-          message="There is no information about the suggested to run tests in this build."
-        />
-      )}
     </div>
   );
 };

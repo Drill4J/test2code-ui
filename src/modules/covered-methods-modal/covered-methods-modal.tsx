@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useRef } from "react";
 import {
-  Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip,
+  Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -41,6 +41,7 @@ export const CoveredMethodsModal = () => {
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
 
+  const { height: documentHeight } = useElementSize(useRef(document.documentElement));
   const headerHeight = 64;
   const methodInfoHeight = 78;
   const testName = concatTestName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
@@ -101,7 +102,7 @@ export const CoveredMethodsModal = () => {
             )}
             gridTemplateColumns="677px 115px auto"
             data={coveredMethods}
-            listHeight={(window.innerHeight * 0.8) - headerHeight - methodInfoHeight}
+            listHeight={(documentHeight * 0.75) - headerHeight - methodInfoHeight}
             initialRowsCount={Number(params.coveredMethods)}
             stub={(
               <Stub

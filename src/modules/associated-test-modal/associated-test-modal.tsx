@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useRef } from "react";
 import {
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, Tooltip,
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -39,6 +39,7 @@ export const AssociatedTestModal = () => {
 
   const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
 
+  const { height: documentHeight } = useElementSize(useRef(document.documentElement));
   const headerHeight = 64;
   const packageInfoHeight = 78;
 
@@ -100,7 +101,7 @@ export const AssociatedTestModal = () => {
                 path: concatTestPath(test?.details?.path, test?.details?.params?.classParams),
               },
             }))}
-            listHeight={(window.innerHeight * 0.8) - headerHeight - packageInfoHeight}
+            listHeight={(documentHeight * 0.75) - headerHeight - packageInfoHeight}
             listItemSize={40}
             initialRowsCount={Number(params.testsCount)}
             stub={(
