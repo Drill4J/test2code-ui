@@ -80,7 +80,7 @@ export const CoveredMethodsModal = () => {
           <MethodInfoValue
             sceleton={showSceleton}
             title={testPath}
-            data-test="covered-methods-modal:test-name"
+            data-test="covered-methods-modal:test-path"
           >
             {testPath}
           </MethodInfoValue>
@@ -92,7 +92,7 @@ export const CoveredMethodsModal = () => {
             {testSummary?.testType}
           </MethodInfoValue>
         </div>
-        <div tw="px-6 pb-4">
+        <div tw="px-6 pb-4" data-test="covered-methods-table">
           <VirtualizedTable
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
@@ -124,7 +124,6 @@ export const CoveredMethodsModal = () => {
                   Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (value
                     ? (
                       <Cells.Compound
-                        data-test="covered-methods-modal:list:methods:name"
                         cellName={value}
                         cellAdditionalInfo={ownerClass}
                         icon={<Icons.Function />}
@@ -165,7 +164,11 @@ export const CoveredMethodsModal = () => {
                           </Link>
                         )}
                       >
-                        <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                        <Cells.Highlight
+                          data-test="covered-methods-modal:list:method:name"
+                          text={value}
+                          searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                        />
                       </Cells.Compound>
                     )
                     : <Skeleton withIcon withSubLine />),

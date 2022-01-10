@@ -84,7 +84,7 @@ export const AssociatedTestModal = () => {
             {isSkeleton ? "" : methodName || "-"}
           </MethodInfoValue>
         </div>
-        <div tw="px-6 pb-4">
+        <div tw="px-6 pb-4" data-test="associated-tests-table">
           <VirtualizedTable
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
@@ -182,7 +182,13 @@ export const AssociatedTestModal = () => {
                   isCustomCell: true,
                   width: "100%",
                   Cell: ({ value = "-", state }: any) => (value
-                    ? <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                    ? (
+                      <Cells.Highlight
+                        text={value}
+                        searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                        data-test="associated-tests:test:path"
+                      />
+                    )
                     : <Skeleton />),
                 },
                 {
