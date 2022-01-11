@@ -38,17 +38,10 @@ export const RisksTable = ({ data }: Props) => {
       isCustomCell: true,
       Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (
         <Cells.Compound
+          cellName={value}
+          cellAdditionalInfo={ownerClass}
           icon={<Icons.Function />}
-        >
-          <div tw="flex gap-x-2 items-center">
-            <CellComponents.Name
-              data-test="compound-cell:name"
-              title={value}
-              bold={!!ownerClass}
-            >
-              <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
-            </CellComponents.Name>
-            <CopyButton text={value} />
+          link={(
             <Link
               to={getPagePath({
                 name: "test2code",
