@@ -15,11 +15,7 @@
  */
 import React, { useRef } from "react";
 import {
-<<<<<<< HEAD
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, Tooltip,
-=======
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton,
->>>>>>> 1406325 (refactor: copy button in tables)
+  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
