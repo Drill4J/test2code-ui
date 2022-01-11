@@ -17,7 +17,7 @@ import React, {
   useCallback, useEffect, useMemo, useRef,
 } from "react";
 import {
-  Icons, Stub, Table, TableElements, Cells, useQueryParams, CellComponents,
+  Icons, Stub, Table, TableElements, Cells, useQueryParams,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import { FilterList } from "@drill4j/types-admin/dist";
@@ -116,19 +116,10 @@ export const MethodsTable = ({
           <div tw="pl-13" ref={ref}>
             <Cells.Compound
               key={value}
+              cellName={value}
+              cellAdditionalInfo={row.original.decl}
               icon={<Icons.Function />}
-            >
-              <div tw="flex gap-x-2 items-center">
-                <CellComponents.Name
-                  data-test="compound-cell:name"
-                  title={value}
-                  bold={!!row.original.decl}
-                >
-                  {value}
-                </CellComponents.Name>
-              </div>
-              <CellComponents.AdditionalInfo info={row.original.decl} />
-            </Cells.Compound>
+            />
           </div>
         ));
       },
