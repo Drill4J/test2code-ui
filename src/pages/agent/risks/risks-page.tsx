@@ -33,13 +33,13 @@ export const RisksPage = () => {
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
   const notCoveredRisksCount = risks.filter(({ coverage = 0 }) => coverage === 0).length;
   return (
-    <div tw="space-y-6">
+    <div tw="space-y-6 flex flex-col flex-grow">
       <RisksPageHeader
         buildVersion={buildVersion}
         previousBuildVersion={previousBuildVersion}
         notCoveredRisksCount={notCoveredRisksCount}
       />
-      <div>
+      <div tw="flex-grow">
         <RisksTable data={risks} filteredCount={filteredCount} />
       </div>
     </div>

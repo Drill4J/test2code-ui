@@ -82,7 +82,7 @@ export const AllScopes = () => {
           {scopesData.length}
         </span>
       </div>
-      <div tw="absolute left-20 w-[calc(100% + 48px)] h-1px bg-monochrome-medium-tint" />
+      <div tw="absolute left-20 w-[calc(100% + 48px)] h-1px bg-monochrome-medium-tint flex-grow" />
       {scopesData.length > 0
         ? (
           <Table
