@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, Cells, Icons, Stub, Table, Tooltip,
+  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -71,7 +71,10 @@ export const RisksTable = ({ data }: Props) => {
             </Link>
           )}
         >
-          <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+          <div tw="flex items-center gap-x-2">
+            <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+            <CopyButton text={value} />
+          </div>
         </Cells.Compound>
       ),
       width: "50%",

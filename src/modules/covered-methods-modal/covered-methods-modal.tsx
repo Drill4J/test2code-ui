@@ -15,7 +15,7 @@
  */
 import React, { useRef } from "react";
 import {
-  Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize,
+  Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize, CopyButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -125,6 +125,7 @@ export const CoveredMethodsModal = () => {
                     ? (
                       <Cells.Compound
                         cellName={value}
+                        data-test="covered-methods-modal:list:methods:name"
                         cellAdditionalInfo={ownerClass}
                         icon={<Icons.Function />}
                         link={(
@@ -164,11 +165,10 @@ export const CoveredMethodsModal = () => {
                           </Link>
                         )}
                       >
-                        <Cells.Highlight
-                          data-test="covered-methods-modal:list:method:name"
-                          text={value}
-                          searchWords={state.filters.map((filter: {value: string}) => filter.value)}
-                        />
+                        <div tw="flex items-center gap-x-2">
+                          <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                          <CopyButton text={value} />
+                        </div>
                       </Cells.Compound>
                     )
                     : <Skeleton withIcon withSubLine />),
