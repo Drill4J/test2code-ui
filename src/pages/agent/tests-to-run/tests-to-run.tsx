@@ -108,7 +108,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         />
       )}
       <div>
-        <div tw="flex flex-col mt-8">
+        <div tw="flex flex-col mt-8 flex-grow">
           <Table
             data={transformTests(testsToRun)}
             stub={tableStub}

@@ -39,7 +39,7 @@ export const RisksPage = () => {
         previousBuildVersion={previousBuildVersion}
         notCoveredRisksCount={notCoveredRisksCount}
       />
-      <div>
+      <div tw="flex-grow">
         <RisksTable data={risks} filteredCount={filteredCount} />
       </div>
     </div>
