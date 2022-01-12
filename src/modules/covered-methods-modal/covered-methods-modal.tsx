@@ -125,7 +125,6 @@ export const CoveredMethodsModal = () => {
                     ? (
                       <Cells.Compound
                         cellName={value}
-                        data-test="covered-methods-modal:list:methods:name"
                         cellAdditionalInfo={ownerClass}
                         icon={<Icons.Function />}
                         link={(
@@ -166,7 +165,11 @@ export const CoveredMethodsModal = () => {
                         )}
                       >
                         <div tw="flex items-center gap-x-2">
-                          <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                          <Cells.Highlight
+                            text={value}
+                            data-test="covered-methods-modal:list:method:name"
+                            searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                          />
                           <CopyButton text={value} />
                         </div>
                       </Cells.Compound>
