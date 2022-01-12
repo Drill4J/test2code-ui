@@ -188,7 +188,8 @@ export const MethodsTable = ({
       useBuildVersion<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
-    const defaultExpandedClass = classes.find(({ methods = [] }) => methods.find(({ name }) => name === methodName));
+    const defaultExpandedClass = classes.find(({ methods = [] }) => methods
+      .find(({ name, desc }) => name === methodName && desc === methodDesc));
     const strngifiedClasses = JSON.stringify(classes);
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
@@ -205,12 +206,12 @@ export const MethodsTable = ({
     useEffect(() => {
       defaultExpandedRow?.id && toggleRowExpanded(defaultExpandedRow.id);
     }, [strngifiedClasses]);
-
     return (
       <>
         {rows.map((row: any) => {
           prepareRow(row);
           const rowProps = row.getRowProps();
+
           return (
             <TableRow
               {...rowProps}

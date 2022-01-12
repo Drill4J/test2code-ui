@@ -30,7 +30,7 @@ import { RisksPage } from "./risks";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
-    <div>
+    <div tw="flex flex-col w-full h-full">
       <Switch>
         <Route
           exact
