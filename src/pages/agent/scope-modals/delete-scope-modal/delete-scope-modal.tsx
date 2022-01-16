@@ -15,7 +15,7 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Popup, GeneralAlerts, Spinner, useCloseModal,
+  Button, Modal, GeneralAlerts, Spinner, useCloseModal,
   useQueryParams,
 } from "@drill4j/ui-kit";
 import { useHistory, Link } from "react-router-dom";
@@ -40,20 +40,19 @@ export const DeleteScopeModal = () => {
   const closeModal = useCloseModal("/delete-scope-modal", ["scopeId"]);
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={<div tw="w-97 text-ellipsis">{`Delete Scope ${scope?.name}`}</div>}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-108">
-        {errorMessage && (
-          <GeneralAlerts type="ERROR">
-            {errorMessage}
-          </GeneralAlerts>
-        )}
-        <div className="mt-4 mx-6 mb-6">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-108" type="info">
+        <Modal.Header>
+          <div tw="w-97 text-ellipsis">
+            {`Delete Scope ${scope?.name}`}
+          </div>
+        </Modal.Header>
+        <Modal.Body>
+          {errorMessage && (
+            <GeneralAlerts type="ERROR">
+              {errorMessage}
+            </GeneralAlerts>
+          )}
           <div className="text-14 leading-20">
             {scope && scope.active && !testTypes.length && (
               <span>
@@ -81,53 +80,53 @@ export const DeleteScopeModal = () => {
               </span>
             )}
           </div>
-          <div className="flex items-center gap-x-4 w-full mt-6">
-            {scope && scope.active && Boolean(testTypes.length)
-              ? (
+        </Modal.Body>
+        <Modal.Footer tw="flex items-center gap-x-4">
+          {scope && scope.active && Boolean(testTypes.length)
+            ? (
+              <Button
+                onClick={closeModal}
+                secondary
+                size="large"
+              >
+                Ok, got it
+              </Button>
+            )
+            : (
+              <>
                 <Button
-                  onClick={closeModal}
+                  className="flex justify-center items-center gap-x-1 px-4 w-43 h-8 text-14"
+                  primary
+                  disabled={!scope || loading}
+                  onClick={async () => {
+                    setLoading(true);
+                    await deleteScope(agentId, pluginId, {
+                      onSuccess: () => {
+                        sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
+                        closeModal();
+                        scope?.id && pathname.includes(scope.id)
+                        && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
+                      },
+                      onError: setErrorMessage,
+                    })(scope as ActiveScope);
+                    setLoading(false);
+                  }}
+                  data-test="delete-scope-modal:confirm-delete-button"
+                >
+                  {loading ? <Spinner /> : "Yes, Delete Scope"}
+                </Button>
+                <Button
                   secondary
                   size="large"
+                  onClick={closeModal}
+                  data-test="delete-scope-modal:cancel-modal-button"
                 >
-                  Ok, got it
+                  Cancel
                 </Button>
-              )
-              : (
-                <>
-                  <Button
-                    className="flex justify-center items-center gap-x-1 px-4 w-43 h-8 text-14"
-                    primary
-                    disabled={!scope || loading}
-                    onClick={async () => {
-                      setLoading(true);
-                      await deleteScope(agentId, pluginId, {
-                        onSuccess: () => {
-                          sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
-                          closeModal();
-                          scope?.id && pathname.includes(scope.id)
-                          && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
-                        },
-                        onError: setErrorMessage,
-                      })(scope as ActiveScope);
-                      setLoading(false);
-                    }}
-                    data-test="delete-scope-modal:confirm-delete-button"
-                  >
-                    {loading ? <Spinner /> : "Yes, Delete Scope"}
-                  </Button>
-                  <Button
-                    secondary
-                    size="large"
-                    onClick={closeModal}
-                    data-test="delete-scope-modal:cancel-modal-button"
-                  >
-                    Cancel
-                  </Button>
-                </>
-              )}
-          </div>
-        </div>
-      </div>
-    </Popup>
+              </>
+            )}
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
   );
 };
