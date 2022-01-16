@@ -15,7 +15,7 @@
  */
 import React from "react";
 import {
-  Form, Formik, Modal, GeneralAlerts, Icons, composeValidators, sizeLimit,
+  Form, Formik, Panel, GeneralAlerts, Icons, composeValidators, sizeLimit,
   required, handleFieldErrors, Stub, useCloseModal, useGeneralAlertMessage,
 } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
@@ -63,93 +63,97 @@ export const SessionsManagementPane = () => {
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
-  const closeModal = useCloseModal("/session-management");
+  const closePanel = useCloseModal("/session-management");
 
   return (
-    <Modal isOpen onToggle={closeModal}>
-      <Formik
-        initialValues={{}}
-        onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
-          { resetForm, setFieldError }: any) => {
-          const error = agentId
-            ? await handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
-            : await handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
-          if (error.sessionId) {
-            setFieldError("sessionId", error.sessionId);
-          } else {
-            resetForm();
-            dispatch(setIsNewSession(false));
-          }
-        }) as any}
-        validate={validateManageSessionsPane}
-      >
-        {({
-          handleSubmit, isSubmitting, isValid,
-        }) => (
-          <Form tw="flex flex-col h-full">
-            <div
-              tw="h-16 px-6 py-4 text-20 leading-32 text-monochrome-black border-b border-monochrome-medium-tint"
-              data-test="sessions-management-pane:header"
-            >
-              {isNewSession ? "Start New Session" : "Sessions Management"}
-            </div>
-            {generalAlertMessage?.type && (
-              <GeneralAlerts type={generalAlertMessage.type}>
-                {generalAlertMessage.text}
-              </GeneralAlerts>
-            )}
-            {isNewSession && (
-              <ManagementNewSession
-                agentId={agentId}
-                serviceGroupId={groupId}
-                hasGlobalSession={hasGlobalSession}
-              />
-            )}
-            {!isNewSession && activeSessions.length > 0 && (
-              <>
-                <ManagementActiveSessions activeSessions={activeSessions} />
-                <ActiveSessionsList
-                  agentType={agentType}
-                  activeSessions={activeSessions}
-                  showGeneralAlertMessage={showGeneralAlertMessage}
-                />
-              </>
-            )}
-            {!isNewSession && activeSessions.length === 0 && (
-              <Stub
-                icon={(
-                  <Icons.Test
-                    width={120}
-                    height={134}
-                    viewBox="0 0 18 20"
-                    data-test="empty-active-sessions-stub:test-icon"
+    <Panel onClose={closePanel}>
+      <Panel.Content>
+        <Formik
+          initialValues={{}}
+          onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
+            { resetForm, setFieldError }: any) => {
+            const error = agentId
+              ? await handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
+              : await handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
+            if (error.sessionId) {
+              setFieldError("sessionId", error.sessionId);
+            } else {
+              resetForm();
+              dispatch(setIsNewSession(false));
+            }
+          }) as any}
+          validate={validateManageSessionsPane}
+        >
+          {({
+            handleSubmit, isSubmitting, isValid,
+          }) => (
+            <Form tw="flex flex-col h-full">
+              <Panel.Header
+                tw="text-20 leading-32 text-monochrome-black"
+                data-test="sessions-management-pane:header"
+              >
+                {isNewSession ? "Start New Session" : "Sessions Management"}
+              </Panel.Header>
+              <Panel.Body tw="text-16 leading-20">
+                {generalAlertMessage?.type && (
+                  <GeneralAlerts type={generalAlertMessage.type}>
+                    {generalAlertMessage.text}
+                  </GeneralAlerts>
+                )}
+                {isNewSession && (
+                  <ManagementNewSession
+                    agentId={agentId}
+                    serviceGroupId={groupId}
+                    hasGlobalSession={hasGlobalSession}
                   />
                 )}
-                title="There are no active sessions"
-                message="You can use this menu to start a new one."
-              />
-            )}
-            <div tw="min-h-80px mt-auto px-6 py-4 bg-monochrome-light-tint">
-              {bulkOperation.isProcessing ? (
-                <BulkOperationWarning
-                  agentId={id}
-                  agentType={agentType}
-                  showGeneralAlertMessage={showGeneralAlertMessage}
-                />
-              ) : (
-                <ActionsPanel
-                  activeSessions={activeSessions}
-                  startSessionDisabled={!isValid || isSubmitting}
-                  onToggle={closeModal}
-                  handleSubmit={handleSubmit}
-                  submitting={isSubmitting}
-                />
-              )}
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </Modal>
+                {!isNewSession && activeSessions.length > 0 && (
+                  <>
+                    <ManagementActiveSessions activeSessions={activeSessions} />
+                    <ActiveSessionsList
+                      agentType={agentType}
+                      activeSessions={activeSessions}
+                      showGeneralAlertMessage={showGeneralAlertMessage}
+                    />
+                  </>
+                )}
+                {!isNewSession && activeSessions.length === 0 && (
+                  <Stub
+                    icon={(
+                      <Icons.Test
+                        width={120}
+                        height={134}
+                        viewBox="0 0 18 20"
+                        data-test="empty-active-sessions-stub:test-icon"
+                      />
+                    )}
+                    title="There are no active sessions"
+                    message="You can use this menu to start a new one."
+                  />
+                )}
+              </Panel.Body>
+              <Panel.Footer>
+                {bulkOperation.isProcessing ? (
+                  <BulkOperationWarning
+                    agentId={id}
+                    agentType={agentType}
+                    showGeneralAlertMessage={showGeneralAlertMessage}
+                  />
+                ) : (
+                  <ActionsPanel
+                    activeSessions={activeSessions}
+                    startSessionDisabled={!isValid || isSubmitting}
+                    onToggle={closePanel}
+                    handleSubmit={handleSubmit}
+                    submitting={isSubmitting}
+                  />
+                )}
+              </Panel.Footer>
+            </Form>
+          )}
+        </Formik>
+      </Panel.Content>
+    </Panel>
   );
 };
 
