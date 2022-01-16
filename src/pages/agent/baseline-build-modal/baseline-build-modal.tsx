@@ -15,7 +15,7 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Popup, Checkbox, Spinner, useCloseModal,
+  Button, Modal, Checkbox, Spinner, useCloseModal,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -45,14 +45,12 @@ export const BaselineBuildModal = () => {
   const closeModal = useCloseModal("/baseline-build-modal");
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={`${isBaseline ? "Unset" : "Set"} as Baseline Build`}
-      closeOnFadeClick
-    >
-      <div tw="w-108 font-regular">
-        <div className="flex flex-col gap-6 pt-4 px-6 pb-6">
+    <Modal onClose={closeModal}>
+      <Modal.Content>
+        <Modal.Header>
+          {`${isBaseline ? "Unset" : "Set"} as Baseline Build`}
+        </Modal.Header>
+        <Modal.Body tw="w-108 font-regular flex flex-col gap-6">
           <Message className="flex items-center w-full">
             {isBaseline
               ? (
@@ -79,43 +77,43 @@ export const BaselineBuildModal = () => {
               </span>
             </Message>
           )}
-          <div className="flex gap-x-4">
-            <ActionButton
-              primary
-              size="large"
-              isBaseline={isBaseline}
-              onClick={async () => {
-                try {
-                  setIsLoading(true);
-                  await toggleBaseline(agentId, pluginId);
-                  setIsLoading(false);
-                  sendNotificationEvent({
-                    type: "SUCCESS",
-                    text: `Current build has been ${isBaseline
-                      ? "unset as baseline successfully. All subsequent builds won't be compared to it."
-                      : "set as baseline successfully. All subsequent builds will be compared to it."}`,
-                  });
-                } catch ({ response: { data: { message } = {} } = {} }) {
-                  sendNotificationEvent({
-                    type: "ERROR",
-                    text: message || "There is some issue with your action. Please try again later.",
-                  });
-                }
-                closeModal();
-              }}
-              disabled={(!isConfirmed && !isBaseline) || isLoading || status !== AGENT_STATUS.ONLINE}
-              data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
-            >
-              {isLoading && <Spinner />}
-              {!isLoading && isBaseline && "Unset as Baseline"}
-              {!isLoading && !isBaseline && "Set as Baseline"}
-            </ActionButton>
-            <Button secondary size="large" onClick={closeModal}>
-              Cancel
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Popup>
+        </Modal.Body>
+        <Modal.Footer tw="flex gap-x-4">
+          <ActionButton
+            primary
+            size="large"
+            isBaseline={isBaseline}
+            onClick={async () => {
+              try {
+                setIsLoading(true);
+                await toggleBaseline(agentId, pluginId);
+                setIsLoading(false);
+                sendNotificationEvent({
+                  type: "SUCCESS",
+                  text: `Current build has been ${isBaseline
+                    ? "unset as baseline successfully. All subsequent builds won't be compared to it."
+                    : "set as baseline successfully. All subsequent builds will be compared to it."}`,
+                });
+              } catch ({ response: { data: { message } = {} } = {} }) {
+                sendNotificationEvent({
+                  type: "ERROR",
+                  text: message || "There is some issue with your action. Please try again later.",
+                });
+              }
+              closeModal();
+            }}
+            disabled={(!isConfirmed && !isBaseline) || isLoading || status !== AGENT_STATUS.ONLINE}
+            data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
+          >
+            {isLoading && <Spinner />}
+            {!isLoading && isBaseline && "Unset as Baseline"}
+            {!isLoading && !isBaseline && "Set as Baseline"}
+          </ActionButton>
+          <Button secondary size="large" onClick={closeModal}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
   );
 };
