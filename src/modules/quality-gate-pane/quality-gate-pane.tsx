@@ -15,7 +15,7 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Modal, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
+  Button, Panel, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
   Form, Formik, useCloseModal,
   useGeneralAlertMessage,
 } from "@drill4j/ui-kit";
@@ -72,95 +72,101 @@ export const QualityGatePane = () => {
   const configured = conditionSettings.some(({ enabled }) => enabled);
 
   return (
-    <Modal isOpen onToggle={handleOnToggle} isDisableFadeClick={isEditing}>
-      <Formik
-        onSubmit={async (values) => {
-          await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
-          setIsEditing(false);
-        }}
-        initialValues={conditionSettingByType}
-        validate={validateQualityGate}
-        enableReinitialize
-      >
-        {({
-          values, isValid, dirty, isSubmitting, initialValues, resetForm,
-        }) => {
-          const isCheckboxesPristine = Object.entries(values)
-            .every(([key, value]) => conditionSettingByType[key].enabled === value.enabled);
+    <Panel onClose={handleOnToggle}>
+      <Panel.Content isDisableFadeClick={isEditing}>
+        <Formik
+          onSubmit={async (values) => {
+            await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
+            setIsEditing(false);
+          }}
+          initialValues={conditionSettingByType}
+          validate={validateQualityGate}
+          enableReinitialize
+        >
+          {({
+            values, isValid, dirty, isSubmitting, initialValues, resetForm,
+          }) => {
+            const isCheckboxesPristine = Object.entries(values)
+              .every(([key, value]) => conditionSettingByType[key].enabled === value.enabled);
 
-          return (
-            <Form tw="flex flex-col h-full font-regular">
-              <div tw="flex justify-between items-center h-16 px-6 border-b border-monochrome-medium-tint">
-                <div tw="text-20 leading-32" data-test="quality-gate-pane:header-title">Quality Gate</div>
-                {configured && !isEditing && (
-                  <StatusIconWrapper status={status}>
-                    <StatusIcon width={24} height={24} data-test="quality-gate-pane:header-status-icon" />
-                  </StatusIconWrapper>
-                )}
-              </div>
-              <GeneralAlerts type="INFO" data-test="quality-gate-pane:general-alerts:info">
-                {configured && !isEditing
-                  ? "Meet all conditions to pass the quality gate."
-                  : "Choose the metrics and define their threshold."}
-              </GeneralAlerts>
-              {generalAlertMessage?.type && (
-                <GeneralAlerts type={generalAlertMessage.type}>
-                  {generalAlertMessage.text}
-                </GeneralAlerts>
-              )}
-              {configured && !isEditing
-                ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
-                : <QualityGateSettings conditionSettingByType={values} />}
-              <ActionsPanel>
-                {configured && !isEditing ? (
-                  <Button
-                    primary
-                    size="large"
-                    onClick={() => { resetForm(); setIsEditing(true); }}
-                    data-test="quality-gate-pane:edit-button"
-                  >
-                    Edit
-                  </Button>
-                )
-                  : (
-                    <Button
-                      className="flex justify-center items-center gap-x-1 w-16"
-                      primary
-                      size="large"
-                      disabled={!isValid || (!dirty && isCheckboxesPristine) || isSubmitting}
-                      type="submit"
-                      data-test="quality-gate-pane:save-button"
-                    >
-                      {isSubmitting ? <Spinner /> : "Save"}
-                    </Button>
+            return (
+              <Form tw="flex flex-col h-full font-regular">
+                <Panel.Header>
+                  <div tw="text-20 leading-32" data-test="quality-gate-pane:header-title">Quality Gate</div>
+                  {configured && !isEditing && (
+                    <StatusIconWrapper status={status}>
+                      <StatusIcon width={24} height={24} data-test="quality-gate-pane:header-status-icon" />
+                    </StatusIconWrapper>
                   )}
-                {configured && isEditing && (
-                  <Button
-                    className="flex gap-x-2"
-                    secondary
-                    size="large"
-                    type="reset"
-                    onClick={() => setIsEditing(false)}
-                    data-test="quality-gate-pane:back-button"
-                  >
-                    <Icons.Expander width={8} height={14} rotate={180} />
-                    <span>Back</span>
-                  </Button>
-                )}
-                <Button
-                  secondary
-                  size="large"
-                  onClick={handleOnToggle}
-                  data-test="quality-gate-pane:cancel-button"
-                >
-                  Close
-                </Button>
-              </ActionsPanel>
-            </Form>
-          );
-        }}
-      </Formik>
-    </Modal>
+                </Panel.Header>
+                <Panel.Body>
+                  <GeneralAlerts type="INFO" data-test="quality-gate-pane:general-alerts:info">
+                    {configured && !isEditing
+                      ? "Meet all conditions to pass the quality gate."
+                      : "Choose the metrics and define their threshold."}
+                  </GeneralAlerts>
+                  {generalAlertMessage?.type && (
+                    <GeneralAlerts type={generalAlertMessage.type}>
+                      {generalAlertMessage.text}
+                    </GeneralAlerts>
+                  )}
+                  {configured && !isEditing
+                    ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
+                    : <QualityGateSettings conditionSettingByType={values} />}
+                </Panel.Body>
+                <Panel.Footer>
+                  <ActionsPanel>
+                    {configured && !isEditing ? (
+                      <Button
+                        primary
+                        size="large"
+                        onClick={() => { resetForm(); setIsEditing(true); }}
+                        data-test="quality-gate-pane:edit-button"
+                      >
+                        Edit
+                      </Button>
+                    )
+                      : (
+                        <Button
+                          className="flex justify-center items-center gap-x-1 w-16"
+                          primary
+                          size="large"
+                          disabled={!isValid || (!dirty && isCheckboxesPristine) || isSubmitting}
+                          type="submit"
+                          data-test="quality-gate-pane:save-button"
+                        >
+                          {isSubmitting ? <Spinner /> : "Save"}
+                        </Button>
+                      )}
+                    {configured && isEditing && (
+                      <Button
+                        className="flex gap-x-2"
+                        secondary
+                        size="large"
+                        type="reset"
+                        onClick={() => setIsEditing(false)}
+                        data-test="quality-gate-pane:back-button"
+                      >
+                        <Icons.Expander width={8} height={14} rotate={180} />
+                        <span>Back</span>
+                      </Button>
+                    )}
+                    <Button
+                      secondary
+                      size="large"
+                      onClick={handleOnToggle}
+                      data-test="quality-gate-pane:cancel-button"
+                    >
+                      Close
+                    </Button>
+                  </ActionsPanel>
+                </Panel.Footer>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Panel.Content>
+    </Panel>
   );
 };
 
@@ -171,6 +177,6 @@ const StatusIconWrapper = styled.div(({ status }: { status: Status }) => [
 ]);
 
 const ActionsPanel = styled.div`
-  ${tw`grid gap-4 items-center h-20 pr-6 pl-6 mt-auto bg-monochrome-light-tint`};
+  ${tw`grid gap-4 items-center`};
   grid-template-columns: max-content max-content max-content;
 `;
