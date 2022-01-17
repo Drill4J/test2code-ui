@@ -29,7 +29,7 @@ interface Props {
 export const ActiveSessionsList = ({
   agentType, activeSessions, showGeneralAlertMessage,
 }: Props) => (
-  <div tw="overflow-y-auto flex-grow">
+  <div tw="flex-grow">
     {agentType === "Agent" ? (
       <div tw="pt-3">
         {activeSessions.map(({

@@ -104,10 +104,10 @@ export const FinishScopeModal = () => {
               loading, hasTests: Boolean(testsCount), hasActiveSessions: Boolean(activeSessionTest.length), forceFinish,
             });
             return (
-              <Form>
+              <Form tw="flex flex-col">
                 <Modal.Body>
                   <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
-                  <div tw="flex flex-col gap-y-4 mt-6 mb-9 text-14 leading-20 text-blue-default">
+                  <div tw="flex flex-col gap-y-4 mt-6 text-14 leading-20 text-blue-default">
                     {Boolean(activeSessionTest.length) && (
                       <div>
                         <Label disabled={false}>

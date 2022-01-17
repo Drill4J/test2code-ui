@@ -50,144 +50,144 @@ export const CoveredMethodsModal = () => {
   return (
     <Modal onClose={closeModal}>
       <Modal.Content tw="w-[1024px]" type="info">
-        <Modal.Header tw="text-20 space-x-2 w-[960px]">
-          <span>Covered Methods</span>
-          <span
-            tw="text-monochrome-default"
-            data-test="covered-methods-modal:methods-count"
-          >
-            {params.coveredMethods}
-          </span>
+        <Modal.Header tw="text-20">
+          <div tw="space-x-2">
+            <span>Covered Methods</span>
+            <span
+              tw="text-monochrome-default"
+              data-test="covered-methods-modal:methods-count"
+            >
+              {params.coveredMethods}
+            </span>
+          </div>
         </Modal.Header>
-        <Modal.Body>
-          <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
-            <MethodInfoLabel>Test Name</MethodInfoLabel>
-            <MethodInfoLabel>Path</MethodInfoLabel>
-            <MethodInfoLabel>Test Type</MethodInfoLabel>
-            <MethodInfoValue
-              skeleton={showSkeleton}
-              title={testName}
-              data-test="covered-methods-modal:test-name"
-            >
-              {testName}
-            </MethodInfoValue>
-            <MethodInfoValue
-              skeleton={showSkeleton}
-              title={testPath}
-              data-test="covered-methods-modal:test-path"
-            >
-              {testPath}
-            </MethodInfoValue>
-            <MethodInfoValue
-              tw="lowercase first-letter:uppercase"
-              skeleton={showSkeleton}
-              data-test="covered-methods-modal:test-type"
-            >
-              {testSummary?.testType}
-            </MethodInfoValue>
-          </div>
-          <div tw="px-6 pb-4" data-test="covered-methods-table">
-            <VirtualizedTable
-              renderHeader={({ currentCount }: { currentCount: number }) => (
-                <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
-                  <div tw="font-bold uppercase">methods</div>
-                  <div>{`Displaying ${currentCount} of ${Number(params.coveredMethods)} rows`}</div>
-                </div>
-              )}
-              gridTemplateColumns="677px 115px auto"
-              data={coveredMethods}
-              listHeight={(documentHeight * 0.75) - headerHeight - methodInfoHeight}
-              initialRowsCount={Number(params.coveredMethods)}
-              stub={(
-                <Stub
-                  tw="h-[630px]"
-                  icon={<Icons.Function height={104} width={107} />}
-                  title="No results found"
-                  message="Try adjusting your search or filter to find what you are looking for."
-                />
-              )}
-              columns={
-                [
-                  {
-                    Header: "Name",
-                    accessor: "name",
-                    textAlign: "left",
-                    filterable: true,
-                    isCustomCell: true,
-                    width: "100%",
-                    Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (value
-                      ? (
-                        <Cells.Compound
-                          cellName={value}
-                          cellAdditionalInfo={ownerClass}
-                          icon={<Icons.Function />}
-                          link={(
-                            <Link
-                              to={() => {
-                                const queryParams = {
-                                  methodName: value,
-                                  methodOwnerClass: ownerClass,
-                                  methodDesc: desc,
-                                  activeTab: "methods",
-                                  tableState: JSON.stringify({
-                                    filters: [{
-                                      id: "name",
-                                      value: ownerClass.slice(0, ownerClass.lastIndexOf("/")),
-                                    }],
-                                  }),
-                                };
-                                return scopeId
-                                  ? getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams })
-                                  : getPagePath({ name: "test2code", queryParams });
-                              }}
-                              tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
-                              title={value}
-                              target="_blank"
+        <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
+          <MethodInfoLabel>Test Name</MethodInfoLabel>
+          <MethodInfoLabel>Path</MethodInfoLabel>
+          <MethodInfoLabel>Test Type</MethodInfoLabel>
+          <MethodInfoValue
+            skeleton={showSkeleton}
+            title={testName}
+            data-test="covered-methods-modal:test-name"
+          >
+            {testName}
+          </MethodInfoValue>
+          <MethodInfoValue
+            skeleton={showSkeleton}
+            title={testPath}
+            data-test="covered-methods-modal:test-path"
+          >
+            {testPath}
+          </MethodInfoValue>
+          <MethodInfoValue
+            tw="lowercase first-letter:uppercase"
+            skeleton={showSkeleton}
+            data-test="covered-methods-modal:test-type"
+          >
+            {testSummary?.testType}
+          </MethodInfoValue>
+        </div>
+        <Modal.Body data-test="covered-methods-table">
+          <VirtualizedTable
+            renderHeader={({ currentCount }: { currentCount: number }) => (
+              <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
+                <div tw="font-bold uppercase">methods</div>
+                <div>{`Displaying ${currentCount} of ${Number(params.coveredMethods)} rows`}</div>
+              </div>
+            )}
+            gridTemplateColumns="677px 115px auto"
+            data={coveredMethods}
+            listHeight={(documentHeight * 0.75) - headerHeight - methodInfoHeight}
+            initialRowsCount={Number(params.coveredMethods)}
+            stub={(
+              <Stub
+                tw="h-[630px]"
+                icon={<Icons.Function height={104} width={107} />}
+                title="No results found"
+                message="Try adjusting your search or filter to find what you are looking for."
+              />
+            )}
+            columns={
+              [
+                {
+                  Header: "Name",
+                  accessor: "name",
+                  textAlign: "left",
+                  filterable: true,
+                  isCustomCell: true,
+                  width: "100%",
+                  Cell: ({ value = "", row: { original: { ownerClass = "", desc = "" } = {} } = {}, state }: any) => (value
+                    ? (
+                      <Cells.Compound
+                        cellName={value}
+                        cellAdditionalInfo={ownerClass}
+                        icon={<Icons.Function />}
+                        link={(
+                          <Link
+                            to={() => {
+                              const queryParams = {
+                                methodName: value,
+                                methodOwnerClass: ownerClass,
+                                methodDesc: desc,
+                                activeTab: "methods",
+                                tableState: JSON.stringify({
+                                  filters: [{
+                                    id: "name",
+                                    value: ownerClass.slice(0, ownerClass.lastIndexOf("/")),
+                                  }],
+                                }),
+                              };
+                              return scopeId
+                                ? getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams })
+                                : getPagePath({ name: "test2code", queryParams });
+                            }}
+                            tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+                            title={value}
+                            target="_blank"
+                          >
+                            <Tooltip
+                              position="top-center"
+                              message={(
+                                <div tw="flex gap-x-2">
+                                  <span>Navigate to method in Application package</span>
+                                  <Icons.NewWindow />
+                                </div>
+                              )}
                             >
-                              <Tooltip
-                                position="top-center"
-                                message={(
-                                  <div tw="flex gap-x-2">
-                                    <span>Navigate to method in Application package</span>
-                                    <Icons.NewWindow />
-                                  </div>
-                                )}
-                              >
-                                <Icons.NewWindow />
-                              </Tooltip>
-                            </Link>
-                          )}
-                        >
-                          <div tw="flex items-center gap-x-2">
-                            <Cells.Highlight
-                              text={value}
-                              data-test="covered-methods-modal:list:method:name"
-                              searchWords={state.filters.map((filter: {value: string}) => filter.value)}
-                            />
-                            <CopyButton text={value} />
-                          </div>
-                        </Cells.Compound>
-                      )
-                      : <Skeleton withIcon withSubLine />),
-                  },
-                  {
-                    Header: "Type",
-                    Cell: ({ value = "" }) => (value ? <span tw="lowercase first-letter:uppercase">{value}</span> : <Skeleton />),
-                    accessor: "type",
-                    textAlign: "left",
-                    width: "100%",
-                  },
-                  {
-                    Header: "Coverage, %",
-                    Cell: ({ value = 0 }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
-                    accessor: "coverage",
-                    textAlign: "right",
-                    width: "100%",
-                  },
-                ]
-              }
-            />
-          </div>
+                              <Icons.NewWindow />
+                            </Tooltip>
+                          </Link>
+                        )}
+                      >
+                        <div tw="flex items-center gap-x-2">
+                          <Cells.Highlight
+                            text={value}
+                            data-test="covered-methods-modal:list:method:name"
+                            searchWords={state.filters.map((filter: {value: string}) => filter.value)}
+                          />
+                          <CopyButton text={value} />
+                        </div>
+                      </Cells.Compound>
+                    )
+                    : <Skeleton withIcon withSubLine />),
+                },
+                {
+                  Header: "Type",
+                  Cell: ({ value = "" }) => (value ? <span tw="lowercase first-letter:uppercase">{value}</span> : <Skeleton />),
+                  accessor: "type",
+                  textAlign: "left",
+                  width: "100%",
+                },
+                {
+                  Header: "Coverage, %",
+                  Cell: ({ value = 0 }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
+                  accessor: "coverage",
+                  textAlign: "right",
+                  width: "100%",
+                },
+              ]
+            }
+          />
         </Modal.Body>
       </Modal.Content>
     </Modal>

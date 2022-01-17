@@ -27,7 +27,7 @@ interface Props {
 
 const Content = styled.div`
   min-height: 88px;
-  ${tw`border-b border-monochrome-medium-tint text-16 leading-20 text-monochrome-black`}
+  ${tw``}
 `;
 
 export const ManagementActiveSessions = ({ activeSessions }: Props) => {
@@ -36,41 +36,40 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const disabled = bulkOperation.isProcessing;
 
   return (
-    <Content
-      data-test="management-active-sessions:search-panel"
+    <div
+      tw="flex flex-col justify-between pt-4 px-6 pb-3 min-h-[88px] border-b
+      border-monochrome-medium-tint text-16 leading-20 text-monochrome-black"
     >
-      <div tw="flex flex-col justify-between pt-4 px-6 pb-3 h-full">
-        <div tw="flex justify-between items-center w-full">
-          <span>
-            Active Sessions
-            <span tw="ml-2 text-monochrome-default">{activeSessions.length}</span>
-          </span>
-          <div tw="flex gap-4">
-            <LinkButton
-              size="small"
-              onClick={() => dispatch(setBulkOperation("abort", true))}
-              data-test="management-active-sessions:abort-all"
-              disabled={disabled}
-            >
-              Abort all
-            </LinkButton>
-            <LinkButton
-              size="small"
-              onClick={() => dispatch(setBulkOperation("finish", true))}
-              data-test="management-active-sessions:finish-all"
-              disabled={disabled}
-            >
-              Finish all
-            </LinkButton>
-          </div>
+      <div tw="flex justify-between items-center w-full">
+        <span>
+          Active Sessions
+          <span tw="ml-2 text-monochrome-default">{activeSessions.length}</span>
+        </span>
+        <div tw="flex gap-4">
+          <LinkButton
+            size="small"
+            onClick={() => dispatch(setBulkOperation("abort", true))}
+            data-test="management-active-sessions:abort-all"
+            disabled={disabled}
+          >
+            Abort all
+          </LinkButton>
+          <LinkButton
+            size="small"
+            onClick={() => dispatch(setBulkOperation("finish", true))}
+            data-test="management-active-sessions:finish-all"
+            disabled={disabled}
+          >
+            Finish all
+          </LinkButton>
         </div>
-        <Field
-          name="id"
-          component={Fields.Search}
-          placeholder="Search session by ID"
-          disabled
-        />
       </div>
-    </Content>
+      <Field
+        name="id"
+        component={Fields.Search}
+        placeholder="Search session by ID"
+        disabled
+      />
+    </div>
   );
 };

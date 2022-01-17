@@ -46,7 +46,7 @@ export const BaselineBuildModal = () => {
 
   return (
     <Modal onClose={closeModal}>
-      <Modal.Content>
+      <Modal.Content type="info">
         <Modal.Header>
           {`${isBaseline ? "Unset" : "Set"} as Baseline Build`}
         </Modal.Header>
