@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {
-  Button, Popup, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required, useCloseModal,
+  Button, Modal, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required, useCloseModal,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -44,14 +44,11 @@ export const FinishAllScopesModal = () => {
   const closeModal = useCloseModal("/finish-all-scopes-modal");
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={<div tw="text-ellipsis">Finish All Scopes</div>}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-108">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-108" type="info">
+        <Modal.Header>
+          <div tw="text-ellipsis">Finish All Scopes</div>
+        </Modal.Header>
         {errorMessage && (
           <GeneralAlerts type="ERROR">
             {errorMessage}
@@ -71,60 +68,60 @@ export const FinishAllScopesModal = () => {
             </div>
           </GeneralAlerts>
         )}
-        <div tw="mt-4 mx-6 mb-6 text-14 leading-24">
-          <span>
-            You are about to finish active scopes of all
-            {` ${agentsSummaries.length} `}
-            service group agents.
-          </span>
-          <Instructions>
-            <div>All gathered data will be added to build stats</div>
-            <div>Empty scopes will be deleted</div>
-            <div>New scopes will be started automatically</div>
-          </Instructions>
-          <Formik
-            initialValues={{ hasNewName: false, ignoreScope: false, scopesName: "" }}
-            validate={validate}
-            onSubmit={async ({ hasNewName, ignoreScope, scopesName = "" }: any) => {
-              setLoading(true);
-              let hasError = false;
-              if (hasNewName) {
-                try {
-                  const scopes = await Promise.allSettled(agentsSummaries.map(({ id = "", buildVersion }): Promise<ScopeSummary> => axios
-                    .get(`/plugins/test2code/active-scope?agentId=${id}&buildVersion=${buildVersion}&type=AGENT`)));
+        <Formik
+          initialValues={{ hasNewName: false, ignoreScope: false, scopesName: "" }}
+          validate={validate}
+          onSubmit={async ({ hasNewName, ignoreScope, scopesName = "" }: any) => {
+            setLoading(true);
+            let hasError = false;
+            if (hasNewName) {
+              try {
+                const scopes = await Promise.allSettled(agentsSummaries.map(({ id = "", buildVersion }): Promise<ScopeSummary> => axios
+                  .get(`/plugins/test2code/active-scope?agentId=${id}&buildVersion=${buildVersion}&type=AGENT`)));
 
-                  const scopesIds = scopes?.map(({ value: { data: { id = "" } = {} } = {} }: any) => id);
+                const scopesIds = scopes?.map(({ value: { data: { id = "" } = {} } = {} }: any) => id);
 
-                  await Promise.allSettled(agentsSummaries.map(({ id: agentId = "" }, i) =>
-                    renameScope(agentId, "test2code",
-                      {
-                        onError: (msg: string) => {
-                          setErrorMessage(msg);
-                          hasError = true;
-                        },
-                      })({ id: scopesIds[i], name: scopesName } as ScopeSummary)));
-                } catch (e) {
-                  setErrorMessage(e.message || "Rename scopes failed");
-                  hasError = true;
-                }
+                await Promise.allSettled(agentsSummaries.map(({ id: agentId = "" }, i) =>
+                  renameScope(agentId, "test2code",
+                    {
+                      onError: (msg: string) => {
+                        setErrorMessage(msg);
+                        hasError = true;
+                      },
+                    })({ id: scopesIds[i], name: scopesName } as ScopeSummary)));
+              } catch (e) {
+                setErrorMessage(e.message || "Rename scopes failed");
+                hasError = true;
               }
-              if (!hasError) {
-                await finishAllScopes(groupId, {
-                  onSuccess: () => {
-                    sendNotificationEvent({
-                      type: "SUCCESS",
-                      text: "All scopes have been successfully finished",
-                    });
-                    closeModal();
-                  },
-                  onError: setErrorMessage,
-                })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
-              }
-              setLoading(false);
-            }}
-          >
-            {({ values: { hasNewName }, isValid }) => (
-              <Form>
+            }
+            if (!hasError) {
+              await finishAllScopes(groupId, {
+                onSuccess: () => {
+                  sendNotificationEvent({
+                    type: "SUCCESS",
+                    text: "All scopes have been successfully finished",
+                  });
+                  closeModal();
+                },
+                onError: setErrorMessage,
+              })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
+            }
+            setLoading(false);
+          }}
+        >
+          {({ values: { hasNewName }, isValid }) => (
+            <Form>
+              <Modal.Body tw="text-14 leading-24">
+                <span>
+                  You are about to finish active scopes of all
+                  {` ${agentsSummaries.length} `}
+                  service group agents.
+                </span>
+                <Instructions>
+                  <div>All gathered data will be added to build stats</div>
+                  <div>Empty scopes will be deleted</div>
+                  <div>New scopes will be started automatically</div>
+                </Instructions>
                 <label tw="flex items-center gap-x-2 my-2 text-blue-default">
                   <Field
                     type="checkbox"
@@ -149,26 +146,26 @@ export const FinishAllScopesModal = () => {
                   component={Fields.Input}
                   disabled={!hasNewName || loading}
                 />
-                <div className="flex items-center w-full mt-6">
-                  <Button
-                    tw="flex justify-center items-center gap-x-1 w-36 h-8 mr-4 px-4 text-14 font-bold"
-                    primary
-                    disabled={activeSessions.length > 0 || loading || !isValid}
-                    type="submit"
-                    data-test="finish-all-scopes-modal:submit-button"
-                  >
-                    {loading ? <Spinner /> : "Finish all scopes"}
-                  </Button>
-                  <Button secondary size="large" type="button" onClick={() => closeModal()}>
-                    Cancel
-                  </Button>
-                </div>
-              </Form>
-            )}
-          </Formik>
-        </div>
-      </div>
-    </Popup>
+              </Modal.Body>
+              <Modal.Footer tw="flex items-center">
+                <Button
+                  tw="flex justify-center items-center gap-x-1 w-36 h-8 mr-4 px-4 text-14 font-bold"
+                  primary
+                  disabled={activeSessions.length > 0 || loading || !isValid}
+                  type="submit"
+                  data-test="finish-all-scopes-modal:submit-button"
+                >
+                  {loading ? <Spinner /> : "Finish all scopes"}
+                </Button>
+                <Button secondary size="large" type="button" onClick={() => closeModal()}>
+                  Cancel
+                </Button>
+              </Modal.Footer>
+            </Form>
+          )}
+        </Formik>
+      </Modal.Content>
+    </Modal>
   );
 };
 
