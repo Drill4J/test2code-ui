@@ -29,7 +29,11 @@ interface Props {
 export const ActiveSessionsList = ({
   agentType, activeSessions, showGeneralAlertMessage,
 }: Props) => (
+<<<<<<< HEAD
   <div tw="overflow-y-auto flex-grow min-h-80px">
+=======
+  <div tw="flex-grow">
+>>>>>>> d255d00 (feat: integrate new modal in get suggested tests modal)
     {agentType === "Agent" ? (
       <div tw="pt-3">
         {activeSessions.map(({
