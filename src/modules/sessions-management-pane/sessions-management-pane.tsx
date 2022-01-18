@@ -94,6 +94,8 @@ export const SessionsManagementPane = () => {
               >
                 {isNewSession ? "Start New Session" : "Sessions Management"}
               </Panel.Header>
+              {/* HACK: use min-width use min-width so that the text does not stretch outside the block
+                Link: https://css-tricks.com/flexbox-truncated-text/ */}
               <Panel.Body tw="text-16 leading-20 flex flex-col min-h-80px">
                 {generalAlertMessage?.type && (
                   <GeneralAlerts type={generalAlertMessage.type}>
