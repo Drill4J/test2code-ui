@@ -25,11 +25,6 @@ interface Props {
   activeSessions: ActiveSession[];
 }
 
-const Content = styled.div`
-  min-height: 88px;
-  ${tw``}
-`;
-
 export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation } = useSessionsPaneState();

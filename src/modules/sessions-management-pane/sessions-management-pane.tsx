@@ -94,7 +94,7 @@ export const SessionsManagementPane = () => {
               >
                 {isNewSession ? "Start New Session" : "Sessions Management"}
               </Panel.Header>
-              <Panel.Body tw="text-16 leading-20">
+              <Panel.Body tw="text-16 leading-20 flex flex-col min-h-80px">
                 {generalAlertMessage?.type && (
                   <GeneralAlerts type={generalAlertMessage.type}>
                     {generalAlertMessage.text}
