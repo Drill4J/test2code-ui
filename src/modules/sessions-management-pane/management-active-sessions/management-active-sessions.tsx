@@ -16,7 +16,7 @@
 import React from "react";
 import { LinkButton, Fields, Field } from "@drill4j/ui-kit";
 
-import tw, { styled } from "twin.macro";
+import "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
@@ -25,14 +25,6 @@ interface Props {
   activeSessions: ActiveSession[];
 }
 
-<<<<<<< HEAD
-=======
-const Content = styled.div`
-  min-height: 88px;
-  ${tw``}
-`;
-
->>>>>>> d255d00 (feat: integrate new modal in get suggested tests modal)
 export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation } = useSessionsPaneState();
