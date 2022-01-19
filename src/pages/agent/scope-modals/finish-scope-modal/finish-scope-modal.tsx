@@ -30,7 +30,7 @@ import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
-  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
+  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
