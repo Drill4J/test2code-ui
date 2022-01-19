@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal,
+  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, useQueryParams,
 } from "@drill4j/ui-kit";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import tw, { styled } from "twin.macro";
@@ -29,7 +29,8 @@ import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
-  const scope = useBuildVersion<ActiveScope>("/active-scope");
+  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope");
   const {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
@@ -41,7 +42,7 @@ export const FinishScopeModal = () => {
     : 0;
   const { push, location: { pathname = "" } } = useHistory();
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
-  const closeModal = useCloseModal("/finish-scope-modal");
+  const closeModal = useCloseModal("/finish-scope-modal", ["scopeId"]);
 
   return (
     <Modal onClose={closeModal}>

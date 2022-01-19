@@ -183,7 +183,7 @@ export const AllScopes = () => {
                     active && {
                       label: "Finish Scope",
                       icon: "Check",
-                      onClick: () => push(getModalPath({ name: "finishScope" })),
+                      onClick: () => push(getModalPath({ name: "finishScope", params: { scopeId: id } })),
                     },
                     active && {
                       label: "Sessions Management",

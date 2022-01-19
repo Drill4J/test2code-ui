@@ -56,7 +56,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
         tw="flex justify-center gap-x-2 w-68"
         primary
         size="large"
-        onClick={() => push(getModalPath({ name: "finishScope" }))}
+        onClick={() => push(getModalPath({ name: "finishScope", params: { scopeId } }))}
         data-test="active-scope-info:finish-scope-button"
       >
         <Icons.Complete />
