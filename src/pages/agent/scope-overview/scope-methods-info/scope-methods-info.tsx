@@ -21,7 +21,7 @@ import "twin.macro";
 import { BuildMethodsCard } from "components";
 import { Methods } from "types/methods";
 import { ActiveScope } from "types/active-scope";
-import { useActiveSessions, useBuildVersion } from "hooks";
+import { useBuildVersion } from "hooks";
 import { ScopeCoverageInfo } from "../scope-coverage-info";
 import { MethodsTable } from "../../methods-table";
 
@@ -38,7 +38,6 @@ export const ScopeMethodsInfo = () => {
   const {
     all, new: newMethods, modified, risks,
   } = useBuildVersion<Methods>(`/build/scopes/${scope?.id}/methods`) || {};
-  const activeSessions = useActiveSessions("Agent", agentId, buildVersion) || [];
 
   return (
     <>
@@ -86,7 +85,6 @@ export const ScopeMethodsInfo = () => {
         <MethodsTable
           topic={`/build/scopes/${scopeId}/coverage/packages`}
           classesTopicPrefix={`build/scopes/${scopeId}`}
-          showCoverageIcon={Boolean(activeSessions.length) || Boolean(scope?.sessionsFinished)}
         />
       </TableActionsProvider>
     </>
