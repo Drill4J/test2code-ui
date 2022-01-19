@@ -35,7 +35,7 @@ export const GetSuggestedTestsModal = () => {
 
   return (
     <Modal onClose={closeModal}>
-      <Modal.Content tw="w-108">
+      <Modal.Content tw="w-108" type="info">
         <Modal.Header>
           <span>Get Suggested Tests</span>
         </Modal.Header>
