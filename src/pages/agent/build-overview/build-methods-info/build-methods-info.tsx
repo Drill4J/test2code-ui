@@ -124,7 +124,6 @@ export const BuildMethodsInfo = () => {
       <MethodsTable
         topic="/build/coverage/packages"
         classesTopicPrefix="build"
-        showCoverageIcon={Boolean(buildCoverage?.finishedScopesCount)}
       />
     </>
   );

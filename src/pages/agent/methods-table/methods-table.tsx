@@ -28,21 +28,17 @@ import { styled } from "twin.macro";
 import { ClassCoverage } from "types/class-coverage";
 import { useBuildVersion } from "hooks";
 import { Package } from "types/package";
-
+import { getModalPath } from "common";
 import { NameCell } from "./name-cell";
-import { CoverageCell } from "./coverage-cell";
-import { getModalPath } from "../../../common";
 
 interface Props {
   topic: string;
   classesTopicPrefix: string;
-  showCoverageIcon: boolean;
 }
 
 export const MethodsTable = ({
   classesTopicPrefix,
   topic,
-  showCoverageIcon,
 }: Props) => {
   const { methodOwnerClass = "", methodName = "", methodDesc = "" } = useQueryParams<{
     methodOwnerClass?: string; methodName?: string; methodDesc?: string; }>();
@@ -92,6 +88,7 @@ export const MethodsTable = ({
           icon={<Icons.Package />}
           value={<Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />}
           testContext="package"
+          title={value}
         />
       ),
       SubCell: ({ value = "", row }: any) => {
@@ -127,33 +124,23 @@ export const MethodsTable = ({
       width: "50%",
     },
     {
-      Header: () => (
-        <div className="flex justify-end items-center w-full">
-          Coverage, %
-          <Icons.Checkbox
-            tw="ml-4 min-w-16px text-monochrome-default"
-            width={16}
-            height={16}
-          />
-        </div>
-      ),
+      Header: "Coverage, %",
       accessor: "coverage",
-      Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon={showCoverageIcon} />
-      ),
-      width: "15%",
+      Cell: ({ value = 0 }: { value: number }) => <Cells.CoverageProgress tw="justify-between" value={value} />,
+      width: "175px",
       sortType: "number",
+      textAlign: "left",
     },
     {
       Header: "Methods total",
       accessor: "totalMethodsCount",
-      width: "10%",
+      width: "175px",
       sortType: "number",
     },
     {
       Header: "Methods covered",
       accessor: "coveredMethodsCount",
-      width: "15%",
+      width: "175px",
       sortType: "number",
     },
     {
@@ -178,7 +165,7 @@ export const MethodsTable = ({
           )}
         </Cells.Clickable>
       ),
-      width: "10%",
+      width: "175px",
       sortType: "number",
     },
   ];
@@ -238,12 +225,7 @@ export const MethodsTable = ({
 
   const renderRowSubComponent = useCallback(
     ({ row }) => <ExpandedClasses parentRow={row} />,
-    [showCoverageIcon],
-  );
-
-  const columnsDependency = useMemo(
-    () => [showCoverageIcon],
-    [showCoverageIcon],
+    [],
   );
 
   return (
@@ -253,7 +235,6 @@ export const MethodsTable = ({
         columns={columns}
         data={coverageByPackages}
         renderRowSubComponent={renderRowSubComponent}
-        columnsDependency={columnsDependency}
         isDefaultExpanded={(original: any) => original?.name === ownerClassPath}
         stub={(
           <Stub

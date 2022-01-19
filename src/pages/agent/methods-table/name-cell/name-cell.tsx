@@ -19,18 +19,21 @@ import "twin.macro";
 interface Props {
   icon?: React.ReactNode;
   type?: "primary" | "secondary";
-  value: any;
+  value: React.ReactNode;
   testContext: string;
+  [key: string]: any; // className and title
 }
 
-export const NameCell = ({ icon, value, testContext }: Props) => (
-  <span tw="flex items-center">
+export const NameCell = ({
+  icon, value, testContext, ...rest
+}: Props) => (
+  <span tw="flex items-center" {...rest}>
     {icon && <div tw="flex items-center mr-2">{icon}</div>}
     <div
       className="text-ellipsis text-14 text-monochrome-black"
       data-test={`name-cell:content:${testContext}`}
-      title={value}
-    >{value}
+    >
+      {value}
     </div>
   </span>
 );
