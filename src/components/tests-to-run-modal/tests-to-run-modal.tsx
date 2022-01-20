@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
-  Icons, Dropdown, Modal, useCloseModal, capitalize, useCopy,
+  Icons, Dropdown, Panel, useCloseModal, capitalize, useCopy,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 
@@ -51,14 +51,14 @@ export const TestsToRunModal = () => {
         return testsToRun[selectedTestsType];
     }
   };
-  const closeModal = useCloseModal("/tests-to-run-modal");
+  const closePanel = useCloseModal("/tests-to-run-modal");
 
   const dropdownItems = Object.entries(testsToRun).map(([key, value]) => ({
     value: key, label: `${capitalize(key)} (${value.length})`,
   }));
 
   return (
-    <Modal isOpen onToggle={closeModal}>
+    <Panel onClose={closePanel}>
       <div tw="flex flex-col h-full">
         <div tw="flex items-center gap-x-2 h-16 border-b border-monochrome-medium-tint pl-6 text-18 leading-24 text-monochrome-black">
           <Icons.Test height={20} width={18} viewBox="0 0 18 20" />
@@ -114,6 +114,6 @@ export const TestsToRunModal = () => {
           </div>
         </div>
       </div>
-    </Modal>
+    </Panel>
   );
 };

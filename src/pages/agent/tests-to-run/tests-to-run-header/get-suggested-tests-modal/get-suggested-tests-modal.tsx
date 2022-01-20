@@ -15,7 +15,7 @@
  */
 import React, { useEffect, useState } from "react";
 import {
-  Button, Icons, Popup, useCloseModal,
+  Button, Icons, Modal, useCloseModal,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
@@ -34,21 +34,22 @@ export const GetSuggestedTestsModal = () => {
   const closeModal = useCloseModal("/get-suggested-tests");
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header="Get Suggested Tests"
-      closeOnFadeClick
-    >
-      <div tw="flex flex-col pt-4 w-108 px-6 pb-6 gap-y-7">
-        <div tw="flex flex-col gap-y-4 text-14 leading-20 break-words text-monochrome-black" data-test="get-suggested-tests-modal:message">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-108" type="info">
+        <Modal.Header>
+          <span>Get Suggested Tests</span>
+        </Modal.Header>
+        <Modal.Body
+          tw="flex flex-col gap-y-4 text-14 leading-20 break-words text-monochrome-black"
+          data-test="get-suggested-tests-modal:message"
+        >
           <span>
             These are recommendations for this build updates only.<br />
             Use this Curl in your command line to get JSON:
           </span>
           <TestsToRunUrl agentId={agentId} pluginId={pluginId} agentType="Agent" />
-        </div>
-        <div className="flex justify-end gap-x-4">
+        </Modal.Body>
+        <Modal.Footer tw="flex justify-end gap-x-4">
           <Button
             tw="min-w-154px"
             primary
@@ -76,8 +77,8 @@ export const GetSuggestedTestsModal = () => {
           >
             Close
           </Button>
-        </div>
-      </div>
-    </Popup>
+        </Modal.Footer>
+      </Modal.Content>
+    </Modal>
   );
 };

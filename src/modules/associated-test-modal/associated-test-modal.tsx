@@ -15,7 +15,7 @@
  */
 import React, { useRef } from "react";
 import {
-  useQueryParams, useCloseModal, Popup, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton, Tooltip,
+  useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -44,20 +44,15 @@ export const AssociatedTestModal = () => {
   const packageInfoHeight = 78;
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={(
-        <div tw="text-20 w-[960px] space-x-2"><span>Associated Tests</span>
-          <span tw="text-monochrome-default">
-            {Number(params.testsCount)}
-          </span>
-        </div>
-      )}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-[1024px]">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-[1024px]" type="info">
+        <Modal.Header tw="text-20">
+          <div tw="space-x-2"><span>Associated Tests</span>
+            <span tw="text-monochrome-default">
+              {Number(params.testsCount)}
+            </span>
+          </div>
+        </Modal.Header>
         <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
           <MethodInfoLabel>Package</MethodInfoLabel>
           <MethodInfoLabel>Class</MethodInfoLabel>
@@ -205,8 +200,8 @@ export const AssociatedTestModal = () => {
             }
           />
         </div>
-      </div>
-    </Popup>
+      </Modal.Content>
+    </Modal>
   );
 };
 

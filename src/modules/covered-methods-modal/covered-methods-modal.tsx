@@ -15,7 +15,7 @@
  */
 import React, { useRef } from "react";
 import {
-  Popup, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize, CopyButton,
+  Modal, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize, CopyButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -34,7 +34,7 @@ export const CoveredMethodsModal = () => {
   const testSummary = useBuildVersion<MethodsCoveredByTestSummary>(
     `${topicCoveredMethodsByTest}/${params?.testId}/methods/summary`,
   ) || {};
-  const showSceleton = !Object.keys(testSummary).length;
+  const showSkeleton = !Object.keys(testSummary).length;
   const closeModal = useCloseModal("/covered-methods-modal", ["testId", "coveredMethods"]);
 
   const coveredMethods = useBuildVersion<MethodsDetails[]>(
@@ -48,37 +48,32 @@ export const CoveredMethodsModal = () => {
   const testPath = concatTestName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={(
-        <div tw="text-20 space-x-2 w-[960px]">
-          <span>Covered Methods</span>
-          <span
-            tw="text-monochrome-default"
-            data-test="covered-methods-modal:methods-count"
-          >
-            {params.coveredMethods}
-          </span>
-        </div>
-      )}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-[1024px]">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-[1024px]" type="info">
+        <Modal.Header tw="text-20">
+          <div tw="space-x-2">
+            <span>Covered Methods</span>
+            <span
+              tw="text-monochrome-default"
+              data-test="covered-methods-modal:methods-count"
+            >
+              {params.coveredMethods}
+            </span>
+          </div>
+        </Modal.Header>
         <div tw="grid grid-cols-3 gap-x-4 px-6 py-3 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
           <MethodInfoLabel>Test Name</MethodInfoLabel>
           <MethodInfoLabel>Path</MethodInfoLabel>
           <MethodInfoLabel>Test Type</MethodInfoLabel>
           <MethodInfoValue
-            sceleton={showSceleton}
+            skeleton={showSkeleton}
             title={testName}
             data-test="covered-methods-modal:test-name"
           >
             {testName}
           </MethodInfoValue>
           <MethodInfoValue
-            sceleton={showSceleton}
+            skeleton={showSkeleton}
             title={testPath}
             data-test="covered-methods-modal:test-path"
           >
@@ -86,13 +81,13 @@ export const CoveredMethodsModal = () => {
           </MethodInfoValue>
           <MethodInfoValue
             tw="lowercase first-letter:uppercase"
-            sceleton={showSceleton}
+            skeleton={showSkeleton}
             data-test="covered-methods-modal:test-type"
           >
             {testSummary?.testType}
           </MethodInfoValue>
         </div>
-        <div tw="px-6 pb-4" data-test="covered-methods-table">
+        <Modal.Body data-test="covered-methods-table">
           <VirtualizedTable
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
@@ -193,16 +188,16 @@ export const CoveredMethodsModal = () => {
               ]
             }
           />
-        </div>
-      </div>
-    </Popup>
+        </Modal.Body>
+      </Modal.Content>
+    </Modal>
   );
 };
 
 const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 font-bold text-monochrome-black`);
 
-const MethodInfoValue = styled.div(({ sceleton }: { sceleton?: boolean }) =>
+const MethodInfoValue = styled.div(({ skeleton }: { skeleton?: boolean }) =>
   [
     tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis`,
-    sceleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
+    skeleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
   ]);

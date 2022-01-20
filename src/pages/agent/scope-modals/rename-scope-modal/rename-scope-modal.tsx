@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import {
   Formik, Field, Form,
-  Button, FormGroup, Popup, GeneralAlerts, Spinner, Fields,
+  Button, FormGroup, Modal, GeneralAlerts, Spinner, Fields,
   composeValidators, sizeLimit, required, useCloseModal,
   useQueryParams,
 } from "@drill4j/ui-kit";
@@ -45,14 +45,11 @@ export const RenameScopeModal = () => {
   const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={<div className="text-20">Rename Scope</div>}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-108">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-108" type="info">
+        <Modal.Header>
+          <div tw="text-20">Rename Scope</div>
+        </Modal.Header>
         {errorMessage && (
           <GeneralAlerts type="ERROR">
             {errorMessage}
@@ -73,11 +70,13 @@ export const RenameScopeModal = () => {
           {({
             isSubmitting, dirty, isValid,
           }) => (
-            <Form className="m-6">
-              <FormGroup label="Scope Name">
-                <Field name="name" component={Fields.Input} placeholder="Enter scope name" />
-              </FormGroup>
-              <div className="flex items-center gap-4 w-full mt-6">
+            <Form>
+              <Modal.Body>
+                <FormGroup label="Scope Name">
+                  <Field name="name" component={Fields.Input} placeholder="Enter scope name" />
+                </FormGroup>
+              </Modal.Body>
+              <Modal.Footer tw="flex items-center gap-4">
                 <Button
                   className="flex justify-center items-center gap-x-1 w-16"
                   primary
@@ -90,11 +89,11 @@ export const RenameScopeModal = () => {
                 <Button secondary size="large" onClick={closeModal}>
                   Cancel
                 </Button>
-              </div>
+              </Modal.Footer>
             </Form>
           )}
         </Formik>
-      </div>
-    </Popup>
+      </Modal.Content>
+    </Modal>
   );
 };

@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Popup, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal,
+  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal,
 } from "@drill4j/ui-kit";
 import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import tw, { styled } from "twin.macro";
@@ -44,18 +44,13 @@ export const FinishScopeModal = () => {
   const closeModal = useCloseModal("/finish-scope-modal");
 
   return (
-    <Popup
-      isOpen
-      onToggle={closeModal}
-      header={(
-        <div tw="w-98">
-          <div tw="text-ellipsis" data-test="finish-scope-modal:header">{`Finish Scope ${scope && scope.name}`}</div>
-        </div>
-      )}
-      type="info"
-      closeOnFadeClick
-    >
-      <div tw="w-108">
+    <Modal onClose={closeModal}>
+      <Modal.Content tw="w-108" type="info">
+        <Modal.Header>
+          <div tw="w-98">
+            <div tw="text-ellipsis" data-test="finish-scope-modal:header">{`Finish Scope ${scope && scope.name}`}</div>
+          </div>
+        </Modal.Header>
         {errorMessage && (
           <GeneralAlerts type="ERROR">
             {errorMessage}
@@ -98,7 +93,7 @@ export const FinishScopeModal = () => {
               onError: setErrorMessage,
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
-                ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
+              ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
               push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
             }
             setLoading(false);
@@ -109,38 +104,40 @@ export const FinishScopeModal = () => {
               loading, hasTests: Boolean(testsCount), hasActiveSessions: Boolean(activeSessionTest.length), forceFinish,
             });
             return (
-              <Form tw="m-6">
-                <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
-                <div tw="flex flex-col gap-y-4 mt-6 mb-9 text-14 leading-20 text-blue-default">
-                  {Boolean(activeSessionTest.length) && (
-                    <div>
-                      <Label disabled={false}>
-                        <Field
-                          type="checkbox"
-                          name="forceFinish"
-                        >
-                          {({ field }: any) => (<Checkbox field={field} />)}
-                        </Field>
-                        <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
-                      </Label>
-                      {forceFinish && scope && !scope.coverage.percentage && (
-                        <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
-                          <Icons.Warning /> Scope is empty and will be deleted after finishing
-                        </div>
-                      )}
-                    </div>
-                  )}
-                  <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
-                    <Field
-                      type="checkbox"
-                      name="ignoreScope"
-                    >
-                      {({ field }: any) => (<Checkbox field={field} />)}
-                    </Field>
-                    <span tw="text-monochrome-black">Ignore scope in build stats</span>
-                  </Label>
-                </div>
-                <div className="flex items-center gap-x-4 w-full mt-9">
+              <Form tw="flex flex-col">
+                <Modal.Body>
+                  <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
+                  <div tw="flex flex-col gap-y-4 mt-6 text-14 leading-20 text-blue-default">
+                    {Boolean(activeSessionTest.length) && (
+                      <div>
+                        <Label disabled={false}>
+                          <Field
+                            type="checkbox"
+                            name="forceFinish"
+                          >
+                            {({ field }: any) => (<Checkbox field={field} />)}
+                          </Field>
+                          <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
+                        </Label>
+                        {forceFinish && scope && !scope.coverage.percentage && (
+                          <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
+                            <Icons.Warning /> Scope is empty and will be deleted after finishing
+                          </div>
+                        )}
+                      </div>
+                    )}
+                    <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
+                      <Field
+                        type="checkbox"
+                        name="ignoreScope"
+                      >
+                        {({ field }: any) => (<Checkbox field={field} />)}
+                      </Field>
+                      <span tw="text-monochrome-black">Ignore scope in build stats</span>
+                    </Label>
+                  </div>
+                </Modal.Body>
+                <Modal.Footer tw="flex items-center gap-x-4">
                   <Button
                     className={`flex justify-center items-center gap-x-1 ${finishScopeButtonContent === "Finish Scope" ? "w-30" : "w-40"}`}
                     primary
@@ -160,13 +157,13 @@ export const FinishScopeModal = () => {
                   >
                     Cancel
                   </Button>
-                </div>
+                </Modal.Footer>
               </Form>
             );
           }}
         </Formik>
-      </div>
-    </Popup>
+      </Modal.Content>
+    </Modal>
   );
 };
 
