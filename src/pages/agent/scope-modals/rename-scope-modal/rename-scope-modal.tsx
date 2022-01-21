@@ -40,7 +40,7 @@ const validateScope = composeValidators(
 export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
-  const scope = useBuildVersion<ActiveScope>(scopeId ? `/build/scopes/${scopeId}` : "/active-scope") || {};
+  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const [errorMessage, setErrorMessage] = useState("");
   const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
 
@@ -64,7 +64,7 @@ export const RenameScopeModal = () => {
             onError: setErrorMessage,
           })(values as ScopeSummary)}
           validate={validateScope}
-          initialValues={scope}
+          initialValues={scope || {}}
           enableReinitialize
         >
           {({
