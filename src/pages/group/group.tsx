@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React, { useEffect, useMemo, useState } from "react";
-import { Menu } from "@drill4j/ui-kit";
+import { Menu, sendAlertEvent } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
@@ -81,14 +81,14 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
             type: "TOGGLE_SCOPE",
             payload: { scopeId: scope.id },
           }))));
-      sendNotificationEvent({
+      sendAlertEvent({
         type: "SUCCESS",
-        text: `Group scopes have been ${enabled ? "ignored" : "included"} in build stats.`,
+        title: `Group scopes have been ${enabled ? "ignored" : "included"} in build stats.`,
       });
     } catch (error) {
-      sendNotificationEvent({
+      sendAlertEvent({
         type: "ERROR",
-        text: "There is some issue with your action. Please try again later",
+        title: "There is some issue with your action. Please try again later",
       });
     }
   };

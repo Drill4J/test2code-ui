@@ -16,23 +16,24 @@
 import axios from "axios";
 import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export const finishAllSession = async (
   { agentId, agentType }: { agentId: string, agentType: string },
-  showGeneralAlertMessage: (message: Message) => void,
+  sessionCount = 0,
 ): Promise<void> => {
   try {
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "STOP_ALL",
     });
-    showGeneralAlertMessage && showGeneralAlertMessage({
+    sendAlertEvent({
       type: "SUCCESS",
-      text: "Sessions have been finished successfully. All your progress has been added to the active scope.",
+      title: `(${sessionCount}) Sessions have been finished successfully. All your progress has been added to the active scope.`,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {
-    showGeneralAlertMessage && showGeneralAlertMessage({
+    sendAlertEvent({
       type: "ERROR",
-      text: message || "There is some issue with your action. Please try again later.",
+      title: message || "There is some issue with your action. Please try again later.",
     });
   }
 };

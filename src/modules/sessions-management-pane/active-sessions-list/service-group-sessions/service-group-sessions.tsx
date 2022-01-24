@@ -24,7 +24,6 @@ import { useSessionsPaneState } from "../../store";
 
 interface Props {
   activeSessions: ActiveSession[];
-  showGeneralAlertMessage: (message: Message) => void;
 }
 
 const ServiceGroupAgentPanel = styled.div`
@@ -33,7 +32,7 @@ const ServiceGroupAgentPanel = styled.div`
   ${({ disabled }: { disabled: boolean }) => disabled && tw`opacity-20`}
 `;
 
-export const ServiceGroupSessions = ({ activeSessions, showGeneralAlertMessage }: Props) => {
+export const ServiceGroupSessions = ({ activeSessions }: Props) => {
   const serviceGroupAgentsIds = Array.from(new Set(activeSessions.map(session => session.agentId)));
   const { bulkOperation } = useSessionsPaneState();
 
@@ -64,7 +63,6 @@ export const ServiceGroupSessions = ({ activeSessions, showGeneralAlertMessage }
                 isGlobal={isGlobal}
                 isRealtime={isRealtime}
                 agentId={agentId}
-                showGeneralAlertMessage={showGeneralAlertMessage}
               />
             ))}
         </div>

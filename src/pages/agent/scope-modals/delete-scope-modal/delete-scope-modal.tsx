@@ -16,10 +16,9 @@
 import React, { useState } from "react";
 import {
   Button, Modal, GeneralAlerts, Spinner, useCloseModal,
-  useQueryParams,
+  useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { useHistory, Link } from "react-router-dom";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
 import "twin.macro";
 
@@ -48,11 +47,6 @@ export const DeleteScopeModal = () => {
           </div>
         </Modal.Header>
         <Modal.Body>
-          {errorMessage && (
-            <GeneralAlerts type="ERROR">
-              {errorMessage}
-            </GeneralAlerts>
-          )}
           <div className="text-14 leading-20">
             {scope && scope.active && !testTypes.length && (
               <span>
@@ -102,7 +96,7 @@ export const DeleteScopeModal = () => {
                     setLoading(true);
                     await deleteScope(agentId, pluginId, {
                       onSuccess: () => {
-                        sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
+                        sendAlertEvent({ type: "SUCCESS", title: "Scope has been deleted" });
                         closeModal();
                         scope?.id && pathname.includes(scope.id)
                         && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));

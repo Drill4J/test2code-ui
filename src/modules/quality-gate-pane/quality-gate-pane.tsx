@@ -17,7 +17,7 @@ import React, { useState } from "react";
 import {
   Button, Panel, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
   Form, Formik, useCloseModal,
-  useGeneralAlertMessage,
+  useGeneralAlertMessage, sendAlertEvent,
 } from "@drill4j/ui-kit";
 
 import tw, { styled } from "twin.macro";
@@ -45,7 +45,7 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
 export const QualityGatePane = () => {
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
-  const { generalAlertMessage, showGeneralAlertMessage } = useGeneralAlertMessage();
+  const { generalAlertMessage } = useGeneralAlertMessage();
   const closeModal = useCloseModal("/quality-gate");
 
   const handleOnToggle = () => {
@@ -76,7 +76,7 @@ export const QualityGatePane = () => {
       <Panel.Content isDisableFadeClick={isEditing}>
         <Formik
           onSubmit={async (values) => {
-            await updateQualityGateSettings(agentId, pluginId, showGeneralAlertMessage)(values as ConditionSettingByType);
+            await updateQualityGateSettings(agentId, pluginId)(values as ConditionSettingByType);
             setIsEditing(false);
           }}
           initialValues={conditionSettingByType}
@@ -105,11 +105,7 @@ export const QualityGatePane = () => {
                       ? "Meet all conditions to pass the quality gate."
                       : "Choose the metrics and define their threshold."}
                   </GeneralAlerts>
-                  {generalAlertMessage?.type && (
-                    <GeneralAlerts type={generalAlertMessage.type}>
-                      {generalAlertMessage.text}
-                    </GeneralAlerts>
-                  )}
+                  {generalAlertMessage?.type && sendAlertEvent({ type: generalAlertMessage.type, title: generalAlertMessage.text })}
                   {configured && !isEditing
                     ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
                     : <QualityGateSettings conditionSettingByType={values} />}

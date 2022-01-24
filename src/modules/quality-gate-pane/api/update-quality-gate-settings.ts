@@ -16,12 +16,11 @@
 import axios from "axios";
 
 import { ConditionSettingByType } from "types/quality-gate-type";
-import { Message } from "@drill4j/types-admin";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export function updateQualityGateSettings(
   agentId: string,
   pluginId: string,
-  showGeneralAlertMessage: (message: Message) => void,
 ) {
   return async (formValues: ConditionSettingByType): Promise<void> => {
     try {
@@ -54,11 +53,11 @@ export function updateQualityGateSettings(
           },
         ],
       });
-      showGeneralAlertMessage({ type: "SUCCESS", text: "Quality Gate has been saved" });
+      sendAlertEvent({ type: "SUCCESS", title: "Quality Gate has been saved" });
     } catch ({ response: { data: { message } = {} } = {} }) {
-      showGeneralAlertMessage({
+      sendAlertEvent({
         type: "ERROR",
-        text: message || "On-submit error. Server problem or operation could not be processed in real-time",
+        title: message || "On-submit error. Server problem or operation could not be processed in real-time",
       });
     }
   };

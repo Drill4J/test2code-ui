@@ -16,7 +16,20 @@
 import React, { useState } from "react";
 import axios from "axios";
 import {
-  Button, Modal, GeneralAlerts, Spinner, Formik, Form, Field, Fields, Checkbox, composeValidators, sizeLimit, required, useCloseModal,
+  Button,
+  Modal,
+  GeneralAlerts,
+  Spinner,
+  Formik,
+  Form,
+  Field,
+  Fields,
+  Checkbox,
+  composeValidators,
+  sizeLimit,
+  required,
+  useCloseModal,
+  sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -49,11 +62,6 @@ export const FinishAllScopesModal = () => {
         <Modal.Header>
           <div tw="text-ellipsis">Finish All Scopes</div>
         </Modal.Header>
-        {errorMessage && (
-          <GeneralAlerts type="ERROR">
-            {errorMessage}
-          </GeneralAlerts>
-        )}
         {activeSessions.length > 0 && (
           <GeneralAlerts type="WARNING">
             <div>
@@ -97,13 +105,18 @@ export const FinishAllScopesModal = () => {
             if (!hasError) {
               await finishAllScopes(groupId, {
                 onSuccess: () => {
-                  sendNotificationEvent({
+                  sendAlertEvent({
                     type: "SUCCESS",
-                    text: "All scopes have been successfully finished",
+                    title: `(${activeSessions.length}) All scopes have been successfully finished`,
                   });
                   closeModal();
                 },
-                onError: setErrorMessage,
+                onError: (message) => {
+                  sendAlertEvent({
+                    type: "ERROR",
+                    title: message,
+                  });
+                },
               })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
             }
             setLoading(false);

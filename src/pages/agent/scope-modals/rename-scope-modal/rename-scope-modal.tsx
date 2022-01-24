@@ -18,14 +18,13 @@ import {
   Formik, Field, Form,
   Button, FormGroup, Modal, GeneralAlerts, Spinner, Fields,
   composeValidators, sizeLimit, required, useCloseModal,
-  useQueryParams,
+  useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
 import { renameScope } from "../../api";
 import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
@@ -50,15 +49,11 @@ export const RenameScopeModal = () => {
         <Modal.Header>
           <div tw="text-20">Rename Scope</div>
         </Modal.Header>
-        {errorMessage && (
-          <GeneralAlerts type="ERROR">
-            {errorMessage}
-          </GeneralAlerts>
-        )}
+        {errorMessage && sendAlertEvent({ type: "ERROR", title: errorMessage })}
         <Formik
           onSubmit={(values) => renameScope(agentId, pluginId, {
             onSuccess: () => {
-              sendNotificationEvent({ type: "SUCCESS", text: "Scope name has been changed" });
+              sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed" });
               closeModal();
             },
             onError: setErrorMessage,

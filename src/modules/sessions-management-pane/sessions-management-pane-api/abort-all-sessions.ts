@@ -14,22 +14,21 @@
  * limitations under the License.
  */
 import axios from "axios";
-import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export const abortAllSession = async (
-  { agentId, agentType }: { agentId: string, agentType: string },
-  showGeneralAlertMessage: (message: Message) => void,
+  { agentId, agentType }: { agentId: string, agentType: string }, sessionCount = 0,
 ): Promise<void> => {
   try {
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "CANCEL_ALL",
     });
-    showGeneralAlertMessage && showGeneralAlertMessage({ type: "SUCCESS", text: "Sessions have been aborted successfully." });
+    sendAlertEvent({ type: "SUCCESS", title: `(${sessionCount}) Sessions have been aborted successfully.` });
   } catch ({ response: { data: { message } = {} } = {} }) {
-    showGeneralAlertMessage && showGeneralAlertMessage({
+    sendAlertEvent({
       type: "ERROR",
-      text: message || "There is some issue with your action. Please try again later.",
+      title: message || "There is some issue with your action. Please try again later.",
     });
   }
 };

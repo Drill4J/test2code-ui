@@ -16,10 +16,10 @@
 import axios from "axios";
 import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export function finishSession(
   agentId: string,
-  showGeneralAlertMessage: (message: Message) => void,
 ) {
   return async (sessionId: string):Promise<void> => {
     try {
@@ -27,14 +27,14 @@ export function finishSession(
         type: "STOP",
         payload: { sessionId },
       });
-      showGeneralAlertMessage && showGeneralAlertMessage({
+      sendAlertEvent({
         type: "SUCCESS",
-        text: "Session has been finished successfully. All your progress has been added to the active scope.",
+        title: "Session has been finished successfully. All your progress has been added to the active scope.",
       });
     } catch ({ response: { data: { message } = {} } = {} }) {
-      showGeneralAlertMessage && showGeneralAlertMessage({
+      sendAlertEvent({
         type: "ERROR",
-        text: message || "There is some issue with your action. Please try again later.",
+        title: message || "There is some issue with your action. Please try again later.",
       });
     }
   };

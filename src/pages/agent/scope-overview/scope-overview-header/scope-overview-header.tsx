@@ -15,11 +15,10 @@
  */
 import React from "react";
 import {
-  Button, Icons, Menu, SessionIndicator,
+  Button, Icons, Menu, sendAlertEvent, SessionIndicator,
 } from "@drill4j/ui-kit";
 import { Link, useHistory, useParams } from "react-router-dom";
 import { AgentStatus } from "@drill4j/types-admin";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
 import tw, { styled } from "twin.macro";
 
@@ -55,15 +54,15 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
       icon: enabled ? "EyeCrossed" : "Eye",
       onClick: () => toggleScope(agentId, {
         onSuccess: () => {
-          sendNotificationEvent({
+          sendAlertEvent({
             type: "SUCCESS",
-            text: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
+            title: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
           });
         },
         onError: () => {
-          sendNotificationEvent({
+          sendAlertEvent({
             type: "ERROR",
-            text: "There is some issue with your action. Please try again later",
+            title: "There is some issue with your action. Please try again later",
           });
         },
       })(scopeId),

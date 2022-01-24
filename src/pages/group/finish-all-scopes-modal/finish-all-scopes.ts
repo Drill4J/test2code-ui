@@ -22,10 +22,11 @@ export function finishAllScopes(
 ) {
   return async (params: { prevScopeEnabled: boolean; savePrevScope: boolean }) => {
     try {
-      await axios.post(`/groups/${serviceGroupId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+      const data = await axios.post(`/groups/${serviceGroupId}/plugins/${PLUGIN_ID}/dispatch-action`, {
         type: "SWITCH_ACTIVE_SCOPE",
         payload: { scopeName: "", ...params },
       });
+      console.log(data);
       onSuccess && onSuccess();
     } catch ({ response: { data: { message } = {} } = {} }) {
       onError && onError(message || "There is some issue with your action. Please try again later");

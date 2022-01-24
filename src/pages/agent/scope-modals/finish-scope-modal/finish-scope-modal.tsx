@@ -16,9 +16,8 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, useQueryParams,
+  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
@@ -52,11 +51,7 @@ export const FinishScopeModal = () => {
             <div tw="text-ellipsis" data-test="finish-scope-modal:header">{`Finish Scope ${scope && scope.name}`}</div>
           </div>
         </Modal.Header>
-        {errorMessage && (
-          <GeneralAlerts type="ERROR">
-            {errorMessage}
-          </GeneralAlerts>
-        )}
+        {errorMessage && sendAlertEvent({ type: "ERROR", title: errorMessage })}
         {activeSessionTest.length > 0 && (
           <GeneralAlerts type="WARNING">
             <div>
@@ -83,9 +78,9 @@ export const FinishScopeModal = () => {
             setLoading(true);
             await finishScope(agentId, pluginId, {
               onSuccess: () => {
-                sendNotificationEvent({
+                sendAlertEvent({
                   type: "SUCCESS",
-                  text: scope?.coverage.percentage
+                  title: scope?.coverage.percentage
                     ? "Scope has been finished"
                     : "Scope has been finished and deleted",
                 });

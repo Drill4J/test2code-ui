@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 import axios from "axios";
-import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export function abortSession(
   agentId: string,
-  showGeneralAlertMessage: (message: Message) => void,
 ) {
   return async (sessionId: string): Promise<void> => {
     try {
@@ -27,11 +26,11 @@ export function abortSession(
         type: "CANCEL",
         payload: { sessionId },
       });
-      showGeneralAlertMessage && showGeneralAlertMessage({ type: "SUCCESS", text: "Session has been aborted successfully." });
+      sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
     } catch ({ response: { data: { message } = {} } = {} }) {
-      showGeneralAlertMessage && showGeneralAlertMessage({
+      sendAlertEvent({
         type: "ERROR",
-        text: message || "There is some issue with your action. Please try again later.",
+        title: message || "There is some issue with your action. Please try again later.",
       });
     }
   };
