@@ -34,7 +34,6 @@ export const FinishScopeModal = () => {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
   const { testTypes: activeSessionTest = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const testsCount = scope
     ? (scope.coverage.byTestType || []).reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0)
@@ -51,7 +50,6 @@ export const FinishScopeModal = () => {
             <div tw="text-ellipsis" data-test="finish-scope-modal:header">{`Finish Scope ${scope && scope.name}`}</div>
           </div>
         </Modal.Header>
-        {errorMessage && sendAlertEvent({ type: "ERROR", title: errorMessage })}
         {activeSessionTest.length > 0 && (
           <GeneralAlerts type="WARNING">
             <div>
@@ -86,7 +84,9 @@ export const FinishScopeModal = () => {
                 });
                 closeModal();
               },
-              onError: setErrorMessage,
+              onError: message => {
+                sendAlertEvent({ type: "ERROR", title: message });
+              },
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
               ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {

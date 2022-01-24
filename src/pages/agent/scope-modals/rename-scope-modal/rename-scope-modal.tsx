@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
+import React from "react";
 import {
   Formik, Field, Form,
-  Button, FormGroup, Modal, GeneralAlerts, Spinner, Fields,
+  Button, FormGroup, Modal, Spinner, Fields,
   composeValidators, sizeLimit, required, useCloseModal,
   useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
@@ -40,7 +40,6 @@ export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
-  const [errorMessage, setErrorMessage] = useState("");
   const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
 
   return (
@@ -49,14 +48,15 @@ export const RenameScopeModal = () => {
         <Modal.Header>
           <div tw="text-20">Rename Scope</div>
         </Modal.Header>
-        {errorMessage && sendAlertEvent({ type: "ERROR", title: errorMessage })}
         <Formik
           onSubmit={(values) => renameScope(agentId, pluginId, {
             onSuccess: () => {
               sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed" });
               closeModal();
             },
-            onError: setErrorMessage,
+            onError: message => {
+              sendAlertEvent({ type: "ERROR", title: message });
+            },
           })(values as ScopeSummary)}
           validate={validateScope}
           initialValues={scope || {}}
