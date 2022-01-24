@@ -105,7 +105,6 @@ export const QualityGatePane = () => {
                       ? "Meet all conditions to pass the quality gate."
                       : "Choose the metrics and define their threshold."}
                   </GeneralAlerts>
-                  {generalAlertMessage?.type && sendAlertEvent({ type: generalAlertMessage.type, title: generalAlertMessage.text })}
                   {configured && !isEditing
                     ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
                     : <QualityGateSettings conditionSettingByType={values} />}
