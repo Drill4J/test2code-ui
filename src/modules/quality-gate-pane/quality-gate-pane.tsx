@@ -17,7 +17,6 @@ import React, { useState } from "react";
 import {
   Button, Panel, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
   Form, Formik, useCloseModal,
-  useGeneralAlertMessage, sendAlertEvent,
 } from "@drill4j/ui-kit";
 
 import tw, { styled } from "twin.macro";
@@ -45,7 +44,6 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
 export const QualityGatePane = () => {
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
-  const { generalAlertMessage } = useGeneralAlertMessage();
   const closeModal = useCloseModal("/quality-gate");
 
   const handleOnToggle = () => {

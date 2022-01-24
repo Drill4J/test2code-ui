@@ -15,7 +15,6 @@
  */
 import React from "react";
 import { Icons } from "@drill4j/ui-kit";
-import { Message } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";

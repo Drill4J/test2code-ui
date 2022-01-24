@@ -27,7 +27,6 @@ import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
 
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { ScopeSummary } from "types";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";

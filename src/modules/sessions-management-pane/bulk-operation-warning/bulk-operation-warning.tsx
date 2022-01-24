@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { Message } from "@drill4j/types-admin";
 
 import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
 import { OperationActionWarning } from "../operation-action-warning";

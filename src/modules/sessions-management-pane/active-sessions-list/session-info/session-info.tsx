@@ -16,7 +16,6 @@
 import React from "react";
 import { Icons, Menu } from "@drill4j/ui-kit";
 import { capitalize } from "@drill4j/common-utils";
-import { Message } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
 import { useSessionsPaneState } from "../../store";

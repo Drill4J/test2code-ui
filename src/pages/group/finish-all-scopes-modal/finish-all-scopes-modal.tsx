@@ -35,7 +35,6 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { useActiveSessions, useGroupData, useGroupRouteParams } from "hooks";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { getGroupModalPath } from "common";
 import { ScopeSummary, ServiceGroupSummary } from "types";
 import { finishAllScopes } from "./finish-all-scopes";
@@ -51,7 +50,6 @@ const validate = (formValues: {hasNewName: boolean}) => composeValidators(
 export const FinishAllScopesModal = () => {
   const { groupId } = useGroupRouteParams();
   const { summaries: agentsSummaries = [] } = useGroupData<ServiceGroupSummary>("/group/summary", groupId) || {};
-  const [errorMessage, setErrorMessage] = useState("");
   const activeSessions = useActiveSessions("ServiceGroup", groupId) || [];
   const [loading, setLoading] = useState(false);
   const closeModal = useCloseModal("/finish-all-scopes-modal");
@@ -92,13 +90,13 @@ export const FinishAllScopesModal = () => {
                 await Promise.allSettled(agentsSummaries.map(({ id: agentId = "" }, i) =>
                   renameScope(agentId, "test2code",
                     {
-                      onError: (msg: string) => {
-                        setErrorMessage(msg);
+                      onError: message => {
+                        sendAlertEvent({ type: "ERROR", title: message });
                         hasError = true;
                       },
                     })({ id: scopesIds[i], name: scopesName } as ScopeSummary)));
               } catch (e) {
-                setErrorMessage(e.message || "Rename scopes failed");
+                sendAlertEvent({ type: "ERROR", title: e.message || "Rename scopes failed" });
                 hasError = true;
               }
             }

@@ -15,7 +15,6 @@
  */
 import React from "react";
 import { ActiveSession } from "types/active-session";
-import { Message } from "@drill4j/types-admin";
 import { SessionInfo } from "./session-info";
 import { ServiceGroupSessions } from "./service-group-sessions";
 import "twin.macro";

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 import axios from "axios";
-import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
 
