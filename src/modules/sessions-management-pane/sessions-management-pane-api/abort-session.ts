@@ -17,21 +17,19 @@ import axios from "axios";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
 
-export function abortSession(
-  agentId: string,
+export async function abortSession(
+  agentId: string, sessionId: string,
 ) {
-  return async (sessionId: string): Promise<void> => {
-    try {
-      await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
-        type: "CANCEL",
-        payload: { sessionId },
-      });
-      sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
-    } catch ({ response: { data: { message } = {} } = {} }) {
-      sendAlertEvent({
-        type: "ERROR",
-        title: message || "There is some issue with your action. Please try again later.",
-      });
-    }
-  };
+  try {
+    await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+      type: "CANCEL",
+      payload: { sessionId },
+    });
+    sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
+  } catch ({ response: { data: { message } = {} } = {} }) {
+    sendAlertEvent({
+      type: "ERROR",
+      title: message || "There is some issue with your action. Please try again later.",
+    });
+  }
 }

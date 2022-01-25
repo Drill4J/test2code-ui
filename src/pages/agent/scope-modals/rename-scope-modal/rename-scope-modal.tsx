@@ -26,8 +26,8 @@ import "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
 
+import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { renameScope } from "../../api";
-import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
 
 const validateScope = composeValidators(
   required("name", "Scope Name"),
@@ -54,9 +54,7 @@ export const RenameScopeModal = () => {
               sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed" });
               closeModal();
             },
-            onError: message => {
-              sendAlertEvent({ type: "ERROR", title: message });
-            },
+            onError: message => sendAlertEvent({ type: "ERROR", title: message }),
           })(values as ScopeSummary)}
           validate={validateScope}
           initialValues={scope || {}}

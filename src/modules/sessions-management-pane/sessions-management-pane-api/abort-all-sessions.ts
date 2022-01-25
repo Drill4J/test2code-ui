@@ -24,7 +24,7 @@ export const abortAllSession = async (
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "CANCEL_ALL",
     });
-    sendAlertEvent({ type: "SUCCESS", title: `(${sessionCount}) Sessions have been aborted successfully.` });
+    sendAlertEvent({ type: "SUCCESS", title: `${sessionCount > 1 ? `(${sessionCount})` : ""} Sessions have been aborted successfully.` });
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({
       type: "ERROR",

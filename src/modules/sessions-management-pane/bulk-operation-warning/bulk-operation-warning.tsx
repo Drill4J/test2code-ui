@@ -15,11 +15,11 @@
  */
 import React, { useState } from "react";
 
+import { ActiveSessions } from "types";
+import { useBuildVersion } from "hooks";
 import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
 import { OperationActionWarning } from "../operation-action-warning";
 import { abortAllSession, finishAllSession } from "../sessions-management-pane-api";
-import { useBuildVersion } from "../../../hooks";
-import { ActiveSessions } from "../../../types";
 
 interface Props {
   agentType: string;

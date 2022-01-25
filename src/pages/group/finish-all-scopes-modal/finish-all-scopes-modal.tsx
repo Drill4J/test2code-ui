@@ -105,16 +105,11 @@ export const FinishAllScopesModal = () => {
                 onSuccess: () => {
                   sendAlertEvent({
                     type: "SUCCESS",
-                    title: `(${activeSessions.length}) All scopes have been successfully finished`,
+                    title: `${agentsSummaries.length > 1 ? `(${agentsSummaries.length})` : ""} Scopes have been successfully finished`,
                   });
                   closeModal();
                 },
-                onError: (message) => {
-                  sendAlertEvent({
-                    type: "ERROR",
-                    title: message,
-                  });
-                },
+                onError: (message) => sendAlertEvent({ type: "ERROR", title: message }),
               })({ prevScopeEnabled: !ignoreScope, savePrevScope: true });
             }
             setLoading(false);

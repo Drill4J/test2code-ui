@@ -27,7 +27,8 @@ export const finishAllSession = async (
     });
     sendAlertEvent({
       type: "SUCCESS",
-      title: `(${sessionCount}) Sessions have been finished successfully. All your progress has been added to the active scope.`,
+      title: `${sessionCount > 1 ? `(${sessionCount})` : ""} Sessions have been finished successfully. 
+      All your progress has been added to the active scope.`,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({

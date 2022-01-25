@@ -100,9 +100,7 @@ export const DeleteScopeModal = () => {
                         scope?.id && pathname.includes(scope.id)
                         && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
                       },
-                      onError: message => {
-                        sendAlertEvent({ type: "ERROR", title: message });
-                      },
+                      onError: message => sendAlertEvent({ type: "ERROR", title: message }),
                     })(scope as ActiveScope);
                     setLoading(false);
                   }}

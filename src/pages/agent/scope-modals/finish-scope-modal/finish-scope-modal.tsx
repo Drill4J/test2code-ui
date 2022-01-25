@@ -84,9 +84,7 @@ export const FinishScopeModal = () => {
                 });
                 closeModal();
               },
-              onError: message => {
-                sendAlertEvent({ type: "ERROR", title: message });
-              },
+              onError: message => sendAlertEvent({ type: "ERROR", title: message }),
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
               ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {

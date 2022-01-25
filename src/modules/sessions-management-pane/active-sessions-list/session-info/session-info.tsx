@@ -61,8 +61,8 @@ export const SessionInfo = ({
         <Actions disabled={disabled}>
           <Menu
             items={[
-              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId)(sessionId) },
-              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId)(sessionId) },
+              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId, sessionId) },
+              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId, sessionId) },
             ]}
           />
         </Actions>
