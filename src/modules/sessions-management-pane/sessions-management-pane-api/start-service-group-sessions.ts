@@ -22,10 +22,6 @@ import { StartSessionPayloadTypes } from "./start-session-payload-types";
 export function startServiceGroupSessions(
   serviceGroupId: string,
 ) {
-  sendAlertEvent({
-    type: "SUCCESS",
-    title: "Sessions has been started successfully.",
-  });
   return ({ sessionId, isGlobal, isRealtime }: StartSessionPayloadTypes): Promise<AxiosResponse> => axios.post(`/groups/${
     serviceGroupId}/plugins/${PLUGIN_ID}/dispatch-action`, {
     type: "START",

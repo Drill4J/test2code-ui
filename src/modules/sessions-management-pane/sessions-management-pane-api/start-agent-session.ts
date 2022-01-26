@@ -22,10 +22,6 @@ import { StartSessionPayloadTypes } from "./start-session-payload-types";
 export function startAgentSession(
   agentId: string,
 ) {
-  sendAlertEvent({
-    type: "SUCCESS",
-    title: "Session has been started successfully.",
-  });
   return ({ sessionId, isGlobal, isRealtime }: StartSessionPayloadTypes): Promise<AxiosResponse> => axios.post(`/agents/${
     agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
     type: "START",
