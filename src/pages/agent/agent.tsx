@@ -27,6 +27,7 @@ import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
+import { SessionsWatcher } from "../../modules/new-session-watcher";
 
 export const Agent = () => (
   <div tw="flex flex-col w-full h-full">
@@ -70,5 +71,6 @@ export const Agent = () => (
       </Switch>
     </div>
     <Modals />
+    <SessionsWatcher />
   </div>
 );

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { sendAlertEvent } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
 import { createStore, WritableStore } from "nanostores";
@@ -21,7 +21,7 @@ import { useActiveSessions } from "../../hooks";
 import { agentPluginPath, groupPluginPath } from "../../router";
 import { ActiveSession } from "../../types/active-session";
 
-export const sessionsStore: WritableStore = createStore();
+export const sessionsStore: WritableStore = createStore<string[]>(() => sessionsStore.set([]));
 
 export const SessionsWatcher = () => {
   const [session, setSession] = useState<ActiveSession[] | null>(null);
@@ -35,17 +35,42 @@ export const SessionsWatcher = () => {
   }) || {};
   const agentType = groupId ? "ServiceGroup" : "Agent";
   const id = agentId || groupId;
-  const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
+  const activeSessions = useActiveSessions(agentType, id, buildVersion);
 
   useEffect(() => {
-    setSession(activeSessions);
-    sessionsStore.set(activeSessions);
-  }, []);
+    if (activeSessions) {
+      setSession(activeSessions);
+    }
+  }, [activeSessions]);
+
   return (
     <>
-      {session && <NewSessionAlert activeSessions={activeSessions} />}
+      {session && <NewSessionAlert activeSessions={session} />}
     </>
   );
 };
 
-const NewSessionAlert = ({ activeSessions }: {activeSessions: ActiveSession[]}) => null;
+const NewSessionAlert = React.memo(({ activeSessions }: {activeSessions: ActiveSession[]}) => {
+  // first sync active session with session store
+  useState(() => {
+    sessionsStore.set(activeSessions.map(sessionValue => sessionValue.id));
+  });
+  console.log(activeSessions, sessionsStore.value);
+
+  if (activeSessions.length === sessionsStore.value.length) return null;
+
+  let diffCount: number;
+  let type: string;
+
+  if (activeSessions.length > sessionsStore.value.length) {
+    type = "started";
+    diffCount = activeSessions.filter(session => !sessionsStore.value.includes(session.id)).length;
+  } else {
+    const mapActiveSessions = activeSessions.map(session => session.id);
+    type = "finished/aborted";
+    diffCount = sessionsStore.value.filter((id: string) => !mapActiveSessions.includes(id)).length;
+  }
+  sendAlertEvent({ type: "INFO", title: `${diffCount > 1 ? `(${diffCount}) Sessions` : "Session"} have been ${type}` });
+
+  return null;
+});

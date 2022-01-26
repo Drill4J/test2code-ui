@@ -20,9 +20,11 @@ import {
 } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
+import { useStore } from "nanostores/react";
 
 import { useActiveSessions } from "hooks";
 import { agentPluginPath, groupPluginPath } from "router";
+import { ReadableStore } from "nanostores";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,
@@ -32,6 +34,7 @@ import { ActiveSessionsList } from "./active-sessions-list";
 import { BulkOperationWarning } from "./bulk-operation-warning";
 import { ActionsPanel } from "./actions-panel";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "./store";
+import { sessionsStore } from "../new-session-watcher/new-session-watcher";
 
 interface FormValues {
   sessionId: string;
@@ -62,6 +65,7 @@ export const SessionsManagementPane = () => {
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
   const closePanel = useCloseModal("/session-management");
+  const store = useStore(sessionsStore);
 
   return (
     <Panel onClose={closePanel}>
@@ -71,7 +75,7 @@ export const SessionsManagementPane = () => {
           onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
             { resetForm, setFieldError }: any) => {
             const error = agentId
-              ? await handleStartAgentSession({ id: agentId }, values)
+              ? await handleStartAgentSession({ id: agentId }, values, store)
               : await handleStartServiceGroupSession({ id: groupId }, values);
             if (error.sessionId) {
               setFieldError("sessionId", error.sessionId);
@@ -180,11 +184,13 @@ async function handleStartServiceGroupSession({ id }: Identifiers,
 }
 
 async function handleStartAgentSession({ id }: Identifiers,
-  values: FormValues) {
+  values: FormValues, store: string[]) {
   try {
-    await startAgentSession(id)(values);
+    const response = await startAgentSession(id)(values);
     sendAlertEvent({ type: "SUCCESS", title: "New session has been started successfully." });
+    sessionsStore.set([...store, response.data.data.payload.sessionId]);
   } catch (error) {
+    console.log(error);
     const { data: { fieldErrors = [] } = {}, message: errorMessage = "" } = error?.response?.data || {};
     if (error?.response?.data?.code === 409) {
       return handleFieldErrors(fieldErrors);
