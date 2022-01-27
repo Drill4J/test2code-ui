@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useState } from "react";
 import { sendAlertEvent } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
 import { createStore, WritableStore } from "nanostores";
@@ -24,7 +24,6 @@ import { ActiveSession } from "../../types/active-session";
 export const sessionsStore: WritableStore = createStore<string[]>(() => sessionsStore.set([]));
 
 export const SessionsWatcher = () => {
-  const [session, setSession] = useState<ActiveSession[] | null>(null);
   const { pathname } = useLocation();
   const {
     params: {
@@ -37,15 +36,9 @@ export const SessionsWatcher = () => {
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion);
 
-  useEffect(() => {
-    if (activeSessions) {
-      setSession(activeSessions);
-    }
-  }, [activeSessions]);
-
   return (
     <>
-      {session && <NewSessionAlert activeSessions={session} />}
+      {activeSessions && <NewSessionAlert activeSessions={activeSessions} />}
     </>
   );
 };
@@ -55,7 +48,6 @@ const NewSessionAlert = React.memo(({ activeSessions }: {activeSessions: ActiveS
   useState(() => {
     sessionsStore.set(activeSessions.map(sessionValue => sessionValue.id));
   });
-  console.log(activeSessions, sessionsStore.value);
 
   if (activeSessions.length === sessionsStore.value.length) return null;
 
@@ -71,6 +63,8 @@ const NewSessionAlert = React.memo(({ activeSessions }: {activeSessions: ActiveS
     diffCount = sessionsStore.value.filter((id: string) => !mapActiveSessions.includes(id)).length;
   }
   sendAlertEvent({ type: "INFO", title: `${diffCount > 1 ? `(${diffCount}) Sessions` : "Session"} have been ${type}` });
+
+  sessionsStore.set(activeSessions.map(sessionValue => sessionValue.id));
 
   return null;
 });
