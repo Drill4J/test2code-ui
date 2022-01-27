@@ -16,15 +16,17 @@
 import axios from "axios";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
+import { sessionsStore } from "../../new-session-watcher/new-session-watcher";
 
 export const abortAllSession = async (
-  { agentId, agentType }: { agentId: string, agentType: string }, sessionCount = 0,
+  { agentId, agentType }: { agentId: string, agentType: string }, sessionCount: number | undefined,
 ): Promise<void> => {
   try {
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "CANCEL_ALL",
     });
-    sendAlertEvent({ type: "SUCCESS", title: `${sessionCount > 1 ? `(${sessionCount})` : ""} Sessions have been aborted successfully.` });
+    sendAlertEvent({ type: "SUCCESS", title: `${sessionCount ? `(${sessionCount})` : "All"} Sessions have been aborted successfully.` });
+    sessionsStore.set([]);
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({
       type: "ERROR",
