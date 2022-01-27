@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useParams } from "react-router-dom";
 
-import { Agent } from "@drill4j/types-admin";
+import { AgentInfo } from "@drill4j/types-admin";
 import { useAdminConnection } from "./use-admin-connection";
+import { useAgentRouteParams } from "./use-agent-route-params";
 
 export const useAgent = (id?:string) => {
-  const { agentId = "" } = useParams<{ agentId?: string;}>();
-  return useAdminConnection<Agent>(`/api/agents/${id || agentId}`) || {};
+  const { agentId } = useAgentRouteParams();
+
+  return useAdminConnection<AgentInfo>(`/api/agent/${id || agentId}`) || {};
 };

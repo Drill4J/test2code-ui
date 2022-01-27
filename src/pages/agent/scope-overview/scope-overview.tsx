@@ -19,7 +19,9 @@ import { useHistory, Redirect, useParams } from "react-router-dom";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
+import {
+  useActiveBuild, useActiveScope, useBuildVersion,
+} from "hooks";
 import { getPagePath } from "common";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
@@ -32,7 +34,7 @@ export const ScopeOverview = () => {
   const {
     scopeId = "", buildVersion = "", agentId = "",
   } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
-  const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
+  const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
 
   const newBuildHasAppeared = activeBuildVersion && buildVersion && activeBuildVersion !== buildVersion;
@@ -41,17 +43,17 @@ export const ScopeOverview = () => {
 
   return (
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
-      ? <Redirect to={{ pathname: getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }) }} />
+      ? <Redirect to={{ pathname: getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }) }} />
       : (
         <>
-          <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
+          <ScopeOverviewHeader status={buildStatus} isActiveBuild={activeBuildVersion === buildVersion} />
           <div tw="flex flex-col items-center w-full">
             <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
               <Tab
                 active={activeTab === "methods"}
                 onClick={() => push(getPagePath({
                   name: "scopeMethods",
-                  params: { scopeId },
+                  params: { scopeId, buildVersion },
                   queryParams: { activeTab: "methods" },
                 }))}
               >
@@ -64,7 +66,7 @@ export const ScopeOverview = () => {
                 active={activeTab === "tests"}
                 onClick={() => push(getPagePath({
                   name: "scopeTests",
-                  params: { scopeId },
+                  params: { scopeId, buildVersion },
                   queryParams: { activeTab: "tests" },
                 }))}
               >

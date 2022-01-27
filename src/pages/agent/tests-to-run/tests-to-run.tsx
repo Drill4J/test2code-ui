@@ -29,7 +29,9 @@ import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
 import { transformTests } from "utils";
-import { useBuildVersion, useAgent, useAgentRouteParams } from "hooks";
+import {
+  useBuildVersion, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild,
+} from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { TestsToRunHeader } from "./tests-to-run-header";
@@ -45,8 +47,9 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     items: testsToRun = [],
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
-  const { buildVersion, agentId } = useAgentRouteParams();
-  const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};
   const { tests: previousBuildTests = [], testDuration: totalDuration = 1 } = useBuildVersion<BuildSummary>(

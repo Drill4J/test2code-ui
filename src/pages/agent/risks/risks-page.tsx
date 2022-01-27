@@ -17,7 +17,7 @@ import React from "react";
 import { FilterList, ParentBuild } from "@drill4j/types-admin";
 import "twin.macro";
 
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { Risk } from "types";
 import { useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
@@ -25,7 +25,7 @@ import { RisksTable } from "./risks-table";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
-  const { buildVersion } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const {
     items: risks = [],

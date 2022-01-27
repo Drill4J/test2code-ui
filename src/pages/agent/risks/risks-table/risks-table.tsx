@@ -23,6 +23,7 @@ import "twin.macro";
 
 import { getModalPath, getPagePath } from "common";
 import { CoverageCell } from "../../methods-table/coverage-cell";
+import { useTestToCodeRouteParams } from "../../../../hooks";
 
 interface Props {
   data: Risk[];
@@ -30,6 +31,7 @@ interface Props {
 }
 
 export const RisksTable = ({ data }: Props) => {
+  const { buildVersion } = useTestToCodeRouteParams();
   const columns = [
     {
       Header: "Name",
@@ -44,7 +46,8 @@ export const RisksTable = ({ data }: Props) => {
           link={(
             <Link
               to={getPagePath({
-                name: "test2code",
+                name: "overview",
+                params: { buildVersion },
                 queryParams: {
                   activeTab: "methods",
                   tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),

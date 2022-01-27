@@ -17,34 +17,34 @@ import React from "react";
 import {
   Button, Icons, Tooltip, Typography,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
-import { AGENT_STATUS } from "common/constants";
+import { BUILD_STATUS } from "common/constants";
 import {
-  useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+  useActiveBuild, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage, useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
-import { useSwitchBuild } from "contexts";
 import { Risk } from "types";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
-  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
-  const { buildVersion: activeBuildVersion = "", status: agentStatus } = useAgent(agentId) || {};
+  const { agentId = "" } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
   const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
-  const switchBuild = useSwitchBuild();
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
+  const { push } = useHistory();
 
   return (
     <Content>
@@ -62,7 +62,11 @@ export const CoveragePluginHeader = () => {
           ? (
             <div
               className="flex link"
-              onClick={() => switchBuild(previousBuildVersion, "/")}
+              onClick={() => push(getPagePath({
+                name: "overview",
+                params: { buildVersion: previousBuildVersion },
+                queryParams: { activeTab: "methods" },
+              }))}
               title={previousBuildVersion}
             >
               <Typography.MiddleEllipsis>
@@ -71,7 +75,7 @@ export const CoveragePluginHeader = () => {
             </div>
           ) : <span>&ndash;</span>}
       </BaselinePanel>
-      {activeBuildVersion === buildVersion && agentStatus === AGENT_STATUS.ONLINE && (
+      {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && (
         <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
           <div className="flex items-center w-full">
             <div tw="mr-2 text-12 leading-16 font-bold" data-test="coverage-plugin-header:quality-gate-label">

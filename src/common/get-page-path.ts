@@ -17,21 +17,21 @@ import { createRouter, getPagePath as getPage } from "nanostores";
 import * as queryString from "querystring";
 
 interface Routes {
-  test2code: void;
-  testsToRun: void;
-  scopeMethods: "scopeId";
-  scopeTests: "scopeId";
-  allScopes: void;
-  risks: void;
+  overview: "buildVersion";
+  testsToRun: "buildVersion";
+  scopeMethods: "buildVersion" | "scopeId";
+  scopeTests: "buildVersion" | "scopeId";
+  allScopes: "buildVersion";
+  risks: "buildVersion";
 }
 
 export const routes = {
-  test2code: "/overview",
-  scopeMethods: "/scopes/:scopeId",
-  scopeTests: "/scopes/:scopeId",
-  testsToRun: "/tests-to-tun",
-  allScopes: "/scopes",
-  risks: "/risks",
+  overview: "/builds/:buildVersion/overview",
+  scopeMethods: "/builds/:buildVersion/scopes/:scopeId",
+  scopeTests: "/builds/:buildVersion/scopes/:scopeId",
+  testsToRun: "/builds/:buildVersion/tests-to-tun",
+  allScopes: "/builds/:buildVersion/scopes",
+  risks: "/builds/:buildVersion/risks",
 };
 
 export const router = createRouter<Routes>(routes);

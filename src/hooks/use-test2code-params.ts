@@ -17,10 +17,15 @@ import { matchPath, useLocation } from "react-router-dom";
 import { routes } from "common";
 import { getAgentRoutePath } from "../router";
 
-export const useTestToCodeParams = (): { scopeId: string; } => {
+interface Params {
+  scopeId: string;
+  buildVersion: string;
+}
+
+export const useTestToCodeRouteParams = ():Params => {
   const { pathname } = useLocation();
-  const { params: { scopeId = "" } = {} } = matchPath<{ scopeId?: string; }>(pathname, {
+  const { params: { scopeId = "", buildVersion = "" } = {} } = matchPath<Partial<Params>>(pathname, {
     path: [...Object.values(routes).map((route) => getAgentRoutePath(route))],
   }) || {};
-  return { scopeId };
+  return { scopeId, buildVersion };
 };
