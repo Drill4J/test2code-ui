@@ -16,9 +16,11 @@
 import axios from "axios";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
+import { ReadableStore } from "nanostores";
+import { sessionsStore } from "../../new-session-watcher/new-session-watcher";
 
 export async function finishSession(
-  agentId: string, sessionId: string,
+  agentId: string, sessionId: string, store: ReadableStore,
 ) {
   try {
     await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
@@ -29,6 +31,7 @@ export async function finishSession(
       type: "SUCCESS",
       title: "Session has been finished successfully. All your progress has been added to the active scope.",
     });
+    sessionsStore.set(store.value.filter((id: string) => id !== sessionId));
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({
       type: "ERROR",

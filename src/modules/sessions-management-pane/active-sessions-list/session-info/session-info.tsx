@@ -17,9 +17,11 @@ import React from "react";
 import { Icons, Menu } from "@drill4j/ui-kit";
 import { capitalize } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
+import { useStore } from "nanostores/react";
 
 import { useSessionsPaneState } from "../../store";
 import { abortSession, finishSession } from "../../sessions-management-pane-api";
+import { sessionsStore } from "../../../new-session-watcher/new-session-watcher";
 
 interface Props {
   testType: string;
@@ -53,6 +55,7 @@ export const SessionInfo = ({
 }: Props) => {
   const { bulkOperation } = useSessionsPaneState();
   const disabled = bulkOperation.isProcessing;
+  const store = useStore(sessionsStore);
 
   return (
     <Content disabled={disabled}>
@@ -61,8 +64,8 @@ export const SessionInfo = ({
         <Actions disabled={disabled}>
           <Menu
             items={[
-              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId, sessionId) },
-              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId, sessionId) },
+              { label: "Finish", icon: "Success", onClick: () => finishSession(agentId, sessionId, store) },
+              { label: "Abort", icon: "Cancel", onClick: () => abortSession(agentId, sessionId, store) },
             ]}
           />
         </Actions>
