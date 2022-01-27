@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 import React, { useState } from "react";
-import { Message } from "@drill4j/types-admin";
 
+import { ActiveSessions } from "types";
+import { useBuildVersion } from "hooks";
 import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
 import { OperationActionWarning } from "../operation-action-warning";
 import { abortAllSession, finishAllSession } from "../sessions-management-pane-api";
@@ -23,15 +24,15 @@ import { abortAllSession, finishAllSession } from "../sessions-management-pane-a
 interface Props {
   agentType: string;
   agentId: string;
-  showGeneralAlertMessage: (message: Message) => void;
 }
 
 export const BulkOperationWarning = ({
-  agentId, agentType, showGeneralAlertMessage,
+  agentId, agentType,
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation: { operationType } } = useSessionsPaneState();
   const [loading, setLoading] = useState(false);
+  const activeSessions = (useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions"));
 
   return (
     <>
@@ -39,7 +40,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await abortAllSession({ agentType, agentId }, showGeneralAlertMessage);
+            await abortAllSession({ agentType, agentId }, activeSessions?.count);
             dispatch(setBulkOperation("abort", false));
           }}
           handleDecline={() => dispatch(setBulkOperation(operationType, false))}
@@ -52,7 +53,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await finishAllSession({ agentType, agentId }, showGeneralAlertMessage);
+            await finishAllSession({ agentType, agentId }, activeSessions?.count);
             dispatch(setBulkOperation("finish", false));
           }}
           handleDecline={() => dispatch(setBulkOperation("finish", false))}

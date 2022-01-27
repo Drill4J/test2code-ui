@@ -15,14 +15,13 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Modal, Checkbox, Spinner, useCloseModal,
+  Button, Modal, Checkbox, Spinner, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { AGENT_STATUS } from "common";
 import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
 import { Baseline } from "types/baseline";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { toggleBaseline } from "../api";
 
 const Message = styled.div`
@@ -88,16 +87,16 @@ export const BaselineBuildModal = () => {
                 setIsLoading(true);
                 await toggleBaseline(agentId, pluginId);
                 setIsLoading(false);
-                sendNotificationEvent({
+                sendAlertEvent({
                   type: "SUCCESS",
-                  text: `Current build has been ${isBaseline
+                  title: `Current build has been ${isBaseline
                     ? "unset as baseline successfully. All subsequent builds won't be compared to it."
                     : "set as baseline successfully. All subsequent builds will be compared to it."}`,
                 });
               } catch ({ response: { data: { message } = {} } = {} }) {
-                sendNotificationEvent({
+                sendAlertEvent({
                   type: "ERROR",
-                  text: message || "There is some issue with your action. Please try again later.",
+                  title: message || "There is some issue with your action. Please try again later.",
                 });
               }
               closeModal();

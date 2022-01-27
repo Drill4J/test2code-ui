@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
+import React from "react";
 import {
   Formik, Field, Form,
-  Button, FormGroup, Modal, GeneralAlerts, Spinner, Fields,
+  Button, FormGroup, Modal, Spinner, Fields,
   composeValidators, sizeLimit, required, useCloseModal,
-  useQueryParams,
+  useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
 
 import "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
+import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { renameScope } from "../../api";
-import { useAgentRouteParams, useBuildVersion } from "../../../../hooks";
 
 const validateScope = composeValidators(
   required("name", "Scope Name"),
@@ -41,7 +40,6 @@ export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
-  const [errorMessage, setErrorMessage] = useState("");
   const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
 
   return (
@@ -50,18 +48,13 @@ export const RenameScopeModal = () => {
         <Modal.Header>
           <div tw="text-20">Rename Scope</div>
         </Modal.Header>
-        {errorMessage && (
-          <GeneralAlerts type="ERROR">
-            {errorMessage}
-          </GeneralAlerts>
-        )}
         <Formik
           onSubmit={(values) => renameScope(agentId, pluginId, {
             onSuccess: () => {
-              sendNotificationEvent({ type: "SUCCESS", text: "Scope name has been changed" });
+              sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed" });
               closeModal();
             },
-            onError: setErrorMessage,
+            onError: message => sendAlertEvent({ type: "ERROR", title: message }),
           })(values as ScopeSummary)}
           validate={validateScope}
           initialValues={scope || {}}

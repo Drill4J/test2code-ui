@@ -15,11 +15,10 @@
  */
 import React from "react";
 import {
-  Form, Formik, Panel, GeneralAlerts, Icons, composeValidators, sizeLimit,
-  required, handleFieldErrors, Stub, useCloseModal, useGeneralAlertMessage,
+  Form, Formik, Panel, Icons, composeValidators, sizeLimit,
+  required, handleFieldErrors, Stub, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
-import { Message } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { useActiveSessions } from "hooks";
@@ -50,7 +49,6 @@ const validateManageSessionsPane = composeValidators(
 export const SessionsManagementPane = () => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation, isNewSession } = useSessionsPaneState();
-  const { generalAlertMessage, showGeneralAlertMessage } = useGeneralAlertMessage();
   const { pathname } = useLocation();
   const {
     params: {
@@ -73,8 +71,8 @@ export const SessionsManagementPane = () => {
           onSubmit={(async (values: {sessionId: string; isRealtime: boolean; isGlobal: boolean},
             { resetForm, setFieldError }: any) => {
             const error = agentId
-              ? await handleStartAgentSession({ id: agentId }, values, showGeneralAlertMessage)
-              : await handleStartServiceGroupSession({ id: groupId }, values, showGeneralAlertMessage);
+              ? await handleStartAgentSession({ id: agentId }, values)
+              : await handleStartServiceGroupSession({ id: groupId }, values);
             if (error.sessionId) {
               setFieldError("sessionId", error.sessionId);
             } else {
@@ -97,11 +95,6 @@ export const SessionsManagementPane = () => {
               {/* HACK: use min-width use min-width so that the text does not stretch outside the block
                 Link: https://css-tricks.com/flexbox-truncated-text/ */}
               <Panel.Body tw="text-16 leading-20 flex flex-col min-h-80px">
-                {generalAlertMessage?.type && (
-                  <GeneralAlerts type={generalAlertMessage.type}>
-                    {generalAlertMessage.text}
-                  </GeneralAlerts>
-                )}
                 {isNewSession && (
                   <ManagementNewSession
                     agentId={agentId}
@@ -115,7 +108,6 @@ export const SessionsManagementPane = () => {
                     <ActiveSessionsList
                       agentType={agentType}
                       activeSessions={activeSessions}
-                      showGeneralAlertMessage={showGeneralAlertMessage}
                     />
                   </>
                 )}
@@ -139,7 +131,6 @@ export const SessionsManagementPane = () => {
                   <BulkOperationWarning
                     agentId={id}
                     agentType={agentType}
-                    showGeneralAlertMessage={showGeneralAlertMessage}
                   />
                 ) : (
                   <ActionsPanel
@@ -159,14 +150,12 @@ export const SessionsManagementPane = () => {
   );
 };
 
-type ShowGeneralAlertMessage = (incomingMessage: Message | null) => void;
-
 interface Identifiers {
   id: string;
 }
 
 async function handleStartServiceGroupSession({ id }: Identifiers,
-  values: FormValues, showGeneralAlertMessage: ShowGeneralAlertMessage) {
+  values: FormValues) {
   try {
     const response = await startServiceGroupSessions(id)(values);
     const serviceWithError = response?.data.find((service: any) => service?.code === 409);
@@ -174,35 +163,35 @@ async function handleStartServiceGroupSession({ id }: Identifiers,
       return handleFieldErrors(serviceWithError?.data?.fieldErrors);
     }
     if (serviceWithError) {
-      showGeneralAlertMessage({
+      sendAlertEvent({
         type: "ERROR",
-        text: serviceWithError?.data?.message || "There is some issue with your action. Please try again later.",
+        title: serviceWithError?.data?.message || "There is some issue with your action. Please try again later.",
       });
       return handleFieldErrors([]);
     }
-    showGeneralAlertMessage({ type: "SUCCESS", text: "New sessions have been started successfully." });
+    sendAlertEvent({ type: "SUCCESS", title: "New sessions have been started successfully." });
   } catch (error) {
-    showGeneralAlertMessage({
+    sendAlertEvent({
       type: "ERROR",
-      text: error?.response?.data?.message || "There is some issue with your action. Please try again  later.",
+      title: error?.response?.data?.message || "There is some issue with your action. Please try again  later.",
     });
   }
   return handleFieldErrors([]);
 }
 
 async function handleStartAgentSession({ id }: Identifiers,
-  values: FormValues, showGeneralAlertMessage: ShowGeneralAlertMessage) {
+  values: FormValues) {
   try {
     await startAgentSession(id)(values);
-    showGeneralAlertMessage({ type: "SUCCESS", text: "New session has been started successfully." });
+    sendAlertEvent({ type: "SUCCESS", title: "New session has been started successfully." });
   } catch (error) {
     const { data: { fieldErrors = [] } = {}, message: errorMessage = "" } = error?.response?.data || {};
     if (error?.response?.data?.code === 409) {
       return handleFieldErrors(fieldErrors);
     }
-    showGeneralAlertMessage({
+    sendAlertEvent({
       type: "ERROR",
-      text: errorMessage || "There is some issue with your action. Please try again later.",
+      title: errorMessage || "There is some issue with your action. Please try again later.",
     });
     return handleFieldErrors(fieldErrors);
   }

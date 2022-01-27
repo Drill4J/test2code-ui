@@ -15,7 +15,6 @@
  */
 import React from "react";
 import { ActiveSession } from "types/active-session";
-import { Message } from "@drill4j/types-admin";
 import { SessionInfo } from "./session-info";
 import { ServiceGroupSessions } from "./service-group-sessions";
 import "twin.macro";
@@ -23,11 +22,10 @@ import "twin.macro";
 interface Props {
   agentType: string;
   activeSessions: ActiveSession[];
-  showGeneralAlertMessage: (message: Message) => void;
 }
 
 export const ActiveSessionsList = ({
-  agentType, activeSessions, showGeneralAlertMessage,
+  agentType, activeSessions,
 }: Props) => (
   <div tw="overflow-y-auto flex-grow min-h-80px">
     {agentType === "Agent" ? (
@@ -42,12 +40,11 @@ export const ActiveSessionsList = ({
             testType={testType}
             isGlobal={isGlobal}
             isRealtime={isRealtime}
-            showGeneralAlertMessage={showGeneralAlertMessage}
           />
         ))}
       </div>
     ) : (
-      <ServiceGroupSessions activeSessions={activeSessions} showGeneralAlertMessage={showGeneralAlertMessage} />
+      <ServiceGroupSessions activeSessions={activeSessions} />
     )}
   </div>
 );

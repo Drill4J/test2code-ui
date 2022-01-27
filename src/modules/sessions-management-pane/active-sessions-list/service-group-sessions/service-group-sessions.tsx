@@ -15,7 +15,6 @@
  */
 import React from "react";
 import { Icons } from "@drill4j/ui-kit";
-import { Message } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
@@ -24,7 +23,6 @@ import { useSessionsPaneState } from "../../store";
 
 interface Props {
   activeSessions: ActiveSession[];
-  showGeneralAlertMessage: (message: Message) => void;
 }
 
 const ServiceGroupAgentPanel = styled.div`
@@ -33,7 +31,7 @@ const ServiceGroupAgentPanel = styled.div`
   ${({ disabled }: { disabled: boolean }) => disabled && tw`opacity-20`}
 `;
 
-export const ServiceGroupSessions = ({ activeSessions, showGeneralAlertMessage }: Props) => {
+export const ServiceGroupSessions = ({ activeSessions }: Props) => {
   const serviceGroupAgentsIds = Array.from(new Set(activeSessions.map(session => session.agentId)));
   const { bulkOperation } = useSessionsPaneState();
 
@@ -64,7 +62,6 @@ export const ServiceGroupSessions = ({ activeSessions, showGeneralAlertMessage }
                 isGlobal={isGlobal}
                 isRealtime={isRealtime}
                 agentId={agentId}
-                showGeneralAlertMessage={showGeneralAlertMessage}
               />
             ))}
         </div>

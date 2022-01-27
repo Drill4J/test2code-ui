@@ -14,25 +14,22 @@
  * limitations under the License.
  */
 import axios from "axios";
-import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
-export function abortSession(
-  agentId: string,
-  showGeneralAlertMessage: (message: Message) => void,
+export async function abortSession(
+  agentId: string, sessionId: string,
 ) {
-  return async (sessionId: string): Promise<void> => {
-    try {
-      await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
-        type: "CANCEL",
-        payload: { sessionId },
-      });
-      showGeneralAlertMessage && showGeneralAlertMessage({ type: "SUCCESS", text: "Session has been aborted successfully." });
-    } catch ({ response: { data: { message } = {} } = {} }) {
-      showGeneralAlertMessage && showGeneralAlertMessage({
-        type: "ERROR",
-        text: message || "There is some issue with your action. Please try again later.",
-      });
-    }
-  };
+  try {
+    await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+      type: "CANCEL",
+      payload: { sessionId },
+    });
+    sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
+  } catch ({ response: { data: { message } = {} } = {} }) {
+    sendAlertEvent({
+      type: "ERROR",
+      title: message || "There is some issue with your action. Please try again later.",
+    });
+  }
 }

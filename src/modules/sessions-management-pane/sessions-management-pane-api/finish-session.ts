@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 import axios from "axios";
-import { Message } from "@drill4j/types-admin";
 import { PLUGIN_ID } from "common";
+import { sendAlertEvent } from "@drill4j/ui-kit";
 
-export function finishSession(
-  agentId: string,
-  showGeneralAlertMessage: (message: Message) => void,
+export async function finishSession(
+  agentId: string, sessionId: string,
 ) {
-  return async (sessionId: string):Promise<void> => {
-    try {
-      await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
-        type: "STOP",
-        payload: { sessionId },
-      });
-      showGeneralAlertMessage && showGeneralAlertMessage({
-        type: "SUCCESS",
-        text: "Session has been finished successfully. All your progress has been added to the active scope.",
-      });
-    } catch ({ response: { data: { message } = {} } = {} }) {
-      showGeneralAlertMessage && showGeneralAlertMessage({
-        type: "ERROR",
-        text: message || "There is some issue with your action. Please try again later.",
-      });
-    }
-  };
+  try {
+    await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+      type: "STOP",
+      payload: { sessionId },
+    });
+    sendAlertEvent({
+      type: "SUCCESS",
+      title: "Session has been finished successfully. All your progress has been added to the active scope.",
+    });
+  } catch ({ response: { data: { message } = {} } = {} }) {
+    sendAlertEvent({
+      type: "ERROR",
+      title: message || "There is some issue with your action. Please try again later.",
+    });
+  }
 }

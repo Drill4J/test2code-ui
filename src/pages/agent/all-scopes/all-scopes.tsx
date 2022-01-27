@@ -15,7 +15,7 @@
  */
 import React from "react";
 import {
-  Menu, Icons, Status, Stub, Table, capitalize, Cells,
+  Menu, Icons, Status, Stub, Table, capitalize, Cells, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { useParams, Link, useHistory } from "react-router-dom";
 import {
@@ -27,7 +27,6 @@ import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
 import { useActiveScope, useAgent, useBuildVersion } from "hooks";
 import { AGENT_STATUS } from "common/constants";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 import { getModalPath, getPagePath } from "common";
 import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
@@ -199,15 +198,15 @@ export const AllScopes = () => {
                       icon: enabled ? "EyeCrossed" : "Eye",
                       onClick: () => toggleScope(agentId, {
                         onSuccess: () => {
-                          sendNotificationEvent({
+                          sendAlertEvent({
                             type: "SUCCESS",
-                            text: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
+                            title: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
                           });
                         },
                         onError: () => {
-                          sendNotificationEvent({
+                          sendAlertEvent({
                             type: "ERROR",
-                            text: "There is some issue with your action. Please try again later",
+                            title: "There is some issue with your action. Please try again later",
                           });
                         },
                       })(id),

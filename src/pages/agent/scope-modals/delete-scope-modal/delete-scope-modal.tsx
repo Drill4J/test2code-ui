@@ -15,11 +15,10 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Modal, GeneralAlerts, Spinner, useCloseModal,
-  useQueryParams,
+  Button, Modal, Spinner, useCloseModal,
+  useQueryParams, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { useHistory, Link } from "react-router-dom";
-import { sendNotificationEvent } from "@drill4j/send-notification-event";
 
 import "twin.macro";
 
@@ -34,7 +33,6 @@ export const DeleteScopeModal = () => {
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const { push, location: { pathname = "" } } = useHistory();
-  const [errorMessage, setErrorMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const closeModal = useCloseModal("/delete-scope-modal", ["scopeId"]);
@@ -48,11 +46,6 @@ export const DeleteScopeModal = () => {
           </div>
         </Modal.Header>
         <Modal.Body>
-          {errorMessage && (
-            <GeneralAlerts type="ERROR">
-              {errorMessage}
-            </GeneralAlerts>
-          )}
           <div className="text-14 leading-20">
             {scope && scope.active && !testTypes.length && (
               <span>
@@ -102,12 +95,12 @@ export const DeleteScopeModal = () => {
                     setLoading(true);
                     await deleteScope(agentId, pluginId, {
                       onSuccess: () => {
-                        sendNotificationEvent({ type: "SUCCESS", text: "Scope has been deleted" });
+                        sendAlertEvent({ type: "SUCCESS", title: "Scope has been deleted" });
                         closeModal();
                         scope?.id && pathname.includes(scope.id)
                         && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
                       },
-                      onError: setErrorMessage,
+                      onError: message => sendAlertEvent({ type: "ERROR", title: message }),
                     })(scope as ActiveScope);
                     setLoading(false);
                   }}
