@@ -73,7 +73,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     )), [testsToRun.length]);
 
   return (
-    <div tw="flex flex-col gap-4">
+    <div tw="flex flex-col gap-4 flex-grow">
       <TestsToRunHeader
         agentInfo={{
           agentType, buildVersion, previousBuildVersion, activeBuildVersion,
@@ -107,84 +107,82 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
           message="There is no information about Auto Tests duration in the parent build."
         />
       )}
-      <div>
-        <div tw="flex flex-col mt-8 flex-grow">
-          <Table
-            data={transformTests(testsToRun)}
-            stub={tableStub}
-            columns={[
-              {
-                Header: "Name",
-                accessor: "overview.details.name",
-                textAlign: "left",
-                filterable: true,
-              },
-              {
-                Header: "Path",
-                accessor: "overview.details.path",
-                textAlign: "left",
-                filterable: true,
-              },
-              {
-                Header: "Test type",
-                accessor: "type",
-                Cell: ({ value }: any) => (
-                  <>
-                    {capitalize(value)}
-                  </>
-                ),
-                textAlign: "left",
-              },
-              {
-                Header: "State",
-                accessor: "overview.result",
-                Cell: ({ row: { original: { toRun } } }: any) => (
-                  <span tw="leading-64" title={toRun ? "To run" : "Done"}>
-                    {toRun
-                      ? "To run"
-                      : <span tw="font-bold text-green-default">Done</span>}
-                  </span>
-                ),
-                textAlign: "left",
-              },
-              {
-                Header: "Coverage, %",
-                accessor: "coverage.percentage",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
-                sortType: "number",
-              },
-              {
-                Header: "Methods covered",
-                accessor: "coverage.methodCount.covered",
-                Cell: ({
-                  value,
-                  row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
-                }: any) => (
-                  toRun ? null : (
-                    <Cells.Clickable
-                      tw="inline"
-                      disabled={!value}
-                    >
-                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-                        {value}
-                      </Link>
-                    </Cells.Clickable>
-                  )
-                ),
-              },
-              {
-                Header: "Duration",
-                accessor: "overview.duration",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-                sortType: "number",
-              }]}
-            renderHeader={({ currentCount }: { currentCount: number }) => (
-              <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
-                <div tw="uppercase font-bold" data-test="tests-to-run-list:table-title">{`All suggested tests (${currentCount})`}</div>
-              </div>
-            )}
-          />
-        </div>
+      <div tw="flex flex-col mt-8 flex-grow">
+        <Table
+          data={transformTests(testsToRun)}
+          stub={tableStub}
+          columns={[
+            {
+              Header: "Name",
+              accessor: "overview.details.name",
+              textAlign: "left",
+              filterable: true,
+            },
+            {
+              Header: "Path",
+              accessor: "overview.details.path",
+              textAlign: "left",
+              filterable: true,
+            },
+            {
+              Header: "Test type",
+              accessor: "type",
+              Cell: ({ value }: any) => (
+                <>
+                  {capitalize(value)}
+                </>
+              ),
+              textAlign: "left",
+            },
+            {
+              Header: "State",
+              accessor: "overview.result",
+              Cell: ({ row: { original: { toRun } } }: any) => (
+                <span tw="leading-64" title={toRun ? "To run" : "Done"}>
+                  {toRun
+                    ? "To run"
+                    : <span tw="font-bold text-green-default">Done</span>}
+                </span>
+              ),
+              textAlign: "left",
+            },
+            {
+              Header: "Coverage, %",
+              accessor: "coverage.percentage",
+              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+              sortType: "number",
+            },
+            {
+              Header: "Methods covered",
+              accessor: "coverage.methodCount.covered",
+              Cell: ({
+                value,
+                row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
+              }: any) => (
+                toRun ? null : (
+                  <Cells.Clickable
+                    tw="inline"
+                    disabled={!value}
+                  >
+                    <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+                      {value}
+                    </Link>
+                  </Cells.Clickable>
+                )
+              ),
+            },
+            {
+              Header: "Duration",
+              accessor: "overview.duration",
+              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+              sortType: "number",
+            }]}
+          renderHeader={({ currentCount }: { currentCount: number }) => (
+            <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
+              <div tw="uppercase font-bold" data-test="tests-to-run-list:table-title">{`All suggested tests (${currentCount})`}</div>
+            </div>
+          )}
+        />
       </div>
     </div>
   );
