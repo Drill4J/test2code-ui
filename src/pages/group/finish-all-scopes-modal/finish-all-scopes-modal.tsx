@@ -105,7 +105,7 @@ export const FinishAllScopesModal = () => {
                 onSuccess: () => {
                   sendAlertEvent({
                     type: "SUCCESS",
-                    title: `${agentsSummaries.length > 1 ? `(${agentsSummaries.length})` : ""} Scopes have been successfully finished`,
+                    title: `${agentsSummaries.length > 1 ? `(${agentsSummaries.length}) Scopes` : "Scope"} have been successfully finished`,
                   });
                   closeModal();
                 },

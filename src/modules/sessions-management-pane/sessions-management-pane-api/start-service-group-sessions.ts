@@ -16,7 +16,6 @@
 import axios, { AxiosResponse } from "axios";
 
 import { PLUGIN_ID } from "common";
-import { sendAlertEvent } from "@drill4j/ui-kit";
 import { StartSessionPayloadTypes } from "./start-session-payload-types";
 
 export function startServiceGroupSessions(

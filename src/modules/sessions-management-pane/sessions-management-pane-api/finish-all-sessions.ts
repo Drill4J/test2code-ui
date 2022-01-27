@@ -19,7 +19,7 @@ import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export const finishAllSession = async (
   { agentId, agentType }: { agentId: string, agentType: string },
-  sessionCount = 0,
+  sessionCount: number,
 ): Promise<void> => {
   try {
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
@@ -27,7 +27,7 @@ export const finishAllSession = async (
     });
     sendAlertEvent({
       type: "SUCCESS",
-      title: `${sessionCount > 1 ? `(${sessionCount})` : ""} Sessions have been finished successfully. 
+      title: `${sessionCount > 1 ? `(${sessionCount}) Sessions` : "Session"} have been finished successfully. 
       All your progress has been added to the active scope.`,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {
