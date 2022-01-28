@@ -45,7 +45,7 @@ export const ScopeOverview = () => {
       : (
         <>
           <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
-          <div tw="flex flex-col items-center w-full">
+          <div tw="flex flex-col items-center flex-grow w-full">
             <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
               <Tab
                 active={activeTab === "methods"}
@@ -74,7 +74,7 @@ export const ScopeOverview = () => {
                 Scope tests
               </Tab>
             </div>
-            <div tw="w-full">
+            <div tw="flex flex-col flex-grow">
               {activeTab === "methods" ? <ScopeMethodsInfo /> : <ScopeTestsInfo />}
             </div>
           </div>

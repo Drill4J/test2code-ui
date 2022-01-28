@@ -229,7 +229,7 @@ export const MethodsTable = ({
   );
 
   return (
-    <div tw="flex flex-col mt-8" data-test="methods-table">
+    <div tw="flex flex-col mt-8 flex-grow" data-test="methods-table">
       <Table
         defaultFilters={[{ id: "name", value: ownerClassPath }]}
         columns={columns}

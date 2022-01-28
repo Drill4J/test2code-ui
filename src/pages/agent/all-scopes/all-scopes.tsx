@@ -74,14 +74,16 @@ export const AllScopes = () => {
     }));
 
   return (
-    <div>
-      <div tw="py-8 space-x-2 text-24 leading-32">
-        <span>All Scopes</span>
-        <span tw="text-monochrome-default font-light">
-          {scopesData.length}
-        </span>
+    <>
+      <div tw="relative">
+        <div tw="py-8 space-x-2 text-24 leading-32">
+          <span>All Scopes</span>
+          <span tw="text-monochrome-default font-light">
+            {scopesData.length}
+          </span>
+        </div>
+        <div tw="absolute -left-8 w-[calc(100% + 148px)] h-1px bg-monochrome-medium-tint flex-grow" />
       </div>
-      <div tw="absolute left-20 w-[calc(100% + 48px)] h-1px bg-monochrome-medium-tint flex-grow" />
       {scopesData.length > 0
         ? (
           <Table
@@ -241,6 +243,6 @@ export const AllScopes = () => {
             message="There are no scopes with finished test sessions in this build."
           />
         )}
-    </div>
+    </>
   );
 };
