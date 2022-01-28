@@ -16,19 +16,19 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, useQueryParams, sendAlertEvent,
+  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { getModalPath, getPagePath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
-  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const { scopeId, buildVersion } = useTestToCodeRouteParams();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     agentId = "", pluginId = "",
@@ -88,7 +88,7 @@ export const FinishScopeModal = () => {
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
               ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
-              push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
+              push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }));
             }
             setLoading(false);
           }}

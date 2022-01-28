@@ -13,4 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useSwitchBuild, SwitchBuildContext } from "./switch-build-context";
+import { BuildStatus } from "@drill4j/types-admin";
+
+const BUSY: BuildStatus = "BUSY";
+const OFFLINE: BuildStatus = "OFFLINE";
+const ONLINE: BuildStatus = "ONLINE";
+
+export const BUILD_STATUS = {
+  BUSY,
+  OFFLINE,
+  ONLINE,
+};

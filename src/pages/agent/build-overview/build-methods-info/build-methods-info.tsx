@@ -23,9 +23,9 @@ import { ActiveScopeInfo } from "modules";
 import { Methods } from "types/methods";
 import { BuildCoverage } from "types/build-coverage";
 import {
-  useActiveScope, useAgent, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
 } from "hooks";
-import { AGENT_STATUS } from "common/constants";
+import { BUILD_STATUS } from "common/constants";
 import { PreviousBuildInfo } from "./previous-build-info-types";
 import { BuildCoverageInfo } from "./build-coverage-info";
 import { ActiveBuildCoverageInfo } from "./active-build-coverage-info";
@@ -60,21 +60,21 @@ export const BuildMethodsInfo = () => {
   const {
     percentage: previousBuildCodeCoverage = 0,
   } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const { status } = useAgent(agentId) || {};
+  const { buildStatus } = useActiveBuild(agentId) || {};
   const { percentage: buildCodeCoverage = 0 } = buildCoverage;
-  const isShowActiveScopeInfo = scope?.active && status === AGENT_STATUS.ONLINE;
+  const isShowActiveScopeInfo = scope?.active && buildStatus === BUILD_STATUS.ONLINE;
   const previousBuildInfo: PreviousBuildInfo = { previousBuildVersion, previousBuildCodeCoverage };
 
   return (
     <>
       <Info>
         <ActiveBuildTestsBar isShowActiveScopeInfo={isShowActiveScopeInfo}>
-          {(scope?.active && status === AGENT_STATUS.ONLINE) ? (
+          {(scope?.active && buildStatus === BUILD_STATUS.ONLINE) ? (
             <ActiveBuildCoverageInfo
               buildCoverage={buildCoverage}
               previousBuildInfo={previousBuildInfo}
               scope={scope}
-              status={status}
+              status={buildStatus}
             />
           ) : (
             <BuildCoverageInfo

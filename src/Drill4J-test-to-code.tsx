@@ -20,7 +20,6 @@ import { BrowserRouter, Route } from "react-router-dom";
 import axios from "axios";
 
 import { Agent, Group } from "pages";
-import { SwitchBuildContext } from "contexts";
 
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
@@ -58,18 +57,12 @@ const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
   </ul>
 );
 
-interface AgentRootComponentProps {
-  switchBuild: (version: string, path: string) => void
-}
-
 const AgentPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: ({ switchBuild }: AgentRootComponentProps) => (
+  rootComponent: () => (
     <BrowserRouter>
-      <SwitchBuildContext.Provider value={switchBuild}>
-        <Agent />
-      </SwitchBuildContext.Provider>
+      <Agent />
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,

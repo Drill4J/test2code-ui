@@ -21,14 +21,15 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
-import { useBuildVersion, useTestToCodeParams } from "hooks";
+import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { getPagePath } from "common";
 import { MethodsDetails } from "types";
 import { concatTestName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
-  const { scopeId } = useTestToCodeParams();
+  const { scopeId } = useTestToCodeRouteParams();
 
+  const { buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; coveredMethods?: number}>();
   const topicCoveredMethodsByTest = scopeId ? `/build/scopes/${scopeId}/tests` : "/build/tests";
   const testSummary = useBuildVersion<MethodsCoveredByTestSummary>(
@@ -138,8 +139,8 @@ export const CoveredMethodsModal = () => {
                                 }),
                               };
                               return scopeId
-                                ? getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams })
-                                : getPagePath({ name: "test2code", queryParams });
+                                ? getPagePath({ name: "scopeMethods", params: { scopeId, buildVersion }, queryParams })
+                                : getPagePath({ name: "overview", params: { buildVersion }, queryParams });
                             }}
                             tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
                             title={value}

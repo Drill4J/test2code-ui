@@ -23,11 +23,10 @@ import "twin.macro";
 import { capitalize } from "@drill4j/common-utils";
 import { TestCoverageInfo } from "types/test-coverage-info";
 
-import { AGENT_STATUS } from "common/constants";
-import { FilterList } from "@drill4j/types-admin/dist";
-import { useAgent, useAgentRouteParams } from "hooks";
+import { FilterList } from "@drill4j/types-admin";
+import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { transformTests } from "utils";
-import { getModalPath } from "../../../common";
+import { getModalPath, BUILD_STATUS } from "common";
 
 interface Props {
   tests: FilterList<TestCoverageInfo>;
@@ -103,7 +102,7 @@ export const TestDetails = ({
   tests: { items: tests = [] },
 }: Props) => {
   const { agentId } = useAgentRouteParams();
-  const { status } = useAgent(agentId);
+  const { buildStatus } = useActiveBuild(agentId) || {};
 
   const stub = useMemo(() => (tests.length > 0
     ? (
@@ -116,8 +115,8 @@ export const TestDetails = ({
     : (
       <Stub
         icon={<Icons.Test height={104} width={107} />}
-        title={status === AGENT_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
-        message={status === AGENT_STATUS.BUSY
+        title={buildStatus === BUILD_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
+        message={buildStatus === BUILD_STATUS.BUSY
           ? "It may take a few seconds."
           : "Information about project tests will appear after the first launch of tests."}
       />

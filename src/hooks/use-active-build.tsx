@@ -13,14 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createContext, useContext } from "react";
+import { ActiveAgentsBuild, AgentBuildInfo } from "@drill4j/types-admin";
+import { useAdminConnection } from "./use-admin-connection";
 
-export const SwitchBuildContext = createContext<(version: string, path: string) => void>(() => {});
-
-export function useSwitchBuild():(version: string, path: string) => void {
-  const context = useContext(SwitchBuildContext);
-  if (!context) {
-    throw new Error("useSwitchBuild must be used within a SwitchBuildContext");
-  }
-  return context;
+export function useActiveBuild(id: string): AgentBuildInfo | null {
+  const builds = useAdminConnection<ActiveAgentsBuild[]>("/api/agents/build") || [];
+  const build = builds.find(({ agentId }) => agentId === id);
+  return build?.build || null;
 }

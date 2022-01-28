@@ -17,12 +17,12 @@ import React from "react";
 import { useTableActionsState } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { useBuildVersion, useTestToCodeParams } from "hooks";
+import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { TestDetails } from "../../../tests-table";
 
 export const ScopeTestsTable = () => {
   const { search } = useTableActionsState();
-  const { scopeId = "" } = useTestToCodeParams();
+  const { scopeId = "" } = useTestToCodeRouteParams();
   const tests = useBuildVersion<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`, { filters: search, output: "LIST" }) || {};
 
   return (

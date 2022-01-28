@@ -20,15 +20,18 @@ import {
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
+import {
+  useActiveBuild, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+} from "hooks";
 import { Baseline } from "types/baseline";
 import { ParentBuild } from "types/parent-build";
 import { getModalPath } from "common";
 
 export const BaselineTooltip = () => {
-  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
 
-  const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const isActiveBuild = activeBuildVersion === buildVersion;
