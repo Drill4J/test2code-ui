@@ -25,8 +25,8 @@ import tw from "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
-import { AGENT_STATUS } from "common/constants";
+import { useActiveBuild, useActiveScope, useBuildVersion } from "hooks";
+import { BUILD_STATUS } from "common/constants";
 import { getModalPath, getPagePath } from "common";
 import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
@@ -35,7 +35,7 @@ import { ScopeTimer } from "../scope-overview/scope-timer";
 export const AllScopes = () => {
   const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
   const { push } = useHistory();
-  const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
+  const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const activeScope = useActiveScope();
   const scopes = useBuildVersion<ScopeSummary[]>("/build/scopes/finished") || [];
   const { byTestType = [] } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
@@ -43,7 +43,7 @@ export const AllScopes = () => {
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
   );
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
-  const isActiveBuildVersion = (activeBuildVersion === buildVersion && status === AGENT_STATUS.ONLINE);
+  const isActiveBuildVersion = (activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE);
   const { coverage: { byTestType: activeScopeTestsType = [] } = {} } = activeScope || {};
 
   const testsColumns = [
@@ -126,7 +126,7 @@ export const AllScopes = () => {
                 }: any) => (
                   <Link
                     tw="font-bold text-14 leading-20 cursor-pointer"
-                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id }, queryParams: { activeTab: "methods" } })}
+                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id, buildVersion }, queryParams: { activeTab: "methods" } })}
                     data-test="scopes-list:scope-name"
                   >
                     <div className="link text-ellipsis" title={value}>

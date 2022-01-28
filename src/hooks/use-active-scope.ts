@@ -18,11 +18,11 @@ import { useState, useEffect } from "react";
 import { test2CodePluginSocket } from "common";
 import { ActiveScope } from "types/active-scope";
 import { useParams } from "react-router-dom";
-import { useAgent } from "./use-agent";
+import { useActiveBuild } from "./use-active-build";
 
 export function useActiveScope(): ActiveScope | null {
   const { agentId = "", buildVersion = "" } = useParams<{agentId?: string, buildVersion?: string}>();
-  const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const [data, setData] = useState<ActiveScope | null>(null);
   const isActiveBuildVersion = buildVersion === activeBuildVersion;
 

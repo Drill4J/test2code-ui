@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { getModalPath, getPagePath } from "common";
-import { useActiveSessions, useAgentRouteParams } from "hooks";
+import { useActiveSessions, useAgentRouteParams, useTestToCodeRouteParams } from "hooks";
 
 interface Props {
   scope: ActiveScope | null;
@@ -34,7 +34,8 @@ const Content = styled.div`
 `;
 
 export const ActiveScopeInfo = ({ scope }: Props) => {
-  const { agentId, buildVersion } = useAgentRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const {
     id: scopeId = "",
@@ -65,14 +66,14 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
       <div className="flex flex-col items-start justify-between w-full gap-y-3 mt-6 font-bold leading-20">
         <Link
           className="link"
-          to={getPagePath({ name: "scopeMethods", params: { scopeId }, queryParams: { activeTab: "methods" } })}
+          to={getPagePath({ name: "scopeMethods", params: { scopeId, buildVersion }, queryParams: { activeTab: "methods" } })}
           data-test="active-scope-info:scope-details-link"
         >
           Scope Details
         </Link>
         <Link
           className="link"
-          to={getPagePath({ name: "allScopes" })}
+          to={getPagePath({ name: "allScopes", params: { buildVersion } })}
           data-test="active-scope-info:all-scopes-link"
         >
           All Scopes

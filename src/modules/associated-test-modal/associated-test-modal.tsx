@@ -20,13 +20,13 @@ import {
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion, useTestToCodeParams } from "hooks";
+import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { concatTestPath, concatTestName } from "utils/transform-tests";
 import { Link } from "react-router-dom";
 import { getPagePath } from "../../common";
 
 export const AssociatedTestModal = () => {
-  const { scopeId } = useTestToCodeParams();
+  const { scopeId, buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
@@ -139,8 +139,8 @@ export const AssociatedTestModal = () => {
                                 }),
                               };
                               return scopeId
-                                ? getPagePath({ name: "scopeTests", params: { scopeId }, queryParams })
-                                : getPagePath({ name: "test2code", queryParams });
+                                ? getPagePath({ name: "scopeTests", params: { scopeId, buildVersion }, queryParams })
+                                : getPagePath({ name: "overview", params: { buildVersion }, queryParams });
                             }}
                             tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
                             title={value}

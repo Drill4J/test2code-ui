@@ -19,8 +19,10 @@ import {
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { AGENT_STATUS } from "common";
-import { useAgent, useAgentRouteParams, useBuildVersion } from "hooks";
+import { BUILD_STATUS } from "common";
+import {
+  useActiveBuild, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+} from "hooks";
 import { Baseline } from "types/baseline";
 import { toggleBaseline } from "../api";
 
@@ -36,8 +38,9 @@ const ActionButton = styled(Button)(({ isBaseline }: {isBaseline: boolean}) => [
 
 export const BaselineBuildModal = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const { pluginId = "", agentId = "", buildVersion = "" } = useAgentRouteParams();
-  const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
+  const { pluginId, agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const [isConfirmed, setIsConfirmed] = useState(isBaseline);
@@ -101,7 +104,7 @@ export const BaselineBuildModal = () => {
               }
               closeModal();
             }}
-            disabled={(!isConfirmed && !isBaseline) || isLoading || status !== AGENT_STATUS.ONLINE}
+            disabled={(!isConfirmed && !isBaseline) || isLoading || buildStatus !== BUILD_STATUS.ONLINE}
             data-test={`baseline-build-modal:${isBaseline ? "unset" : "set"}-as-baseline-button`}
           >
             {isLoading && <Spinner />}

@@ -15,22 +15,21 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Modal, Spinner, useCloseModal,
-  useQueryParams, sendAlertEvent,
+  Button, Modal, Spinner, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { useHistory, Link } from "react-router-dom";
 
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
 import { ActiveSessions } from "types/active-sessions";
 import { getModalPath, getPagePath } from "common";
 import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
-  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const { buildVersion, scopeId } = useTestToCodeRouteParams();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const { push, location: { pathname = "" } } = useHistory();
   const [loading, setLoading] = useState(false);
@@ -98,7 +97,7 @@ export const DeleteScopeModal = () => {
                         sendAlertEvent({ type: "SUCCESS", title: "Scope has been deleted" });
                         closeModal();
                         scope?.id && pathname.includes(scope.id)
-                        && push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
+                        && push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }));
                       },
                       onError: message => sendAlertEvent({ type: "ERROR", title: message }),
                     })(scope as ActiveScope);

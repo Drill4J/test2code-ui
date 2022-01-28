@@ -24,12 +24,14 @@ import { getPagePath } from "common";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
+import { useTestToCodeRouteParams } from "../../../hooks";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2 text-monochrome-black`}
 `;
 
 export const BuildOverview = () => {
+  const { buildVersion } = useTestToCodeRouteParams();
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
 
@@ -39,7 +41,7 @@ export const BuildOverview = () => {
       <div tw="flex mb-4 border-b border-monochrome-medium-tint">
         <Tab
           active={activeTab === "methods"}
-          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }))}
+          onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }))}
           data-test="build-overview:tab:build-methods"
         >
           <TabIconWrapper>
@@ -49,7 +51,7 @@ export const BuildOverview = () => {
         </Tab>
         <Tab
           active={activeTab === "tests"}
-          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "tests" } }))}
+          onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "tests" } }))}
           data-test="build-overview:tab:build-tests"
         >
           <TabIconWrapper>
