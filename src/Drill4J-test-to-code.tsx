@@ -21,9 +21,9 @@ import axios from "axios";
 
 import { Agent, Group } from "pages";
 
+import { agentDashboardPath, groupDashboardPath } from "admin-routes";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
-import { agentDashboardPath, groupDashboardPath } from "./router";
 import { routes } from "./common";
 import pkj from "../package.json";
 

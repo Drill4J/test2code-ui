@@ -1011,6 +1011,10 @@ button:focus {
   min-width: 154px;
 }
 
+.max-w-200px {
+  max-width: 200px;
+}
+
 .max-w-280px {
   max-width: 280px;
 }
@@ -1581,14 +1585,24 @@ button:focus {
   color: rgba(104, 116, 129, var(--tw-text-opacity));
 }
 
-.text-monochrome-black {
+.text-blue-medium-tint {
   --tw-text-opacity: 1;
-  color: rgba(27, 25, 27, var(--tw-text-opacity));
+  color: rgba(51, 153, 255, var(--tw-text-opacity));
+}
+
+.text-blue-shade {
+  --tw-text-opacity: 1;
+  color: rgba(0, 108, 216, var(--tw-text-opacity));
 }
 
 .text-blue-default {
   --tw-text-opacity: 1;
   color: rgba(0, 127, 255, var(--tw-text-opacity));
+}
+
+.text-monochrome-black {
+  --tw-text-opacity: 1;
+  color: rgba(27, 25, 27, var(--tw-text-opacity));
 }
 
 .text-red-default {

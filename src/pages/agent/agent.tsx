@@ -16,17 +16,18 @@
 import React from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import { Route, Switch, Redirect } from "react-router-dom";
-import { getAgentRoutePath } from "router";
+import { getAgentRoutePath } from "admin-routes";
 import "twin.macro";
 
 import { getPagePath, routes } from "common";
-import { Modals } from "components";
+import { Modals, Breadcrumbs } from "components";
 import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
+import { AllBuilds } from "./all-builds";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
@@ -38,49 +39,53 @@ export const Agent = () => {
 
   return (
     <div tw="flex flex-col w-full h-full">
-      <div tw="flex flex-col w-full h-full">
-        <Switch>
-          <Route
-            exact
-            path={getAgentRoutePath("/")}
-            render={() => (
-              <Redirect
-                to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
-              />
-            )}
-          />
-          <Route
-            path={getAgentRoutePath(routes.overview)}
-            component={BuildOverview}
-          />
-          <Route
-            path={[getAgentRoutePath(routes.scopeMethods), getAgentRoutePath(routes.scopeTests)]}
-            component={ScopeOverview}
-          />
-          <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
-          <Route
-            path={getAgentRoutePath(routes.risks)}
-            render={() => (
-              <TableActionsProvider defaultState={{
-                search: [],
-                sort: [{ field: "coverage", order: "ASC" }],
-                expandedRows: [],
-              }}
-              >
-                <RisksPage />
-              </TableActionsProvider>
-            )}
-          />
-          <Route
-            path={getAgentRoutePath(routes.testsToRun)}
-            render={() => (
-              <TableActionsProvider>
-                <TestsToRun />
-              </TableActionsProvider>
-            )}
-          />
-        </Switch>
-      </div>
+      <Breadcrumbs />
+      <Switch>
+        <Route
+          exact
+          path={getAgentRoutePath("/")}
+          render={() => (
+            <Redirect
+              to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+            />
+          )}
+        />
+        <Route
+          exact
+          path={getAgentRoutePath(routes.allBuilds)}
+          component={AllBuilds}
+        />
+        <Route
+          path={getAgentRoutePath(routes.overview)}
+          component={BuildOverview}
+        />
+        <Route
+          path={getAgentRoutePath(routes.scope)}
+          component={ScopeOverview}
+        />
+        <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route
+          path={getAgentRoutePath(routes.risks)}
+          render={() => (
+            <TableActionsProvider defaultState={{
+              search: [],
+              sort: [{ field: "coverage", order: "ASC" }],
+              expandedRows: [],
+            }}
+            >
+              <RisksPage />
+            </TableActionsProvider>
+          )}
+        />
+        <Route
+          path={getAgentRoutePath(routes.testsToRun)}
+          render={() => (
+            <TableActionsProvider>
+              <TestsToRun />
+            </TableActionsProvider>
+          )}
+        />
+      </Switch>
       <Modals />
     </div>
   );

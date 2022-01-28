@@ -15,7 +15,7 @@
  */
 import { matchPath, useLocation } from "react-router-dom";
 import { routes } from "common";
-import { getAgentRoutePath } from "../router";
+import { getAgentRoutePath } from "admin-routes";
 
 interface Params {
   scopeId: string;

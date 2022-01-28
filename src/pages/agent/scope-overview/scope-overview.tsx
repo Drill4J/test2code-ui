@@ -52,7 +52,7 @@ export const ScopeOverview = () => {
               <Tab
                 active={activeTab === "methods"}
                 onClick={() => push(getPagePath({
-                  name: "scopeMethods",
+                  name: "scope",
                   params: { scopeId, buildVersion },
                   queryParams: { activeTab: "methods" },
                 }))}
@@ -65,7 +65,7 @@ export const ScopeOverview = () => {
               <Tab
                 active={activeTab === "tests"}
                 onClick={() => push(getPagePath({
-                  name: "scopeTests",
+                  name: "scope",
                   params: { scopeId, buildVersion },
                   queryParams: { activeTab: "tests" },
                 }))}
