@@ -109,7 +109,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
             tw="flex gap-x-2 mr-4"
             primary
             size="large"
-            onClick={() => push(getModalPath({ name: "finishScope" }))}
+            onClick={() => push(getModalPath({ name: "finishScope", params: { scopeId } }))}
             data-test="scope-info:finish-scope-button"
           >
             <Icons.Complete />
