@@ -173,14 +173,26 @@ export const CoveredMethodsModal = () => {
                 },
                 {
                   Header: "Type",
-                  Cell: ({ value = "" }) => (value ? <span tw="lowercase first-letter:uppercase">{value}</span> : <Skeleton />),
+                  Cell: ({ value = "" }) => (value ? (
+                    <span
+                      tw="lowercase first-letter:uppercase"
+                      data-test="coverage-methods:method:type"
+                    >
+                      {value}
+                    </span>
+                  ) : <Skeleton />),
                   accessor: "type",
                   textAlign: "left",
                   width: "100%",
                 },
                 {
                   Header: "Coverage, %",
-                  Cell: ({ value = 0 }) => (value ? <Cells.CoverageProgress value={value} /> : <Skeleton />),
+                  Cell: ({ value = 0 }) => (value ? (
+                    <Cells.CoverageProgress
+                      value={value}
+                      data-test="coverage-methods:method:coverage"
+                    />
+                  ) : <Skeleton />),
                   accessor: "coverage",
                   textAlign: "right",
                   width: "100%",
