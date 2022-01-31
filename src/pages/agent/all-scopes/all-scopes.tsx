@@ -31,6 +31,7 @@ import { getModalPath, getPagePath } from "common";
 import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
+import { PageHeader } from "../../../components";
 
 export const AllScopes = () => {
   const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
@@ -75,13 +76,12 @@ export const AllScopes = () => {
 
   return (
     <div>
-      <div tw="py-8 space-x-2 text-24 leading-32">
+      <PageHeader tw="gap-x-2 text-24 leading-32 text-monochrome-black">
         <span>All Scopes</span>
         <span tw="text-monochrome-default font-light">
           {scopesData.length}
         </span>
-      </div>
-      <div tw="absolute left-20 w-[calc(100% + 48px)] h-1px bg-monochrome-medium-tint flex-grow" />
+      </PageHeader>
       {scopesData.length > 0
         ? (
           <Table

@@ -74,6 +74,7 @@ const Crumb = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
         return (
           <CrumbLink key={content}>
             <Link
+              data-test={`crumb:${content}`}
               title={content}
               to={link}
             >
