@@ -665,10 +665,6 @@ button:focus {
   bottom: 1.5rem;
 }
 
-.-left-8 {
-  left: -2rem;
-}
-
 .top-2\.5 {
   top: 0.625rem;
 }
@@ -791,6 +787,10 @@ button:focus {
   margin-left: 1rem;
 }
 
+.mt-9 {
+  margin-top: 2.25rem;
+}
+
 .mt-8 {
   margin-top: 2rem;
 }
@@ -843,6 +843,10 @@ button:focus {
   display: contents;
 }
 
+.h-10 {
+  height: 2.5rem;
+}
+
 .h-2 {
   height: 0.5rem;
 }
@@ -853,6 +857,10 @@ button:focus {
 
 .h-20 {
   height: 5rem;
+}
+
+.h-\[96px\] {
+  height: 96px;
 }
 
 .h-full {
@@ -867,10 +875,6 @@ button:focus {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
-}
-
-.h-10 {
-  height: 2.5rem;
 }
 
 .h-\[630px\] {
@@ -893,8 +897,8 @@ button:focus {
   height: 1.25rem;
 }
 
-.h-1px {
-  height: 1px;
+.h-12 {
+  height: 3rem;
 }
 
 .h-6 {
@@ -1009,6 +1013,10 @@ button:focus {
 
 .min-w-154px {
   min-width: 154px;
+}
+
+.max-w-200px {
+  max-width: 200px;
 }
 
 .max-w-280px {
@@ -1336,14 +1344,19 @@ button:focus {
   padding: 1.5rem;
 }
 
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .py-3 {
@@ -1356,19 +1369,9 @@ button:focus {
   padding-bottom: 1rem;
 }
 
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
 .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
-}
-
-.px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
 }
 
 .px-12 {
@@ -1576,6 +1579,11 @@ button:focus {
   line-height: 36px;
 }
 
+.text-blue-default {
+  --tw-text-opacity: 1;
+  color: rgba(0, 127, 255, var(--tw-text-opacity));
+}
+
 .text-monochrome-default {
   --tw-text-opacity: 1;
   color: rgba(104, 116, 129, var(--tw-text-opacity));
@@ -1584,11 +1592,6 @@ button:focus {
 .text-monochrome-black {
   --tw-text-opacity: 1;
   color: rgba(27, 25, 27, var(--tw-text-opacity));
-}
-
-.text-blue-default {
-  --tw-text-opacity: 1;
-  color: rgba(0, 127, 255, var(--tw-text-opacity));
 }
 
 .text-red-default {
@@ -1681,14 +1684,14 @@ button:focus {
   --tw-bg-opacity: 1;
 }
 
-.hover\:text-blue-default:hover {
-  --tw-text-opacity: 1;
-  color: rgba(0, 127, 255, var(--tw-text-opacity));
-}
-
 .hover\:text-blue-medium-tint:hover {
   --tw-text-opacity: 1;
   color: rgba(51, 153, 255, var(--tw-text-opacity));
+}
+
+.hover\:text-blue-default:hover {
+  --tw-text-opacity: 1;
+  color: rgba(0, 127, 255, var(--tw-text-opacity));
 }
 
 .hover\:opacity-100:hover {

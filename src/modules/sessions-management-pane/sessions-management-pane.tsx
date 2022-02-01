@@ -22,7 +22,7 @@ import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
 import { useActiveSessions } from "hooks";
-import { agentPluginPath, groupPluginPath } from "router";
+import { agentPluginPath, groupPluginPath } from "admin-routes";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,

@@ -13,21 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { matchPath, useLocation } from "react-router-dom";
-import {
-  agentDashboardPath, agentPluginPath, groupPluginPath, groupDashboardPath,
-} from "admin-routes";
-
-interface Params {
-  agentId: string;
-  pluginId: string;
-}
-
-export const useAgentRouteParams = (): Params => {
-  const { pathname } = useLocation();
-  const { params: { agentId = "", pluginId = "" } = {} } = matchPath<Partial<Params>>(
-    pathname,
-    { path: [agentPluginPath, agentDashboardPath, groupPluginPath, groupDashboardPath] },
-  ) || {};
-  return { agentId, pluginId };
-};
+export { Breadcrumbs } from "./breadcrumbs";

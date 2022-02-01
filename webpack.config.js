@@ -42,7 +42,7 @@ module.exports = (webpackConfigEnv, argv) => {
         components: path.resolve(__dirname, "src/components/"),
         common: path.resolve(__dirname, "src/common/"),
         pages: path.resolve(__dirname, "src/pages/"),
-        router: path.resolve(__dirname, "src/router/"),
+        "admin-routes": path.resolve(__dirname, "src/admin-routes/"),
         modules: path.resolve(__dirname, "src/modules/"),
         contexts: path.resolve(__dirname, "src/contexts/"),
         utils: path.resolve(__dirname, "src/utils/"),

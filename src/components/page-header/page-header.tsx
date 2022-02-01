@@ -13,21 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { matchPath, useLocation } from "react-router-dom";
-import {
-  agentDashboardPath, agentPluginPath, groupPluginPath, groupDashboardPath,
-} from "admin-routes";
+import tw, { styled } from "twin.macro";
 
-interface Params {
-  agentId: string;
-  pluginId: string;
-}
-
-export const useAgentRouteParams = (): Params => {
-  const { pathname } = useLocation();
-  const { params: { agentId = "", pluginId = "" } = {} } = matchPath<Partial<Params>>(
-    pathname,
-    { path: [agentPluginPath, agentDashboardPath, groupPluginPath, groupDashboardPath] },
-  ) || {};
-  return { agentId, pluginId };
-};
+export const PageHeader = styled.div`
+  ${tw`flex items-center w-full h-[96px] px-6`}
+  ${tw`border-monochrome-medium-tint border-b`}
+`;

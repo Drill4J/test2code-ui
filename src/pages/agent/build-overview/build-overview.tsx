@@ -39,8 +39,9 @@ export const BuildOverview = () => {
     <>
       <CoveragePluginHeader />
       <div tw="flex mb-4 border-b border-monochrome-medium-tint">
+        {/* !activeTab expressions means that t is default active tab */}
         <Tab
-          active={activeTab === "methods"}
+          active={!activeTab || activeTab === "methods"}
           onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }))}
           data-test="build-overview:tab:build-methods"
         >
@@ -60,7 +61,8 @@ export const BuildOverview = () => {
           Build tests
         </Tab>
       </div>
-      {activeTab === "methods" ? <BuildMethodsInfo /> : <BuildTestsInfo />}
+      {(!activeTab || activeTab === "methods") && <BuildMethodsInfo /> }
+      {activeTab === "tests" && <BuildTestsInfo />}
     </>
   );
 };

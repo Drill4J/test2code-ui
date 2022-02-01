@@ -139,7 +139,7 @@ export const AssociatedTestModal = () => {
                                 }),
                               };
                               return scopeId
-                                ? getPagePath({ name: "scopeTests", params: { scopeId, buildVersion }, queryParams })
+                                ? getPagePath({ name: "scope", params: { scopeId, buildVersion }, queryParams })
                                 : getPagePath({ name: "overview", params: { buildVersion }, queryParams });
                             }}
                             tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"

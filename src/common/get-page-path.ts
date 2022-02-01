@@ -19,19 +19,19 @@ import * as queryString from "querystring";
 interface Routes {
   overview: "buildVersion";
   testsToRun: "buildVersion";
-  scopeMethods: "buildVersion" | "scopeId";
-  scopeTests: "buildVersion" | "scopeId";
+  scope: "buildVersion" | "scopeId";
   allScopes: "buildVersion";
   risks: "buildVersion";
+  allBuilds: void;
 }
 
 export const routes = {
   overview: "/builds/:buildVersion/overview",
-  scopeMethods: "/builds/:buildVersion/scopes/:scopeId",
-  scopeTests: "/builds/:buildVersion/scopes/:scopeId",
+  scope: "/builds/:buildVersion/scopes/:scopeId",
   testsToRun: "/builds/:buildVersion/tests-to-tun",
   allScopes: "/builds/:buildVersion/scopes",
   risks: "/builds/:buildVersion/risks",
+  allBuilds: "/builds",
 };
 
 export const router = createRouter<Routes>(routes);

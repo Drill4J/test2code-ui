@@ -31,6 +31,7 @@ import { getModalPath, getPagePath } from "common";
 import { BuildCoverage } from "types/build-coverage";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
+import { PageHeader } from "../../../components";
 
 export const AllScopes = () => {
   const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
@@ -74,16 +75,13 @@ export const AllScopes = () => {
     }));
 
   return (
-    <>
-      <div tw="relative">
-        <div tw="py-8 space-x-2 text-24 leading-32">
-          <span>All Scopes</span>
-          <span tw="text-monochrome-default font-light">
-            {scopesData.length}
-          </span>
-        </div>
-        <div tw="absolute -left-8 w-[calc(100% + 148px)] h-1px bg-monochrome-medium-tint flex-grow" />
-      </div>
+    <div>
+      <PageHeader tw="gap-x-2 text-24 leading-32 text-monochrome-black">
+        <span>All Scopes</span>
+        <span tw="text-monochrome-default font-light">
+          {scopesData.length}
+        </span>
+      </PageHeader>
       {scopesData.length > 0
         ? (
           <Table
@@ -126,7 +124,7 @@ export const AllScopes = () => {
                 }: any) => (
                   <Link
                     tw="font-bold text-14 leading-20 cursor-pointer"
-                    to={getPagePath({ name: "scopeMethods", params: { scopeId: id, buildVersion }, queryParams: { activeTab: "methods" } })}
+                    to={getPagePath({ name: "scope", params: { scopeId: id, buildVersion }, queryParams: { activeTab: "methods" } })}
                     data-test="scopes-list:scope-name"
                   >
                     <div className="link text-ellipsis" title={value}>
@@ -243,6 +241,6 @@ export const AllScopes = () => {
             message="There are no scopes with finished test sessions in this build."
           />
         )}
-    </>
+    </div>
   );
 };
