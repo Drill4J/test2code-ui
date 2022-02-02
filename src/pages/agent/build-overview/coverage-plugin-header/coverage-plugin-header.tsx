@@ -29,6 +29,7 @@ import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
 import { Risk } from "types";
+import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
 
@@ -47,7 +48,7 @@ export const CoveragePluginHeader = () => {
   const { push } = useHistory();
 
   return (
-    <Content>
+    <ContentWrapper>
       <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
       <BaselinePanel>
         <div>Current build:</div>
@@ -157,12 +158,12 @@ export const CoveragePluginHeader = () => {
           </div>
         )}
       </ActionSection>
-    </Content>
+    </ContentWrapper>
   );
 };
 
-const Content = styled.div`
-  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 items-center gap-2 py-4 w-full border-b border-monochrome-medium-tint`}
+const ContentWrapper = styled(PageHeader)`
+  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
   @media screen and (min-width: 1024px) {
     grid-template-columns: max-content auto max-content max-content max-content !important;
   }

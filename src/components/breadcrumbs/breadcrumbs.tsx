@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
-  Link, matchPath, Switch, useLocation, Route,
+  Link, Switch, useLocation, Route,
 } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
@@ -41,7 +41,7 @@ const Routes = [
   { path: routes.testsToRun, crumbs: [allBuildCrumb, buildCrumb, testsToRunCrumb] },
   { path: routes.allScopes, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb] },
   { path: routes.scope, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb, scopeCrumb] },
-  { path: routes.allBuilds, crumbs: [allBuildCrumb] },
+  { path: routes.allBuilds, crumbs: [{ content: "Test2Code Plugin", path: "/" }] },
 ];
 
 export const Breadcrumbs = () => (
@@ -67,8 +67,7 @@ const Crumb = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
   return (
     <BreadcrumbsContainer>
       {crumbs.map((crumb) => {
-        const rawLink = `${adminPath}${prepareLink(crumb.path)}`;
-        const link = prepareLink(rawLink);
+        const link = `${adminPath}${prepareLink(crumb.path)}`;
         const content = prepareContent(crumb.content);
 
         return (

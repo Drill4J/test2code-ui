@@ -34,40 +34,42 @@ export const AllBuilds = () => {
         <span>All builds </span>
         <span tw="font-light text-monochrome-default">{buildVersions.length}</span>
       </PageHeader>
-      <Table
-        renderHeader={({ currentCount, totalCount }) => (
-          <div tw="flex justify-between text-monochrome-default text-14 leading-24 mt-9 mb-3">
-            <div tw="uppercase">Builds List</div>
-            <div>{`Displaying ${currentCount} of ${totalCount} builds`}</div>
-          </div>
-        )}
-        columns={[
-          {
-            Header: "Name",
-            accessor: "buildVersion",
-            Cell: ({ value: buildVersion }: any) => (
-              <NameCell title={buildVersion}>
-                <Link
-                  tw="link text-ellipsis"
-                  to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
-                >
-                  <Typography.MiddleEllipsis>
-                    <span>{buildVersion}</span>
-                  </Typography.MiddleEllipsis>
-                </Link>
-              </NameCell>
-            ),
-            textAlign: "left",
-          },
-          {
-            Header: "Added",
-            accessor: "detectedAt",
-            Cell: ({ value }: any) => <span>{dateTimeFormatter(value)}</span>,
-            textAlign: "left",
-          },
-        ]}
-        data={buildVersions}
-      />
+      <div tw="px-6">
+        <Table
+          renderHeader={({ currentCount, totalCount }) => (
+            <div tw="flex justify-between text-monochrome-default text-14 leading-24 mt-9 mb-3">
+              <div tw="uppercase">Builds List</div>
+              <div>{`Displaying ${currentCount} of ${totalCount} builds`}</div>
+            </div>
+          )}
+          columns={[
+            {
+              Header: "Name",
+              accessor: "buildVersion",
+              Cell: ({ value: buildVersion }: any) => (
+                <NameCell title={buildVersion}>
+                  <Link
+                    tw="link text-ellipsis"
+                    to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+                  >
+                    <Typography.MiddleEllipsis>
+                      <span>{buildVersion}</span>
+                    </Typography.MiddleEllipsis>
+                  </Link>
+                </NameCell>
+              ),
+              textAlign: "left",
+            },
+            {
+              Header: "Added",
+              accessor: "detectedAt",
+              Cell: ({ value }: any) => <span>{dateTimeFormatter(value)}</span>,
+              textAlign: "left",
+            },
+          ]}
+          data={buildVersions}
+        />
+      </div>
     </div>
   );
 };

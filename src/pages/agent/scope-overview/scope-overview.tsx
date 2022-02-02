@@ -47,8 +47,8 @@ export const ScopeOverview = () => {
       : (
         <>
           <ScopeOverviewHeader status={buildStatus} isActiveBuild={activeBuildVersion === buildVersion} />
-          <div tw="flex flex-col flex-grow items-center w-full">
-            <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
+          <div tw="flex flex-col items-center flex-grow w-full px-6 mt-6">
+            <div tw="flex gap-x-6 mb-4 w-full border-b border-monochrome-medium-tint">
               <Tab
                 active={activeTab === "methods"}
                 onClick={() => push(getPagePath({
@@ -57,7 +57,7 @@ export const ScopeOverview = () => {
                   queryParams: { activeTab: "methods" },
                 }))}
               >
-                <div tw="flex items-center mr-2 text-monochrome-black">
+                <div tw="flex items-center mr-2">
                   <Icons.Function />
                 </div>
                 Scope methods
@@ -70,7 +70,7 @@ export const ScopeOverview = () => {
                   queryParams: { activeTab: "tests" },
                 }))}
               >
-                <div tw="flex items-center mr-2 text-monochrome-black">
+                <div tw="flex items-center mr-2">
                   <Icons.Test width={16} />
                 </div>
                 Scope tests

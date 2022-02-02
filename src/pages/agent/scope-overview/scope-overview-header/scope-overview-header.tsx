@@ -18,7 +18,7 @@ import {
   Button, Icons, Menu, sendAlertEvent, SessionIndicator,
 } from "@drill4j/ui-kit";
 import { Link, useHistory } from "react-router-dom";
-
+import { BuildStatus } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common/constants";
@@ -27,7 +27,7 @@ import {
 } from "hooks";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
-import { BuildStatus } from "@drill4j/types-admin";
+import { PageHeader } from "components";
 import { toggleScope } from "../../api";
 import { ScopeStatus } from "../scope-status";
 
@@ -125,8 +125,8 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   );
 };
 
-const Header = styled.div`
-  ${tw`grid items-center gap-4 w-full h-20 border-b border-monochrome-medium-tint`}
+const Header = styled(PageHeader)`
+  ${tw`grid items-center gap-4 w-full`}
   ${tw`text-24 text-monochrome-black`}
   grid-template-columns: minmax(auto, max-content) auto auto;
 `;

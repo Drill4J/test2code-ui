@@ -82,165 +82,168 @@ export const AllScopes = () => {
           {scopesData.length}
         </span>
       </PageHeader>
-      {scopesData.length > 0
-        ? (
-          <Table
-            data={scopesData}
-            columnsDependency={[
-              isActiveBuildVersion,
-              activeScope?.coverage.percentage,
-              activeScopeTestsType.length,
-              byTestType.length, scopes.length,
-            ]}
-            defaultSortBy={[{
-              id: "started",
-              desc: false,
-            }]}
-            renderHeader={({ currentCount, totalCount }) => (
-              <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-9 pb-3">
-                <div tw="font-bold uppercase">Scopes List</div>
-                <div>{`Displaying ${currentCount} of ${totalCount} scopes`}</div>
-              </div>
-            )}
-            stub={(
-              <Stub
-                icon={<Icons.Scope height={104} width={107} />}
-                title="No results found"
-                message="Try adjusting your search or filter to find what you are looking for."
-              />
-            )}
-            columns={[
-              {
-                Header: "Name",
-                accessor: "name",
-                filterable: true,
-                isCustomCell: true,
-                Cell: ({
-                  value = "", state, row: {
-                    original: {
-                      id = "", started = 0, active = false, enabled = false, finished = 0,
-                    } = {},
-                  },
-                }: any) => (
-                  <Link
-                    tw="font-bold text-14 leading-20 cursor-pointer"
-                    to={getPagePath({ name: "scope", params: { scopeId: id, buildVersion }, queryParams: { activeTab: "methods" } })}
-                    data-test="scopes-list:scope-name"
-                  >
-                    <div className="link text-ellipsis" title={value}>
-                      <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
-                    </div>
-                    <div css={[
-                      tw`flex gap-x-2 items-center w-full text-12`,
-                      active && tw`text-green-default`,
-                      !enabled && tw`text-monochrome-default`]}
+      <div tw="px-6 mt-9">
+        {scopesData.length > 0
+          ? (
+            <Table
+              data={scopesData}
+              columnsDependency={[
+                isActiveBuildVersion,
+                activeScope?.coverage.percentage,
+                activeScopeTestsType.length,
+                byTestType.length, scopes.length,
+              ]}
+              defaultSortBy={[{
+                id: "started",
+                desc: false,
+              }]}
+              renderHeader={({ currentCount, totalCount }) => (
+                <div tw="flex justify-between text-monochrome-default text-14 leading-24 mb-3">
+                  <div tw="font-bold uppercase">Scopes List</div>
+                  <div>{`Displaying ${currentCount} of ${totalCount} scopes`}</div>
+                </div>
+              )}
+              stub={(
+                <Stub
+                  icon={<Icons.Scope height={104} width={107} />}
+                  title="No results found"
+                  message="Try adjusting your search or filter to find what you are looking for."
+                />
+              )}
+              columns={[
+                {
+                  Header: "Name",
+                  accessor: "name",
+                  filterable: true,
+                  isCustomCell: true,
+                  Cell: ({
+                    value = "", state, row: {
+                      original: {
+                        id = "", started = 0, active = false, enabled = false, finished = 0,
+                      } = {},
+                    },
+                  }: any) => (
+                    <Link
+                      tw="font-bold text-14 leading-20 cursor-pointer"
+                      to={getPagePath({ name: "scope", params: { scopeId: id, buildVersion }, queryParams: { activeTab: "methods" } })}
+                      data-test="scopes-list:scope-name"
                     >
-                      <ScopeTimer started={started} finished={finished} active={active} size="small" />
-                      {active && <Status>Active</Status>}
-                      {!enabled && <Status>Ignored</Status>}
+                      <div className="link text-ellipsis" title={value}>
+                        <Cells.Highlight text={value} searchWords={state.filters.map((filter: {value: string}) => filter.value)} />
+                      </div>
+                      <div css={[
+                        tw`flex gap-x-2 items-center w-full text-12`,
+                        active && tw`text-green-default`,
+                        !enabled && tw`text-monochrome-default`]}
+                      >
+                        <ScopeTimer started={started} finished={finished} active={active} size="small" />
+                        {active && <Status>Active</Status>}
+                        {!enabled && <Status>Ignored</Status>}
+                      </div>
+                    </Link>
+                  ),
+                  textAlign: "left",
+                  width: "60%",
+                },
+                {
+                  Header: "Started",
+                  accessor: "started",
+                  Cell: ({ value = 0 }: any) => (
+                    <>
+                      <div tw="font-bold text-12 leading-16 text-monochrome-black">
+                        {dateFormatter(value)}
+                      </div>
+                      <div tw="text-12 leading-20 text-monochrome-default">
+                        at {timeFormatter(value)}
+                      </div>
+                    </>
+                  ),
+                  textAlign: "left",
+                  width: "20%",
+                  sortType: "number",
+                },
+                {
+                  Header: "Coverage, %",
+                  accessor: "coverage.percentage",
+                  Cell: ({ row: { original = {} } = {} }: any) => (
+                    <div tw="text-20 leading-32 my-6 text-monochrome-black" data-test="scopes-list:coverage">
+                      {percentFormatter(original?.coverage?.percentage)}
                     </div>
-                  </Link>
-                ),
-                textAlign: "left",
-                width: "60%",
-              },
-              {
-                Header: "Started",
-                accessor: "started",
-                Cell: ({ value = 0 }: any) => (
-                  <>
-                    <div tw="font-bold text-12 leading-16 text-monochrome-black">
-                      {dateFormatter(value)}
-                    </div>
-                    <div tw="text-12 leading-20 text-monochrome-default">
-                      at {timeFormatter(value)}
-                    </div>
-                  </>
-                ),
-                textAlign: "left",
-                width: "20%",
-                sortType: "number",
-              },
-              {
-                Header: "Coverage, %",
-                accessor: "coverage.percentage",
-                Cell: ({ row: { original = {} } = {} }: any) => (
-                  <div tw="text-20 leading-32 my-6 text-monochrome-black" data-test="scopes-list:coverage">
-                    {percentFormatter(original?.coverage?.percentage)}
-                  </div>
-                ),
-                width: "20%",
-                sortType: "number",
-              },
-              ...testsColumns,
-              {
-                Header: () => null,
-                accessor: "actions",
-                Cell: isActiveBuildVersion ? ({ row: { original = {} } = {} }: any) => {
-                  const { active, enabled, id } = original;
-                  const menuActions = [
-                    active && {
-                      label: "Finish Scope",
-                      icon: "Check",
-                      onClick: () => push(getModalPath({ name: "finishScope", params: { scopeId: id } })),
-                    },
-                    active && {
-                      label: "Sessions Management",
-                      icon: "ManageSessions",
-                      Content: ({ children }: { children: JSX.Element }) => (
-                        <Link to={getModalPath({ name: "sessionManagement" })}>
-                          {children}
-                        </Link>
-                      ),
-                    },
-                    !active && {
-                      label: `${enabled ? "Ignore" : "Include"} in stats`,
-                      icon: enabled ? "EyeCrossed" : "Eye",
-                      onClick: () => toggleScope(agentId, {
-                        onSuccess: () => {
-                          sendAlertEvent({
-                            type: "SUCCESS",
-                            title: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
-                          });
-                        },
-                        onError: () => {
-                          sendAlertEvent({
-                            type: "ERROR",
-                            title: "There is some issue with your action. Please try again later",
-                          });
-                        },
-                      })(id),
-                    },
-                    {
-                      label: "Rename",
-                      icon: "Edit",
-                      onClick: () => push(getModalPath({ name: "renameScope", params: { scopeId: id } })),
-                    },
-                    {
-                      label: "Delete",
-                      icon: "Delete",
-                      onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId: id } })),
-                    },
-                  ].filter(Boolean);
-                  return (
-                    <div tw="flex justify-end">
-                      <Menu items={menuActions} />
-                    </div>
-                  );
-                } : () => null,
-                width: "48px",
-                notSortable: true,
-                disableEllipsis: true,
-              },
-            ]}
-          />
-        ) : (
-          <Stub
-            icon={<Icons.Scope tw="text-monochrome-medium-tint" width={157} height={157} data-test="no-scope-stub:test-icon" />}
-            title={<span tw="text-24">No scopes found</span>}
-            message="There are no scopes with finished test sessions in this build."
-          />
-        )}
+                  ),
+                  width: "20%",
+                  sortType: "number",
+                },
+                ...testsColumns,
+                {
+                  Header: () => null,
+                  accessor: "actions",
+                  Cell: isActiveBuildVersion ? ({ row: { original = {} } = {} }: any) => {
+                    const { active, enabled, id } = original;
+                    const menuActions = [
+                      active && {
+                        label: "Finish Scope",
+                        icon: "Check",
+                        onClick: () => push(getModalPath({ name: "finishScope", params: { scopeId: id } })),
+                      },
+                      active && {
+                        label: "Sessions Management",
+                        icon: "ManageSessions",
+                        Content: ({ children }: { children: JSX.Element }) => (
+                          <Link to={getModalPath({ name: "sessionManagement" })}>
+                            {children}
+                          </Link>
+                        ),
+                      },
+                      !active && {
+                        label: `${enabled ? "Ignore" : "Include"} in stats`,
+                        icon: enabled ? "EyeCrossed" : "Eye",
+                        onClick: () => toggleScope(agentId, {
+                          onSuccess: () => {
+                            sendAlertEvent({
+                              type: "SUCCESS",
+                              title: `Scope has been ${enabled ? "ignored" : "included"} in build stats.`,
+                            });
+                          },
+                          onError: () => {
+                            sendAlertEvent({
+                              type: "ERROR",
+                              title: "There is some issue with your action. Please try again later",
+                            });
+                          },
+                        })(id),
+                      },
+                      {
+                        label: "Rename",
+                        icon: "Edit",
+                        onClick: () => push(getModalPath({ name: "renameScope", params: { scopeId: id } })),
+                      },
+                      {
+                        label: "Delete",
+                        icon: "Delete",
+                        onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId: id } })),
+                      },
+                    ].filter(Boolean);
+                    return (
+                      <div tw="flex justify-end">
+                        <Menu items={menuActions} />
+                      </div>
+                    );
+                  } : () => null,
+                  width: "48px",
+                  notSortable: true,
+                  disableEllipsis: true,
+                },
+              ]}
+            />
+          ) : (
+            <Stub
+              icon={<Icons.Scope tw="text-monochrome-medium-tint" width={157} height={157} data-test="no-scope-stub:test-icon" />}
+              title={<span tw="text-24">No scopes found</span>}
+              message="There are no scopes with finished test sessions in this build."
+            />
+          )}
+
+      </div>
     </div>
   );
 };

@@ -31,11 +31,7 @@ import { AllBuilds } from "./all-builds";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useActiveBuild(agentId) || {};
-
-  if (!buildVersion) {
-    return null; // TODO add stub here
-  }
+  const { buildVersion = "" } = useActiveBuild(agentId) || {};
 
   return (
     <div tw="flex flex-col w-full h-full">
