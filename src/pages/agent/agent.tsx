@@ -31,7 +31,11 @@ import { AllBuilds } from "./all-builds";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
-  const { buildVersion = "" } = useActiveBuild(agentId) || {};
+  const { buildVersion } = useActiveBuild(agentId) || {};
+
+  if (!buildVersion) { // Add spinner
+    return null;
+  }
 
   return (
     <div tw="flex flex-col w-full h-full">

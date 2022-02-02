@@ -52,18 +52,20 @@ export const List = ({
           gridTemplateColumns: gridTemplateColumns || `repeat(${columns.length}, 1fr)`,
         }}
       />
-      {data.map((item, index) => (
-        <ListRow
-          item={item}
-          columns={columns}
-          index={index}
-          key={item.id as string}
-          style={{
-            gridTemplateColumns: gridTemplateColumns || `repeat(${columns.length}, 1fr)`,
-          }}
-          testContext={testContext}
-        />
-      ))}
+      <div tw="px-6">
+        {data.map((item, index) => (
+          <ListRow
+            item={item}
+            columns={columns}
+            index={index}
+            key={item.id as string}
+            style={{
+              gridTemplateColumns: gridTemplateColumns || `repeat(${columns.length}, 1fr)`,
+            }}
+            testContext={testContext}
+          />
+        ))}
+      </div>
     </div>
   );
 };

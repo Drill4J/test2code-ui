@@ -22,6 +22,7 @@ import tw, { styled } from "twin.macro";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
 import { SavedTimeSection } from "./saved-time-section";
+import { PageHeader } from "../../../../components";
 
 interface AgentInfo {
   agentType: string;
@@ -72,109 +73,105 @@ export const TestsToRunHeader = ({
   );
 
   return (
-    <>
-      <div tw="flex items-center h-20 border-b border-monochrome-medium-tint">
-        <div tw="flex justify-between items-center w-full">
-          <div>
-            <div
-              tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
-              data-test="tests-to-run-header:title"
-            >
-              Tests to Run
-              <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
-            </div>
-            <SubTitle data-test="tests-to-run-header:subtitle">
-              Build:
-              <div
-                tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
-                className="text-ellipsis"
-                data-test="tests-to-run-header:current-build-version"
-                title={buildVersion}
-              >
-                <Typography.MiddleEllipsis>
-                  <span>{buildVersion}</span>
-                </Typography.MiddleEllipsis>
-              </div>
-              Compared to:
-              <div
-                tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
-                className="text-ellipsis"
-                data-test="tests-to-run-header:compared-build-version"
-                title={previousBuildVersion}
-              >
-                <Typography.MiddleEllipsis>
-                  <span>{previousBuildVersion}</span>
-                </Typography.MiddleEllipsis>
-              </div>
-            </SubTitle>
-          </div>
-          <div tw="flex items-center gap-6 mr-10">
-            {activeBuildVersion === buildVersion && (
-              <Button
-                secondary
-                size="large"
-                onClick={() => push(getModalPath({ name: "getSuggestedTests" }))}
-                data-test="tests-to-run-header:get-suggested-tests-button"
-                disabled={!totalTestsToRun}
-              >
-                Get Suggested Tests
-              </Button>
-            )}
-            <SavedTimeSection
-              previousBuildAutoTestsCount={previousBuildAutoTestsCount}
-              label="total duration"
-              message={getTotalDurationTooltipMessage(previousBuildAutoTestsCount)}
-            >
-              {totalDuration.hours}:{totalDuration.minutes}:{totalDuration.seconds}
-            </SavedTimeSection>
-            <SavedTimeSection
-              previousBuildAutoTestsCount={previousBuildAutoTestsCount}
-              label="estimated time saved"
-              percentage={
-                totalAutoTestsToRun
-                  ? percentFormatter(
-                    convertToPercentage(
-                      previousBuildTestsDuration - parentDuration,
-                      previousBuildTestsDuration,
-                    ),
-                  )
-                  : undefined
-              }
-              message={
-                previousBuildAutoTestsCount
-                  ? getEstimatedTimeSavedTooltipMessage(totalAutoTestsToRun)
-                  : null
-              }
-            >
-              {totalAutoTestsToRun
-                ? `${estimatedTimeSaved.hours}:${estimatedTimeSaved.minutes}:${estimatedTimeSaved.seconds}`
-                : "––:––:––"}
-            </SavedTimeSection>
-            <SavedTimeSection
-              previousBuildAutoTestsCount={previousBuildAutoTestsCount}
-              label="total time saved"
-              percentage={
-                totalAutoTestsToRun && totalAutoTestsToRun === completedAutoTestsToRun
-                  ? percentFormatter(
-                    convertToPercentage(
-                      previousBuildTestsDuration - currentDuration,
-                      previousBuildTestsDuration,
-                    ),
-                  )
-                  : undefined
-              }
-              message={getTotalSavedTimeTooltipMessage(
-                totalAutoTestsToRun - completedAutoTestsToRun,
-              )}
-            >
-              {totalAutoTestsToRun && totalAutoTestsToRun === completedAutoTestsToRun
-                ? `${totalTimeSaved.hours}:${totalTimeSaved.minutes}:${totalTimeSaved.seconds}`
-                : "––:––:––"}
-            </SavedTimeSection>
-          </div>
+    <PageHeader tw="justify-between">
+      <div>
+        <div
+          tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
+          data-test="tests-to-run-header:title"
+        >
+          Tests to Run
+          <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
         </div>
+        <SubTitle data-test="tests-to-run-header:subtitle">
+          Build:
+          <div
+            tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
+            className="text-ellipsis"
+            data-test="tests-to-run-header:current-build-version"
+            title={buildVersion}
+          >
+            <Typography.MiddleEllipsis>
+              <span>{buildVersion}</span>
+            </Typography.MiddleEllipsis>
+          </div>
+          Compared to:
+          <div
+            tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
+            className="text-ellipsis"
+            data-test="tests-to-run-header:compared-build-version"
+            title={previousBuildVersion}
+          >
+            <Typography.MiddleEllipsis>
+              <span>{previousBuildVersion}</span>
+            </Typography.MiddleEllipsis>
+          </div>
+        </SubTitle>
       </div>
-    </>
+      <div tw="flex items-center gap-6 mr-10">
+        {activeBuildVersion === buildVersion && (
+          <Button
+            secondary
+            size="large"
+            onClick={() => push(getModalPath({ name: "getSuggestedTests" }))}
+            data-test="tests-to-run-header:get-suggested-tests-button"
+            disabled={!totalTestsToRun}
+          >
+            Get Suggested Tests
+          </Button>
+        )}
+        <SavedTimeSection
+          previousBuildAutoTestsCount={previousBuildAutoTestsCount}
+          label="total duration"
+          message={getTotalDurationTooltipMessage(previousBuildAutoTestsCount)}
+        >
+          {totalDuration.hours}:{totalDuration.minutes}:{totalDuration.seconds}
+        </SavedTimeSection>
+        <SavedTimeSection
+          previousBuildAutoTestsCount={previousBuildAutoTestsCount}
+          label="estimated time saved"
+          percentage={
+            totalAutoTestsToRun
+              ? percentFormatter(
+                convertToPercentage(
+                  previousBuildTestsDuration - parentDuration,
+                  previousBuildTestsDuration,
+                ),
+              )
+              : undefined
+          }
+          message={
+            previousBuildAutoTestsCount
+              ? getEstimatedTimeSavedTooltipMessage(totalAutoTestsToRun)
+              : null
+          }
+        >
+          {totalAutoTestsToRun
+            ? `${estimatedTimeSaved.hours}:${estimatedTimeSaved.minutes}:${estimatedTimeSaved.seconds}`
+            : "––:––:––"}
+        </SavedTimeSection>
+        <SavedTimeSection
+          previousBuildAutoTestsCount={previousBuildAutoTestsCount}
+          label="total time saved"
+          percentage={
+            totalAutoTestsToRun && totalAutoTestsToRun === completedAutoTestsToRun
+              ? percentFormatter(
+                convertToPercentage(
+                  previousBuildTestsDuration - currentDuration,
+                  previousBuildTestsDuration,
+                ),
+              )
+              : undefined
+          }
+          message={getTotalSavedTimeTooltipMessage(
+            totalAutoTestsToRun - completedAutoTestsToRun,
+          )}
+        >
+          {totalAutoTestsToRun && totalAutoTestsToRun === completedAutoTestsToRun
+            ? `${totalTimeSaved.hours}:${totalTimeSaved.minutes}:${totalTimeSaved.seconds}`
+            : "––:––:––"}
+        </SavedTimeSection>
+      </div>
+    </PageHeader>
   );
 };
 

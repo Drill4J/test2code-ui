@@ -16,6 +16,6 @@
 import tw, { styled } from "twin.macro";
 
 export const PageHeader = styled.div`
-  ${tw`flex items-center w-full h-[96px] px-6`}
+  ${tw`flex items-center w-full min-h-[96px] px-6`}
   ${tw`border-monochrome-medium-tint border-b`}
 `;
