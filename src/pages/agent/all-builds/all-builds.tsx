@@ -66,6 +66,26 @@ export const AllBuilds = () => {
               Cell: ({ value }: any) => <span>{dateTimeFormatter(value)}</span>,
               textAlign: "left",
             },
+            {
+              Header: "Total methods",
+              accessor: "summary.total",
+            },
+            {
+              Header: "New",
+              accessor: "summary.new",
+            },
+            {
+              Header: "Modified",
+              accessor: "summary.modified",
+            },
+            {
+              Header: "Unaffected",
+              accessor: "summary.unaffected",
+            },
+            {
+              Header: "Deleted",
+              accessor: "summary.deleted",
+            },
           ]}
           data={buildVersions}
         />
