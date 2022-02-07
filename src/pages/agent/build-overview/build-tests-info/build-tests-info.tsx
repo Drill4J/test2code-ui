@@ -62,7 +62,7 @@ export const BuildTestsInfo = () => {
           <ActiveBuildTestsInfo testsInfo={testsInfo} />
         </ActiveBuildTestsBar>
         <Cards isShowActiveScopeInfo={isShowActiveScopeInfo}>
-          {testsByType.map(({ type, summary }) => <BuildTestsCard label={type} testTypeSummary={summary} />)}
+          {testsByType.map(({ type, summary }) => <BuildTestsCard key={type} label={type} testTypeSummary={summary} />)}
         </Cards>
         {isShowActiveScopeInfo && (
           <div tw="lg:col-start-2 lg:row-start-1 lg:row-end-3">
