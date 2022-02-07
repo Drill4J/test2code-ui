@@ -15,6 +15,7 @@
  */
 import { createRouter, getPagePath as getPage } from "nanostores";
 import * as queryString from "querystring";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 interface Routes {
   overview: "buildVersion";
@@ -38,15 +39,13 @@ export const router = createRouter<Routes>(routes);
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
   name: PageName;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   params?: AppPages[PageName] extends void ? void : Record<AppPages[PageName], string>;
   queryParams?: Record<string, string>
 }
 
 export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({
-  name,
-  params, queryParams,
+  name, params, queryParams,
 }: Path<PageName, AppPages>): string => {
   const path = `${window.location.pathname.split("test2code")[0]}test2code${getPage(router, name as any, params as any)}`;
   if (queryParams) {

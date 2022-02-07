@@ -127,7 +127,7 @@ export const CoveragePluginHeader = () => {
         {initialRisks.length
           ? (
             <Count
-              to={getPagePath({ name: "risks" })}
+              to={getPagePath({ name: "risks", params: { buildVersion } })}
               className="flex items-center w-full"
               data-test="action-section:count:risks"
             >
@@ -142,7 +142,7 @@ export const CoveragePluginHeader = () => {
       >
         {previousBuildTests.length > 0 ? (
           <Count
-            to={getPagePath({ name: "testsToRun" })}
+            to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
             className="flex items-center w-full"
             data-test="action-section:count:tests-to-run"
           >
