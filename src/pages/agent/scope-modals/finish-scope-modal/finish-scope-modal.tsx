@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent,
+  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent, useQueryParams,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -28,7 +28,8 @@ import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
-  const { scopeId, buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { scopeId } = useQueryParams<{scopeId?: string;}>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     agentId = "", pluginId = "",
@@ -41,7 +42,6 @@ export const FinishScopeModal = () => {
   const { push, location: { pathname = "" } } = useHistory();
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
   const closeModal = useCloseModal("/finish-scope-modal", ["scopeId"]);
-
   return (
     <Modal onClose={closeModal}>
       <Modal.Content tw="w-108" type="info">

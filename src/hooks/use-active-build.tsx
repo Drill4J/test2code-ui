@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ActiveAgentsBuild, AgentBuildInfo } from "@drill4j/types-admin";
+import { AgentBuildInfo } from "@drill4j/types-admin";
 import { useAdminConnection } from "./use-admin-connection";
 
 export function useActiveBuild(id: string): AgentBuildInfo | null {
-  const builds = useAdminConnection<ActiveAgentsBuild[]>("/api/agents/build") || [];
-  const build = builds.find(({ agentId }) => agentId === id);
-  return build?.build || null;
+  const [build = null] = useAdminConnection<AgentBuildInfo[]>(`/api/agent/${id}/builds`) || [];
+  return build;
 }

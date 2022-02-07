@@ -15,7 +15,7 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Modal, Spinner, useCloseModal, sendAlertEvent,
+  Button, Modal, Spinner, useCloseModal, sendAlertEvent, useQueryParams,
 } from "@drill4j/ui-kit";
 import { useHistory, Link } from "react-router-dom";
 
@@ -29,7 +29,8 @@ import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
-  const { buildVersion, scopeId } = useTestToCodeRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { scopeId } = useQueryParams<{scopeId?: string;}>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const { push, location: { pathname = "" } } = useHistory();
   const [loading, setLoading] = useState(false);

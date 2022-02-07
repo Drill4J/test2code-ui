@@ -48,15 +48,16 @@ export const Breadcrumbs = () => (
   <Switch>
     {Routes.map((route) => (
       <Route
+        key={route.path}
         exact
         path={getAgentRoutePath(route.path)}
-        render={() => <Crumb crumbs={route.crumbs} path={route.path} />}
+        render={() => <RouteCrumbs crumbs={route.crumbs} path={route.path} />}
       />
     ))}
   </Switch>
 );
 
-const Crumb = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
+const RouteCrumbs = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
   const { pathname } = useLocation();
 
   const { adminPath } = dividePathname(pathname);
