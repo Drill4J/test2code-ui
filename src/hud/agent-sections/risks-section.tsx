@@ -22,10 +22,14 @@ import { SingleBar, DashboardSection, SectionTooltip } from "components";
 import { useBuildVersion } from "hooks";
 import { convertToPercentage } from "@drill4j/common-utils";
 
-export const RisksSection = () => {
+interface Props {
+  buildVersion?: string;
+}
+
+export const RisksSection = ({ buildVersion }: Props) => {
   const {
     riskCounts: { total = 0, new: newMethodsCount = 0, modified: modifiedMethodsCount = 0 } = {},
-  } = useBuildVersion<BuildSummary>("/build/summary") || {};
+  } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
   const tooltipData = {
     new: {
       count: newMethodsCount,

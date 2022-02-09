@@ -33,11 +33,15 @@ const BuildInfo = styled.div`
   }
 `;
 
-export const CoverageSection = () => {
+interface Props {
+  buildVersion?: string;
+}
+
+export const CoverageSection = ({ buildVersion }: Props) => {
   const { agentId = "" } = useAgentRouteParams();
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent", { buildVersion }) || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary") || {};
+  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
   const {
     all: {
       total: allMethodsTotalCount = 0,
