@@ -51,6 +51,7 @@ export const AllBuilds = () => {
                   <Link
                     tw="link text-ellipsis"
                     to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+                    data-test="builds-table:buildVersion"
                   >
                     <Typography.MiddleEllipsis>
                       <span>{buildVersion}</span>

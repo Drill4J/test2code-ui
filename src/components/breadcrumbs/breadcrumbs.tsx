@@ -74,7 +74,7 @@ const RouteCrumbs = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
         return (
           <CrumbLink key={content}>
             <Link
-              data-test={`crumb:${content}`}
+              data-test={`crumb:${convertToDataTestAttr(crumb.content)}`}
               title={content}
               to={link}
             >
@@ -135,3 +135,10 @@ const getContent = ({ buildVersion, scopeId }: {buildVersion: string, scopeId: s
     }
     return crumb;
   };
+
+const convertToDataTestAttr = (crumb: string) => crumb
+  .replace(":buildVersion", "selected-build")
+  .replace(":scopeId", "selected-scope")
+  .replace("Tests to Run", "tests-to-tun")
+  .replace("All Scopes", "scopes")
+  .replace("All builds", "builds");
