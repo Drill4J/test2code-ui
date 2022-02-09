@@ -40,12 +40,7 @@ export const List = ({
   const columns = Children.map(children, (column) => column && column.props);
 
   return (
-    <div
-      tw="grid items-center"
-      style={{
-        gridTemplateRows: `repeat(${data.length + 1}, 80px)`,
-      }}
-    >
+    <div>
       <ListHeader
         columns={columns}
         style={{
