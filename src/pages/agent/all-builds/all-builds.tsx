@@ -26,7 +26,7 @@ import { getPagePath } from "common";
 
 export const AllBuilds = () => {
   const { agentId } = useAgentRouteParams();
-  const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds-summary`) || [];
+  const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
 
   return (
     <div>
