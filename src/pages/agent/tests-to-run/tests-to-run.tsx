@@ -119,7 +119,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
           />
         ) : (
           <Stub
-            tw="h-auto"
+            tw="h-auto flex-grow-0"
             icon={<Icons.Graph tw="text-monochrome-medium-tint" width={70} height={75} />}
             title="No data about saved time"
             message="There is no information about Auto Tests duration in the parent build."

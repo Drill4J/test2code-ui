@@ -83,15 +83,15 @@ export const AllScopes = () => {
   }), [scopesData]);
 
   return (
-    <div>
+    <>
       <PageHeader tw="gap-x-2 text-24 leading-32 text-monochrome-black">
         <span>All Scopes</span>
         <span tw="text-monochrome-default font-light">
           {data.length}
         </span>
       </PageHeader>
-      <div tw="px-6 mt-9">
-        {data.length > 0
+      <div tw="px-6 mt-9 flex flex-col flex-grow">
+        {scopesData.length > 0
           ? (
             <Table
               data={data}
@@ -250,8 +250,7 @@ export const AllScopes = () => {
               message="There are no scopes with finished test sessions in this build."
             />
           )}
-
       </div>
-    </div>
+    </>
   );
 };
