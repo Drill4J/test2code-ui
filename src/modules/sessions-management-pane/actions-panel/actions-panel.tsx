@@ -18,6 +18,7 @@ import { Button, Icons, Spinner } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent, EVENT_LABELS } from "common/analytic";
 import { useSessionsPaneDispatch, useSessionsPaneState, setIsNewSession } from "../store";
 
 const Content = styled.div`
@@ -59,6 +60,7 @@ export const ActionsPanel = ({
           onClick={(e: any) => {
             e.preventDefault();
             dispatch(setIsNewSession(true));
+            sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
           }}
           data-test="sessions-management-pane:start-new-session-button"
         >

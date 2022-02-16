@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 import React from "react";
-import { LinkButton, Fields, Field } from "@drill4j/ui-kit";
+import { Field, Fields, LinkButton } from "@drill4j/ui-kit";
 
 import "twin.macro";
 
 import { ActiveSession } from "types/active-session";
-import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent, EVENT_LABELS } from "common/analytic";
+import { setBulkOperation, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 interface Props {
   activeSessions: ActiveSession[];
@@ -43,7 +44,10 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
         <div tw="flex gap-4">
           <LinkButton
             size="small"
-            onClick={() => dispatch(setBulkOperation("abort", true))}
+            onClick={() => {
+              dispatch(setBulkOperation("abort", true));
+              sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
+            }}
             data-test="management-active-sessions:abort-all"
             disabled={disabled}
           >
@@ -51,7 +55,10 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
           </LinkButton>
           <LinkButton
             size="small"
-            onClick={() => dispatch(setBulkOperation("finish", true))}
+            onClick={() => {
+              dispatch(setBulkOperation("finish", true));
+              sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
+            }}
             data-test="management-active-sessions:finish-all"
             disabled={disabled}
           >

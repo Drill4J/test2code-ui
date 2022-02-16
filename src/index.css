@@ -847,10 +847,6 @@ button:focus {
   display: contents;
 }
 
-.h-10 {
-  height: 2.5rem;
-}
-
 .h-2 {
   height: 0.5rem;
 }
@@ -879,6 +875,10 @@ button:focus {
   height: -webkit-fit-content;
   height: -moz-fit-content;
   height: fit-content;
+}
+
+.h-10 {
+  height: 2.5rem;
 }
 
 .h-\[630px\] {
@@ -915,6 +915,10 @@ button:focus {
 
 .h-8 {
   height: 2rem;
+}
+
+.min-h-\[40px\] {
+  min-height: 40px;
 }
 
 .min-h-\[96px\] {

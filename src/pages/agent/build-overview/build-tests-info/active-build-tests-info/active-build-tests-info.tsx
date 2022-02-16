@@ -50,6 +50,7 @@ export const ActiveBuildTestsInfo = ({ testsInfo }: Props) => {
       } = {},
     } = {},
   } = testsInfo;
+
   const testsExecuted = autoTestsCount + manualTestsCount;
   const ref = useRef<HTMLDivElement>(null);
   const { width } = useElementSize(ref);
