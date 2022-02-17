@@ -141,10 +141,10 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
               },
               {
                 Header: "State",
-                accessor: "overview.result",
-                Cell: ({ row: { original: { toRun } } }: any) => (
-                  <span tw="leading-64" title={toRun ? "To run" : "Done"}>
-                    {toRun
+                accessor: "toRun",
+                Cell: ({ value }: any) => (
+                  <span tw="leading-64" title={value ? "To run" : "Done"}>
+                    {value
                       ? "To run"
                       : <span tw="font-bold text-green-default">Done</span>}
                   </span>
