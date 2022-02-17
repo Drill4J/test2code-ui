@@ -37,7 +37,7 @@ interface GroupedTestToRun {
   totalCount?: number;
 }
 
-export const TestsToRunModal = () => {
+export const TestsToRunPanel = () => {
   const { copied, setCopied } = useCopy({ delay: 5000 });
   const { groupId = "" } = useGroupRouteParams();
   const { byType: testsToRun = {} } = useGroupData<GroupedTestToRun>("/group/data/tests-to-run", groupId) || {};
@@ -59,12 +59,12 @@ export const TestsToRunModal = () => {
 
   return (
     <Panel onClose={closePanel}>
-      <div tw="flex flex-col h-full">
-        <div tw="flex items-center gap-x-2 h-16 border-b border-monochrome-medium-tint pl-6 text-18 leading-24 text-monochrome-black">
+      <Panel.Content>
+        <Panel.Header tw="flex items-center gap-x-2">
           <Icons.Test height={20} width={18} viewBox="0 0 18 20" />
           <span>Tests to run</span>
           <h2>{allTests.length}</h2>
-        </div>
+        </Panel.Header>
         <div
           css={[
             tw`relative flex flex-col gap-y-4 gap-x-2 pt-2 pb-2 pr-6 pl-6`,
@@ -113,7 +113,7 @@ export const TestsToRunModal = () => {
             ))}
           </div>
         </div>
-      </div>
+      </Panel.Content>
     </Panel>
   );
 };
