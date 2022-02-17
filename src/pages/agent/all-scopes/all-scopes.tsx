@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Menu, Icons, Status, Stub, Table, capitalize, Cells, sendAlertEvent,
 } from "@drill4j/ui-kit";
@@ -54,7 +54,8 @@ export const AllScopes = () => {
   ].reduce((acc: string[], item) => (acc.includes(item.type) ? acc : [...acc, item.type]), [])
     .map((type) => ({
       Header: `${capitalize(type)} tests`,
-      accessor: `${type}Tests`,
+      accessor: `coverageByTestType.${type}`,
+      testType: type,
       Cell: ({ row: { original = {} } = {} }: any) => {
         const coverageByTestTypes = transformObjectsArrayToObject(original?.coverage?.byTestType as TestTypeSummary[], "type");
         const testTypeSummary = coverageByTestTypes[type]?.summary;
@@ -71,22 +72,29 @@ export const AllScopes = () => {
         );
       },
       width: "20%",
-      sortType: "number",
     }));
+
+  const data = useMemo(() => scopesData.map((value) => {
+    const res = { ...value };
+    const scopeTestTypes = value?.coverage?.byTestType
+      ?.reduce((acc, testData) => ({ [testData?.type]: testData?.summary?.coverage?.percentage }), {}) as any;
+    res.coverageByTestType = testsColumns.reduce((acc, { testType }) => ({ ...acc, [testType]: scopeTestTypes[testType] || 0 }), {});
+    return res;
+  }), [scopesData]);
 
   return (
     <div>
       <PageHeader tw="gap-x-2 text-24 leading-32 text-monochrome-black">
         <span>All Scopes</span>
         <span tw="text-monochrome-default font-light">
-          {scopesData.length}
+          {data.length}
         </span>
       </PageHeader>
       <div tw="px-6 mt-9">
-        {scopesData.length > 0
+        {data.length > 0
           ? (
             <Table
-              data={scopesData}
+              data={data}
               columnsDependency={[
                 isActiveBuildVersion,
                 activeScope?.coverage.percentage,
