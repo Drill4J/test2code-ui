@@ -157,6 +157,7 @@ export const AssociatedTestModal = () => {
                       >
                         <div tw="flex items-center gap-x-2">
                           <Cells.Highlight
+                            tw="truncate"
                             text={value}
                             searchWords={state.filters.map((filter: {value: string}) => filter.value)}
                             data-test="associated-tests:test:name"
@@ -177,6 +178,7 @@ export const AssociatedTestModal = () => {
                   Cell: ({ value = "-", state }: any) => (value
                     ? (
                       <Cells.Highlight
+                        tw="truncate"
                         text={value}
                         searchWords={state.filters.map((filter: {value: string}) => filter.value)}
                         data-test="associated-tests:test:path"

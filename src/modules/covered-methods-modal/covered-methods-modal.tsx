@@ -158,6 +158,7 @@ export const CoveredMethodsModal = () => {
                       >
                         <div tw="flex items-center gap-x-2">
                           <Cells.Highlight
+                            tw="truncate"
                             text={value}
                             data-test="covered-methods-modal:list:method:name"
                             searchWords={state.filters.map((filter: {value: string}) => filter.value)}
