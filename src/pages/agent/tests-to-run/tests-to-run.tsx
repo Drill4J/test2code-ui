@@ -75,6 +75,19 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
       />
     )), [testsToRun.length]);
 
+  // It need because test that don`t run can have the same (0) percentage & duration & covered methods count  with done tests
+  // And tests that weren`t run should be in the start of table when we sorting DESC
+  const tableData = useMemo(() => transformTests(testsToRun).map((test) => {
+    if (test.toRun) {
+      return {
+        ...test,
+        coverage: { percentage: -1, methodCount: { covered: -1 } },
+        overview: { ...test.overview, duration: -1 },
+      };
+    }
+    return test;
+  }), [testsToRun]);
+
   return (
     <>
       <TestsToRunHeader
@@ -114,7 +127,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         )}
         <div tw="flex flex-col mt-8 flex-grow">
           <Table
-            data={transformTests(testsToRun)}
+            data={tableData}
             stub={tableStub}
             columns={[
               {
