@@ -87,6 +87,7 @@ export const CoveredMethodsModal = () => {
         </div>
         <Modal.Body data-test="covered-methods-table" tw="flex flex-col flex-grow min-h-[1px] pb-4">
           <VirtualizedTable
+            tw="flex flex-col flex-grow min-h-[1px]"
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
                 <div tw="font-bold uppercase">methods</div>
