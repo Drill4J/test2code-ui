@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useRef } from "react";
+import React from "react";
 import {
-  useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, useElementSize, CopyButton, Tooltip,
+  useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, CopyButton, Tooltip,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
@@ -39,13 +39,9 @@ export const AssociatedTestModal = () => {
 
   const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
 
-  const { height: documentHeight } = useElementSize(useRef(document.documentElement));
-  const headerHeight = 64;
-  const packageInfoHeight = 78;
-
   return (
     <Modal onClose={closeModal}>
-      <Modal.Content tw="w-[1024px]" type="info">
+      <Modal.Content tw="max-w-[1024px] w-[80%] max-h-[850px] h-[80%] flex flex-col" type="info">
         <Modal.Header tw="text-20">
           <div tw="space-x-2"><span>Associated Tests</span>
             <span tw="text-monochrome-default">
@@ -79,15 +75,16 @@ export const AssociatedTestModal = () => {
             {isSkeleton ? "" : methodName || "-"}
           </MethodInfoValue>
         </div>
-        <div tw="px-6 pb-4" data-test="associated-tests-table">
+        <div tw="px-6 pb-4 flex flex-col flex-grow min-h-[1px]" data-test="associated-tests-table">
           <VirtualizedTable
+            tw="flex flex-col flex-grow min-h-[1px]"
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
                 <div tw="font-bold uppercase">tests</div>
                 <div>{`Displaying ${currentCount} of ${Number(params.testsCount)} rows`}</div>
               </div>
             )}
-            gridTemplateColumns="400px 456px auto"
+            gridTemplateColumns="1fr 1fr 120px"
             data={tests.map((test) => ({
               ...test,
               details: {
@@ -96,12 +93,10 @@ export const AssociatedTestModal = () => {
                 path: concatTestPath(test?.details?.path, test?.details?.params?.classParams),
               },
             }))}
-            listHeight={(documentHeight * 0.75) - headerHeight - packageInfoHeight}
             listItemSize={40}
             initialRowsCount={Number(params.testsCount)}
             stub={(
               <Stub
-                tw="h-[630px]"
                 icon={<Icons.Test height={104} width={107} />}
                 title="No results found"
                 message="Try adjusting your search or filter to find what you are looking for."
@@ -209,6 +204,6 @@ const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 fo
 
 const MethodInfoValue = styled.div(({ skeleton }: { skeleton?: boolean }) =>
   [
-    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase first-letter:uppercase`,
+    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase`,
     skeleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
   ]);
