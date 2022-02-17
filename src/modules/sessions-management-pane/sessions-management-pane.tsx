@@ -21,7 +21,9 @@ import {
 import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
-import { useActiveSessions } from "hooks";
+import {
+  useActiveSessions, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
+} from "hooks";
 import { agentPluginPath, groupPluginPath } from "admin-routes";
 import { ManagementNewSession } from "./management-new-session";
 import {
@@ -49,14 +51,9 @@ const validateManageSessionsPane = composeValidators(
 export const SessionsManagementPane = () => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation, isNewSession } = useSessionsPaneState();
-  const { pathname } = useLocation();
-  const {
-    params: {
-      agentId = "", groupId = "", buildVersion = "",
-    } = {},
-  } = matchPath<{ agentId: string; groupId: string; buildVersion: string}>(pathname, {
-    path: [agentPluginPath, groupPluginPath],
-  }) || {};
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { groupId } = useGroupRouteParams();
   const agentType = groupId ? "ServiceGroup" : "Agent";
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
