@@ -16,7 +16,7 @@
 import { TestCoverageInfo } from "types";
 
 export const concatTestPath = (path?: string, classParams?: string) => {
-  if (!classParams && !path) return "";
+  if (!classParams && !path) return "-";
   if (!classParams) return path;
 
   return `${path}${classParams}`;
