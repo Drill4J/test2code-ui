@@ -15,8 +15,8 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Panel, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
-  Form, Formik, useCloseModal,
+  Button, Panel, Icons, Spinner, composeValidators, numericLimits, positiveInteger,
+  Form, Formik, useCloseModal, ContentAlert,
 } from "@drill4j/ui-kit";
 
 import tw, { styled } from "twin.macro";
@@ -98,11 +98,11 @@ export const QualityGatePane = () => {
                   )}
                 </Panel.Header>
                 <Panel.Body>
-                  <GeneralAlerts type="INFO" data-test="quality-gate-pane:general-alerts:info">
+                  <ContentAlert tw="mx-6 mt-6" type="INFO" data-test="quality-gate-pane:content-alert:info">
                     {configured && !isEditing
                       ? "Meet all conditions to pass the quality gate."
                       : "Choose the metrics and define their threshold."}
-                  </GeneralAlerts>
+                  </ContentAlert>
                   {configured && !isEditing
                     ? <QualityGateStatus conditionSettingByType={initialValues} results={results} />
                     : <QualityGateSettings conditionSettingByType={values} />}
