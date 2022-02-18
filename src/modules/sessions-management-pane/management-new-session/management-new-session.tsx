@@ -15,7 +15,7 @@
  */
 import React, { useEffect } from "react";
 import {
-  Field, FormGroup, GeneralAlerts, Icons, Tooltip, Fields, Checkbox, useFormikContext,
+  Field, FormGroup, ContentAlert, Icons, Tooltip, Fields, Checkbox, useFormikContext,
 } from "@drill4j/ui-kit";
 import { NavLink } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -37,7 +37,7 @@ export const ManagementNewSession = ({
 
   return (
     <div>
-      <GeneralAlerts type="INFO">
+      <ContentAlert tw="mx-6 mt-6" type="INFO">
         <span data-test="management-new-session:info-general-alert">
           Pay attention that you have to specify Header Mapping in&nbsp;
           {agentId
@@ -60,7 +60,7 @@ export const ManagementNewSession = ({
               </SettingsLink>
             )}
         </span>
-      </GeneralAlerts>
+      </ContentAlert>
       <div tw="grid gap-4 py-4 px-6">
         <FormGroup label="Session ID">
           <Field
