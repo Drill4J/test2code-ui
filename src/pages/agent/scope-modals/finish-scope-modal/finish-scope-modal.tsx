@@ -16,7 +16,7 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent, useQueryParams, ContentAlert,
+  Button, Icons, Modal, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent, useQueryParams, ContentAlert,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 

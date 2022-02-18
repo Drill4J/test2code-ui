@@ -18,7 +18,6 @@ import axios from "axios";
 import {
   Button,
   Modal,
-  GeneralAlerts,
   Spinner,
   Formik,
   Form,
@@ -29,7 +28,7 @@ import {
   sizeLimit,
   required,
   useCloseModal,
-  sendAlertEvent,
+  sendAlertEvent, ContentAlert,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -60,20 +59,6 @@ export const FinishAllScopesModal = () => {
         <Modal.Header>
           <div tw="text-ellipsis">Finish All Scopes</div>
         </Modal.Header>
-        {activeSessions.length > 0 && (
-          <GeneralAlerts type="WARNING">
-            <div>
-              At least one active session has been detected.<br />
-              First, you need to finish it in&nbsp;
-              <Link
-                to={getGroupModalPath({ name: "sessionManagement" })}
-                tw="link text-14"
-              >
-                Sessions Management
-              </Link>
-            </div>
-          </GeneralAlerts>
-        )}
         <Formik
           initialValues={{ hasNewName: false, ignoreScope: false, scopesName: "" }}
           validate={validate}
@@ -118,6 +103,20 @@ export const FinishAllScopesModal = () => {
           {({ values: { hasNewName }, isValid }) => (
             <Form>
               <Modal.Body tw="text-14 leading-24">
+                {activeSessions.length > 0 && (
+                  <ContentAlert tw="mb-6" type="WARNING">
+                    <div>
+                      At least one active session has been detected.<br />
+                      First, you need to finish it in&nbsp;
+                      <Link
+                        to={getGroupModalPath({ name: "sessionManagement" })}
+                        tw="link text-14"
+                      >
+                        Sessions Management
+                      </Link>
+                    </div>
+                  </ContentAlert>
+                )}
                 <span>
                   You are about to finish active scopes of all
                   {` ${agentsSummaries.length} `}
