@@ -76,7 +76,6 @@ export const AssociatedTestModal = () => {
         </div>
         <div tw="px-6 pb-4 flex flex-col flex-grow min-h-[1px]" data-test="associated-tests-table">
           <VirtualizedTable
-            tw="flex flex-col flex-grow min-h-[1px]"
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
                 <div tw="font-bold uppercase">tests</div>
