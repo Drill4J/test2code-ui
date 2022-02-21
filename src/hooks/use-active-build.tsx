@@ -17,6 +17,9 @@ import { AgentBuildInfo } from "@drill4j/types-admin";
 import { useAdminConnection } from "./use-admin-connection";
 
 export function useActiveBuild(id: string): AgentBuildInfo | null {
+  if (!id) {
+    return null;
+  }
   const [build = null] = useAdminConnection<AgentBuildInfo[]>(`/api/agent/${id}/builds`) || [];
   return build;
 }

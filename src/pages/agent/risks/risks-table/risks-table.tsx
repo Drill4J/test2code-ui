@@ -21,9 +21,9 @@ import {
 import { Link } from "react-router-dom";
 import "twin.macro";
 
-import { getModalPath, getPagePath } from "common";
+import { getModalPath } from "common";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoverageCell } from "../../methods-table/coverage-cell";
-import { useTestToCodeRouteParams } from "../../../../hooks";
 
 interface Props {
   data: Risk[];
@@ -32,6 +32,7 @@ interface Props {
 
 export const RisksTable = ({ data }: Props) => {
   const { buildVersion } = useTestToCodeRouteParams();
+  const { getPagePath } = useNavigation();
   const columns = [
     {
       Header: "Name",

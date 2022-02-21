@@ -13,12 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export {
-  COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR,
-  TESTS_TYPES_COLOR, AGENT_STATUS, PLUGIN_ID, BUILD_STATUS,
-} from "./constants";
-export { routes, getAdminPath } from "./get-page-path";
-export { defaultAdminSocket, test2CodePluginSocket } from "./connections";
-export { modalsRoutes, getModalPath } from "./get-modal-path";
-export { getGroupModalPath, groupModalsRoutes } from "./get-group-modal";
+export const getAdminPath = (pathname: string) => {
+  const path = pathname.split("test2code")[0];
+  return path.slice(-1) === "/" ? `${path}test2code` : `${path}/test2code`;
+};

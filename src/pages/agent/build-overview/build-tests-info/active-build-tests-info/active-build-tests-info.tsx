@@ -17,13 +17,13 @@ import React, { useRef } from "react";
 import {
   Legend, Tooltip, useElementSize,
 } from "@drill4j/ui-kit";
-import { useParams } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 
 import tw, { styled } from "twin.macro";
 
 import { DATA_VISUALIZATION_COLORS } from "common/constants";
 import { TestsInfo } from "types/tests-info";
+import { useTestToCodeRouteParams } from "hooks";
 
 interface Props {
   testsInfo: TestsInfo;
@@ -56,7 +56,7 @@ export const ActiveBuildTestsInfo = ({ testsInfo }: Props) => {
   const autoTestsBarWidth = (autoTestsCount / testsExecuted) * width;
   const manualTestsBarWidth = (manualTestsCount / testsExecuted) * width;
   const minBarWidth = 4;
-  const { scopeId = "" } = useParams<{ scopeId?: string }>();
+  const { scopeId = "" } = useTestToCodeRouteParams();
 
   return (
     <div tw="text-12 leading-16 text-monochrome-default" ref={ref}>

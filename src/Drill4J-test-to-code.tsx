@@ -24,7 +24,6 @@ import { Agent, Group } from "pages";
 import { agentDashboardPath, groupDashboardPath } from "admin-routes";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import { GroupRootComponentProps } from "./pages/group/group";
-import { routes } from "./common";
 import pkj from "../package.json";
 
 import "./index.css";
@@ -150,5 +149,3 @@ export const GroupPlugin = {
   update: GroupPluginLifecycle.update,
   bootstrap: GroupPluginLifecycle.bootstrap,
 };
-
-export const Routes = { ...routes };

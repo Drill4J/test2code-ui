@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 import { matchPath, useLocation } from "react-router-dom";
-import { groupDashboardPath, groupPluginPath } from "admin-routes";
+
+import {
+  groupPluginPath, groupDashboardPath,
+} from "admin-routes";
 
 export const useGroupRouteParams = (): { groupId: string; pluginId: string } => {
   const { pathname } = useLocation();

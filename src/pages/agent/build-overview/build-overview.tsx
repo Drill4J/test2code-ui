@@ -20,11 +20,10 @@ import {
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { getPagePath } from "common";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
-import { useTestToCodeRouteParams } from "../../../hooks";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2`}
@@ -34,6 +33,7 @@ export const BuildOverview = () => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
+  const { getPagePath } = useNavigation();
 
   return (
     <>

@@ -14,3 +14,4 @@
  * limitations under the License.
  */
 export { transformTests } from "./transform-tests";
+export { getAdminPath } from "./get-admin-path";

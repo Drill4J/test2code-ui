@@ -22,8 +22,10 @@ import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { getModalPath, getPagePath } from "common";
-import { useActiveSessions, useAgentRouteParams, useTestToCodeRouteParams } from "hooks";
+import { getModalPath } from "common";
+import {
+  useActiveSessions, useAgentRouteParams, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
 
 interface Props {
   scope: ActiveScope | null;
@@ -41,7 +43,9 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
     id: scopeId = "",
     coverage: { percentage = 0 } = {},
   } = scope || {};
+  const { getPagePath } = useNavigation();
   const { push } = useHistory();
+
   return (
     <Content>
       <div>
