@@ -38,7 +38,7 @@ export const BuildOverview = () => {
   return (
     <>
       <CoveragePluginHeader />
-      <div tw="px-6">
+      <div tw="px-6 flex flex-col flex-grow">
         <div tw="flex gap-x-6 mt-6 mb-4 border-b border-monochrome-medium-tint">
           {/* !activeTab expressions means that t is default active tab */}
           <Tab
