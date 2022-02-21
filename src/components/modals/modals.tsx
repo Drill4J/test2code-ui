@@ -23,7 +23,7 @@ import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "pages/agen
 import { BaselineBuildModal } from "pages/agent/baseline-build-modal";
 import { GetSuggestedTestsModal } from "pages/agent/tests-to-run/tests-to-run-header/get-suggested-tests-modal";
 import { FinishAllScopesModal } from "../../pages/group/finish-all-scopes-modal";
-import { TestsToRunModal } from "../tests-to-run-modal";
+import { TestsToRunPanel } from "../tests-to-run-panel";
 
 export const agentModalsNames = {
   RENAME_SCOPE: "RENAME_SCOPE",
@@ -52,7 +52,7 @@ const modals: Record<ModalsType, any> = {
   BASELINE_BUILD: BaselineBuildModal,
   GET_SUGGESTED_TESTS: GetSuggestedTestsModal,
   FINISH_ALL_SCOPES: FinishAllScopesModal,
-  TESTS_TO_RUN: TestsToRunModal,
+  TESTS_TO_RUN: TestsToRunPanel,
 };
 
 export const Modals = () => {
