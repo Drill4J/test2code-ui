@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useRef } from "react";
+import React from "react";
 import {
-  Modal, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, useElementSize, CopyButton,
+  Modal, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, CopyButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -42,15 +42,12 @@ export const CoveredMethodsModal = () => {
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
 
-  const { height: documentHeight } = useElementSize(useRef(document.documentElement));
-  const headerHeight = 64;
-  const methodInfoHeight = 78;
   const testName = concatTestName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
   const testPath = concatTestName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
 
   return (
     <Modal onClose={closeModal}>
-      <Modal.Content tw="w-[1024px]" type="info">
+      <Modal.Content tw="max-w-[1024px] w-[80%] max-h-[850px] h-[80%] flex flex-col" type="info">
         <Modal.Header tw="text-20">
           <div tw="space-x-2">
             <span>Covered Methods</span>
@@ -75,10 +72,10 @@ export const CoveredMethodsModal = () => {
           </MethodInfoValue>
           <MethodInfoValue
             skeleton={showSkeleton}
-            title={testPath}
+            title={testPath || "-"}
             data-test="covered-methods-modal:test-path"
           >
-            {testPath}
+            {testPath || "-"}
           </MethodInfoValue>
           <MethodInfoValue
             tw="lowercase first-letter:uppercase"
@@ -88,7 +85,7 @@ export const CoveredMethodsModal = () => {
             {testSummary?.testType}
           </MethodInfoValue>
         </div>
-        <Modal.Body data-test="covered-methods-table">
+        <Modal.Body data-test="covered-methods-table" tw="flex flex-col flex-grow min-h-[1px] pb-4">
           <VirtualizedTable
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-between text-monochrome-default text-14 leading-24 pt-5 pb-3">
@@ -96,13 +93,11 @@ export const CoveredMethodsModal = () => {
                 <div>{`Displaying ${currentCount} of ${Number(params.coveredMethods)} rows`}</div>
               </div>
             )}
-            gridTemplateColumns="677px 115px auto"
+            gridTemplateColumns="1fr 120px 184px"
             data={coveredMethods}
-            listHeight={(documentHeight * 0.75) - headerHeight - methodInfoHeight}
             initialRowsCount={Number(params.coveredMethods)}
             stub={(
               <Stub
-                tw="h-[630px]"
                 icon={<Icons.Function height={104} width={107} />}
                 title="No results found"
                 message="Try adjusting your search or filter to find what you are looking for."
@@ -162,6 +157,7 @@ export const CoveredMethodsModal = () => {
                       >
                         <div tw="flex items-center gap-x-2">
                           <Cells.Highlight
+                            tw="truncate"
                             text={value}
                             data-test="covered-methods-modal:list:method:name"
                             searchWords={state.filters.map((filter: {value: string}) => filter.value)}
