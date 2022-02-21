@@ -89,7 +89,7 @@ export const QualityGatePane = () => {
 
             return (
               <Form tw="flex flex-col h-full font-regular">
-                <Panel.Header>
+                <Panel.Header tw="flex gap-x-2 justify-between">
                   <div tw="text-20 leading-32" data-test="quality-gate-pane:header-title">Quality Gate</div>
                   {configured && !isEditing && (
                     <StatusIconWrapper status={status}>
