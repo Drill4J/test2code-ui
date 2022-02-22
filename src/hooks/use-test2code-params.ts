@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 import { matchPath, useLocation } from "react-router-dom";
-import { routes } from "common";
-import { getAgentRoutePath } from "admin-routes";
+import { useNavigation } from "./use-navigation";
 
 interface Params {
   scopeId: string;
@@ -24,8 +23,9 @@ interface Params {
 
 export const useTestToCodeRouteParams = ():Params => {
   const { pathname } = useLocation();
+  const { routes } = useNavigation();
   const { params: { scopeId = "", buildVersion = "" } = {} } = matchPath<Partial<Params>>(pathname, {
-    path: [...Object.values(routes).map((route) => getAgentRoutePath(route))],
+    path: Object.values(routes),
   }) || {};
   return { scopeId, buildVersion };
 };

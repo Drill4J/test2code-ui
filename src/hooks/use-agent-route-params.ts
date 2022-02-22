@@ -15,7 +15,7 @@
  */
 import { matchPath, useLocation } from "react-router-dom";
 import {
-  agentDashboardPath, agentPluginPath, groupPluginPath, groupDashboardPath,
+  agentPluginPath, agentDashboardPath, groupPluginPath, groupDashboardPath,
 } from "admin-routes";
 
 interface Params {

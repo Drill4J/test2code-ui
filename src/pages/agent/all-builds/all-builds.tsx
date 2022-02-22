@@ -20,12 +20,12 @@ import { Table, Typography, dateTimeFormatter } from "@drill4j/ui-kit";
 import { BuildVersion } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
-import { useAdminConnection, useAgentRouteParams } from "hooks";
+import { useAdminConnection, useAgentRouteParams, useNavigation } from "hooks";
 import { PageHeader } from "components";
-import { getPagePath } from "common";
 
 export const AllBuilds = () => {
   const { agentId } = useAgentRouteParams();
+  const { getPagePath } = useNavigation();
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
 
   return (

@@ -17,20 +17,19 @@ import React from "react";
 import {
   useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, CopyButton, Tooltip,
 } from "@drill4j/ui-kit";
+import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { concatTestPath, concatTestName } from "utils/transform-tests";
-import { Link } from "react-router-dom";
-import { getPagePath } from "../../common";
 
 export const AssociatedTestModal = () => {
   const { scopeId, buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
-
+  const { getPagePath } = useNavigation();
   const isSkeleton = Object.keys(associatedTests).length === 0;
 
   const {

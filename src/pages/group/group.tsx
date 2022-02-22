@@ -21,11 +21,13 @@ import tw, { styled } from "twin.macro";
 import axios from "axios";
 
 import {
-  PLUGIN_ID, getGroupModalPath, routes as agentRoutes, test2CodePluginSocket,
+  PLUGIN_ID, getGroupModalPath, test2CodePluginSocket,
 } from "common";
 import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
+// eslint-disable-next-line import/named
+import { routesWithoutAdminPath } from "hooks/use-navigation";
 
 import { ScopeSummary } from "types";
 import { AgentInfo } from "@drill4j/types-admin";
@@ -144,7 +146,7 @@ export const Group = ({ getAgentPluginPath, openSettingsPanel, getAgentDashboard
             <TestToCodeCell
               value={value?.count}
               name="tests-to-run"
-              link={getAgentPluginPath({ agentId, path: agentRoutes.testsToRun.replace(":buildVersion", buildVersion) })}
+              link={getAgentPluginPath({ agentId, path: routesWithoutAdminPath.testsToRun.replace(":buildVersion", buildVersion) })}
             />
           )}
           HeaderCell={() => (
@@ -169,7 +171,7 @@ export const Group = ({ getAgentPluginPath, openSettingsPanel, getAgentDashboard
                     Content: ({ children }: { children: JSX.Element }) => (
                       <Link to={getAgentPluginPath({
                         agentId: agent.id,
-                        path: agentRoutes.allBuilds.replace(":buildVersion", agent.buildVersion),
+                        path: routesWithoutAdminPath.allBuilds.replace(":buildVersion", agent.buildVersion),
                       })}
                       >
                         {children}

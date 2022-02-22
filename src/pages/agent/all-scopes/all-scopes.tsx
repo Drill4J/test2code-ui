@@ -17,7 +17,7 @@ import React, { useMemo } from "react";
 import {
   Menu, Icons, Status, Stub, Table, capitalize, Cells, sendAlertEvent,
 } from "@drill4j/ui-kit";
-import { useParams, Link, useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   percentFormatter, dateFormatter, timeFormatter, transformObjectsArrayToObject,
 } from "@drill4j/common-utils";
@@ -25,21 +25,25 @@ import tw from "twin.macro";
 
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
-import { useActiveBuild, useActiveScope, useBuildVersion } from "hooks";
+import {
+  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
 import { BUILD_STATUS } from "common/constants";
-import { getModalPath, getPagePath } from "common";
+import { getModalPath } from "common";
 import { BuildCoverage } from "types/build-coverage";
+import { PageHeader } from "components";
 import { toggleScope } from "../api";
 import { ScopeTimer } from "../scope-overview/scope-timer";
-import { PageHeader } from "../../../components";
 
 export const AllScopes = () => {
-  const { buildVersion = "", agentId = "" } = useParams<{ buildVersion: string; agentId?: string; }>();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
   const { push } = useHistory();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const activeScope = useActiveScope();
   const scopes = useBuildVersion<ScopeSummary[]>("/build/scopes/finished") || [];
   const { byTestType = [] } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
+  const { getPagePath } = useNavigation();
   scopes.sort(
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
   );

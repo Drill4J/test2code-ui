@@ -22,14 +22,17 @@ import { useHistory, Link } from "react-router-dom";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import {
+  useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
 import { ActiveSessions } from "types/active-sessions";
-import { getModalPath, getPagePath } from "common";
+import { getModalPath } from "common";
 import { deleteScope } from "../../api";
 
 export const DeleteScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const { getPagePath } = useNavigation();
   const { scopeId } = useQueryParams<{scopeId?: string;}>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const { push, location: { pathname = "" } } = useHistory();

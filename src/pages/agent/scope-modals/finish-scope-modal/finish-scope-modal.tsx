@@ -22,8 +22,10 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
-import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
-import { getModalPath, getPagePath } from "common";
+import {
+  useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
+import { getModalPath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
@@ -34,6 +36,7 @@ export const FinishScopeModal = () => {
   const {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
+  const { getPagePath } = useNavigation();
   const { testTypes: activeSessionTest = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [loading, setLoading] = useState(false);
   const testsCount = scope
@@ -42,6 +45,7 @@ export const FinishScopeModal = () => {
   const { push, location: { pathname = "" } } = useHistory();
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
   const closeModal = useCloseModal("/finish-scope-modal", ["scopeId"]);
+
   return (
     <Modal onClose={closeModal}>
       <Modal.Content tw="w-108" type="info">

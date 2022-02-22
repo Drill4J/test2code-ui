@@ -18,13 +18,11 @@ import {
   Form, Formik, Panel, Icons, composeValidators, sizeLimit,
   required, handleFieldErrors, Stub, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
 import {
   useActiveSessions, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
 } from "hooks";
-import { agentPluginPath, groupPluginPath } from "admin-routes";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,

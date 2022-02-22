@@ -35,12 +35,14 @@ export function useBuildVersion<T>(
   const [data, setData] = useState<T | null>(null);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const hasBuildVersion = buildVersion || message.buildVersion;
+
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);
     }
 
-    const unsubscribe = test2CodePluginSocket.subscribe(
+    const unsubscribe = hasBuildVersion && agentId && test2CodePluginSocket.subscribe(
       topic,
       handleDataChange,
       {
@@ -52,7 +54,7 @@ export function useBuildVersion<T>(
     );
 
     return () => {
-      unsubscribe();
+      unsubscribe && unsubscribe();
     };
   }, [message.buildVersion, message.agentId,
     message.output, agentId, buildVersion, topic,

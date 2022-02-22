@@ -27,12 +27,12 @@ interface Routes {
 }
 
 export const routes = {
-  overview: "/builds/:buildVersion/overview",
-  scope: "/builds/:buildVersion/scopes/:scopeId",
-  testsToRun: "/builds/:buildVersion/tests-to-tun",
-  allScopes: "/builds/:buildVersion/scopes",
-  risks: "/builds/:buildVersion/risks",
-  allBuilds: "/builds",
+  overview: `${getAdminPath()}/builds/:buildVersion/overview`,
+  scope: `${getAdminPath()}/builds/:buildVersion/scopes/:scopeId`,
+  testsToRun: `${getAdminPath()}/builds/:buildVersion/tests-to-tun`,
+  allScopes: `${getAdminPath()}/builds/:buildVersion/scopes`,
+  risks: `${getAdminPath()}/builds/:buildVersion/risks`,
+  allBuilds: `${getAdminPath()}/builds`,
 };
 
 export const router = createRouter<Routes>(routes);
@@ -47,9 +47,14 @@ interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
 export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({
   name, params, queryParams,
 }: Path<PageName, AppPages>): string => {
-  const path = `${window.location.pathname.split("test2code")[0]}test2code${getPage(router, name as any, params as any)}`;
+  const path = getPage(router, name as any, params as any);
   if (queryParams) {
     return `${path}?${queryString.stringify(queryParams)}`;
   }
   return path;
 };
+
+export function getAdminPath() {
+  const path = window.location.pathname.split("test2code")[0];
+  return path.slice(-1) === "/" ? `${path}test2code` : `${path}/test2code`;
+}

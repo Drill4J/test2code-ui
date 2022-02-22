@@ -15,14 +15,13 @@
  */
 import React from "react";
 import { Icons, Tab, useQueryParams } from "@drill4j/ui-kit";
-import { useHistory, Redirect, useParams } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import {
-  useActiveBuild, useActiveScope, useBuildVersion,
+  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
 } from "hooks";
-import { getPagePath } from "common";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
 import { ScopeTestsInfo } from "./scope-tests-info";
@@ -30,10 +29,9 @@ import { ScopeTestsInfo } from "./scope-tests-info";
 export const ScopeOverview = () => {
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
-
-  const {
-    scopeId = "", buildVersion = "", agentId = "",
-  } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
+  const { getPagePath } = useNavigation();
+  const { scopeId, buildVersion } = useTestToCodeRouteParams();
+  const { agentId } = useAgentRouteParams();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
 

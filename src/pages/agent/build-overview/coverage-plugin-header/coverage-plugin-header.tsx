@@ -23,11 +23,11 @@ import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useBuildVersion, useNavigation, usePreviousBuildCoverage, useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { getModalPath, getPagePath } from "common";
+import { getModalPath } from "common";
 import { Risk } from "types";
 import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
@@ -36,6 +36,7 @@ import { BaselineTooltip } from "./baseline-tooltip";
 export const CoveragePluginHeader = () => {
   const { agentId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const { getPagePath } = useNavigation();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
   const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];

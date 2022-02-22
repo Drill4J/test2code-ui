@@ -15,13 +15,14 @@
  */
 import React from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
-import { Route, Switch, Redirect } from "react-router-dom";
-import { getAgentRoutePath } from "admin-routes";
+import {
+  Route, Switch, Redirect, useLocation,
+} from "react-router-dom";
 import "twin.macro";
 
-import { getPagePath, routes } from "common";
+import { getAdminPath } from "utils";
 import { Modals, Breadcrumbs } from "components";
-import { useActiveBuild, useAgentRouteParams } from "hooks";
+import { useActiveBuild, useAgentRouteParams, useNavigation } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
@@ -32,8 +33,10 @@ import { AllBuilds } from "./all-builds";
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useActiveBuild(agentId) || {};
+  const { routes, getPagePath } = useNavigation();
+  const { pathname } = useLocation();
 
-  if (!buildVersion) { // Add spinner
+  if (!buildVersion) { // TODO Add spinner
     return null;
   }
 
@@ -43,7 +46,7 @@ export const Agent = () => {
       <Switch>
         <Route
           exact
-          path={getAgentRoutePath("/")}
+          path={getAdminPath(pathname)}
           render={() => (
             <Redirect
               to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
@@ -52,20 +55,20 @@ export const Agent = () => {
         />
         <Route
           exact
-          path={getAgentRoutePath(routes.allBuilds)}
+          path={routes.allBuilds}
           component={AllBuilds}
         />
         <Route
-          path={getAgentRoutePath(routes.overview)}
+          path={routes.overview}
           component={BuildOverview}
         />
         <Route
-          path={getAgentRoutePath(routes.scope)}
+          path={routes.scope}
           component={ScopeOverview}
         />
-        <Route path={getAgentRoutePath(routes.allScopes)} component={AllScopes} />
+        <Route path={routes.allScopes} component={AllScopes} />
         <Route
-          path={getAgentRoutePath(routes.risks)}
+          path={routes.risks}
           render={() => (
             <TableActionsProvider defaultState={{
               search: [],
@@ -78,7 +81,7 @@ export const Agent = () => {
           )}
         />
         <Route
-          path={getAgentRoutePath(routes.testsToRun)}
+          path={routes.testsToRun}
           render={() => (
             <TableActionsProvider>
               <TestsToRun />

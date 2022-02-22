@@ -21,13 +21,13 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
-import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
-import { getPagePath } from "common";
+import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { MethodsDetails } from "types";
 import { concatTestName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
   const { scopeId } = useTestToCodeRouteParams();
+  const { getPagePath } = useNavigation();
 
   const { buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; coveredMethods?: number}>();

@@ -13,62 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useMemo } from "react";
 import {
-  Link, Switch, useLocation, Route,
+  Link, Switch, Route,
 } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { PLUGIN_ID, routes } from "common";
-import { useTestToCodeRouteParams } from "hooks";
-import { getAgentRoutePath } from "admin-routes";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
 
 interface CrumbType {
   content: string;
-  path: string;
+  link: string;
 }
 
-const allBuildCrumb = { content: "All builds", path: routes.allBuilds };
-const buildCrumb = { content: ":buildVersion", path: routes.overview };
-const testsToRunCrumb = { content: "Tests to Run", path: routes.testsToRun };
-const allScopesCrumb = { content: "All Scopes", path: routes.allScopes };
-const scopeCrumb = { content: ":scopeId", path: routes.scope };
-const risksCrumb = { content: "Risks", path: routes.risks };
+export const Breadcrumbs = () => {
+  const { routes } = useNavigation();
+  const {
+    testsToRunCrumb, allBuildCrumb, scopeCrumb, risksCrumb, buildCrumb, allScopesCrumb,
+  } = useMemo(() => ({
+    allBuildCrumb: { content: "All builds", link: routes.allBuilds },
+    buildCrumb: { content: ":buildVersion", link: routes.overview },
+    testsToRunCrumb: { content: "Tests to Run", link: routes.testsToRun },
+    allScopesCrumb: { content: "All Scopes", link: routes.allScopes },
+    scopeCrumb: { content: ":scopeId", link: routes.scope },
+    risksCrumb: { content: "Risks", link: routes.risks },
+  }), [routes]);
 
-const Routes = [
-  { path: routes.overview, crumbs: [allBuildCrumb, buildCrumb] },
-  { path: routes.risks, crumbs: [allBuildCrumb, buildCrumb, risksCrumb] },
-  { path: routes.testsToRun, crumbs: [allBuildCrumb, buildCrumb, testsToRunCrumb] },
-  { path: routes.allScopes, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb] },
-  { path: routes.scope, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb, scopeCrumb] },
-  { path: routes.allBuilds, crumbs: [{ content: "Test2Code Plugin", path: "/" }] },
-];
+  const Routes = useMemo(() => [
+    { path: routes.overview, crumbs: [allBuildCrumb, buildCrumb] },
+    { path: routes.risks, crumbs: [allBuildCrumb, buildCrumb, risksCrumb] },
+    { path: routes.testsToRun, crumbs: [allBuildCrumb, buildCrumb, testsToRunCrumb] },
+    { path: routes.allScopes, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb] },
+    { path: routes.scope, crumbs: [allBuildCrumb, buildCrumb, allScopesCrumb, scopeCrumb] },
+    { path: routes.allBuilds, crumbs: [{ content: "Test2Code Plugin", link: "/" }] },
+  ], [routes]);
+  return (
+    <Switch>
+      {Routes.map((route) => (
+        <Route
+          key={route.path}
+          exact
+          path={route.path}
+          render={() => <RouteCrumbs crumbs={route.crumbs} />}
+        />
+      ))}
+    </Switch>
+  );
+};
 
-export const Breadcrumbs = () => (
-  <Switch>
-    {Routes.map((route) => (
-      <Route
-        key={route.path}
-        exact
-        path={getAgentRoutePath(route.path)}
-        render={() => <RouteCrumbs crumbs={route.crumbs} path={route.path} />}
-      />
-    ))}
-  </Switch>
-);
-
-const RouteCrumbs = ({ crumbs }: {crumbs: CrumbType[]; path: string}) => {
-  const { pathname } = useLocation();
-
-  const { adminPath } = dividePathname(pathname);
+const RouteCrumbs = ({ crumbs }: {crumbs: CrumbType[];}) => {
   const { buildVersion, scopeId } = useTestToCodeRouteParams();
   const prepareLink = replaceLinkValues({ buildVersion, scopeId });
   const prepareContent = getContent({ buildVersion, scopeId });
-
   return (
     <BreadcrumbsContainer>
       {crumbs.map((crumb) => {
-        const link = `${adminPath}${prepareLink(crumb.path)}`;
+        const link = prepareLink(crumb.link);
         const content = prepareContent(crumb.content);
 
         return (
@@ -111,11 +111,6 @@ const CrumbLink = styled.div`
     ${tw`hover:text-blue-medium-tint active:text-blue-shade`};
   }
 `;
-
-const dividePathname = (pathname: string) => {
-  const [adminPath = "", test2codePath = ""] = pathname.split(`/${PLUGIN_ID}/`);
-  return { adminPath: `${adminPath}/${PLUGIN_ID}`, test2codePath };
-};
 
 const replaceLinkValues = ({ buildVersion, scopeId }: {buildVersion: string, scopeId: string}) =>
   (link: string) => link
