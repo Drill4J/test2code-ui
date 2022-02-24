@@ -51,7 +51,7 @@ export const RenameScopeModal = () => {
         <Formik
           onSubmit={(values) => renameScope(agentId, pluginId, {
             onSuccess: () => {
-              sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed" });
+              sendAlertEvent({ type: "SUCCESS", title: "Scope name has been changed." });
               closeModal();
             },
             onError: message => sendAlertEvent({ type: "ERROR", title: message }),

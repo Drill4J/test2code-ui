@@ -219,7 +219,7 @@ export const AllScopes = () => {
                           onError: () => {
                             sendAlertEvent({
                               type: "ERROR",
-                              title: "There is some issue with your action. Please try again later",
+                              title: "There is some issue with your action. Please try again later.",
                             });
                           },
                         })(id),

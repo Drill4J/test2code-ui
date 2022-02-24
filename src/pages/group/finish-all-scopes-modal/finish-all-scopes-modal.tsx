@@ -81,7 +81,7 @@ export const FinishAllScopesModal = () => {
                       },
                     })({ id: scopesIds[i], name: scopesName } as ScopeSummary)));
               } catch (e) {
-                sendAlertEvent({ type: "ERROR", title: e.message || "Rename scopes failed" });
+                sendAlertEvent({ type: "ERROR", title: e.message || "Rename scopes failed." });
                 hasError = true;
               }
             }
@@ -90,7 +90,8 @@ export const FinishAllScopesModal = () => {
                 onSuccess: () => {
                   sendAlertEvent({
                     type: "SUCCESS",
-                    title: `${agentsSummaries.length > 1 ? `(${agentsSummaries.length}) Scopes` : "Scope"} have been successfully finished`,
+                    title: `${agentsSummaries.length > 1 ? `(${agentsSummaries.length}) Scopes` : "Scope"} 
+                    have been successfully finished.`,
                   });
                   closeModal();
                 },

@@ -90,7 +90,7 @@ export const Group = ({ getAgentPluginPath, openSettingsPanel, getAgentDashboard
     } catch (error) {
       sendAlertEvent({
         type: "ERROR",
-        title: "There is some issue with your action. Please try again later",
+        title: "There is some issue with your action. Please try again later.",
       });
     }
   };
