@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Field, FormGroup, ContentAlert, Icons, Tooltip, Fields, Checkbox, useFormikContext,
 } from "@drill4j/ui-kit";
-import { NavLink } from "react-router-dom";
 import tw, { styled } from "twin.macro";
+import { SetPanelContext } from "../../../Drill4J-test-to-code";
+import { useAdminConnection, useAgent } from "../../../hooks";
 
 interface Props {
   agentId: string;
@@ -35,6 +36,21 @@ export const ManagementNewSession = ({
     setErrors({});
   }, []);
 
+  const setPanel = useContext(SetPanelContext);
+  const agent = useAgent(agentId);
+  const group = useAdminConnection(`/api/groups/${serviceGroupId}`) || {};
+
+  const linkToSettingsHandler = () => {
+    agentId ?
+      setPanel({
+        type: "SETTINGS",
+        payload: { ...agent, tab: "system" },
+      }) : setPanel({
+        type: "SETTINGS",
+        payload: { ...Object(group), agentType: "Group", tab: "system" },
+      });
+  };
+
   return (
     <div>
       <ContentAlert tw="mx-6 mt-6" type="INFO">
@@ -44,17 +60,16 @@ export const ManagementNewSession = ({
             ? (
               <SettingsLink
                 tw="link"
-                to={`/agents/${agentId}/general-settings`}
                 data-test="management-new-session:settings-link:agent"
-              >
-                Agent Settings
+                onClick={linkToSettingsHandler}
+              >Agent Settings
               </SettingsLink>
             )
             : (
               <SettingsLink
                 tw="link"
-                to={`/agents/group/${serviceGroupId}/general-settings`}
                 data-test="management-new-session:settings-link:service-group"
+                onClick={linkToSettingsHandler}
               >
                 Service Group Settings
               </SettingsLink>
@@ -140,6 +155,6 @@ const Label = styled.label<{disabled: boolean}>`
   ${({ disabled }) => disabled && tw`opacity-30 pointer-events-none`}
 `;
 
-const SettingsLink = styled(NavLink)`
+const SettingsLink = styled.button`
   ${tw`font-bold`}
 `;
