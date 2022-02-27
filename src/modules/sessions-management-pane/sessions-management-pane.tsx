@@ -126,6 +126,7 @@ export const SessionsManagementPane = () => {
                   <BulkOperationWarning
                     agentId={id}
                     agentType={agentType}
+                    activeSessionsCount={activeSessions.length}
                   />
                 ) : (
                   <ActionsPanel
