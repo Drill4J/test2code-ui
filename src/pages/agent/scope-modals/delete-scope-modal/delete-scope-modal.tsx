@@ -98,7 +98,7 @@ export const DeleteScopeModal = () => {
                     setLoading(true);
                     await deleteScope(agentId, pluginId, {
                       onSuccess: () => {
-                        sendAlertEvent({ type: "SUCCESS", title: "Scope has been deleted" });
+                        sendAlertEvent({ type: "SUCCESS", title: "Scope has been deleted." });
                         closeModal();
                         scope?.id && pathname.includes(scope.id)
                         && push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }));

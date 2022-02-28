@@ -53,11 +53,11 @@ export function updateQualityGateSettings(
           },
         ],
       });
-      sendAlertEvent({ type: "SUCCESS", title: "Quality Gate has been saved" });
+      sendAlertEvent({ type: "SUCCESS", title: "Quality Gate has been saved." });
     } catch ({ response: { data: { message } = {} } = {} }) {
       sendAlertEvent({
         type: "ERROR",
-        title: message || "On-submit error. Server problem or operation could not be processed in real-time",
+        title: message || "On-submit error. Server problem or operation could not be processed in real-time.",
       });
     }
   };

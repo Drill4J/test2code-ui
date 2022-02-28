@@ -15,8 +15,6 @@
  */
 import React, { useState } from "react";
 
-import { ActiveSessions } from "types";
-import { useBuildVersion } from "hooks";
 import { useSessionsPaneDispatch, useSessionsPaneState, setBulkOperation } from "../store";
 import { OperationActionWarning } from "../operation-action-warning";
 import { abortAllSession, finishAllSession } from "../sessions-management-pane-api";
@@ -24,15 +22,15 @@ import { abortAllSession, finishAllSession } from "../sessions-management-pane-a
 interface Props {
   agentType: string;
   agentId: string;
+  activeSessionsCount: number;
 }
 
 export const BulkOperationWarning = ({
-  agentId, agentType,
+  agentId, agentType, activeSessionsCount,
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation: { operationType } } = useSessionsPaneState();
   const [loading, setLoading] = useState(false);
-  const activeSessions = (useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions"));
 
   return (
     <>
@@ -40,7 +38,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await abortAllSession({ agentType, agentId }, activeSessions?.count);
+            await abortAllSession({ agentType, agentId }, activeSessionsCount);
             dispatch(setBulkOperation("abort", false));
           }}
           handleDecline={() => dispatch(setBulkOperation(operationType, false))}
@@ -53,7 +51,7 @@ export const BulkOperationWarning = ({
         <OperationActionWarning
           handleConfirm={async () => {
             setLoading(true);
-            await finishAllSession({ agentType, agentId }, activeSessions?.count);
+            await finishAllSession({ agentType, agentId }, activeSessionsCount);
             dispatch(setBulkOperation("finish", false));
           }}
           handleDecline={() => dispatch(setBulkOperation("finish", false))}

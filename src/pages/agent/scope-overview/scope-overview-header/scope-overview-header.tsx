@@ -64,7 +64,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
         onError: () => {
           sendAlertEvent({
             type: "ERROR",
-            title: "There is some issue with your action. Please try again later",
+            title: "There is some issue with your action. Please try again later.",
           });
         },
       })(scopeId),

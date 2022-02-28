@@ -19,7 +19,7 @@ import { sendAlertEvent } from "@drill4j/ui-kit";
 
 export const finishAllSession = async (
   { agentId, agentType }: { agentId: string, agentType: string },
-  sessionCount = 0,
+  sessionCount: number,
 ): Promise<void> => {
   try {
     await axios.post(`/${agentType === "ServiceGroup" ? "groups" : "agents"}/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {

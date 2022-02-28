@@ -63,8 +63,8 @@ export const FinishScopeModal = () => {
                 sendAlertEvent({
                   type: "SUCCESS",
                   title: scope?.coverage.percentage
-                    ? "Scope has been finished"
-                    : "Scope has been finished and deleted",
+                    ? "Scope has been finished."
+                    : "Scope has been finished and deleted.",
                 });
                 closeModal();
               },
