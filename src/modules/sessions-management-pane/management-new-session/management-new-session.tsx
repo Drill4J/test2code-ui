@@ -19,16 +19,18 @@ import {
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 import { SetPanelContext } from "common";
-import { useAdminConnection, useAgent } from "hooks";
+import { Agent, ServiceGroup } from "@drill4j/types-admin/dist";
 
 interface Props {
   agentId: string;
   serviceGroupId: string;
   hasGlobalSession: boolean;
+  agent: Agent;
+  group: ServiceGroup | null;
 }
 
 export const ManagementNewSession = ({
-  agentId, serviceGroupId, hasGlobalSession,
+  agentId, hasGlobalSession, agent, group,
 }: Props) => {
   const { setErrors, setFieldError } = useFormikContext();
   useEffect(() => {
@@ -37,8 +39,6 @@ export const ManagementNewSession = ({
   }, []);
 
   const setPanel = useContext(SetPanelContext);
-  const agent = useAgent(agentId);
-  const group = useAdminConnection(`/api/groups/${serviceGroupId}`) || {};
 
   return (
     <div>
