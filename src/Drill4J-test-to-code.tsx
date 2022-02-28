@@ -22,12 +22,11 @@ import axios from "axios";
 import { Agent, Group } from "pages";
 
 import { agentDashboardPath, groupDashboardPath } from "admin-routes";
+import { SetPanelContext } from "common";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import pkj from "../package.json";
 
 import "./index.css";
-
-export const SetPanelContext = React.createContext<({ type, payload } : { type: string, payload: any}) => void>(() => {});
 
 console.log("Test2Code-UI version: ", pkj.version);
 

@@ -18,8 +18,8 @@ import {
   Field, FormGroup, ContentAlert, Icons, Tooltip, Fields, Checkbox, useFormikContext,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
-import { SetPanelContext } from "../../../Drill4J-test-to-code";
-import { useAdminConnection, useAgent } from "../../../hooks";
+import { SetPanelContext } from "common";
+import { useAdminConnection, useAgent } from "hooks";
 
 interface Props {
   agentId: string;
@@ -40,17 +40,6 @@ export const ManagementNewSession = ({
   const agent = useAgent(agentId);
   const group = useAdminConnection(`/api/groups/${serviceGroupId}`) || {};
 
-  const linkToSettingsHandler = () => {
-    agentId ?
-      setPanel({
-        type: "SETTINGS",
-        payload: { ...agent, tab: "system" },
-      }) : setPanel({
-        type: "SETTINGS",
-        payload: { ...Object(group), agentType: "Group", tab: "system" },
-      });
-  };
-
   return (
     <div>
       <ContentAlert tw="mx-6 mt-6" type="INFO">
@@ -61,7 +50,12 @@ export const ManagementNewSession = ({
               <SettingsLink
                 tw="link"
                 data-test="management-new-session:settings-link:agent"
-                onClick={linkToSettingsHandler}
+                onClick={() => {
+                  setPanel({
+                    type: "SETTINGS",
+                    payload: { ...agent, tab: "system" },
+                  });
+                }}
               >Agent Settings
               </SettingsLink>
             )
@@ -69,7 +63,12 @@ export const ManagementNewSession = ({
               <SettingsLink
                 tw="link"
                 data-test="management-new-session:settings-link:service-group"
-                onClick={linkToSettingsHandler}
+                onClick={() => {
+                  setPanel({
+                    type: "SETTINGS",
+                    payload: { ...Object(group), agentType: "Group", tab: "system" },
+                  });
+                }}
               >
                 Service Group Settings
               </SettingsLink>
