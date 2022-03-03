@@ -96,7 +96,7 @@ export const CoverageSection = ({ buildVersion }: Props) => {
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
                   tw="whitespace-nowrap link font-bold leading-16 no-underline max-w-[210px]"
-                  to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
+                  to={`/agents/${agentId}/plugins/test2code/builds/${previousBuildVersion}/overview`}
                   title={`Build ${previousBuildVersion}`}
                 >
                     &nbsp;Build&nbsp;
