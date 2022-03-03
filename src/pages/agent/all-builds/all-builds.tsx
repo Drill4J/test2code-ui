@@ -16,7 +16,9 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
-import { Table, Typography, dateTimeFormatter } from "@drill4j/ui-kit";
+import {
+  Table, Typography, dateTimeFormatter, Stub, Icons,
+} from "@drill4j/ui-kit";
 import { BuildVersion } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
@@ -29,12 +31,12 @@ export const AllBuilds = () => {
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
 
   return (
-    <div>
+    <div tw="flex flex-col flex-grow">
       <PageHeader tw="gap-x-2 text-24 leading-32 text-monochrome-black">
         <span>All builds </span>
         <span tw="font-light text-monochrome-default">{buildVersions.length}</span>
       </PageHeader>
-      <div tw="px-6">
+      <div tw="px-6 flex flex-col flex-grow">
         <Table
           renderHeader={({ currentCount, totalCount }) => (
             <div tw="flex justify-between text-monochrome-default text-14 leading-24 mt-9 mb-3">
@@ -45,8 +47,9 @@ export const AllBuilds = () => {
           columns={[
             {
               Header: "Name",
-              filterable: true,
               accessor: "buildVersion",
+              filterable: true,
+              isCustomCell: true,
               Cell: ({ value: buildVersion }: any) => (
                 <NameCell title={buildVersion}>
                   <Link
@@ -90,6 +93,13 @@ export const AllBuilds = () => {
             },
           ]}
           data={buildVersions}
+          stub={(
+            <Stub
+              icon={<Icons.BuildList height={104} width={107} />}
+              title="No results found"
+              message="Try adjusting your search or filter to find what you are looking for."
+            />
+          )}
         />
       </div>
     </div>
