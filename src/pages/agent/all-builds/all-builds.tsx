@@ -45,6 +45,7 @@ export const AllBuilds = () => {
           columns={[
             {
               Header: "Name",
+              filterable: true,
               accessor: "buildVersion",
               Cell: ({ value: buildVersion }: any) => (
                 <NameCell title={buildVersion}>
