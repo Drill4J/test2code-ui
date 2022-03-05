@@ -88,6 +88,7 @@ export const Agent = () => {
             </TableActionsProvider>
           )}
         />
+        <Redirect push to="/" />
       </Switch>
       <Modals />
     </div>
