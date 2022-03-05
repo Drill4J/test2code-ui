@@ -15,6 +15,9 @@
  */
 import React from "react";
 import { Risk } from "types";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+import MiddleEllipsis from "react-middle-ellipsis";
 import {
   capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
 } from "@drill4j/ui-kit";
@@ -57,7 +60,7 @@ export const RisksTable = ({ data }: Props) => {
                   methodDesc: desc,
                 },
               })}
-              tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+              tw="max-w-280px text-14 text-ellipsis text-monochrome-black link"
               title={value}
               target="_blank"
             >
@@ -82,6 +85,21 @@ export const RisksTable = ({ data }: Props) => {
         </Cells.Compound>
       ),
       width: "50%",
+      textAlign: "left",
+    },
+    {
+      Header: "Covered in Builds",
+      accessor: "status",
+      notSortable: true,
+      Cell: ({ value }: any) => {
+        const builds = Object.entries(value).filter(([build, status]) => status === "COVERED").map(statusValue => statusValue[0]);
+        return (
+          <MiddleEllipsis>
+            <span title={builds.join(", ")}>{builds[0]}</span>
+          </MiddleEllipsis>
+        );
+      },
+      width: "150px",
       textAlign: "left",
     },
     {
