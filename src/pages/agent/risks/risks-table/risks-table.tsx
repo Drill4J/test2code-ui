@@ -15,11 +15,8 @@
  */
 import React from "react";
 import { Risk } from "types";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import MiddleEllipsis from "react-middle-ellipsis";
 import {
-  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
+  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -94,9 +91,9 @@ export const RisksTable = ({ data }: Props) => {
       Cell: ({ value }: any) => {
         const builds = Object.entries(value).filter(([build, status]) => status === "COVERED").map(statusValue => statusValue[0]);
         return (
-          <MiddleEllipsis>
+          <Typography.MiddleEllipsis>
             <span title={builds.join(", ")}>{builds[0]}</span>
-          </MiddleEllipsis>
+          </Typography.MiddleEllipsis>
         );
       },
       width: "150px",
