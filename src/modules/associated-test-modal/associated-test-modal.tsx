@@ -56,7 +56,7 @@ export const AssociatedTestModal = () => {
             skeleton={isSkeleton}
             title={packageName}
             data-test="associated-tests:package-name"
-            tw="lowercase"
+            tw="first-letter:lowercase"
           >
             {isSkeleton ? "" : packageName || "-"}
           </MethodInfoValue>
@@ -64,7 +64,6 @@ export const AssociatedTestModal = () => {
             skeleton={isSkeleton}
             title={testClassName}
             data-test="associated-tests-modal:test-class-name"
-            tw="first-letter:uppercase"
           >
             {isSkeleton ? "" : testClassName || "-"}
           </MethodInfoValue>
