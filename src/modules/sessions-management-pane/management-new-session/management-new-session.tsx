@@ -25,7 +25,7 @@ interface Props {
   agentId: string;
   serviceGroupId: string;
   hasGlobalSession: boolean;
-  agent: Agent;
+  agent: Agent | null;
   group: ServiceGroup | null;
 }
 
@@ -63,12 +63,10 @@ export const ManagementNewSession = ({
               <SettingsLink
                 tw="link"
                 data-test="management-new-session:settings-link:service-group"
-                onClick={() => {
-                  setPanel({
-                    type: "SETTINGS",
-                    payload: { ...Object(group), agentType: "Group", tab: "system" },
-                  });
-                }}
+                onClick={() => setPanel({
+                  type: "SETTINGS",
+                  payload: { ...group, agentType: "Group", tab: "system" },
+                })}
               >
                 Service Group Settings
               </SettingsLink>
