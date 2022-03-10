@@ -21,7 +21,7 @@ import {
 import "twin.macro";
 
 import { getAdminPath } from "utils";
-import { Modals, Breadcrumbs } from "components";
+import { Modals, Breadcrumbs, Baseline } from "components";
 import { useActiveBuild, useAgentRouteParams, useNavigation } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
@@ -42,7 +42,10 @@ export const Agent = () => {
 
   return (
     <div tw="flex flex-col w-full h-full">
-      <Breadcrumbs />
+      <div tw="flex justify-between gap-x-3 px-6 border-b border-monochrome-medium-tint">
+        <Breadcrumbs />
+        <Baseline />
+      </div>
       <Switch>
         <Route
           exact

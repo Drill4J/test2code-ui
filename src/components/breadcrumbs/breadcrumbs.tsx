@@ -88,7 +88,7 @@ const RouteCrumbs = ({ crumbs }: {crumbs: CrumbType[];}) => {
 };
 
 const BreadcrumbsContainer = styled.div`
-  ${tw`flex items-center min-h-[40px] px-6 border-b border-monochrome-medium-tint`}
+  ${tw`flex items-center min-h-[40px]`}
 `;
 
 const CrumbLink = styled.div`
