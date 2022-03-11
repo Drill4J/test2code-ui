@@ -32,3 +32,14 @@ export interface TestOverviewFilter {
   valuesOp?: BetweenOp.OR;
   values?: FilterValue[]
 }
+
+export interface Attribute {
+  fieldPath: string;
+  valuesOp: BetweenOp;
+  values: AttributeValue[];
+}
+
+export interface AttributeValue {
+  value: string;
+  op: OP.EQ;
+}

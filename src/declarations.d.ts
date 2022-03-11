@@ -62,3 +62,9 @@ declare module "*.svg" {
   const src: string;
   export default src;
 }
+declare namespace React {
+  interface DOMAttributes<T> {
+    onSelect: any;
+    onChange: any;
+  }
+}
