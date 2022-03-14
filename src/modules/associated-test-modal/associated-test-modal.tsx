@@ -56,6 +56,7 @@ export const AssociatedTestModal = () => {
             skeleton={isSkeleton}
             title={packageName}
             data-test="associated-tests:package-name"
+            tw="first-letter:lowercase"
           >
             {isSkeleton ? "" : packageName || "-"}
           </MethodInfoValue>
@@ -204,6 +205,6 @@ const MethodInfoLabel = styled.div(tw`min-w-32px text-left text-14 leading-32 fo
 
 const MethodInfoValue = styled.div(({ skeleton }: { skeleton?: boolean }) =>
   [
-    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis lowercase`,
+    tw`text-monochrome-default text-14 leading-20 break-all text-ellipsis`,
     skeleton && tw`h-4 animate-pulse w-full bg-monochrome-medium-tint rounded`,
   ]);
