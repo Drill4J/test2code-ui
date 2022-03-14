@@ -21,8 +21,9 @@ import {
 import "twin.macro";
 
 import {
-  useActiveSessions, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
+  useActiveSessions, useAdminConnection, useAgent, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
 } from "hooks";
+import { ServiceGroup } from "@drill4j/types-admin/dist";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,
@@ -57,6 +58,8 @@ export const SessionsManagementPane = () => {
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
   const closePanel = useCloseModal("/session-management");
+  const agent = useAgent(agentId);
+  const group = useAdminConnection<ServiceGroup>(`/api/groups/${groupId}`);
 
   return (
     <Panel onClose={closePanel}>
@@ -95,6 +98,8 @@ export const SessionsManagementPane = () => {
                     agentId={agentId}
                     serviceGroupId={groupId}
                     hasGlobalSession={hasGlobalSession}
+                    agent={agent}
+                    group={group}
                   />
                 )}
                 {!isNewSession && activeSessions.length > 0 && (

@@ -22,8 +22,8 @@ import axios from "axios";
 import { Agent, Group } from "pages";
 
 import { agentDashboardPath, groupDashboardPath } from "admin-routes";
+import { SetPanelContext } from "common";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
-import { GroupRootComponentProps } from "./pages/group/group";
 import pkj from "../package.json";
 
 import "./index.css";
@@ -59,9 +59,11 @@ const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
 const AgentPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: () => (
+  rootComponent: ({ setPanel }) => (
     <BrowserRouter>
-      <Agent />
+      <SetPanelContext.Provider value={setPanel}>
+        <Agent />
+      </SetPanelContext.Provider>
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
@@ -130,9 +132,11 @@ export const GroupHUD = {
 export const GroupPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: (props: GroupRootComponentProps) => (
+  rootComponent: ({ setPanel, ...props }) => (
     <BrowserRouter>
-      <Group {...props} />
+      <SetPanelContext.Provider value={setPanel}>
+        <Group {...props} />
+      </SetPanelContext.Provider>
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,

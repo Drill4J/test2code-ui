@@ -13,27 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import {
   Field, FormGroup, ContentAlert, Icons, Tooltip, Fields, Checkbox, useFormikContext,
 } from "@drill4j/ui-kit";
-import { NavLink } from "react-router-dom";
 import tw, { styled } from "twin.macro";
+import { SetPanelContext } from "common";
+import { Agent, ServiceGroup } from "@drill4j/types-admin/dist";
 
 interface Props {
   agentId: string;
   serviceGroupId: string;
   hasGlobalSession: boolean;
+  agent: Agent | null;
+  group: ServiceGroup | null;
 }
 
 export const ManagementNewSession = ({
-  agentId, serviceGroupId, hasGlobalSession,
+  agentId, hasGlobalSession, agent, group,
 }: Props) => {
   const { setErrors, setFieldError } = useFormikContext();
   useEffect(() => {
     setFieldError("sessionId", "");
     setErrors({});
   }, []);
+
+  const setPanel = useContext(SetPanelContext);
 
   return (
     <div>
@@ -44,17 +49,24 @@ export const ManagementNewSession = ({
             ? (
               <SettingsLink
                 tw="link"
-                to={`/agents/${agentId}/general-settings`}
                 data-test="management-new-session:settings-link:agent"
-              >
-                Agent Settings
+                onClick={() => {
+                  setPanel({
+                    type: "SETTINGS",
+                    payload: { ...agent, tab: "system" },
+                  });
+                }}
+              >Agent Settings
               </SettingsLink>
             )
             : (
               <SettingsLink
                 tw="link"
-                to={`/agents/group/${serviceGroupId}/general-settings`}
                 data-test="management-new-session:settings-link:service-group"
+                onClick={() => setPanel({
+                  type: "SETTINGS",
+                  payload: { ...group, agentType: "Group", tab: "system" },
+                })}
               >
                 Service Group Settings
               </SettingsLink>
@@ -140,6 +152,6 @@ const Label = styled.label<{disabled: boolean}>`
   ${({ disabled }) => disabled && tw`opacity-30 pointer-events-none`}
 `;
 
-const SettingsLink = styled(NavLink)`
+const SettingsLink = styled.button`
   ${tw`font-bold`}
 `;
