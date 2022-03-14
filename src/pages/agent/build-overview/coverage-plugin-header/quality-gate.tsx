@@ -19,11 +19,11 @@ import { getModalPath } from "common";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGateStatus, QualityGate as QualityGateType } from "types";
-import { useBuildVersion } from "hooks";
+import { useFilteredData } from "hooks";
 
 export const QualityGate = () => {
-  const { status = "FAILED" } = useBuildVersion<QualityGateType>("/data/quality-gate") || {};
-  const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
+  const { status = "FAILED" } = useFilteredData<QualityGateType>("/data/quality-gate") || {};
+  const conditionSettings = useFilteredData<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
 

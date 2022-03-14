@@ -25,7 +25,7 @@ import {
   ConditionSetting,
   ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentRouteParams, useFilteredData } from "hooks";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
@@ -54,8 +54,8 @@ export const QualityGatePane = () => {
   const {
     status = "FAILED",
     results = { coverage: false, risks: false, tests: false },
-  } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
-  const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
+  } = useFilteredData<QualityGate>("/data/quality-gate") || {};
+  const conditionSettings = useFilteredData<ConditionSetting[]>("/data/quality-gate-settings") || [];
 
   const conditionSettingByType = conditionSettings.reduce(
     (conditionSetting, measureType) => ({

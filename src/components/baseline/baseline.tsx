@@ -16,13 +16,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Icons, Typography } from "@drill4j/ui-kit";
-import { useBuildVersion, useNavigation } from "hooks";
+import { useFilteredData, useNavigation } from "hooks";
 import { ParentBuild } from "types";
 import "twin.macro";
 
 export const Baseline = () => {
   const { getPagePath, getModalPath } = useNavigation();
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
 
   return (
     <div tw="flex gap-x-6 text-12 font-bold">

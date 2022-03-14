@@ -18,12 +18,12 @@ import { useTableActionsState } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { useBuildVersion } from "hooks";
+import { useFilteredData } from "hooks";
 import { TestDetails } from "pages/agent/tests-table";
 
 export const BuildTestsTable = () => {
   const { search } = useTableActionsState();
-  const tests = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests", { filters: search, output: "LIST" }) || {};
+  const tests = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests", { filters: search, output: "LIST" }) || {};
 
   return (
     <TestDetails

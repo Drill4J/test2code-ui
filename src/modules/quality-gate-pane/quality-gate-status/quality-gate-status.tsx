@@ -19,7 +19,7 @@ import tw from "twin.macro";
 
 import { copyToClipboard, percentFormatter } from "@drill4j/common-utils";
 import { ConditionSettingByType, Results } from "types/quality-gate-type";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentRouteParams, useFilteredData } from "hooks";
 import { Metrics } from "types/metrics";
 import { QualityGateConfigurationUrl } from "./quality-gate-configuration-url";
 import { getQualityGateConfigurationUrl } from "./get-quality-gate-configuration-url";
@@ -33,7 +33,7 @@ interface Props {
 export const QualityGateStatus = ({ conditionSettingByType, results }: Props) => {
   const [copied, setCopied] = useState(false);
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
-  const { coverage = 0, risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
+  const { coverage = 0, risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
 
   useEffect(() => {
     const timeout = setTimeout(() => setCopied(false), 5000);

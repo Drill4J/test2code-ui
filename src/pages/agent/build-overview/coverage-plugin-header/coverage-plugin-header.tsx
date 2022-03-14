@@ -13,41 +13,54 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
-  Button, Icons,
+  Button, Icons, LightDropdown,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, useNavigation, usePreviousBuildCoverage, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useFilteredData, useNavigation,
+  usePreviousBuildCoverage, useTestToCodeRouteParams, useTestToCodeData,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { Risk } from "types";
+import { Risk, Filter } from "types";
 import { PageHeader } from "components";
+import { useSetFilterDispatch } from "common";
 import { ActionSection } from "./action-section";
 import { QualityGate } from "./quality-gate";
 import { ConfigureFilter } from "./configure-filter";
 
 export const CoveragePluginHeader = () => {
-  const [isConfigureFilter, setIsConfigureFilter] = useState(true);
+  const [isConfigureFilter, setIsConfigureFilter] = useState(false);
   const { agentId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
-  const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
-  const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+  const { risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
+  const initialRisks = useFilteredData<Risk[]>("/build/risks") || [];
+  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
+  const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const closeConfigureFilter = useCallback(() => setIsConfigureFilter(false), [setIsConfigureFilter]);
+  const setFilter = useSetFilterDispatch();
+
   return (
     <>
       <Header>
         <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
-        <div tw="flex gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
+        <div tw="flex items-center gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
+          {Boolean(filters.length) && (
+            <LightDropdown
+              tw="w-[320px]"
+              placeholder="Select filter"
+              onChange={(filter) => setFilter(filter as any)}
+              options={filters.map(({ name = "", id = "" }) => ({ label: name, value: id }))}
+            />
+          )}
           <Button
             tw="flex items-center gap-x-2"
             secondary

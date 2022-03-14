@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
-import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { MethodsDetails } from "types";
 import { concatTestName } from "utils/transform-tests";
 
@@ -32,13 +32,13 @@ export const CoveredMethodsModal = () => {
   const { buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; coveredMethods?: number}>();
   const topicCoveredMethodsByTest = scopeId ? `/build/scopes/${scopeId}/tests` : "/build/tests";
-  const testSummary = useBuildVersion<MethodsCoveredByTestSummary>(
+  const testSummary = useFilteredData<MethodsCoveredByTestSummary>(
     `${topicCoveredMethodsByTest}/${params?.testId}/methods/summary`,
   ) || {};
   const showSkeleton = !Object.keys(testSummary).length;
   const closeModal = useCloseModal("/covered-methods-modal", ["testId", "coveredMethods"]);
 
-  const coveredMethods = useBuildVersion<MethodsDetails[]>(
+  const coveredMethods = useFilteredData<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
 

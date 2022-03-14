@@ -21,7 +21,7 @@ import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
 import { Baseline } from "types/baseline";
 import { toggleBaseline } from "../api";
@@ -41,7 +41,7 @@ export const BaselineBuildModal = () => {
   const { pluginId, agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
-  const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const { version: baseline } = useFilteredData<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const [isConfirmed, setIsConfirmed] = useState(isBaseline);
   const closeModal = useCloseModal("/baseline-build-modal");

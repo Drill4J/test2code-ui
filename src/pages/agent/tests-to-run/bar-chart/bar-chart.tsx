@@ -18,7 +18,7 @@ import { nanoid } from "nanoid";
 import { Typography, convertToPercentage, useElementSize } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
-import { useBuildVersion } from "hooks";
+import { useFilteredData } from "hooks";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 
 import { Chart } from "./chart";
@@ -136,7 +136,7 @@ export const BarChart = ({ activeBuildVersion, totalDuration, summaryTestsToRun 
   }, [width, visibleBarsCount]);
 
   const testsToRunParentStats =
-    useBuildVersion<TestsToRunSummary[]>("/build/tests-to-run/parent-stats") || [];
+    useFilteredData<TestsToRunSummary[]>("/build/tests-to-run/parent-stats") || [];
   const testsToRunHistory = [...testsToRunParentStats, summaryTestsToRun];
 
   const sliderThumb = convertToPercentage(visibleBarsCount, testsToRunHistory.length);

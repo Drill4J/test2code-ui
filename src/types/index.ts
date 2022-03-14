@@ -53,6 +53,6 @@ export type { TestsToRunSummary } from "./tests-to-run-summary";
 export type { TestsToRun } from "./tests-to-run";
 export type { TestDetails } from "./test-details";
 export type {
-  TestOverviewFilter, FilterValue, AttributeValue, Attribute,
+  TestOverviewFilter, FilterValue, AttributeValue, Attribute, Filter,
 } from "./filters";
 export { BetweenOp, OP } from "./filters";

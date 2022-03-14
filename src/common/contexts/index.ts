@@ -14,3 +14,6 @@
  * limitations under the License.
  */
 export { SetPanelContext } from "./set-panel-context";
+export {
+  SetFilterDispatchContext, useSetFilterDispatch, useFilterState, FilterContextProvider,
+} from "./filter-context";

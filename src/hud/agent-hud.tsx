@@ -18,7 +18,7 @@ import { PluginCard } from "./plugin-card";
 import {
   CoverageSection, RisksSection,
 } from "./agent-sections";
-import { useActiveBuild, useAgentRouteParams, useBuildVersion } from "../hooks";
+import { useActiveBuild, useAgentRouteParams, useFilteredData } from "../hooks";
 import { BuildCoverage, BuildSummary } from "../types";
 import { TestType } from "./agent-sections/section-tooltip";
 import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
@@ -30,9 +30,9 @@ export interface AgentHudProps {
 export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useActiveBuild(agentId) || {};
-  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary",
+  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useFilteredData<BuildSummary>("/build/summary",
     { buildVersion }) || {};
-  const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage", { buildVersion }) || {};
+  const { byTestType = [], finishedScopesCount = 0 } = useFilteredData<BuildCoverage>("/build/coverage", { buildVersion }) || {};
 
   const totalTestsCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
   const buildTestsByType = byTestType

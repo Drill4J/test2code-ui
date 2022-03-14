@@ -20,7 +20,7 @@ import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import {
-  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+  useActiveBuild, useActiveScope, useAgentRouteParams, useFilteredData, useNavigation, useTestToCodeRouteParams,
 } from "hooks";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
@@ -33,7 +33,7 @@ export const ScopeOverview = () => {
   const { scopeId, buildVersion } = useTestToCodeRouteParams();
   const { agentId } = useAgentRouteParams();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
-  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
+  const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
 
   const newBuildHasAppeared = activeBuildVersion && buildVersion && activeBuildVersion !== buildVersion;
   const activeScope = useActiveScope();

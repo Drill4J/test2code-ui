@@ -21,13 +21,13 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { concatTestPath, concatTestName } from "utils/transform-tests";
 
 export const AssociatedTestModal = () => {
   const { scopeId, buildVersion } = useTestToCodeRouteParams();
   const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
-  const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
+  const associatedTests = useFilteredData<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
   const { getPagePath } = useNavigation();
   const isSkeleton = Object.keys(associatedTests).length === 0;

@@ -31,7 +31,9 @@ import {
 } from "@drill4j/ui-kit";
 import React, { useMemo, useState } from "react";
 import tw, { styled } from "twin.macro";
-import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import {
+  useAgentRouteParams, useFilteredData, useTestToCodeData, useTestToCodeRouteParams,
+} from "hooks";
 import { Attribute, BetweenOp, OP } from "types";
 import { createFilter } from "../../api";
 
@@ -49,7 +51,7 @@ interface Values {
 export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
-  const attributes = useBuildVersion<string[]>("/build/attributes") || [];
+  const attributes = useTestToCodeData<string[]>("/build/attributes") || [];
   const attributesOptions = useMemo(() => attributes.map((attr) => ({ value: attr, label: attr })), [attributes]);
 
   return (
@@ -179,7 +181,7 @@ interface AttributeValuesProps {
 }
 
 const AttributeValues = ({ attributeName, onChange, currentValues }: AttributeValuesProps) => {
-  const values = useBuildVersion<string[]>(`/build/attributes/${attributeName}/values`) || [];
+  const values = useTestToCodeData<string[]>(`/build/attributes/${attributeName}/values`) || [];
   const valuesOptions = useMemo(() => values.map((value) => ({ value, label: value })), [values]);
   return (
     <MultipleSelectAutocomplete

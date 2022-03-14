@@ -27,6 +27,11 @@ export interface FilterValue {
   op?: OP.EQ;
 }
 
+export interface Filter {
+  name?: string;
+  id?: string;
+}
+
 export interface TestOverviewFilter {
   fieldPath?: string;
   valuesOp?: BetweenOp.OR;

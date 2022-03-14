@@ -20,7 +20,7 @@ import {
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";

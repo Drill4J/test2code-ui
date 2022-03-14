@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
 import { Baseline } from "types/baseline";
 import { ParentBuild } from "types/parent-build";
@@ -32,10 +32,10 @@ export const BaselineTooltip = () => {
   const { buildVersion } = useTestToCodeRouteParams();
 
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
-  const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const { version: baseline } = useFilteredData<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const isActiveBuild = activeBuildVersion === buildVersion;
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
   const { Flag, disabled, info } = showBaseline(isBaseline, isActiveBuild, previousBuildVersion);
 
   return (
