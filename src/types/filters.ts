@@ -33,9 +33,11 @@ export interface Filter {
 }
 
 export interface TestOverviewFilter {
-  fieldPath?: string;
-  valuesOp?: BetweenOp.OR;
-  values?: FilterValue[]
+  name?: string;
+  buildVersion?: string;
+  attributesOp?: string;
+  agentId?: string;
+  attributes?: Attribute[];
 }
 
 export interface Attribute {

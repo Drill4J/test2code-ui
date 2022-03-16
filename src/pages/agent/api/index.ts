@@ -19,3 +19,4 @@ export { toggleScope } from "./toggle-scope";
 export { renameScope } from "./rename-scope";
 export { toggleBaseline } from "./toggle-baseline";
 export { createFilter } from "./create-filter";
+export { updateFilter } from "./update-filter";

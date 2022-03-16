@@ -681,6 +681,10 @@ button:focus {
   bottom: -1px;
 }
 
+.top-full {
+  top: 100%;
+}
+
 .bottom-1\/2 {
   bottom: 50%;
 }
@@ -929,6 +933,10 @@ button:focus {
   max-height: 850px;
 }
 
+.max-h-\[268px\] {
+  max-height: 268px;
+}
+
 .min-h-\[40px\] {
   min-height: 40px;
 }
@@ -1009,6 +1017,10 @@ button:focus {
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+}
+
+.w-\[320px\] {
+  width: 320px;
 }
 
 .w-97 {
@@ -1675,6 +1687,11 @@ button:focus {
   color: rgba(245, 166, 35, var(--tw-text-opacity));
 }
 
+.text-monochrome-dark-tint {
+  --tw-text-opacity: 1;
+  color: rgba(164, 172, 179, var(--tw-text-opacity));
+}
+
 .text-data-visualization-saved-time {
   --tw-text-opacity: 1;
   color: rgba(103, 213, 181, var(--tw-text-opacity));
@@ -1735,6 +1752,10 @@ button:focus {
 
 .first-letter\:uppercase::first-letter {
   text-transform: uppercase;
+}
+
+.first-letter\:lowercase::first-letter {
+  text-transform: lowercase;
 }
 
 .hover\:border:hover {

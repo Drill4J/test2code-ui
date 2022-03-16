@@ -29,45 +29,77 @@ import {
   sizeLimit,
   useFormikContext,
 } from "@drill4j/ui-kit";
+import { v4 as uuidv4 } from "uuid";
 import React, { useMemo, useState } from "react";
 import tw, { styled } from "twin.macro";
+
 import {
-  useAgentRouteParams, useFilteredData, useTestToCodeData, useTestToCodeRouteParams,
+  useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams,
 } from "hooks";
-import { Attribute, BetweenOp, OP } from "types";
-import { createFilter } from "../../api";
+import {
+  Attribute, BetweenOp, OP, TestOverviewFilter,
+} from "types";
+import { createFilter, updateFilter } from "../../api";
 
 /* eslint-disable react/no-array-index-key */
 
+type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>};
+
 interface Props {
   closeConfigureFilter: () => void;
+  filterId: string | null;
 }
 
 interface Values {
   name: string;
-  attributes: Attribute[];
+  attributes: CustomAttribute[];
 }
 
-export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
+// If filterId == null It means that we are creating new filter
+
+export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
+  const idEditing = Boolean(filterId);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const attributes = useTestToCodeData<string[]>("/build/attributes") || [];
+  const filter = useTestToCodeData<TestOverviewFilter>(idEditing ? `/build/filters/${filterId}` : null);
+  const { name: filterName, attributes: filterAttributes = [] } = filter || {};
   const attributesOptions = useMemo(() => attributes.map((attr) => ({ value: attr, label: attr })), [attributes]);
+
+  const transformedFilterAttributes = useMemo(() => filterAttributes
+    .map(({ fieldPath, valuesOp, values = [] }) => ({
+      id: uuidv4(),
+      fieldPath,
+      valuesOp,
+      values: values.reduce((acc, { value }) => ({ ...acc, [value]: true }), {}),
+    })), [filterAttributes]);
+
+  const initialValues = useMemo(() => (idEditing ? {
+    name: filterName,
+    attributes: transformedFilterAttributes,
+  } : {
+    name: "",
+    attributes: [{
+      fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(),
+    }],
+  }), [idEditing, filterName, transformedFilterAttributes]);
 
   return (
     <div tw="relative p-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
       <Formik
+        initialValues={initialValues as Values}
         onSubmit={async ({ name, attributes: selectedAttributes }: any) => {
           const values = {
             name,
             buildVersion,
-            attributes: selectedAttributes.map((attr: any) => ({
-              ...attr,
-              valuesOp: attr.valuesOp === "any" ? BetweenOp.AND : BetweenOp.OR,
-              values: Object.keys(attr.values).map((value) => ({ value, op: OP.EQ })),
+            attributes: selectedAttributes.map(({ valuesOp, values: attrValues, fieldPath }: any) => ({
+              fieldPath,
+              valuesOp,
+              values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
             })),
           };
-          await createFilter(agentId, values, {
+          const action = filterId ? updateFilter : createFilter;
+          await action(agentId, values, {
             onSuccess: () => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
               closeConfigureFilter();
@@ -75,13 +107,13 @@ export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });
         }}
-        initialValues={{ name: "", attributes: [{ fieldPath: "", values: [], valuesOp: BetweenOp.OR }] } as Values}
         validate={composeValidators(
           required("name"),
           sizeLimit({
             name: "name", min: 1, max: 40,
           }),
         ) as any}
+        enableReinitialize
       >
         {({
           setFieldValue, values, isSubmitting, isValid, dirty,
@@ -99,9 +131,13 @@ export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
                 <div tw="flex flex-col gap-y-4">
                   {values.attributes.map((attr, index) => (
                     <ConfigureAttribute
-                      key={index}
+                      key={attr.id}
                       accessor={index}
                       attributesOptions={attributesOptions}
+                      removeAttribute={values.attributes.length > 1
+                        ? () => setFieldValue("attributes", values.attributes.filter((_, attrIndex) => attrIndex !== index))
+                        : null}
+                      defaultValue={attr.fieldPath}
                     />
                   ))}
                 </div>
@@ -109,7 +145,7 @@ export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
               <button
                 tw="flex items-center gap-x-2 ml-6 link text-14 leading-24 cursor-pointer font-semibold"
                 type="button"
-                onClick={() => setFieldValue(`attributes[${values.attributes.length}]`, {})}
+                onClick={() => setFieldValue(`attributes[${values.attributes.length}]`, { id: uuidv4() })}
               >
                 <Icons.Plus />Add New
               </button>
@@ -138,15 +174,19 @@ export const ConfigureFilter = ({ closeConfigureFilter }: Props) => {
 interface ConfigureAttributeProps {
   attributesOptions: {value: string, label: string}[];
   accessor: number;
+  defaultValue: string;
+  removeAttribute: (() => void) | null;
 }
 
-const ConfigureAttribute = ({ attributesOptions, accessor }: ConfigureAttributeProps) => {
-  const [attributeName, setAttributeName] = useState<string>("");
+const ConfigureAttribute = ({
+  attributesOptions, accessor, removeAttribute, defaultValue = "",
+}: ConfigureAttributeProps) => {
+  const [attributeName, setAttributeName] = useState<string>(defaultValue);
   const { setFieldValue, values } = useFormikContext<Values>();
   const attrValues = values?.attributes[accessor]?.values || {};
 
   return (
-    <div tw="grid grid-cols-[224px 4px 84px 300px] items-center gap-x-2">
+    <div tw="grid grid-cols-[224px 4px 84px 300px 16px] items-center gap-x-2">
       <Autocomplete
         placeholder="Key"
         options={attributesOptions}
@@ -154,22 +194,32 @@ const ConfigureAttribute = ({ attributesOptions, accessor }: ConfigureAttributeP
           setFieldValue(`attributes[${accessor}].fieldPath`, value);
           setAttributeName(value as string);
         }}
+        defaultValue={attributeName}
       />
       <span>:</span>
       <LightDropdown
         placeholder="Operator"
         options={[
-          { value: "any", label: "any" },
-          { value: "all", label: "all" },
+          { value: BetweenOp.OR, labelInInput: "Any", label: "Any value is met" },
+          { value: BetweenOp.AND, labelInInput: "All", label: "All values are met" },
         ]}
         onChange={(value) => setFieldValue(`attributes[${accessor}].valuesOp`, value)}
-        defaultValue="any"
+        defaultValue={BetweenOp.OR}
+        displayingInInputAccessor="labelInInput"
       />
       <AttributeValues
         onChange={(value) => setFieldValue(`attributes[${accessor}].values`, value)}
         currentValues={attrValues as any}
         attributeName={attributeName}
       />
+      {removeAttribute && (
+        <Icons.Delete
+          tw="ml-2 text-monochrome-dark-tint cursor-pointer"
+          width={16}
+          height={16}
+          onClick={removeAttribute}
+        />
+      )}
     </div>
   );
 };

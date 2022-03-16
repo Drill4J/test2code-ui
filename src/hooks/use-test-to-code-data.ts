@@ -32,7 +32,7 @@ interface Message {
 }
 
 export function useTestToCodeData<T>(
-  topic: string,
+  topic: string | null,
   message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
@@ -47,7 +47,7 @@ export function useTestToCodeData<T>(
   const handleDataChange = useCallback((newData: T) => setData(newData), [setData]);
 
   useEffect(() => {
-    const unsubscribe = hasBuildVersion && agentId && test2CodePluginSocket.subscribe(
+    const unsubscribe = topic && hasBuildVersion && agentId && test2CodePluginSocket.subscribe(
       topic,
       handleDataChange,
       memoMessage,

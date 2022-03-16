@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import {
-  Button, Icons, LightDropdown,
+  Button, Icons, Autocomplete,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -29,13 +29,20 @@ import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { Risk, Filter } from "types";
 import { PageHeader } from "components";
-import { useSetFilterDispatch } from "common";
+import { useFilterState, useSetFilterDispatch } from "common";
 import { ActionSection } from "./action-section";
 import { QualityGate } from "./quality-gate";
 import { ConfigureFilter } from "./configure-filter";
 
+enum FILTER_STATE {
+  CREATING = "CREATING",
+  EDITING = "EDITING",
+}
+
+type ConfigureFilterSate = FILTER_STATE.EDITING | FILTER_STATE.CREATING | null
+
 export const CoveragePluginHeader = () => {
-  const [isConfigureFilter, setIsConfigureFilter] = useState(false);
+  const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
   const { agentId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
@@ -43,18 +50,19 @@ export const CoveragePluginHeader = () => {
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
   const initialRisks = useFilteredData<Risk[]>("/build/risks") || [];
   const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
-  const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const closeConfigureFilter = useCallback(() => setIsConfigureFilter(false), [setIsConfigureFilter]);
+  const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
+  const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
   const setFilter = useSetFilterDispatch();
-
+  const { filterId } = useFilterState();
+  console.log(configureFilterState);
   return (
     <>
       <Header>
         <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
         <div tw="flex items-center gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
           {Boolean(filters.length) && (
-            <LightDropdown
+            <Autocomplete
               tw="w-[320px]"
               placeholder="Select filter"
               onChange={(filter) => setFilter(filter as any)}
@@ -65,7 +73,7 @@ export const CoveragePluginHeader = () => {
             tw="flex items-center gap-x-2"
             secondary
             size="large"
-            onClick={() => setIsConfigureFilter(true)}
+            onClick={() => setConfigureFilter(FILTER_STATE.CREATING)}
           >
             <Icons.Filter /> Add New Filter
           </Button>
@@ -109,14 +117,27 @@ export const CoveragePluginHeader = () => {
             </div>
           )}
         </ActionSection>
+        {filterId && (
+          <ShowCriteria
+            tw="absolute left-1/2 -translate-x-1/2 top-full flex items-center gap-x-1 px-2"
+            onClick={() => setConfigureFilter(FILTER_STATE.EDITING)}
+          >
+            <Icons.Expander width={8} height={8} rotate={90} /> Show Criteria
+          </ShowCriteria>
+        )}
       </Header>
-      {isConfigureFilter && <ConfigureFilter closeConfigureFilter={closeConfigureFilter} />}
+      {configureFilterState && (
+        <ConfigureFilter
+          closeConfigureFilter={closeConfigureFilter}
+          filterId={configureFilterState === FILTER_STATE.EDITING ? filterId : null}
+        />
+      )}
     </>
   );
 };
 
 const Header = styled(PageHeader)`
-  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
+  ${tw`relative grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
   @media screen and (min-width: 1024px) {
     grid-template-columns: max-content auto max-content max-content max-content !important;
   }
@@ -125,4 +146,9 @@ const Header = styled(PageHeader)`
 const Count = styled(Link)`
   ${tw`flex items-center w-full text-20 leading-32 cursor-pointer`}
   ${tw`text-monochrome-black hover:text-blue-medium-tint active:text-blue-shade`}
+`;
+
+const ShowCriteria = styled.button`
+  ${tw`border border-monochrome-medium-tint bg-monochrome-white text-blue-default text-10 leading-14 font-bold`}
+  border-radius: 0px 0px 8px 8px ;
 `;
