@@ -39,10 +39,9 @@ import {
 import {
   Attribute, BetweenOp, OP, TestOverviewFilter,
 } from "types";
-import { Link } from "react-router-dom";
-import { createFilter, deleteFilter, updateFilter } from "../../api";
+import { useSetFilterDispatch } from "common";
+import { createFilter, updateFilter } from "../../api";
 import { DeleteFilterModal } from "./delete-filter-modal";
-import { useSetFilterDispatch } from "../../../../common";
 
 /* eslint-disable react/no-array-index-key */
 
@@ -61,8 +60,8 @@ interface Values {
 // If filterId == null It means that we are creating new filter
 
 export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
+  const [isEditing, setIsEditing] = useState(Boolean(filterId));
   const [isDeleteFilterModalOpen, setIsDeleteFilterModalOpen] = useState(false);
-  const isEditing = Boolean(filterId);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const setFilter = useSetFilterDispatch();
@@ -119,7 +118,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
             name: "name", min: 1, max: 40,
           }),
         ) as any}
-        enableReinitialize
+        enableReinitialize={isEditing}
       >
         {({
           setFieldValue, values, isSubmitting, isValid, dirty, resetForm,
@@ -161,7 +160,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
                 <Button
                   secondary
                   size="large"
-                  onClick={() => resetForm(initialValues as any)}
+                  onClick={() => resetForm({ values: initialValues } as any)}
                 >
                   Discard
                 </Button>
@@ -184,7 +183,8 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
                       icon: "Copy",
                       onClick: () => {
                         const newValues = { ...initialValues, name: `${initialValues.name} (1)` };
-                        resetForm(newValues as any);
+                        resetForm({ values: newValues } as any);
+                        setIsEditing(false);
                       },
                     },
                     {

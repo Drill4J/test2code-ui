@@ -55,7 +55,7 @@ export const CoveragePluginHeader = () => {
   const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
   const setFilter = useSetFilterDispatch();
   const { filterId } = useFilterState();
-  console.log(configureFilterState);
+
   return (
     <>
       <Header>
@@ -65,7 +65,10 @@ export const CoveragePluginHeader = () => {
             <Autocomplete
               tw="w-[320px]"
               placeholder="Select filter"
-              onChange={(filter) => setFilter(filter as any)}
+              onChange={(filter) => {
+                setFilter(filter as any);
+                setConfigureFilter(null);
+              }}
               options={filters.map(({ name = "", id = "" }) => ({ label: name, value: id }))}
             />
           )}
@@ -128,7 +131,6 @@ export const CoveragePluginHeader = () => {
       </Header>
       {configureFilterState && (
         <ConfigureFilter
-          key={filterId}
           closeConfigureFilter={closeConfigureFilter}
           filterId={configureFilterState === FILTER_STATE.EDITING ? filterId : null}
         />
