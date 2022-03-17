@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Button, Icons, Autocomplete,
 } from "@drill4j/ui-kit";
@@ -27,7 +27,7 @@ import {
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { Risk, Filter } from "types";
+import { Risk, Filter, TestTypeSummary } from "types";
 import { PageHeader } from "components";
 import { useFilterState, useSetFilterDispatch } from "common";
 import { ActionSection } from "./action-section";
@@ -46,15 +46,20 @@ export const CoveragePluginHeader = () => {
   const { agentId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
+
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
   const initialRisks = useFilteredData<Risk[]>("/build/risks") || [];
   const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
+  const testsByType = useTestToCodeData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
+
   const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
   const setFilter = useSetFilterDispatch();
   const { filterId } = useFilterState();
+
+  const hasTestsInBuild = Boolean(testsByType.length);
 
   return (
     <>
@@ -76,6 +81,7 @@ export const CoveragePluginHeader = () => {
             tw="flex items-center gap-x-2"
             secondary
             size="large"
+            disabled={!hasTestsInBuild}
             onClick={() => setConfigureFilter(FILTER_STATE.CREATING)}
           >
             <Icons.Filter /> Add New Filter
