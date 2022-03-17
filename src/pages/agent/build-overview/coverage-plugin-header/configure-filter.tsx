@@ -23,7 +23,7 @@ import {
   FormGroup,
   Formik,
   Icons,
-  LightDropdown,
+  LightDropdown, Menu,
   MultipleSelectAutocomplete,
   required, sendAlertEvent,
   sizeLimit,
@@ -39,7 +39,10 @@ import {
 import {
   Attribute, BetweenOp, OP, TestOverviewFilter,
 } from "types";
-import { createFilter, updateFilter } from "../../api";
+import { Link } from "react-router-dom";
+import { createFilter, deleteFilter, updateFilter } from "../../api";
+import { DeleteFilterModal } from "./delete-filter-modal";
+import { useSetFilterDispatch } from "../../../../common";
 
 /* eslint-disable react/no-array-index-key */
 
@@ -58,11 +61,14 @@ interface Values {
 // If filterId == null It means that we are creating new filter
 
 export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
-  const idEditing = Boolean(filterId);
+  const [isDeleteFilterModalOpen, setIsDeleteFilterModalOpen] = useState(false);
+  const isEditing = Boolean(filterId);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const setFilter = useSetFilterDispatch();
   const attributes = useTestToCodeData<string[]>("/build/attributes") || [];
-  const filter = useTestToCodeData<TestOverviewFilter>(idEditing ? `/build/filters/${filterId}` : null);
+  const filter = useTestToCodeData<TestOverviewFilter>(isEditing ? `/build/filters/${filterId}` : null);
+
   const { name: filterName, attributes: filterAttributes = [] } = filter || {};
   const attributesOptions = useMemo(() => attributes.map((attr) => ({ value: attr, label: attr })), [attributes]);
 
@@ -74,7 +80,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
       values: values.reduce((acc, { value }) => ({ ...acc, [value]: true }), {}),
     })), [filterAttributes]);
 
-  const initialValues = useMemo(() => (idEditing ? {
+  const initialValues = useMemo(() => (isEditing ? {
     name: filterName,
     attributes: transformedFilterAttributes,
   } : {
@@ -82,7 +88,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
     attributes: [{
       fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(),
     }],
-  }), [idEditing, filterName, transformedFilterAttributes]);
+  }), [isEditing, filterName, transformedFilterAttributes]);
 
   return (
     <div tw="relative p-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
@@ -116,7 +122,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
         enableReinitialize
       >
         {({
-          setFieldValue, values, isSubmitting, isValid, dirty,
+          setFieldValue, values, isSubmitting, isValid, dirty, resetForm,
         }) => (
           <Form tw="grid grid-cols-[300px 1fr 300px]">
             <FormGroup tw="mr-6" label="Filter Name">
@@ -151,7 +157,16 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
               </button>
             </div>
             <div tw="flex gap-x-4 items-center justify-end border-l border-monochrome-medium-tint">
-              <Button secondary size="large" onClick={closeConfigureFilter}>Cancel</Button>
+              {isEditing && dirty && (
+                <Button
+                  secondary
+                  size="large"
+                  onClick={() => resetForm(initialValues as any)}
+                >
+                  Discard
+                </Button>
+              )}
+              {!isEditing && <Button secondary size="large" onClick={closeConfigureFilter}>Cancel</Button>}
               <Button
                 type="submit"
                 primary
@@ -160,6 +175,27 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
               >
                 Apply & Save
               </Button>
+              {isEditing && (
+                <Menu
+                  tw="mr-3"
+                  items={[
+                    {
+                      label: "Duplicate filter",
+                      icon: "Copy",
+                      onClick: () => {
+                        const newValues = { ...initialValues, name: `${initialValues.name} (1)` };
+                        resetForm(newValues as any);
+                      },
+                    },
+                    {
+                      label: "Delete filter",
+                      icon: "Delete",
+                      onClick: () => setIsDeleteFilterModalOpen(true),
+                    },
+                  ]}
+                  testContext="configure-filter"
+                />
+              )}
             </div>
           </Form>
         )}
@@ -167,6 +203,15 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
       <HideCriteria tw="absolute left-1/2 -translate-x-1/2 -bottom-px flex items-center gap-x-1 px-2" onClick={closeConfigureFilter}>
         <Icons.Expander width={8} height={8} rotate={-90} /> Hide Criteria
       </HideCriteria>
+      {isDeleteFilterModalOpen && (
+        <DeleteFilterModal
+          closeModal={() => setIsDeleteFilterModalOpen(false)}
+          closeEditingFilter={() => {
+            closeConfigureFilter();
+            setFilter(null);
+          }}
+        />
+      )}
     </div>
   );
 };

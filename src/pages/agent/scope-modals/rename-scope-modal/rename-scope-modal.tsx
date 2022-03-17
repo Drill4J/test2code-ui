@@ -40,7 +40,7 @@ export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
   const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
-  const closeModal = useCloseModal("/rename-scope-modal", ["scopeId"]);
+  const closeModal = useCloseModal(["scopeId"]);
 
   return (
     <Modal onClose={closeModal}>

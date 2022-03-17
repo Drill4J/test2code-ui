@@ -44,7 +44,7 @@ export const FinishScopeModal = () => {
     : 0;
   const { push, location: { pathname = "" } } = useHistory();
   const isScopeInfoPage = scope?.id && pathname.includes(scope.id);
-  const closeModal = useCloseModal("/finish-scope-modal", ["scopeId"]);
+  const closeModal = useCloseModal(["scopeId"]);
 
   return (
     <Modal onClose={closeModal}>

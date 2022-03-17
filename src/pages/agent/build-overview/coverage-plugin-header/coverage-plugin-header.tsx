@@ -128,6 +128,7 @@ export const CoveragePluginHeader = () => {
       </Header>
       {configureFilterState && (
         <ConfigureFilter
+          key={filterId}
           closeConfigureFilter={closeConfigureFilter}
           filterId={configureFilterState === FILTER_STATE.EDITING ? filterId : null}
         />

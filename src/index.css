@@ -823,12 +823,12 @@ button:focus {
   margin-right: 1.5rem;
 }
 
-.mb-1 {
-  margin-bottom: 0.25rem;
-}
-
 .mr-3 {
   margin-right: 0.75rem;
+}
+
+.mb-1 {
+  margin-bottom: 0.25rem;
 }
 
 .block {
@@ -931,10 +931,6 @@ button:focus {
 
 .max-h-\[850px\] {
   max-height: 850px;
-}
-
-.max-h-\[268px\] {
-  max-height: 268px;
 }
 
 .min-h-\[40px\] {

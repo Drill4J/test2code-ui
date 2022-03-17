@@ -38,7 +38,7 @@ export const DeleteScopeModal = () => {
   const { push, location: { pathname = "" } } = useHistory();
   const [loading, setLoading] = useState(false);
   const { testTypes = [] } = useFilteredData<ActiveSessions>("/active-scope/summary/active-sessions") || {};
-  const closeModal = useCloseModal("/delete-scope-modal", ["scopeId"]);
+  const closeModal = useCloseModal(["scopeId"]);
 
   return (
     <Modal onClose={closeModal}>

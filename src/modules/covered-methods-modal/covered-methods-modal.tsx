@@ -36,7 +36,7 @@ export const CoveredMethodsModal = () => {
     `${topicCoveredMethodsByTest}/${params?.testId}/methods/summary`,
   ) || {};
   const showSkeleton = !Object.keys(testSummary).length;
-  const closeModal = useCloseModal("/covered-methods-modal", ["testId", "coveredMethods"]);
+  const closeModal = useCloseModal(["testId", "coveredMethods"]);
 
   const coveredMethods = useFilteredData<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
