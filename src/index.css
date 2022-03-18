@@ -1466,6 +1466,10 @@ button:focus {
   padding-bottom: 0.75rem;
 }
 
+.pt-1 {
+  padding-top: 0.25rem;
+}
+
 .pl-8 {
   padding-left: 2rem;
 }
@@ -1480,10 +1484,6 @@ button:focus {
 
 .pb-1 {
   padding-bottom: 0.25rem;
-}
-
-.pt-1 {
-  padding-top: 0.25rem;
 }
 
 .pr-4 {
@@ -1713,6 +1713,10 @@ button:focus {
 
 .first-letter\:uppercase::first-letter {
   text-transform: uppercase;
+}
+
+.first-letter\:lowercase::first-letter {
+  text-transform: lowercase;
 }
 
 .hover\:border:hover {
