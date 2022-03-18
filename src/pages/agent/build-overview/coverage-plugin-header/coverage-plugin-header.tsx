@@ -95,7 +95,7 @@ export const CoveragePluginHeader = () => {
                               selected={value === selectedOption?.value}
                               onClick={() => {
                                 selectValue(value);
-                                setFilter(value as any);
+                                setFilter(value);
                                 setConfigureFilter(null);
                                 setIsOpen(false);
                               }}
@@ -116,7 +116,10 @@ export const CoveragePluginHeader = () => {
             secondary
             size="large"
             disabled={!hasTestsInBuild}
-            onClick={() => setConfigureFilter(FILTER_STATE.CREATING)}
+            onClick={() => {
+              setConfigureFilter(FILTER_STATE.CREATING);
+              setFilter(null);
+            }}
           >
             <Icons.Filter /> Add New Filter
           </Button>

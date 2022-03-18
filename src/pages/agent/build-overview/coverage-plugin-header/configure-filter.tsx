@@ -82,7 +82,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
     name: filterName,
     attributes: transformedFilterAttributes,
   } : {
-    name: "",
+    name: "New filter 1",
     attributes: [{
       fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(),
     }],
