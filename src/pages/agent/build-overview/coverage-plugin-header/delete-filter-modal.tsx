@@ -15,7 +15,7 @@
  */
 import React, { useState } from "react";
 import {
-  Modal, Button, sendAlertEvent, useQueryParams, Spinner,
+  Modal, Button, sendAlertEvent, Spinner,
 } from "@drill4j/ui-kit";
 import { useAgentRouteParams } from "hooks";
 import { deleteFilter } from "pages/agent/api";
@@ -24,11 +24,11 @@ import "twin.macro";
 interface Props {
   closeModal: () => void;
   closeEditingFilter: () => void;
+  filterName: string;
 }
 
-export const DeleteFilterModal = ({ closeModal, closeEditingFilter }: Props) => {
+export const DeleteFilterModal = ({ closeModal, closeEditingFilter, filterName }: Props) => {
   const { agentId } = useAgentRouteParams();
-  const { filterName = "" } = useQueryParams<{filterName?: string;}>();
   const [isLoading, setIsLoading] = useState(false);
 
   return (

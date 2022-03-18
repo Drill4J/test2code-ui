@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
-  Button, Icons, Autocomplete,
+  Button, Icons, Autocomplete, HeadlessSelect,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -27,7 +27,9 @@ import {
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { Risk, Filter, TestTypeSummary } from "types";
+import {
+  Risk, Filter, TestTypeSummary, BetweenOp,
+} from "types";
 import { PageHeader } from "components";
 import { useFilterState, useSetFilterDispatch } from "common";
 import { ActionSection } from "./action-section";
@@ -67,15 +69,47 @@ export const CoveragePluginHeader = () => {
         <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
         <div tw="flex items-center gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
           {Boolean(filters.length) && (
-            <Autocomplete
+            <HeadlessSelect
               tw="w-[320px]"
-              placeholder="Select filter"
-              onChange={(filter) => {
-                setFilter(filter as any);
-                setConfigureFilter(null);
-              }}
               options={filters.map(({ name = "", id = "" }) => ({ label: name, value: id }))}
-            />
+            >
+              {({
+                options, selectedOption, isOpen, selectValue, setIsOpen,
+              }) => {
+                useEffect(() => {
+                  selectValue(filterId || "");
+                }, [filterId]);
+
+                return (
+                  <>
+                    <HeadlessSelect.Input>
+                      {selectedOption
+                        ? <HeadlessSelect.SelectedValue>{selectedOption.label}</HeadlessSelect.SelectedValue>
+                        : <HeadlessSelect.Placeholder>Select filter</HeadlessSelect.Placeholder>}
+                    </HeadlessSelect.Input>
+                    {isOpen && (
+                      <HeadlessSelect.Body>
+                        <HeadlessSelect.ContainerWithScroll>
+                          {options.map(({ label, value }) => (
+                            <HeadlessSelect.Option
+                              selected={value === selectedOption?.value}
+                              onClick={() => {
+                                selectValue(value);
+                                setFilter(value as any);
+                                setConfigureFilter(null);
+                                setIsOpen(false);
+                              }}
+                            >
+                              {label}
+                            </HeadlessSelect.Option>
+                          ))}
+                        </HeadlessSelect.ContainerWithScroll>
+                      </HeadlessSelect.Body>
+                    )}
+                  </>
+                );
+              }}
+            </HeadlessSelect>
           )}
           <Button
             tw="flex items-center gap-x-2"

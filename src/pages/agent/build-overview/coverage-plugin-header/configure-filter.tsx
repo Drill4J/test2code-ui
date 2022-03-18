@@ -21,9 +21,8 @@ import {
   Fields,
   Form,
   FormGroup,
-  Formik,
-  Icons,
-  LightDropdown, Menu,
+  Formik, HeadlessSelect,
+  Icons, Menu,
   MultipleSelectAutocomplete,
   required, sendAlertEvent,
   sizeLimit,
@@ -203,13 +202,14 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
       <HideCriteria tw="absolute left-1/2 -translate-x-1/2 -bottom-px flex items-center gap-x-1 px-2" onClick={closeConfigureFilter}>
         <Icons.Expander width={8} height={8} rotate={-90} /> Hide Criteria
       </HideCriteria>
-      {isDeleteFilterModalOpen && (
+      {filterName && isDeleteFilterModalOpen && (
         <DeleteFilterModal
           closeModal={() => setIsDeleteFilterModalOpen(false)}
           closeEditingFilter={() => {
             closeConfigureFilter();
             setFilter(null);
           }}
+          filterName={filterName}
         />
       )}
     </div>
@@ -242,16 +242,43 @@ const ConfigureAttribute = ({
         defaultValue={attributeName}
       />
       <span>:</span>
-      <LightDropdown
-        placeholder="Operator"
+      <HeadlessSelect
         options={[
           { value: BetweenOp.OR, labelInInput: "Any", label: "Any value is met" },
           { value: BetweenOp.AND, labelInInput: "All", label: "All values are met" },
         ]}
-        onChange={(value) => setFieldValue(`attributes[${accessor}].valuesOp`, value)}
         defaultValue={BetweenOp.OR}
-        displayingInInputAccessor="labelInInput"
-      />
+      >
+        {({
+          options, selectedOption, isOpen, selectValue, setIsOpen,
+        }) => (
+          <>
+            <HeadlessSelect.Input>
+              {selectedOption
+                ? <HeadlessSelect.SelectedValue>{selectedOption.labelInInput}</HeadlessSelect.SelectedValue>
+                : <HeadlessSelect.Placeholder>Operator</HeadlessSelect.Placeholder>}
+            </HeadlessSelect.Input>
+            {isOpen && (
+              <HeadlessSelect.Body tw="!w-[150px] right-0">
+                <HeadlessSelect.ContainerWithScroll>
+                  {options.map(({ label, value }) => (
+                    <HeadlessSelect.Option
+                      selected={value === selectedOption?.value}
+                      onClick={() => {
+                        selectValue(value);
+                        setFieldValue(`attributes[${accessor}].valuesOp`, value);
+                        setIsOpen(false);
+                      }}
+                    >
+                      {label}
+                    </HeadlessSelect.Option>
+                  ))}
+                </HeadlessSelect.ContainerWithScroll>
+              </HeadlessSelect.Body>
+            )}
+          </>
+        )}
+      </HeadlessSelect>
       <AttributeValues
         onChange={(value) => setFieldValue(`attributes[${accessor}].values`, value)}
         currentValues={attrValues as any}
@@ -284,6 +311,7 @@ const AttributeValues = ({ attributeName, onChange, currentValues }: AttributeVa
       options={valuesOptions}
       onChange={onChange as any}
       values={currentValues}
+      disabled={!attributeName}
     />
   );
 };
