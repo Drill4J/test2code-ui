@@ -14,52 +14,47 @@
  * limitations under the License.
  */
 import {
-  Autocomplete,
   Button,
   composeValidators,
   Field,
   Fields,
   Form,
   FormGroup,
-  Formik, HeadlessSelect,
-  Icons, Menu,
-  MultipleSelectAutocomplete,
-  required, sendAlertEvent,
+  Formik,
+  Icons,
+  Menu,
+  required,
+  sendAlertEvent,
   sizeLimit,
-  useFormikContext,
 } from "@drill4j/ui-kit";
 import { v4 as uuidv4 } from "uuid";
 import React, { useMemo, useState } from "react";
 import tw, { styled } from "twin.macro";
 
+import { useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams } from "hooks";
 import {
-  useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams,
-} from "hooks";
-import {
-  Attribute, BetweenOp, OP, TestOverviewFilter,
+  BetweenOp, Filter, OP, TestOverviewFilter,
 } from "types";
 import { useSetFilterDispatch } from "common";
-import { createFilter, updateFilter } from "../../api";
+import { createFilter, updateFilter } from "../../../api";
 import { DeleteFilterModal } from "./delete-filter-modal";
+import { SelectAttribute, Values } from "./select-attribute";
+import { ConfigureFilterSate, FILTER_STATE } from "../types";
 
 /* eslint-disable react/no-array-index-key */
-
-type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>};
 
 interface Props {
   closeConfigureFilter: () => void;
   filterId: string | null;
+  filters: Filter[];
+  configureFilterState: ConfigureFilterSate;
+  setConfigureFilter: (val: ConfigureFilterSate) => void;
 }
 
-interface Values {
-  name: string;
-  attributes: CustomAttribute[];
-}
-
-// If filterId == null It means that we are creating new filter
-
-export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
-  const [isEditing, setIsEditing] = useState(Boolean(filterId));
+export const ConfigureFilter = ({
+  closeConfigureFilter, filterId, configureFilterState, setConfigureFilter, filters,
+}: Props) => {
+  const isEditing = configureFilterState === FILTER_STATE.EDITING;
   const [isDeleteFilterModalOpen, setIsDeleteFilterModalOpen] = useState(false);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
@@ -82,7 +77,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
     name: filterName,
     attributes: transformedFilterAttributes,
   } : {
-    name: "New filter 1",
+    name: `New filter ${filters.length + 1}`,
     attributes: [{
       fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(),
     }],
@@ -104,9 +99,10 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
           };
           const action = filterId ? updateFilter : createFilter;
           await action(agentId, values, {
-            onSuccess: () => {
+            onSuccess: (createdFilterId) => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
               closeConfigureFilter();
+              setFilter(createdFilterId);
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });
@@ -134,7 +130,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
               <FormGroup tw="mx-6 mb-3" label="Attributes">
                 <div tw="flex flex-col gap-y-4">
                   {values.attributes.map((attr, index) => (
-                    <ConfigureAttribute
+                    <SelectAttribute
                       key={attr.id}
                       accessor={index}
                       attributesOptions={attributesOptions}
@@ -171,7 +167,7 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
                 size="large"
                 disabled={isSubmitting || !isValid || !dirty}
               >
-                Apply & Save
+                {isEditing ? "Apply & Save" : "Create & Apply"}
               </Button>
               {isEditing && (
                 <Menu
@@ -183,7 +179,8 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
                       onClick: () => {
                         const newValues = { ...initialValues, name: `${initialValues.name} (1)` };
                         resetForm({ values: newValues } as any);
-                        setIsEditing(false);
+                        setConfigureFilter(FILTER_STATE.EDITING);
+                        setFilter(null);
                       },
                     },
                     {
@@ -213,106 +210,6 @@ export const ConfigureFilter = ({ closeConfigureFilter, filterId }: Props) => {
         />
       )}
     </div>
-  );
-};
-
-interface ConfigureAttributeProps {
-  attributesOptions: {value: string, label: string}[];
-  accessor: number;
-  defaultValue: string;
-  removeAttribute: (() => void) | null;
-}
-
-const ConfigureAttribute = ({
-  attributesOptions, accessor, removeAttribute, defaultValue = "",
-}: ConfigureAttributeProps) => {
-  const [attributeName, setAttributeName] = useState<string>(defaultValue);
-  const { setFieldValue, values } = useFormikContext<Values>();
-  const attrValues = values?.attributes[accessor]?.values || {};
-
-  return (
-    <div tw="grid grid-cols-[224px 4px 84px 300px 16px] items-center gap-x-2">
-      <Autocomplete
-        placeholder="Key"
-        options={attributesOptions}
-        onChange={(value) => {
-          setFieldValue(`attributes[${accessor}].fieldPath`, value);
-          setAttributeName(value as string);
-        }}
-        defaultValue={attributeName}
-      />
-      <span>:</span>
-      <HeadlessSelect
-        options={[
-          { value: BetweenOp.OR, labelInInput: "Any", label: "Any value is met" },
-          { value: BetweenOp.AND, labelInInput: "All", label: "All values are met" },
-        ]}
-        defaultValue={BetweenOp.OR}
-      >
-        {({
-          options, selectedOption, isOpen, selectValue, setIsOpen,
-        }) => (
-          <>
-            <HeadlessSelect.Input>
-              {selectedOption
-                ? <HeadlessSelect.SelectedValue>{selectedOption.labelInInput}</HeadlessSelect.SelectedValue>
-                : <HeadlessSelect.Placeholder>Operator</HeadlessSelect.Placeholder>}
-            </HeadlessSelect.Input>
-            {isOpen && (
-              <HeadlessSelect.Body tw="!w-[150px] right-0">
-                <HeadlessSelect.ContainerWithScroll>
-                  {options.map(({ label, value }) => (
-                    <HeadlessSelect.Option
-                      selected={value === selectedOption?.value}
-                      onClick={() => {
-                        selectValue(value);
-                        setFieldValue(`attributes[${accessor}].valuesOp`, value);
-                        setIsOpen(false);
-                      }}
-                    >
-                      {label}
-                    </HeadlessSelect.Option>
-                  ))}
-                </HeadlessSelect.ContainerWithScroll>
-              </HeadlessSelect.Body>
-            )}
-          </>
-        )}
-      </HeadlessSelect>
-      <AttributeValues
-        onChange={(value) => setFieldValue(`attributes[${accessor}].values`, value)}
-        currentValues={attrValues as any}
-        attributeName={attributeName}
-      />
-      {removeAttribute && (
-        <Icons.Delete
-          tw="ml-2 text-monochrome-dark-tint cursor-pointer"
-          width={16}
-          height={16}
-          onClick={removeAttribute}
-        />
-      )}
-    </div>
-  );
-};
-
-interface AttributeValuesProps {
-  onChange: (values: Record<string, boolean>) => void;
-  currentValues: Record<string, boolean>;
-  attributeName: string;
-}
-
-const AttributeValues = ({ attributeName, onChange, currentValues }: AttributeValuesProps) => {
-  const values = useTestToCodeData<string[]>(`/build/attributes/${attributeName}/values`) || [];
-  const valuesOptions = useMemo(() => values.map((value) => ({ value, label: value })), [values]);
-  return (
-    <MultipleSelectAutocomplete
-      placeholder="Value"
-      options={valuesOptions}
-      onChange={onChange as any}
-      values={currentValues}
-      disabled={!attributeName}
-    />
   );
 };
 

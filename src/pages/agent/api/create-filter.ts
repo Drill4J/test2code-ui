@@ -27,14 +27,14 @@ interface Payload {
 export const createFilter = async (
   agentId: string,
   payload: Payload,
-  { onSuccess, onError }: { onSuccess?: () => void; onError?: (message: string) => void } = {},
+  { onSuccess, onError }: { onSuccess?: (filterId: string) => void; onError?: (message: string) => void } = {},
 ) => {
   try {
-    await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
+    const res = await axios.post(`/agents/${agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
       type: "CREATE_FILTER",
       payload,
     });
-    onSuccess && onSuccess();
+    onSuccess && onSuccess(res.data.message);
   } catch ({ response: { data: { message } = {} } = {} }) {
     onError && onError(message || "There is some issue with your action. Please try again later.");
   }

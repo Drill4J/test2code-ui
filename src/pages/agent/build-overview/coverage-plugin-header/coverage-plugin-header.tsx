@@ -14,34 +14,29 @@
  * limitations under the License.
  */
 import React, { useCallback, useEffect, useState } from "react";
-import {
-  Button, Icons, Autocomplete, HeadlessSelect,
-} from "@drill4j/ui-kit";
+import { Button, HeadlessSelect, Icons } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAgentRouteParams, useFilteredData, useNavigation,
-  usePreviousBuildCoverage, useTestToCodeRouteParams, useTestToCodeData,
+  useActiveBuild,
+  useAgentRouteParams,
+  useFilteredData,
+  useNavigation,
+  usePreviousBuildCoverage,
+  useTestToCodeData,
+  useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import {
-  Risk, Filter, TestTypeSummary, BetweenOp,
-} from "types";
+import { Filter, Risk, TestTypeSummary } from "types";
 import { PageHeader } from "components";
 import { useFilterState, useSetFilterDispatch } from "common";
 import { ActionSection } from "./action-section";
 import { QualityGate } from "./quality-gate";
-import { ConfigureFilter } from "./configure-filter";
-
-enum FILTER_STATE {
-  CREATING = "CREATING",
-  EDITING = "EDITING",
-}
-
-type ConfigureFilterSate = FILTER_STATE.EDITING | FILTER_STATE.CREATING | null
+import { ConfigureFilter } from "./global-filter";
+import { ConfigureFilterSate, FILTER_STATE } from "./types";
 
 export const CoveragePluginHeader = () => {
   const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
@@ -76,16 +71,33 @@ export const CoveragePluginHeader = () => {
               {({
                 options, selectedOption, isOpen, selectValue, setIsOpen,
               }) => {
+                const unSelectFilter = useCallback((e) => {
+                  e.stopPropagation();
+                  selectValue("");
+                  setFilter(null);
+                  setConfigureFilter(null);
+                }, []);
+
                 useEffect(() => {
                   selectValue(filterId || "");
                 }, [filterId]);
 
                 return (
                   <>
+
                     <HeadlessSelect.Input>
-                      {selectedOption
-                        ? <HeadlessSelect.SelectedValue>{selectedOption.label}</HeadlessSelect.SelectedValue>
-                        : <HeadlessSelect.Placeholder>Select filter</HeadlessSelect.Placeholder>}
+                      <div tw="flex justify-between items-center flex-grow">
+                        {selectedOption
+                          ? <HeadlessSelect.SelectedValue>{selectedOption.label}</HeadlessSelect.SelectedValue>
+                          : <HeadlessSelect.Placeholder>Select filter</HeadlessSelect.Placeholder>}
+                        {selectedOption && (
+                          <Icons.Close
+                            width={12}
+                            height={12}
+                            onClick={unSelectFilter}
+                          />
+                        )}
+                      </div>
                     </HeadlessSelect.Input>
                     {isOpen && (
                       <HeadlessSelect.Body>
@@ -96,7 +108,7 @@ export const CoveragePluginHeader = () => {
                               onClick={() => {
                                 selectValue(value);
                                 setFilter(value);
-                                setConfigureFilter(null);
+                                setConfigureFilter(FILTER_STATE.EDITING);
                                 setIsOpen(false);
                               }}
                             >
@@ -176,6 +188,9 @@ export const CoveragePluginHeader = () => {
         <ConfigureFilter
           closeConfigureFilter={closeConfigureFilter}
           filterId={configureFilterState === FILTER_STATE.EDITING ? filterId : null}
+          configureFilterState={configureFilterState}
+          setConfigureFilter={setConfigureFilter}
+          filters={filters}
         />
       )}
     </>
