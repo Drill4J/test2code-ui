@@ -17,15 +17,17 @@ import React from "react";
 import {
   Button, Icons, Menu, sendAlertEvent, SessionIndicator,
 } from "@drill4j/ui-kit";
-import { Link, useHistory, useParams } from "react-router-dom";
-import { AgentStatus } from "@drill4j/types-admin";
-
+import { Link, useHistory } from "react-router-dom";
+import { BuildStatus } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
-import { AGENT_STATUS } from "common/constants";
-import { useActiveSessions, useAgentRouteParams, useBuildVersion } from "hooks";
+import { BUILD_STATUS } from "common/constants";
+import {
+  useActiveSessions, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+} from "hooks";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
+import { PageHeader } from "components";
 import { toggleScope } from "../../api";
 import { ScopeStatus } from "../scope-status";
 
@@ -37,13 +39,13 @@ interface MenuItemType {
 
 interface Props {
   isActiveBuild: boolean;
-  status?: AgentStatus;
+  status?: BuildStatus;
 }
 
 export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const { push } = useHistory();
-  const { agentId, buildVersion } = useAgentRouteParams();
-  const { scopeId = "" } = useParams<{ scopeId?: string; }>();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion, scopeId } = useTestToCodeRouteParams();
   const activeSessionsQuantity = useActiveSessions("Agent", agentId, buildVersion)?.length;
   const {
     name = "", active = false, enabled = false, started = 0, finished = 0,
@@ -62,7 +64,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
         onError: () => {
           sendAlertEvent({
             type: "ERROR",
-            title: "There is some issue with your action. Please try again later",
+            title: "There is some issue with your action. Please try again later.",
           });
         },
       })(scopeId),
@@ -97,14 +99,14 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
       >
         {name}
       </div>
-      {status === AGENT_STATUS.ONLINE && (
+      {status === BUILD_STATUS.ONLINE && (
         <div tw="flex items-center gap-x-2 w-full">
           {active && <SessionIndicator active={Boolean(activeSessionsQuantity)} />}
           <ScopeStatus active={active} loading={Boolean(activeSessionsQuantity)} enabled={enabled} started={started} finished={finished} />
         </div>
       )}
       <div tw="flex justify-end items-center w-full">
-        {active && status === AGENT_STATUS.ONLINE && (
+        {active && status === BUILD_STATUS.ONLINE && (
           <Button
             tw="flex gap-x-2 mr-4"
             primary
@@ -116,15 +118,15 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
             <span>Finish Scope</span>
           </Button>
         )}
-        {isActiveBuild && status === AGENT_STATUS.ONLINE
+        {isActiveBuild && status === BUILD_STATUS.ONLINE
         && <Menu items={menuActions as MenuItemType[]} />}
       </div>
     </Header>
   );
 };
 
-const Header = styled.div`
-  ${tw`grid items-center gap-4 w-full h-20 border-b border-monochrome-medium-tint`}
+const Header = styled(PageHeader)`
+  ${tw`grid items-center gap-4 w-full`}
   ${tw`text-24 text-monochrome-black`}
   grid-template-columns: minmax(auto, max-content) auto auto;
 `;

@@ -20,45 +20,51 @@ import {
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { getPagePath } from "common";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
 
 const TabIconWrapper = styled.div`
-  ${tw`flex items-center mr-2 text-monochrome-black`}
+  ${tw`flex items-center mr-2`}
 `;
 
 export const BuildOverview = () => {
+  const { buildVersion } = useTestToCodeRouteParams();
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
+  const { getPagePath } = useNavigation();
 
   return (
     <>
       <CoveragePluginHeader />
-      <div tw="flex mb-4 border-b border-monochrome-medium-tint">
-        <Tab
-          active={activeTab === "methods"}
-          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }))}
-          data-test="build-overview:tab:build-methods"
-        >
-          <TabIconWrapper>
-            <Icons.Function />
-          </TabIconWrapper>
-          Build methods
-        </Tab>
-        <Tab
-          active={activeTab === "tests"}
-          onClick={() => push(getPagePath({ name: "test2code", queryParams: { activeTab: "tests" } }))}
-          data-test="build-overview:tab:build-tests"
-        >
-          <TabIconWrapper>
-            <Icons.Test width={16} />
-          </TabIconWrapper>
-          Build tests
-        </Tab>
+      <div tw="px-6 flex flex-col flex-grow">
+        <div tw="flex gap-x-6 mt-6 mb-4 border-b border-monochrome-medium-tint">
+          {/* !activeTab expressions means that t is default active tab */}
+          <Tab
+            active={!activeTab || activeTab === "methods"}
+            onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }))}
+            data-test="build-overview:tab:build-methods"
+          >
+            <TabIconWrapper>
+              <Icons.Function />
+            </TabIconWrapper>
+            Build methods
+          </Tab>
+          <Tab
+            active={activeTab === "tests"}
+            onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "tests" } }))}
+            data-test="build-overview:tab:build-tests"
+          >
+            <TabIconWrapper>
+              <Icons.Test width={16} />
+            </TabIconWrapper>
+            Build tests
+          </Tab>
+        </div>
+        {(!activeTab || activeTab === "methods") && <BuildMethodsInfo /> }
+        {activeTab === "tests" && <BuildTestsInfo />}
       </div>
-      {activeTab === "methods" ? <BuildMethodsInfo /> : <BuildTestsInfo />}
     </>
   );
 };

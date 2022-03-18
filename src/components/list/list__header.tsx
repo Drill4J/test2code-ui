@@ -24,7 +24,7 @@ interface Props {
 }
 
 export const ListHeader = memo(({ columns, style }: Props) => (
-  <div tw="grid items-center h-20 border-b border-monochrome-medium-tint" style={style}>
+  <div tw="grid items-center h-24 px-6 border-b border-monochrome-medium-tint" style={style}>
     {columns.map((column) => {
       const DefaultHeaderCell = ({ column: { label } }: { column: ColumnProps }) => (
         <div>{label}</div>

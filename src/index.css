@@ -665,10 +665,6 @@ button:focus {
   bottom: 1.5rem;
 }
 
-.-left-8 {
-  left: -2rem;
-}
-
 .top-2\.5 {
   top: 0.625rem;
 }
@@ -779,6 +775,10 @@ button:focus {
   margin-bottom: 0.75rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 .mr-4 {
   margin-right: 1rem;
 }
@@ -789,6 +789,10 @@ button:focus {
 
 .ml-4 {
   margin-left: 1rem;
+}
+
+.mt-9 {
+  margin-top: 2.25rem;
 }
 
 .mt-8 {
@@ -835,6 +839,10 @@ button:focus {
   display: inline-flex;
 }
 
+.table {
+  display: table;
+}
+
 .grid {
   display: grid;
 }
@@ -851,16 +859,16 @@ button:focus {
   height: 5.75rem;
 }
 
+.h-24 {
+  height: 6rem;
+}
+
 .h-20 {
   height: 5rem;
 }
 
 .h-full {
   height: 100%;
-}
-
-.h-16 {
-  height: 4rem;
 }
 
 .h-fit {
@@ -873,8 +881,8 @@ button:focus {
   height: 2.5rem;
 }
 
-.h-\[630px\] {
-  height: 630px;
+.h-\[80\%\] {
+  height: 80%;
 }
 
 .h-4 {
@@ -893,16 +901,36 @@ button:focus {
   height: 1.25rem;
 }
 
-.h-1px {
-  height: 1px;
+.h-12 {
+  height: 3rem;
 }
 
 .h-6 {
   height: 1.5rem;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .h-8 {
   height: 2rem;
+}
+
+.max-h-\[850px\] {
+  max-height: 850px;
+}
+
+.min-h-\[40px\] {
+  min-height: 40px;
+}
+
+.min-h-\[96px\] {
+  min-height: 96px;
+}
+
+.min-h-\[1px\] {
+  min-height: 1px;
 }
 
 .min-h-80px {
@@ -937,8 +965,8 @@ button:focus {
   width: 17rem;
 }
 
-.w-\[1024px\] {
-  width: 1024px;
+.w-\[80\%\] {
+  width: 80%;
 }
 
 .w-16 {
@@ -1011,6 +1039,18 @@ button:focus {
   min-width: 154px;
 }
 
+.max-w-200px {
+  max-width: 200px;
+}
+
+.max-w-\[210px\] {
+  max-width: 210px;
+}
+
+.max-w-\[1024px\] {
+  max-width: 1024px;
+}
+
 .max-w-280px {
   max-width: 280px;
 }
@@ -1025,6 +1065,10 @@ button:focus {
 
 .flex-grow {
   flex-grow: 1;
+}
+
+.flex-grow-0 {
+  flex-grow: 0;
 }
 
 .-translate-x-1\/2 {
@@ -1177,6 +1221,11 @@ button:focus {
   row-gap: 0.75rem;
 }
 
+.gap-x-6 {
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
+}
+
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-y-reverse: 0;
   margin-top: calc(1rem * calc(1 - var(--tw-space-y-reverse)));
@@ -1205,6 +1254,12 @@ button:focus {
 
 .overflow-x-hidden {
   overflow-x: hidden;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .whitespace-nowrap {
@@ -1336,14 +1391,19 @@ button:focus {
   padding: 1.5rem;
 }
 
-.px-4 {
-  padding-left: 1rem;
-  padding-right: 1rem;
-}
-
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
 
 .py-3 {
@@ -1356,19 +1416,9 @@ button:focus {
   padding-bottom: 1rem;
 }
 
-.py-8 {
-  padding-top: 2rem;
-  padding-bottom: 2rem;
-}
-
 .py-0 {
   padding-top: 0px;
   padding-bottom: 0px;
-}
-
-.px-2 {
-  padding-left: 0.5rem;
-  padding-right: 0.5rem;
 }
 
 .px-12 {
@@ -1384,10 +1434,6 @@ button:focus {
   padding-bottom: 1rem;
 }
 
-.pl-6 {
-  padding-left: 1.5rem;
-}
-
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -1398,6 +1444,10 @@ button:focus {
 
 .pr-6 {
   padding-right: 1.5rem;
+}
+
+.pl-6 {
+  padding-left: 1.5rem;
 }
 
 .pt-4 {
@@ -1416,8 +1466,8 @@ button:focus {
   padding-bottom: 0.75rem;
 }
 
-.pt-9 {
-  padding-top: 2.25rem;
+.pt-1 {
+  padding-top: 0.25rem;
 }
 
 .pl-8 {
@@ -1434,10 +1484,6 @@ button:focus {
 
 .pb-1 {
   padding-bottom: 0.25rem;
-}
-
-.pt-1 {
-  padding-top: 0.25rem;
 }
 
 .pr-4 {
@@ -1502,10 +1548,6 @@ button:focus {
 
 .text-48 {
   font-size: 48px;
-}
-
-.text-18 {
-  font-size: 18px;
 }
 
 .text-10 {
@@ -1576,6 +1618,11 @@ button:focus {
   line-height: 36px;
 }
 
+.text-blue-default {
+  --tw-text-opacity: 1;
+  color: rgba(0, 127, 255, var(--tw-text-opacity));
+}
+
 .text-monochrome-default {
   --tw-text-opacity: 1;
   color: rgba(104, 116, 129, var(--tw-text-opacity));
@@ -1584,11 +1631,6 @@ button:focus {
 .text-monochrome-black {
   --tw-text-opacity: 1;
   color: rgba(27, 25, 27, var(--tw-text-opacity));
-}
-
-.text-blue-default {
-  --tw-text-opacity: 1;
-  color: rgba(0, 127, 255, var(--tw-text-opacity));
 }
 
 .text-red-default {
@@ -1673,6 +1715,10 @@ button:focus {
   text-transform: uppercase;
 }
 
+.first-letter\:lowercase::first-letter {
+  text-transform: lowercase;
+}
+
 .hover\:border:hover {
   border-width: 1px;
 }
@@ -1681,14 +1727,14 @@ button:focus {
   --tw-bg-opacity: 1;
 }
 
-.hover\:text-blue-default:hover {
-  --tw-text-opacity: 1;
-  color: rgba(0, 127, 255, var(--tw-text-opacity));
-}
-
 .hover\:text-blue-medium-tint:hover {
   --tw-text-opacity: 1;
   color: rgba(51, 153, 255, var(--tw-text-opacity));
+}
+
+.hover\:text-blue-default:hover {
+  --tw-text-opacity: 1;
+  color: rgba(0, 127, 255, var(--tw-text-opacity));
 }
 
 .hover\:opacity-100:hover {

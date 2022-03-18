@@ -26,18 +26,15 @@ import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
 import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
 
-const BuildInfo = styled.div`
-  ${tw`grid items-center`}
-  & {
-    grid-template-columns: max-content 1fr;
-  }
-`;
+interface Props {
+  buildVersion?: string;
+}
 
-export const CoverageSection = () => {
+export const CoverageSection = ({ buildVersion }: Props) => {
   const { agentId = "" } = useAgentRouteParams();
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent", { buildVersion }) || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary") || {};
+  const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
   const {
     all: {
       total: allMethodsTotalCount = 0,
@@ -94,17 +91,17 @@ export const CoverageSection = () => {
         )}
         additionalInfo={(
           Boolean(buildDiff) && !isFirstBuild && scopeCount > 0 && (
-            <BuildInfo>
+            <BuildInfo tw="w-full">
               <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
-                  tw="inline-block whitespace-nowrap font-bold link leading-16 no-underline"
+                  tw="whitespace-nowrap link font-bold leading-16 no-underline max-w-[210px]"
                   to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
                   title={`Build ${previousBuildVersion}`}
-                  style={{ maxWidth: "230px" }}
                 >
+                    &nbsp;Build&nbsp;
                   <span className="ellipseMe">
-                      &nbsp;Build {previousBuildVersion}
+                    {previousBuildVersion}
                   </span>
                 </NavLink>
               </Typography.MiddleEllipsis>
@@ -114,3 +111,10 @@ export const CoverageSection = () => {
     </div>
   );
 };
+
+const BuildInfo = styled.div`
+  ${tw`grid items-center`}
+  & {
+    grid-template-columns: max-content 1fr;
+  }
+`;

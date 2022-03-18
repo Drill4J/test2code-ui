@@ -15,42 +15,46 @@
  */
 import { createRouter, getPagePath as getPage } from "nanostores";
 import * as queryString from "querystring";
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
 interface Routes {
-  test2code: void;
-  testsToRun: void;
-  scopeMethods: "scopeId";
-  scopeTests: "scopeId";
-  allScopes: void;
-  risks: void;
+  overview: "buildVersion";
+  testsToRun: "buildVersion";
+  scope: "buildVersion" | "scopeId";
+  allScopes: "buildVersion";
+  risks: "buildVersion";
+  allBuilds: void;
 }
 
 export const routes = {
-  test2code: "/overview",
-  scopeMethods: "/scopes/:scopeId",
-  scopeTests: "/scopes/:scopeId",
-  testsToRun: "/tests-to-tun",
-  allScopes: "/scopes",
-  risks: "/risks",
+  overview: `${getAdminPath()}/builds/:buildVersion/overview`,
+  scope: `${getAdminPath()}/builds/:buildVersion/scopes/:scopeId`,
+  testsToRun: `${getAdminPath()}/builds/:buildVersion/tests-to-tun`,
+  allScopes: `${getAdminPath()}/builds/:buildVersion/scopes`,
+  risks: `${getAdminPath()}/builds/:buildVersion/risks`,
+  allBuilds: `${getAdminPath()}/builds`,
 };
 
 export const router = createRouter<Routes>(routes);
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
   name: PageName;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   params?: AppPages[PageName] extends void ? void : Record<AppPages[PageName], string>;
   queryParams?: Record<string, string>
 }
 
 export const getPagePath = <AppPages extends Routes, PageName extends keyof AppPages>({
-  name,
-  params, queryParams,
+  name, params, queryParams,
 }: Path<PageName, AppPages>): string => {
-  const path = `${window.location.pathname.split("test2code")[0]}test2code${getPage(router, name as any, params as any)}`;
+  const path = getPage(router, name as any, params as any);
   if (queryParams) {
     return `${path}?${queryString.stringify(queryParams)}`;
   }
   return path;
 };
+
+export function getAdminPath() {
+  const path = window.location.pathname.split("test2code")[0];
+  return path.slice(-1) === "/" ? `${path}test2code` : `${path}/test2code`;
+}

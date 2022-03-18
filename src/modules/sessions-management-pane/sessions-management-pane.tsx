@@ -18,11 +18,12 @@ import {
   Form, Formik, Panel, Icons, composeValidators, sizeLimit,
   required, handleFieldErrors, Stub, useCloseModal, sendAlertEvent,
 } from "@drill4j/ui-kit";
-import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
-import { useActiveSessions } from "hooks";
-import { agentPluginPath, groupPluginPath } from "router";
+import {
+  useActiveSessions, useAdminConnection, useAgent, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
+} from "hooks";
+import { ServiceGroup } from "@drill4j/types-admin/dist";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,
@@ -49,19 +50,16 @@ const validateManageSessionsPane = composeValidators(
 export const SessionsManagementPane = () => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation, isNewSession } = useSessionsPaneState();
-  const { pathname } = useLocation();
-  const {
-    params: {
-      agentId = "", groupId = "", buildVersion = "",
-    } = {},
-  } = matchPath<{ agentId: string; groupId: string; buildVersion: string}>(pathname, {
-    path: [agentPluginPath, groupPluginPath],
-  }) || {};
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { groupId } = useGroupRouteParams();
   const agentType = groupId ? "ServiceGroup" : "Agent";
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
   const closePanel = useCloseModal("/session-management");
+  const agent = useAgent(agentId);
+  const group = useAdminConnection<ServiceGroup>(`/api/groups/${groupId}`);
 
   return (
     <Panel onClose={closePanel}>
@@ -100,6 +98,8 @@ export const SessionsManagementPane = () => {
                     agentId={agentId}
                     serviceGroupId={groupId}
                     hasGlobalSession={hasGlobalSession}
+                    agent={agent}
+                    group={group}
                   />
                 )}
                 {!isNewSession && activeSessions.length > 0 && (
@@ -131,6 +131,7 @@ export const SessionsManagementPane = () => {
                   <BulkOperationWarning
                     agentId={id}
                     agentType={agentType}
+                    activeSessionsCount={activeSessions.length}
                   />
                 ) : (
                   <ActionsPanel

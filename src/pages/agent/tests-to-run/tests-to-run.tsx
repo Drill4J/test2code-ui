@@ -29,7 +29,9 @@ import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
 import { transformTests } from "utils";
-import { useBuildVersion, useAgent, useAgentRouteParams } from "hooks";
+import {
+  useBuildVersion, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild,
+} from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { TestsToRunHeader } from "./tests-to-run-header";
@@ -45,8 +47,9 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
     items: testsToRun = [],
   } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
-  const { buildVersion, agentId } = useAgentRouteParams();
-  const { buildVersion: activeBuildVersion = "" } = useAgent(agentId) || {};
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};
   const { tests: previousBuildTests = [], testDuration: totalDuration = 1 } = useBuildVersion<BuildSummary>(
@@ -72,8 +75,21 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
       />
     )), [testsToRun.length]);
 
+  // It need because test that don`t run can have the same (0) percentage & duration & covered methods count  with done tests
+  // And tests that weren`t run should be in the start of table when we sorting DESC
+  const tableData = useMemo(() => transformTests(testsToRun).map((test) => {
+    if (test.toRun) {
+      return {
+        ...test,
+        coverage: { percentage: -1, methodCount: { covered: -1 } },
+        overview: { ...test.overview, duration: -1 },
+      };
+    }
+    return test;
+  }), [testsToRun]);
+
   return (
-    <div tw="flex flex-col gap-4 flex-grow">
+    <>
       <TestsToRunHeader
         agentInfo={{
           agentType, buildVersion, previousBuildVersion, activeBuildVersion,
@@ -82,108 +98,111 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
         previousBuildTestsDuration={totalDuration}
         previousBuildAutoTestsCount={previousBuildAutoTestsCount}
       />
-      <div tw="flex justify-between items-start w-full">
-        <span tw="h-6 align-top text-12 leading-16 font-bold text-monochrome-default uppercase" data-test="tests-to-run-list:bar-title">
-          saved time history
-        </span>
-        <Legend
-          legendItems={[
-            { label: "No data", borderColor: DATA_VISUALIZATION_COLORS.SAVED_TIME, color: "transparent" },
-            { label: "Saved time", color: DATA_VISUALIZATION_COLORS.SAVED_TIME },
-            { label: "Duration with Drill4J", color: DATA_VISUALIZATION_COLORS.DURATION_WITH_D4J },
-          ]}
-        />
+      <div tw="flex flex-col flex-grow mt-4 px-6">
+        <div tw="flex justify-between items-start w-full">
+          <span tw="h-6 align-top text-12 leading-16 font-bold text-monochrome-default uppercase" data-test="tests-to-run-list:bar-title">
+            saved time history
+          </span>
+          <Legend
+            legendItems={[
+              { label: "No data", borderColor: DATA_VISUALIZATION_COLORS.SAVED_TIME, color: "transparent" },
+              { label: "Saved time", color: DATA_VISUALIZATION_COLORS.SAVED_TIME },
+              { label: "Duration with Drill4J", color: DATA_VISUALIZATION_COLORS.DURATION_WITH_D4J },
+            ]}
+          />
+        </div>
+        {previousBuildAutoTestsCount ? (
+          <BarChart
+            activeBuildVersion={activeBuildVersion}
+            totalDuration={totalDuration}
+            summaryTestsToRun={summaryTestsToRun}
+          />
+        ) : (
+          <Stub
+            tw="h-auto flex-grow-0"
+            icon={<Icons.Graph tw="text-monochrome-medium-tint" width={70} height={75} />}
+            title="No data about saved time"
+            message="There is no information about Auto Tests duration in the parent build."
+          />
+        )}
+        <div tw="flex flex-col mt-8 flex-grow">
+          <Table
+            data={tableData}
+            stub={tableStub}
+            columns={[
+              {
+                Header: "Name",
+                accessor: "overview.details.name",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Path",
+                accessor: "overview.details.path",
+                textAlign: "left",
+                filterable: true,
+              },
+              {
+                Header: "Test type",
+                accessor: "type",
+                Cell: ({ value }: any) => (
+                  <>
+                    {capitalize(value)}
+                  </>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "State",
+                accessor: "toRun",
+                Cell: ({ value }: any) => (
+                  <span tw="leading-64" title={value ? "To run" : "Done"}>
+                    {value
+                      ? "To run"
+                      : <span tw="font-bold text-green-default">Done</span>}
+                  </span>
+                ),
+                textAlign: "left",
+              },
+              {
+                Header: "Coverage, %",
+                accessor: "coverage.percentage",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+                sortType: "number",
+              },
+              {
+                Header: "Methods covered",
+                accessor: "coverage.methodCount.covered",
+                Cell: ({
+                  value,
+                  row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
+                }: any) => (
+                  toRun ? null : (
+                    <Cells.Clickable
+                      tw="inline"
+                      disabled={!value}
+                    >
+                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+                        {value}
+                      </Link>
+                    </Cells.Clickable>
+                  )
+                ),
+              },
+              {
+                Header: "Duration",
+                accessor: "overview.duration",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
+                sortType: "number",
+              }]}
+            renderHeader={({ currentCount }: { currentCount: number }) => (
+              <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
+                <div tw="uppercase font-bold" data-test="tests-to-run-list:table-title">{`All suggested tests (${currentCount})`}</div>
+              </div>
+            )}
+          />
+        </div>
       </div>
-      {previousBuildAutoTestsCount ? (
-        <BarChart
-          activeBuildVersion={activeBuildVersion}
-          totalDuration={totalDuration}
-          summaryTestsToRun={summaryTestsToRun}
-        />
-      ) : (
-        <Stub
-          icon={<Icons.Graph tw="text-monochrome-medium-tint" width={70} height={75} />}
-          title="No data about saved time"
-          message="There is no information about Auto Tests duration in the parent build."
-        />
-      )}
-      <div tw="flex flex-col mt-8 flex-grow">
-        <Table
-          data={transformTests(testsToRun)}
-          stub={tableStub}
-          columns={[
-            {
-              Header: "Name",
-              accessor: "overview.details.name",
-              textAlign: "left",
-              filterable: true,
-            },
-            {
-              Header: "Path",
-              accessor: "overview.details.path",
-              textAlign: "left",
-              filterable: true,
-            },
-            {
-              Header: "Test type",
-              accessor: "type",
-              Cell: ({ value }: any) => (
-                <>
-                  {capitalize(value)}
-                </>
-              ),
-              textAlign: "left",
-            },
-            {
-              Header: "State",
-              accessor: "overview.result",
-              Cell: ({ row: { original: { toRun } } }: any) => (
-                <span tw="leading-64" title={toRun ? "To run" : "Done"}>
-                  {toRun
-                    ? "To run"
-                    : <span tw="font-bold text-green-default">Done</span>}
-                </span>
-              ),
-              textAlign: "left",
-            },
-            {
-              Header: "Coverage, %",
-              accessor: "coverage.percentage",
-              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
-              sortType: "number",
-            },
-            {
-              Header: "Methods covered",
-              accessor: "coverage.methodCount.covered",
-              Cell: ({
-                value,
-                row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
-              }: any) => (
-                toRun ? null : (
-                  <Cells.Clickable
-                    tw="inline"
-                    disabled={!value}
-                  >
-                    <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-                      {value}
-                    </Link>
-                  </Cells.Clickable>
-                )
-              ),
-            },
-            {
-              Header: "Duration",
-              accessor: "overview.duration",
-              Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-              sortType: "number",
-            }]}
-          renderHeader={({ currentCount }: { currentCount: number }) => (
-            <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">
-              <div tw="uppercase font-bold" data-test="tests-to-run-list:table-title">{`All suggested tests (${currentCount})`}</div>
-            </div>
-          )}
-        />
-      </div>
-    </div>
+    </>
   );
 };

@@ -21,25 +21,28 @@ import tw, { styled } from "twin.macro";
 import axios from "axios";
 
 import {
-  PLUGIN_ID, getGroupModalPath, routes as agentRoutes, test2CodePluginSocket,
+  PLUGIN_ID, getGroupModalPath, test2CodePluginSocket,
 } from "common";
 import { List, ListColumn, Modals } from "components";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { useGroupData, useGroupRouteParams } from "hooks";
+// eslint-disable-next-line import/named
+import { routesWithoutAdminPath } from "hooks/use-navigation";
 
 import { ScopeSummary } from "types";
+import { AgentInfo } from "@drill4j/types-admin";
 import { TestToCodeNameCell } from "./test-to-code-name-cell";
 import { TestToCodeCoverageCell } from "./test-to-code-coverage-cell";
 import { TestToCodeCell } from "./test-to-code-cell";
 import { TestToCodeHeaderCell } from "./test-to-code-header-cell";
 
 export interface GroupRootComponentProps {
-  getAgentPluginPath: (props: { agentId: string; buildVersion: string; path?: string}) => string;
-  getAgentDashboardPath: (props: { agentId: string; buildVersion: string; }) => string;
-  getAgentSettingsPath: (agentId: string) => string;
+  getAgentPluginPath: (props: { agentId: string; path?: string}) => string;
+  getAgentDashboardPath: (props: { agentId: string;}) => string;
+  openSettingsPanel: (agent: AgentInfo) => void;
 }
 
-export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashboardPath }: GroupRootComponentProps) => {
+export const Group = ({ getAgentPluginPath, openSettingsPanel, getAgentDashboardPath }: GroupRootComponentProps) => {
   const { groupId } = useGroupRouteParams();
   const { summaries = [], aggregated } = useGroupData<ServiceGroupSummary>("/group/summary", groupId) || {};
   const serviceGroupSummaries = summaries.map((agentSummary) => ({
@@ -87,7 +90,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
     } catch (error) {
       sendAlertEvent({
         type: "ERROR",
-        title: "There is some issue with your action. Please try again later",
+        title: "There is some issue with your action. Please try again later.",
       });
     }
   };
@@ -111,10 +114,15 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
             <TestToCodeNameCell
               name={value}
               additionalInformation={`Build: ${buildVersion}`}
-              link={getAgentDashboardPath({ buildVersion, agentId })}
+              link={getAgentDashboardPath({ agentId })}
             />
           )}
-          HeaderCell={() => <div tw="font-light text-24 leading-32">Test2Code</div>}
+          HeaderCell={() => (
+            <div tw="text-monochrome-black">
+              <div tw="mb-2 text-24 leading-32">Test2Code</div>
+              <div tw="text-14 leading-16">Online Agents <span tw="text-monochrome-default">{summaries.length}</span></div>
+            </div>
+          )}
         />
         <ListColumn
           name="coverage"
@@ -138,7 +146,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
             <TestToCodeCell
               value={value?.count}
               name="tests-to-run"
-              link={getAgentPluginPath({ buildVersion, agentId, path: agentRoutes.testsToRun })}
+              link={getAgentPluginPath({ agentId, path: routesWithoutAdminPath.testsToRun.replace(":buildVersion", buildVersion) })}
             />
           )}
           HeaderCell={() => (
@@ -151,7 +159,7 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
         />
         <ListColumn
           name="actions"
-          Cell={({ item: { id: agentId = "" } }) => (
+          Cell={({ item: agent }) => (
             <MenuWrapper>
               <Menu
                 testContext="test-to-code-plugin:actions:cell"
@@ -161,7 +169,13 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     icon: "BuildList",
                     onClick: () => null,
                     Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={`/agents/${agentId}/builds`}>{children}</Link>
+                      <Link to={getAgentPluginPath({
+                        agentId: agent.id,
+                        path: routesWithoutAdminPath.allBuilds.replace(":buildVersion", agent.buildVersion),
+                      })}
+                      >
+                        {children}
+                      </Link>
                     ),
                   },
                   {
@@ -169,9 +183,9 @@ export const Group = ({ getAgentPluginPath, getAgentSettingsPath, getAgentDashbo
                     icon: "Settings",
                     onClick: () => null,
                     Content: ({ children }: { children: JSX.Element }) => (
-                      <Link to={getAgentSettingsPath(agentId)}>
+                      <span onClick={() => openSettingsPanel(agent)}>
                         {children}
-                      </Link>
+                      </span>
                     ),
                   },
                 ]}

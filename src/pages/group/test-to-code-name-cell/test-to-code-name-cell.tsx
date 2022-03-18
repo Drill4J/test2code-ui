@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Typography } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import React, { memo } from "react";
 import tw, { styled } from "twin.macro";
@@ -45,13 +44,11 @@ export const TestToCodeNameCell = memo(({ name, additionalInformation, link }: P
       </Name>
     </div>
     <div
-      tw="text-ellipsis max-w-1/2 mt-1 text-12"
+      tw="truncate max-w-1/2 mt-1 text-12"
       data-test="test-to-code-name-cell:additional-information"
       title={additionalInformation}
     >
-      <Typography.MiddleEllipsis>
-        <span>{additionalInformation}</span>
-      </Typography.MiddleEllipsis>
+      <span>{additionalInformation}</span>
     </div>
   </Content>
 ));

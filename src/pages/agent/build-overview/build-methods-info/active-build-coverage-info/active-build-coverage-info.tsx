@@ -16,7 +16,7 @@
 import React from "react";
 import { Legend, ProgressBarLegends } from "@drill4j/ui-kit";
 import { percentFormatter } from "@drill4j/common-utils";
-import { AgentStatus } from "@drill4j/types-admin";
+import { BuildStatus } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
@@ -29,7 +29,7 @@ interface Props {
   buildCoverage: BuildCoverage;
   previousBuildInfo?: PreviousBuildInfo;
   scope?: ActiveScope | null;
-  status?: AgentStatus;
+  status?: BuildStatus;
 }
 
 export const ActiveBuildCoverageInfo = ({

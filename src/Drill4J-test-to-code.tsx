@@ -20,12 +20,10 @@ import { BrowserRouter, Route } from "react-router-dom";
 import axios from "axios";
 
 import { Agent, Group } from "pages";
-import { SwitchBuildContext } from "contexts";
 
+import { agentDashboardPath, groupDashboardPath } from "admin-routes";
+import { SetPanelContext } from "common";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
-import { GroupRootComponentProps } from "./pages/group/group";
-import { agentDashboardPath, groupDashboardPath } from "./router";
-import { routes } from "./common";
 import pkj from "../package.json";
 
 import "./index.css";
@@ -58,18 +56,14 @@ const ErrorBoundary = (err: Error, info: React.ErrorInfo, props: any) => (
   </ul>
 );
 
-interface AgentRootComponentProps {
-  switchBuild: (version: string, path: string) => void
-}
-
 const AgentPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: ({ switchBuild }: AgentRootComponentProps) => (
+  rootComponent: ({ setPanel }) => (
     <BrowserRouter>
-      <SwitchBuildContext.Provider value={switchBuild}>
+      <SetPanelContext.Provider value={setPanel}>
         <Agent />
-      </SwitchBuildContext.Provider>
+      </SetPanelContext.Provider>
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
@@ -138,9 +132,11 @@ export const GroupHUD = {
 export const GroupPluginLifecycle = singleSpaReact({
   React,
   ReactDOM,
-  rootComponent: (props: GroupRootComponentProps) => (
+  rootComponent: ({ setPanel, ...props }) => (
     <BrowserRouter>
-      <Group {...props} />
+      <SetPanelContext.Provider value={setPanel}>
+        <Group {...props} />
+      </SetPanelContext.Provider>
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,
@@ -157,5 +153,3 @@ export const GroupPlugin = {
   update: GroupPluginLifecycle.update,
   bootstrap: GroupPluginLifecycle.bootstrap,
 };
-
-export const Routes = { ...routes };

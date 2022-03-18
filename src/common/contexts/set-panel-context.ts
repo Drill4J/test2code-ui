@@ -13,4 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { TestsToRunModal } from "./tests-to-run-modal";
+import React from "react";
+
+export const SetPanelContext = React.createContext<({ type, payload } : { type: string, payload: any}) => void>(() => {});

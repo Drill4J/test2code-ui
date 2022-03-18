@@ -15,6 +15,7 @@
  */
 import React from "react";
 import tw, { styled } from "twin.macro";
+import { PageHeader } from "components";
 
 const Subtitle = styled.div`
   ${tw`grid gap-x-1`}
@@ -29,31 +30,32 @@ interface Props {
 }
 
 export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCoveredRisksCount }: Props) => (
-  <div tw="py-3 border-b border-monochrome-medium-tint">
-    <div tw="mb-1 font-light text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
-      <span>Risks</span>
-      <span tw="ml-2 text-monochrome-default">
-        {notCoveredRisksCount}
-      </span>
+  <PageHeader>
+    <div>
+      <div tw="mb-1 font-light text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
+        <span>Risks</span>
+        <span tw="ml-2 text-monochrome-default">
+          {notCoveredRisksCount}
+        </span>
+      </div>
+      <Subtitle data-test="risks-list:subtitle">
+        <span>Build:</span>
+        <span
+          className="text-monochrome-black text-ellipsis"
+          data-test="risks-list:current-build-version"
+          title={buildVersion}
+        >
+          {buildVersion}
+        </span>
+        <span tw="ml-1">Compared to:</span>
+        <span
+          className="text-monochrome-black text-ellipsis"
+          data-test="risks-list:previous-build-version"
+          title={`Build ${previousBuildVersion}`}
+        >
+          Build {previousBuildVersion}
+        </span>
+      </Subtitle>
     </div>
-    <Subtitle data-test="risks-list:subtitle">
-      <span>Build:</span>
-      <span
-        className="text-monochrome-black text-ellipsis"
-        data-test="risks-list:current-build-version"
-        title={buildVersion}
-      >
-        {buildVersion}
-      </span>
-      <span tw="ml-1">Compared to:</span>
-      <span
-        className="text-monochrome-black text-ellipsis"
-        data-test="risks-list:previous-build-version"
-        title={`Build ${previousBuildVersion}`}
-      >
-        Build {previousBuildVersion}
-      </span>
-    </Subtitle>
-  </div>
-
+  </PageHeader>
 );

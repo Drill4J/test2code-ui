@@ -13,14 +13,4 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { createContext, useContext } from "react";
-
-export const SwitchBuildContext = createContext<(version: string, path: string) => void>(() => {});
-
-export function useSwitchBuild():(version: string, path: string) => void {
-  const context = useContext(SwitchBuildContext);
-  if (!context) {
-    throw new Error("useSwitchBuild must be used within a SwitchBuildContext");
-  }
-  return context;
-}
+export { AllBuilds } from "./all-builds";

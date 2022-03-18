@@ -13,4 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useSwitchBuild, SwitchBuildContext } from "./switch-build-context";
+import tw, { styled } from "twin.macro";
+
+export const PageHeader = styled.div`
+  ${tw`flex items-center w-full min-h-[96px] px-6`}
+  ${tw`border-monochrome-medium-tint border-b`}
+`;

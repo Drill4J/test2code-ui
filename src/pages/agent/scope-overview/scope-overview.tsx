@@ -15,12 +15,13 @@
  */
 import React from "react";
 import { Icons, Tab, useQueryParams } from "@drill4j/ui-kit";
-import { useHistory, Redirect, useParams } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
-import { useActiveScope, useAgent, useBuildVersion } from "hooks";
-import { getPagePath } from "common";
+import {
+  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
 import { ScopeOverviewHeader } from "./scope-overview-header";
 import { ScopeMethodsInfo } from "./scope-methods-info";
 import { ScopeTestsInfo } from "./scope-tests-info";
@@ -28,11 +29,10 @@ import { ScopeTestsInfo } from "./scope-tests-info";
 export const ScopeOverview = () => {
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
-
-  const {
-    scopeId = "", buildVersion = "", agentId = "",
-  } = useParams<{ pluginId: string, scopeId: string, buildVersion: string; tab: string; agentId?: string; }>();
-  const { buildVersion: activeBuildVersion = "", status } = useAgent(agentId) || {};
+  const { getPagePath } = useNavigation();
+  const { scopeId, buildVersion } = useTestToCodeRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
 
   const newBuildHasAppeared = activeBuildVersion && buildVersion && activeBuildVersion !== buildVersion;
@@ -41,21 +41,21 @@ export const ScopeOverview = () => {
 
   return (
     (scope && !scope?.coverage.percentage && newBuildHasAppeared) || (hasNewActiveScope && scope && !scope?.coverage?.percentage)
-      ? <Redirect to={{ pathname: getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }) }} />
+      ? <Redirect to={{ pathname: getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }) }} />
       : (
         <>
-          <ScopeOverviewHeader status={status} isActiveBuild={activeBuildVersion === buildVersion} />
-          <div tw="flex flex-col items-center flex-grow w-full">
-            <div tw="flex mb-4 w-full border-b border-monochrome-medium-tint">
+          <ScopeOverviewHeader status={buildStatus} isActiveBuild={activeBuildVersion === buildVersion} />
+          <div tw="flex flex-col items-center flex-grow w-full px-6 mt-6">
+            <div tw="flex gap-x-6 mb-4 w-full border-b border-monochrome-medium-tint">
               <Tab
                 active={activeTab === "methods"}
                 onClick={() => push(getPagePath({
-                  name: "scopeMethods",
-                  params: { scopeId },
+                  name: "scope",
+                  params: { scopeId, buildVersion },
                   queryParams: { activeTab: "methods" },
                 }))}
               >
-                <div tw="flex items-center mr-2 text-monochrome-black">
+                <div tw="flex items-center mr-2">
                   <Icons.Function />
                 </div>
                 Scope methods
@@ -63,12 +63,12 @@ export const ScopeOverview = () => {
               <Tab
                 active={activeTab === "tests"}
                 onClick={() => push(getPagePath({
-                  name: "scopeTests",
-                  params: { scopeId },
+                  name: "scope",
+                  params: { scopeId, buildVersion },
                   queryParams: { activeTab: "tests" },
                 }))}
               >
-                <div tw="flex items-center mr-2 text-monochrome-black">
+                <div tw="flex items-center mr-2">
                   <Icons.Test width={16} />
                 </div>
                 Scope tests

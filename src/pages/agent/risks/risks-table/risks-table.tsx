@@ -21,7 +21,8 @@ import {
 import { Link } from "react-router-dom";
 import "twin.macro";
 
-import { getModalPath, getPagePath } from "common";
+import { getModalPath } from "common";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
@@ -30,6 +31,8 @@ interface Props {
 }
 
 export const RisksTable = ({ data }: Props) => {
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { getPagePath } = useNavigation();
   const columns = [
     {
       Header: "Name",
@@ -44,7 +47,8 @@ export const RisksTable = ({ data }: Props) => {
           link={(
             <Link
               to={getPagePath({
-                name: "test2code",
+                name: "overview",
+                params: { buildVersion },
                 queryParams: {
                   activeTab: "methods",
                   tableState: JSON.stringify({ filters: [{ id: "name", value: ownerClass.slice(0, ownerClass.lastIndexOf("/")) }] }),

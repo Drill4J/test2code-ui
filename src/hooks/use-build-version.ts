@@ -18,6 +18,7 @@ import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
 import { useAgentRouteParams } from "./use-agent-route-params";
+import { useTestToCodeRouteParams } from "./use-test2code-params";
 
 interface Message {
   agentId?: string;
@@ -32,13 +33,16 @@ export function useBuildVersion<T>(
   message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
-  const { agentId = "", buildVersion = "" } = useAgentRouteParams();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const hasBuildVersion = buildVersion || message.buildVersion;
+
   useEffect(() => {
     function handleDataChange(newData: T) {
       setData(newData);
     }
 
-    const unsubscribe = test2CodePluginSocket.subscribe(
+    const unsubscribe = hasBuildVersion && agentId && test2CodePluginSocket.subscribe(
       topic,
       handleDataChange,
       {
@@ -50,7 +54,7 @@ export function useBuildVersion<T>(
     );
 
     return () => {
-      unsubscribe();
+      unsubscribe && unsubscribe();
     };
   }, [message.buildVersion, message.agentId,
     message.output, agentId, buildVersion, topic,

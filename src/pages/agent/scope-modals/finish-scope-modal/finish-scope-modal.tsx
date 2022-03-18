@@ -16,23 +16,27 @@
 import React, { useState } from "react";
 import { useHistory, Link } from "react-router-dom";
 import {
-  Button, Icons, Modal, GeneralAlerts, Spinner, Formik, Form, Checkbox, Field, useCloseModal, useQueryParams, sendAlertEvent,
+  Button, Icons, Modal, Spinner, Formik, Form, Checkbox, Field, useCloseModal, sendAlertEvent, useQueryParams, ContentAlert,
 } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
-import { getModalPath, getPagePath } from "common";
+import {
+  useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+} from "hooks";
+import { getModalPath } from "common";
 import { finishScope } from "../../api";
 import { ScopeSummary } from "./scope-summary";
 
 export const FinishScopeModal = () => {
-  const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { scopeId } = useQueryParams<{scopeId?: string;}>();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
+  const { getPagePath } = useNavigation();
   const { testTypes: activeSessionTest = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [loading, setLoading] = useState(false);
   const testsCount = scope
@@ -50,26 +54,6 @@ export const FinishScopeModal = () => {
             <div tw="text-ellipsis" data-test="finish-scope-modal:header">{`Finish Scope ${scope && scope.name}`}</div>
           </div>
         </Modal.Header>
-        {activeSessionTest.length > 0 && (
-          <GeneralAlerts type="WARNING">
-            <div>
-              At least one active session has been detected.<br />
-              First, you need to finish it in&nbsp;
-              <Link
-                data-test="finish-scope-modal:general-alert:session-management-link"
-                tw="link font-bold text-14"
-                to={getModalPath({ name: "sessionManagement" })}
-              >
-                Sessions Management
-              </Link>
-            </div>
-          </GeneralAlerts>
-        )}
-        {Boolean(!testsCount && !activeSessionTest.length) && (
-          <GeneralAlerts type="WARNING">
-            Scope is empty and will be deleted after finishing.
-          </GeneralAlerts>
-        )}
         <Formik
           initialValues={{ ignoreScope: false, forceFinish: false }}
           onSubmit={async ({ ignoreScope, forceFinish }: any) => {
@@ -79,8 +63,8 @@ export const FinishScopeModal = () => {
                 sendAlertEvent({
                   type: "SUCCESS",
                   title: scope?.coverage.percentage
-                    ? "Scope has been finished"
-                    : "Scope has been finished and deleted",
+                    ? "Scope has been finished."
+                    : "Scope has been finished and deleted.",
                 });
                 closeModal();
               },
@@ -88,7 +72,7 @@ export const FinishScopeModal = () => {
             })({ prevScopeEnabled: !ignoreScope, savePrevScope: true, forceFinish });
             if (isScopeInfoPage &&
               ((forceFinish && !scope?.coverage.percentage) || (!forceFinish && !scope?.sessionsFinished))) {
-              push(getPagePath({ name: "test2code", queryParams: { activeTab: "methods" } }));
+              push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }));
             }
             setLoading(false);
           }}
@@ -100,6 +84,26 @@ export const FinishScopeModal = () => {
             return (
               <Form tw="flex flex-col">
                 <Modal.Body>
+                  {activeSessionTest.length > 0 && (
+                    <ContentAlert tw="mb-6" type="WARNING">
+                      <div>
+                        At least one active session has been detected.<br />
+                        First, you need to finish it in&nbsp;
+                        <Link
+                          data-test="finish-scope-modal:general-alert:session-management-link"
+                          tw="link font-bold text-14"
+                          to={getModalPath({ name: "sessionManagement" })}
+                        >
+                          Sessions Management
+                        </Link>
+                      </div>
+                    </ContentAlert>
+                  )}
+                  {Boolean(!testsCount && !activeSessionTest.length) && (
+                    <ContentAlert tw="mb-6" type="WARNING">
+                      Scope is empty and will be deleted after finishing.
+                    </ContentAlert>
+                  )}
                   <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
                   <div tw="flex flex-col gap-y-4 mt-6 text-14 leading-20 text-blue-default">
                     {Boolean(activeSessionTest.length) && (

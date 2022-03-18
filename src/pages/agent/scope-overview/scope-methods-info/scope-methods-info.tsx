@@ -15,25 +15,20 @@
  */
 import React from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { BuildMethodsCard } from "components";
 import { Methods } from "types/methods";
 import { ActiveScope } from "types/active-scope";
-import { useBuildVersion } from "hooks";
+import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import { PLUGIN_ID } from "common";
 import { ScopeCoverageInfo } from "../scope-coverage-info";
 import { MethodsTable } from "../../methods-table";
 
 export const ScopeMethodsInfo = () => {
-  const {
-    pluginId = "", agentId = "", buildVersion = "", scopeId = "",
-  } = useParams<{
-    pluginId: string;
-    agentId: string;
-    buildVersion: string;
-    scopeId: string
-  }>();
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion, scopeId } = useTestToCodeRouteParams();
   const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     all, new: newMethods, modified, risks,
@@ -57,7 +52,7 @@ export const ScopeMethodsInfo = () => {
             {Boolean(risks?.new) && (
               <Link
                 tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${scopeId}/risks-modal/?filter=new`}
+                to={`/full-page/${agentId}/${buildVersion}/${PLUGIN_ID}/scope/${scopeId}/risks-modal/?filter=new`}
                 data-test="project-methods-cards:link-button:new:risks"
               >
                 {risks?.new} risks
@@ -72,7 +67,7 @@ export const ScopeMethodsInfo = () => {
             {Boolean(risks?.modified) && (
               <Link
                 tw="link"
-                to={`/full-page/${agentId}/${buildVersion}/${pluginId}/scope/${scopeId}/risks-modal/?filter=modified`}
+                to={`/full-page/${agentId}/${buildVersion}/${PLUGIN_ID}/scope/${scopeId}/risks-modal/?filter=modified`}
                 data-test="project-methods-cards:link-button:modified:risks"
               >
                 {risks?.modified} risks
