@@ -15,8 +15,17 @@
  */
 import React from "react";
 import {
-  Form, Formik, Panel, Icons, composeValidators, sizeLimit,
-  required, handleFieldErrors, Stub, useCloseModal, sendAlertEvent,
+  composeValidators,
+  Form,
+  Formik,
+  handleFieldErrors,
+  Icons,
+  Panel,
+  required,
+  sendAlertEvent,
+  sizeLimit,
+  Stub,
+  useCloseModal,
 } from "@drill4j/ui-kit";
 import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
@@ -24,14 +33,13 @@ import "twin.macro";
 import { useActiveSessions } from "hooks";
 import { agentPluginPath, groupPluginPath } from "admin-routes";
 import { ManagementNewSession } from "./management-new-session";
-import {
-  startServiceGroupSessions, startAgentSession,
-} from "./sessions-management-pane-api";
+import { startAgentSession, startServiceGroupSessions } from "./sessions-management-pane-api";
 import { ManagementActiveSessions } from "./management-active-sessions";
 import { ActiveSessionsList } from "./active-sessions-list";
 import { BulkOperationWarning } from "./bulk-operation-warning";
 import { ActionsPanel } from "./actions-panel";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "./store";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "../../common/analytic";
 
 interface FormValues {
   sessionId: string;
@@ -76,6 +84,14 @@ export const SessionsManagementPane = () => {
             if (error.sessionId) {
               setFieldError("sessionId", error.sessionId);
             } else {
+              const label = [];
+              values.isGlobal && label.push("Set as global session");
+              values.isRealtime && label.push("Real-time coverage collection");
+              sendPluginEvent({
+                name: PLUGIN_EVENT_NAMES.CLICK_ON_START_SESSION_BUTTON,
+                dimension2: id,
+                label: label.join("#"),
+              });
               resetForm();
               dispatch(setIsNewSession(false));
             }

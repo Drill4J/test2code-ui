@@ -45,7 +45,7 @@ export enum EVENT_LABELS {
 
 interface PluginEventProps {
   name: PLUGIN_EVENT_NAMES,
-  label?: EVENT_LABELS,
+  label?: EVENT_LABELS | string,
   dimension2?: string,
 }
 

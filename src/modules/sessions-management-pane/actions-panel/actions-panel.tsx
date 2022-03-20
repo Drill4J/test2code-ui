@@ -18,7 +18,7 @@ import { Button, Icons, Spinner } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
-import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 import { useAgentRouteParams } from "../../../hooks";
 
@@ -65,6 +65,7 @@ export const ActionsPanel = ({
             sendPluginEvent({
               name: PLUGIN_EVENT_NAMES.CLICK_ON_START_NEW_SESSION_BUTTON,
               dimension2: agentId,
+              label: EVENT_LABELS.SESSION_MANAGEMENT,
             });
           }}
           data-test="sessions-management-pane:start-new-session-button"
