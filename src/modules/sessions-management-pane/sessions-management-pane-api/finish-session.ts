@@ -16,6 +16,7 @@
 import axios from "axios";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
+import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
 
 export async function finishSession(
   agentId: string, sessionId: string,
@@ -28,6 +29,11 @@ export async function finishSession(
     sendAlertEvent({
       type: "SUCCESS",
       title: "Session has been finished successfully. All your progress has been added to the active scope.",
+    });
+    sendPluginEvent({
+      name: PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_SESSION_BUTTON,
+      dimension2: agentId,
+      label: EVENT_LABELS.SESSION_MANAGEMENT,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({

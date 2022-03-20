@@ -19,7 +19,8 @@ import { Field, Fields, LinkButton } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { ActiveSession } from "types/active-session";
-import { PLUGIN_EVENT_NAMES, sendPluginEvent, EVENT_LABELS } from "common/analytic";
+import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { useAgentRouteParams } from "hooks";
 import { setBulkOperation, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 interface Props {
@@ -30,6 +31,7 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation } = useSessionsPaneState();
   const disabled = bulkOperation.isProcessing;
+  const { agentId } = useAgentRouteParams();
 
   return (
     <div
@@ -46,7 +48,11 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
             size="small"
             onClick={() => {
               dispatch(setBulkOperation("abort", true));
-              sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
+              sendPluginEvent({
+                name: PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_ALL_SESSION_BUTTON,
+                dimension2: agentId,
+                label: EVENT_LABELS.SESSION_MANAGEMENT,
+              });
             }}
             data-test="management-active-sessions:abort-all"
             disabled={disabled}
@@ -57,7 +63,11 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
             size="small"
             onClick={() => {
               dispatch(setBulkOperation("finish", true));
-              sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
+              sendPluginEvent({
+                name: PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON,
+                dimension2: agentId,
+                label: EVENT_LABELS.SESSION_MANAGEMENT,
+              });
             }}
             data-test="management-active-sessions:finish-all"
             disabled={disabled}
