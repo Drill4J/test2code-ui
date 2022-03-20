@@ -32,6 +32,7 @@ import { Risk } from "types";
 import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../../common/analytic";
 
 export const CoveragePluginHeader = () => {
   const { agentId = "" } = useAgentRouteParams();
@@ -103,6 +104,12 @@ export const CoveragePluginHeader = () => {
               <Button
                 primary
                 size="small"
+                onClick={() => {
+                  sendKeyMetricsEvent({
+                    name: KEY_METRICS_EVENT_NAMES.CLICK_ON_CONFIGURE_BUTTON,
+                    dimension2: agentId,
+                  });
+                }}
               >
                 Configure
               </Button>
