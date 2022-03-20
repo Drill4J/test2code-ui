@@ -19,8 +19,8 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { useAgentRouteParams } from "hooks";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
-import { useAgentRouteParams } from "../../../hooks";
 
 const Content = styled.div`
   ${tw`grid gap-4 items-center h-full`}
