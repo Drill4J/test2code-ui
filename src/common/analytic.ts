@@ -43,10 +43,17 @@ export enum EVENT_LABELS {
   SESSION_MANAGEMENT = "Panel \"Sessions Management\""
 }
 
-export const sendPluginEvent = (event: PLUGIN_EVENT_NAMES, label?: EVENT_LABELS) => {
+interface PluginEventProps {
+  name: PLUGIN_EVENT_NAMES,
+  label?: EVENT_LABELS,
+  dimension2?: string,
+}
+
+export const sendPluginEvent = ({ name, label, dimension2 }: PluginEventProps) => {
   ReactGA.set({ dimension3: Date.now() });
+  dimension2 && ReactGA.set({ dimension2 });
   ReactGA.event({
-    action: event,
+    action: name,
     category: "Plugin",
     label,
   });

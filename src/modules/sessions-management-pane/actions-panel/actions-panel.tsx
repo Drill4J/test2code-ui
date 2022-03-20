@@ -18,8 +18,9 @@ import { Button, Icons, Spinner } from "@drill4j/ui-kit";
 import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
-import { PLUGIN_EVENT_NAMES, sendPluginEvent, EVENT_LABELS } from "common/analytic";
-import { useSessionsPaneDispatch, useSessionsPaneState, setIsNewSession } from "../store";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
+import { useAgentRouteParams } from "../../../hooks";
 
 const Content = styled.div`
   ${tw`grid gap-4 items-center h-full`}
@@ -39,6 +40,7 @@ export const ActionsPanel = ({
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { isNewSession } = useSessionsPaneState();
+  const { agentId } = useAgentRouteParams();
 
   return (
     <Content>
@@ -60,7 +62,10 @@ export const ActionsPanel = ({
           onClick={(e: any) => {
             e.preventDefault();
             dispatch(setIsNewSession(true));
-            sendPluginEvent(PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON, EVENT_LABELS.SESSION_MANAGEMENT);
+            sendPluginEvent({
+              name: PLUGIN_EVENT_NAMES.CLICK_ON_START_NEW_SESSION_BUTTON,
+              dimension2: agentId,
+            });
           }}
           data-test="sessions-management-pane:start-new-session-button"
         >
