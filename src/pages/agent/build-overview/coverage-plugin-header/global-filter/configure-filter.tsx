@@ -105,7 +105,6 @@ export const ConfigureFilter = ({
           await action(agentId, values, {
             onSuccess: (createdFilterId) => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
-              closeConfigureFilter();
               setFilter(createdFilterId || filterId);
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
