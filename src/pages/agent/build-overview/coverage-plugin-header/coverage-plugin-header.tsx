@@ -23,7 +23,12 @@ import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAdminConnection, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage, useTestToCodeRouteParams,
+  useActiveBuild,
+  useAdminConnection,
+  useAgentRouteParams,
+  useBuildVersion,
+  usePreviousBuildCoverage,
+  useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
@@ -118,6 +123,12 @@ export const CoveragePluginHeader = () => {
             <StatusWrapper
               to={getModalPath({ name: "qualityGate" })}
               status={status}
+              onClick={() => {
+                !isAnalyticsDisabled && sendKeyMetricsEvent({
+                  name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
+                  label: "Quality Gates",
+                });
+              }}
             >
               <StatusIcon />
               <StatusTitle data-test="coverage-plugin-header:quality-gate-status">
@@ -137,6 +148,12 @@ export const CoveragePluginHeader = () => {
               to={getPagePath({ name: "risks", params: { buildVersion } })}
               className="flex items-center w-full"
               data-test="action-section:count:risks"
+              onClick={() => {
+                !isAnalyticsDisabled && sendKeyMetricsEvent({
+                  name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
+                  label: "Risks",
+                });
+              }}
             >
               {risksCount}
               <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
@@ -152,6 +169,12 @@ export const CoveragePluginHeader = () => {
             to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
             className="flex items-center w-full"
             data-test="action-section:count:tests-to-run"
+            onClick={() => {
+              !isAnalyticsDisabled && sendKeyMetricsEvent({
+                name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
+                label: "Test to Run",
+              });
+            }}
           >
             {testToRunCount}
             <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
