@@ -21,8 +21,11 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import { getModalPath, getPagePath } from "common";
-import { useActiveSessions, useAgentRouteParams, useTestToCodeRouteParams } from "hooks";
+import {
+  useActiveSessions, useAdminConnection, useAgentRouteParams, useTestToCodeRouteParams,
+} from "hooks";
 import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { AnalyticsInfo } from "types";
 
 interface Props {
   scope: ActiveScope | null;
@@ -35,6 +38,7 @@ const Content = styled.div`
 export const ActiveScopeInfo = ({ scope }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const {
     id: scopeId = "",
@@ -81,7 +85,7 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
           tw="link"
           to={getModalPath({ name: "sessionManagement" })}
           data-test="active-scope-info:sessions-management-link"
-          onClick={() => sendPluginEvent({
+          onClick={() => !isAnalyticsDisabled && sendPluginEvent({
             name: PLUGIN_EVENT_NAMES.CLICK_ON_SESSION_MANAGEMENT_LINK,
           })}
         >

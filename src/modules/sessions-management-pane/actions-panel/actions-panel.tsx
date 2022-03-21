@@ -19,6 +19,8 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { useAdminConnection } from "hooks";
+import { AnalyticsInfo } from "types";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 const Content = styled.div`
@@ -39,6 +41,7 @@ export const ActionsPanel = ({
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { isNewSession } = useSessionsPaneState();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <Content>
@@ -60,7 +63,7 @@ export const ActionsPanel = ({
           onClick={(e: any) => {
             e.preventDefault();
             dispatch(setIsNewSession(true));
-            sendPluginEvent({
+            !isAnalyticsDisabled && sendPluginEvent({
               name: PLUGIN_EVENT_NAMES.CLICK_ON_START_NEW_SESSION_BUTTON,
               label: EVENT_LABELS.SESSION_MANAGEMENT,
             });

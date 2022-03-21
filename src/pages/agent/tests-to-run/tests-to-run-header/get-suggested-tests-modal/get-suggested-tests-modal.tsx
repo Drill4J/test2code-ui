@@ -22,7 +22,8 @@ import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
-import { useAgentRouteParams } from "hooks";
+import { useAdminConnection, useAgentRouteParams } from "hooks";
+import { AnalyticsInfo } from "types";
 
 export const GetSuggestedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
@@ -33,6 +34,7 @@ export const GetSuggestedTestsModal = () => {
     return () => clearTimeout(timeout);
   }, [copied]);
   const closeModal = useCloseModal("/get-suggested-tests");
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <Modal onClose={closeModal}>
@@ -58,7 +60,7 @@ export const GetSuggestedTestsModal = () => {
             onClick={() => {
               copyToClipboard(getTestsToRunURL(agentId, pluginId, "Agent"));
               setCopied(true);
-              sendKeyMetricsEvent({
+              !isAnalyticsDisabled && sendKeyMetricsEvent({
                 name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_TO_CLIPBOARD_BUTTON,
               });
             }}

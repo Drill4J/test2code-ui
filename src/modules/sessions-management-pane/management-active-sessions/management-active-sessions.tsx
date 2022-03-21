@@ -20,6 +20,8 @@ import "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { useAdminConnection } from "hooks";
+import { AnalyticsInfo } from "types";
 import { setBulkOperation, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 interface Props {
@@ -30,6 +32,7 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation } = useSessionsPaneState();
   const disabled = bulkOperation.isProcessing;
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <div
@@ -46,7 +49,7 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
             size="small"
             onClick={() => {
               dispatch(setBulkOperation("abort", true));
-              sendPluginEvent({
+              !isAnalyticsDisabled && sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_ALL_SESSION_BUTTON,
                 label: EVENT_LABELS.SESSION_MANAGEMENT,
               });
@@ -60,7 +63,7 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
             size="small"
             onClick={() => {
               dispatch(setBulkOperation("finish", true));
-              sendPluginEvent({
+              !isAnalyticsDisabled && sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON,
                 label: EVENT_LABELS.SESSION_MANAGEMENT,
               });

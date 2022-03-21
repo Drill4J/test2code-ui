@@ -23,12 +23,12 @@ import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage, useTestToCodeRouteParams,
+  useActiveBuild, useAdminConnection, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage, useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
-import { Risk } from "types";
+import { AnalyticsInfo, Risk } from "types";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
@@ -47,6 +47,7 @@ export const CoveragePluginHeader = () => {
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
   const { push } = useHistory();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <ContentWrapper>
@@ -105,7 +106,7 @@ export const CoveragePluginHeader = () => {
                 primary
                 size="small"
                 onClick={() => {
-                  sendKeyMetricsEvent({
+                  !isAnalyticsDisabled && sendKeyMetricsEvent({
                     name: KEY_METRICS_EVENT_NAMES.CLICK_ON_CONFIGURE_BUTTON,
                   });
                 }}

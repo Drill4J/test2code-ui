@@ -34,7 +34,8 @@ import {
   ConditionSetting, ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAdminConnection, useAgentRouteParams, useBuildVersion } from "hooks";
+import { AnalyticsInfo } from "types";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
@@ -54,6 +55,7 @@ export const QualityGatePane = () => {
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
   const closeModal = useCloseModal("/quality-gate");
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   const handleOnToggle = () => {
     closeModal();
@@ -90,7 +92,7 @@ export const QualityGatePane = () => {
             coverage?.enabled && label.push("Build coverage");
             risks?.enabled && label.push("Risks");
             tests?.enabled && label.push("Tests to run");
-            sendKeyMetricsEvent({
+            !isAnalyticsDisabled && sendKeyMetricsEvent({
               name: KEY_METRICS_EVENT_NAMES.CLICK_ON_SAVE_BUTTON_IN_QG_PANEL,
               label: label.join("#"),
             });

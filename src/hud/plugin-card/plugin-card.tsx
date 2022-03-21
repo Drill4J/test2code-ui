@@ -17,6 +17,8 @@ import React, { Children, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 import { NAVIGATION_EVENT_NAMES, sendNavigationEvent } from "common/analytic";
+import { useAdminConnection } from "hooks";
+import { AnalyticsInfo } from "types";
 
 interface Props {
   children?: ReactNode[];
@@ -29,27 +31,31 @@ const Sections = styled.div`
       ${tw`border-r border-monochrome-medium-tint`}
   }`;
 
-export const PluginCard = ({ children, pluginLink }: Props) => (
-  <div tw="w-full h-fit border border-monochrome-medium-tint">
-    <div tw="flex justify-between w-full p-4 border-b border-monochrome-medium-tint text-14 leading-20">
-      <span tw="font-bold text-monochrome-default uppercase">test2code</span>
-      <Link
-        className="font-regular link no-underline"
-        to={pluginLink}
-        onClick={() => {
-          sendNavigationEvent({
-            name: NAVIGATION_EVENT_NAMES.CLICK_ON_VIEW_MORE,
-            label: "dashboards",
-          });
-        }}
-      >
-        View more &gt;
-      </Link>
+export const PluginCard = ({ children, pluginLink }: Props) => {
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
+
+  return (
+    <div tw="w-full h-fit border border-monochrome-medium-tint">
+      <div tw="flex justify-between w-full p-4 border-b border-monochrome-medium-tint text-14 leading-20">
+        <span tw="font-bold text-monochrome-default uppercase">test2code</span>
+        <Link
+          className="font-regular link no-underline"
+          to={pluginLink}
+          onClick={() => {
+            !isAnalyticsDisabled && sendNavigationEvent({
+              name: NAVIGATION_EVENT_NAMES.CLICK_ON_VIEW_MORE,
+              label: "dashboards",
+            });
+          }}
+        >
+          View more &gt;
+        </Link>
+      </div>
+      <Sections>
+        {Children.map(children, (child) => (
+          <div tw="w-full p-4">{child}</div>
+        ))}
+      </Sections>
     </div>
-    <Sections>
-      {Children.map(children, (child) => (
-        <div tw="w-full p-4">{child}</div>
-      ))}
-    </Sections>
-  </div>
-);
+  );
+};

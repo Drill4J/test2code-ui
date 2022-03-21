@@ -30,9 +30,10 @@ import {
 import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
-import { useActiveSessions } from "hooks";
+import { useActiveSessions, useAdminConnection } from "hooks";
 import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
 import { agentPluginPath, groupPluginPath } from "admin-routes";
+import { AnalyticsInfo } from "types";
 import { ManagementNewSession } from "./management-new-session";
 import { startAgentSession, startServiceGroupSessions } from "./sessions-management-pane-api";
 import { ManagementActiveSessions } from "./management-active-sessions";
@@ -70,6 +71,7 @@ export const SessionsManagementPane = () => {
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
   const closePanel = useCloseModal("/session-management");
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <Panel onClose={closePanel}>
@@ -87,7 +89,7 @@ export const SessionsManagementPane = () => {
               const label = [];
               values.isGlobal && label.push("Set as global session");
               values.isRealtime && label.push("Real-time coverage collection");
-              sendPluginEvent({
+              !isAnalyticsDisabled && sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_START_SESSION_BUTTON,
                 label: label.join("#"),
               });
