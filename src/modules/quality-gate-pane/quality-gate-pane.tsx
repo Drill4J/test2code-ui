@@ -15,20 +15,29 @@
  */
 import React, { useState } from "react";
 import {
-  Button, Panel, Icons, GeneralAlerts, Spinner, composeValidators, numericLimits, positiveInteger,
-  Form, Formik, useCloseModal,
+  Button,
+  composeValidators,
+  Form,
+  Formik,
+  GeneralAlerts,
+  Icons,
+  numericLimits,
+  Panel,
+  positiveInteger,
+  Spinner,
+  useCloseModal,
 } from "@drill4j/ui-kit";
 
 import tw, { styled } from "twin.macro";
 
 import {
-  ConditionSetting,
-  ConditionSettingByType, QualityGate, QualityGateStatus as Status,
+  ConditionSetting, ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
 import { useAgentRouteParams, useBuildVersion } from "hooks";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../common/analytic";
 
 const validateQualityGate = (formValues: ConditionSettingByType) => composeValidators(
   formValues.coverage?.enabled ? numericLimits({
@@ -76,6 +85,17 @@ export const QualityGatePane = () => {
           onSubmit={async (values) => {
             await updateQualityGateSettings(agentId, pluginId)(values as ConditionSettingByType);
             setIsEditing(false);
+            ((items) => {
+              const label = [];
+              items.coverage?.enabled && label.push("Build coverage");
+              items.risks?.enabled && label.push("Risks");
+              items.tests?.enabled && label.push("Tests to run");
+              sendKeyMetricsEvent({
+                name: KEY_METRICS_EVENT_NAMES.CLICK_ON_SAVE_BUTTON_IN_QG_PANEL,
+                dimension2: agentId,
+                label: label.join("#"),
+              });
+            })(values as ConditionSettingByType);
           }}
           initialValues={conditionSettingByType}
           validate={validateQualityGate}
