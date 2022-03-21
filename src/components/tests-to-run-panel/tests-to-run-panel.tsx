@@ -105,8 +105,8 @@ export const TestsToRunPanel = () => {
             />
           </div>
           <div tw="text-14 mt-4 px-6 space-y-4">
-            {getSelectedTests().map(({ id = "", details }) => (
-              <div tw="flex items-center gap-x-4" key={id} data-test="tests-to-run-modal:tests-list:test">
+            {getSelectedTests().map(({ details }) => (
+              <div tw="flex items-center gap-x-4" data-test="tests-to-run-modal:tests-list:test">
                 <Icons.Test tw="flex items-center min-w-16px" />
                 <div tw="break-all">{concatTestName(details?.testName, details?.params?.methodParams)}</div>
               </div>
