@@ -20,7 +20,8 @@ import {
   Fields,
   Form,
   FormGroup,
-  Formik,
+  Formik, FormValidator,
+  getPropertyByPath,
   Icons,
   Menu,
   required,
@@ -63,7 +64,9 @@ export const ConfigureFilter = ({
   const filter = useTestToCodeData<TestOverviewFilter>(isEditing ? `/build/filters/${filterId}` : null);
 
   const { name: filterName, attributes: filterAttributes = [] } = filter || {};
+
   const attributesOptions = useMemo(() => attributes.map((attr) => ({ value: attr, label: attr })), [attributes]);
+  const filterNames = useMemo(() => filters.map(({ name = "" }) => name), [filters]);
 
   const transformedFilterAttributes = useMemo(() => filterAttributes
     .map(({ fieldPath, valuesOp, values = [] }) => ({
@@ -112,6 +115,7 @@ export const ConfigureFilter = ({
           sizeLimit({
             name: "name", min: 1, max: 40,
           }),
+          unusedName("name", filterNames),
         ) as any}
         enableReinitialize
       >
@@ -217,3 +221,11 @@ const HideCriteria = styled.button`
   ${tw`border border-monochrome-medium-tint bg-monochrome-white text-blue-default text-10 leading-14 font-bold`}
   border-radius: 8px 8px 0px 0px;
 `;
+
+export function unusedName(field: string, names: string[]): FormValidator {
+  return (valitationItem) => {
+    const value = getPropertyByPath<string>(valitationItem, field);
+    const hasSameName = names.some(name => name === value);
+    return hasSameName ? { [field]: "Filter with such name already exists." } : {};
+  };
+}
