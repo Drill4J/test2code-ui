@@ -28,7 +28,7 @@ interface Props {
   removeAttribute: (() => void) | null;
 }
 
-type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>};
+export type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>};
 
 export interface Values {
   name: string;

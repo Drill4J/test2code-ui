@@ -39,7 +39,7 @@ import {
 import { useSetFilterDispatch } from "common";
 import { createFilter, updateFilter } from "../../../api";
 import { DeleteFilterModal } from "./delete-filter-modal";
-import { SelectAttribute, Values } from "./select-attribute";
+import { CustomAttribute, SelectAttribute, Values } from "./select-attribute";
 import { ConfigureFilterSate, FILTER_STATE } from "../types";
 
 /* eslint-disable react/no-array-index-key */
@@ -100,12 +100,13 @@ export const ConfigureFilter = ({
               values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
             })),
           };
-          const action = filterId ? updateFilter : createFilter;
+
+          const action = isEditing ? updateFilter : createFilter;
           await action(agentId, values, {
             onSuccess: (createdFilterId) => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
               closeConfigureFilter();
-              setFilter(createdFilterId);
+              setFilter(createdFilterId || filterId);
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });
@@ -115,7 +116,11 @@ export const ConfigureFilter = ({
           sizeLimit({
             name: "name", min: 1, max: 40,
           }),
-          unusedName("name", filterNames),
+          unusedName("name",
+            isEditing // if we editing filter we should not throw error on editing filter with initial name
+              ? filterNames.filter((name) => name !== filterName)
+              : filterNames),
+          emptyAttribute(),
         ) as any}
         enableReinitialize
       >
@@ -149,7 +154,7 @@ export const ConfigureFilter = ({
               <button
                 tw="flex items-center gap-x-2 ml-6 link text-14 leading-24 cursor-pointer font-semibold"
                 type="button"
-                onClick={() => setFieldValue(`attributes[${values.attributes.length}]`, { id: uuidv4() })}
+                onClick={() => setFieldValue(`attributes[${values.attributes.length}]`, { id: uuidv4(), valuesOp: BetweenOp.OR })}
               >
                 <Icons.Plus />Add New
               </button>
@@ -222,10 +227,16 @@ const HideCriteria = styled.button`
   border-radius: 8px 8px 0px 0px;
 `;
 
-export function unusedName(field: string, names: string[]): FormValidator {
-  return (valitationItem) => {
-    const value = getPropertyByPath<string>(valitationItem, field);
-    const hasSameName = names.some(name => name === value);
-    return hasSameName ? { [field]: "Filter with such name already exists." } : {};
-  };
-}
+const unusedName = (field: string, names: string[]): FormValidator => (valitationItem) => {
+  const value = getPropertyByPath<string>(valitationItem, field);
+  const hasSameName = names.some(name => name === value);
+  return hasSameName ? { [field]: "Filter with such name already exists." } : {};
+};
+
+const emptyAttribute = (): FormValidator => (valitationItem) => {
+  const field = "attributes";
+  const attributes = getPropertyByPath<CustomAttribute[]>(valitationItem, field);
+  const isValid = attributes.every(({ values = {}, fieldPath }) => Boolean(fieldPath) && Object.keys(values).length);
+
+  return isValid ? {} : { [field as string]: "Please select attributes" };
+};
