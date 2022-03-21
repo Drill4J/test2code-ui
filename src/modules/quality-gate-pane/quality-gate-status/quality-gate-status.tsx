@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Icons } from "@drill4j/ui-kit";
 import tw from "twin.macro";
 
@@ -24,6 +24,7 @@ import { Metrics } from "types/metrics";
 import { QualityGateConfigurationUrl } from "./quality-gate-configuration-url";
 import { getQualityGateConfigurationUrl } from "./get-quality-gate-configuration-url";
 import { Condition } from "./condition";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../common/analytic";
 
 interface Props {
   conditionSettingByType: ConditionSettingByType;
@@ -109,7 +110,13 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
             : (
               <Icons.Copy
                 data-test="quality-gate-status:copy-icon"
-                onClick={() => { copyToClipboard(getQualityGateConfigurationUrl(agentId, pluginId)); setCopied(true); }}
+                onClick={() => {
+                  copyToClipboard(getQualityGateConfigurationUrl(agentId, pluginId)); setCopied(true);
+                  sendKeyMetricsEvent({
+                    name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_ICON_IN_QG_PANEL,
+                    dimension2: agentId,
+                  });
+                }}
               />
             )}
         </div>
