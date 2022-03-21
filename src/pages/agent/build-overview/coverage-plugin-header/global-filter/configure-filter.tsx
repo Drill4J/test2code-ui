@@ -113,7 +113,7 @@ export const ConfigureFilter = ({
             name: "name", min: 1, max: 40,
           }),
         ) as any}
-        enableReinitialize={isEditing}
+        enableReinitialize
       >
         {({
           setFieldValue, values, isSubmitting, isValid, dirty, resetForm,
