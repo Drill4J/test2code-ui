@@ -57,7 +57,7 @@ export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudPro
   });
 
   return (
-    <PluginCard pluginLink={pluginPagePath}>
+    <PluginCard pluginLink={pluginPagePath} agentId={groupId}>
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
       {testSection}
       <RisksSection risks={riskCounts} />

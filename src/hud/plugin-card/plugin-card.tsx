@@ -16,10 +16,12 @@
 import React, { Children, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
+import { NAVIGATION_EVENT_NAMES, sendNavigationEvent } from "common/analytic";
 
 interface Props {
   children?: ReactNode[];
   pluginLink: string;
+  agentId: string;
 }
 
 const Sections = styled.div`
@@ -28,11 +30,23 @@ const Sections = styled.div`
       ${tw`border-r border-monochrome-medium-tint`}
   }`;
 
-export const PluginCard = ({ children, pluginLink }: Props) => (
+export const PluginCard = ({ children, pluginLink, agentId }: Props) => (
   <div tw="w-full h-fit border border-monochrome-medium-tint">
     <div tw="flex justify-between w-full p-4 border-b border-monochrome-medium-tint text-14 leading-20">
       <span tw="font-bold text-monochrome-default uppercase">test2code</span>
-      <Link className="font-regular link no-underline" to={pluginLink}>View more &gt;</Link>
+      <Link
+        className="font-regular link no-underline"
+        to={pluginLink}
+        onClick={() => {
+          sendNavigationEvent({
+            name: NAVIGATION_EVENT_NAMES.CLICK_ON_VIEW_MORE,
+            dimension2: agentId,
+            label: "dashboards",
+          });
+        }}
+      >
+        View more &gt;
+      </Link>
     </div>
     <Sections>
       {Children.map(children, (child) => (

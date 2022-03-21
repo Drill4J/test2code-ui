@@ -36,7 +36,7 @@ export enum KEY_METRICS_EVENT_NAMES {
 }
 
 export enum NAVIGATION_EVENT_NAMES {
-  CLICK_ON_DASHBOARD_ICON = "Click on icon",
+  CLICK_ON_VIEW_MORE = "Click on icon \"View more\"",
 }
 
 export enum EVENT_LABELS {
