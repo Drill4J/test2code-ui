@@ -20,7 +20,6 @@ import "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
-import { useAgentRouteParams } from "hooks";
 import { setBulkOperation, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 interface Props {
@@ -31,7 +30,6 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { bulkOperation } = useSessionsPaneState();
   const disabled = bulkOperation.isProcessing;
-  const { agentId } = useAgentRouteParams();
 
   return (
     <div
@@ -50,7 +48,6 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
               dispatch(setBulkOperation("abort", true));
               sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_ALL_SESSION_BUTTON,
-                dimension2: agentId,
                 label: EVENT_LABELS.SESSION_MANAGEMENT,
               });
             }}
@@ -65,7 +62,6 @@ export const ManagementActiveSessions = ({ activeSessions }: Props) => {
               dispatch(setBulkOperation("finish", true));
               sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_ALL_SESSION_BUTTON,
-                dimension2: agentId,
                 label: EVENT_LABELS.SESSION_MANAGEMENT,
               });
             }}

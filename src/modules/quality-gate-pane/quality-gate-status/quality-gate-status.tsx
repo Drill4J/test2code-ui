@@ -20,11 +20,11 @@ import tw from "twin.macro";
 import { copyToClipboard, percentFormatter } from "@drill4j/common-utils";
 import { ConditionSettingByType, Results } from "types/quality-gate-type";
 import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { Metrics } from "types/metrics";
 import { QualityGateConfigurationUrl } from "./quality-gate-configuration-url";
 import { getQualityGateConfigurationUrl } from "./get-quality-gate-configuration-url";
 import { Condition } from "./condition";
-import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../common/analytic";
 
 interface Props {
   conditionSettingByType: ConditionSettingByType;
@@ -114,7 +114,6 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
                   copyToClipboard(getQualityGateConfigurationUrl(agentId, pluginId)); setCopied(true);
                   sendKeyMetricsEvent({
                     name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_ICON_IN_QG_PANEL,
-                    dimension2: agentId,
                   });
                 }}
               />

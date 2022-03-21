@@ -45,25 +45,21 @@ export enum EVENT_LABELS {
 
 interface PluginEventProps {
   name: PLUGIN_EVENT_NAMES,
-  label?: EVENT_LABELS | string,
-  dimension2?: string,
+  label?: string,
 }
 
 interface MetricsEventProps {
   name: KEY_METRICS_EVENT_NAMES,
-  label?: EVENT_LABELS | string,
-  dimension2?: string,
+  label?: string,
 }
 
 interface NavigationEventProps {
   name: NAVIGATION_EVENT_NAMES,
-  label?: EVENT_LABELS | string,
-  dimension2?: string,
+  label?: string,
 }
 
-export const sendPluginEvent = ({ name, label, dimension2 }: PluginEventProps) => {
+export const sendPluginEvent = ({ name, label }: PluginEventProps) => {
   ReactGA.set({ dimension3: Date.now() });
-  dimension2 && ReactGA.set({ dimension2 });
   ReactGA.event({
     action: name,
     category: "Plugin",
@@ -71,9 +67,8 @@ export const sendPluginEvent = ({ name, label, dimension2 }: PluginEventProps) =
   });
 };
 
-export const sendKeyMetricsEvent = ({ name, label, dimension2 }: MetricsEventProps) => {
+export const sendKeyMetricsEvent = ({ name, label }: MetricsEventProps) => {
   ReactGA.set({ dimension3: Date.now() });
-  dimension2 && ReactGA.set({ dimension2 });
   ReactGA.event({
     action: name,
     category: "Key metrics",
@@ -81,9 +76,8 @@ export const sendKeyMetricsEvent = ({ name, label, dimension2 }: MetricsEventPro
   });
 };
 
-export const sendNavigationEvent = ({ name, label, dimension2 }: NavigationEventProps) => {
+export const sendNavigationEvent = ({ name, label }: NavigationEventProps) => {
   ReactGA.set({ dimension3: Date.now() });
-  dimension2 && ReactGA.set({ dimension2 });
   ReactGA.event({
     action: name,
     category: "Navigation",

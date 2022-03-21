@@ -19,7 +19,6 @@ import tw, { styled } from "twin.macro";
 
 import { ActiveSession } from "types/active-session";
 import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
-import { useAgentRouteParams } from "hooks";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "../store";
 
 const Content = styled.div`
@@ -40,7 +39,6 @@ export const ActionsPanel = ({
 }: Props) => {
   const dispatch = useSessionsPaneDispatch();
   const { isNewSession } = useSessionsPaneState();
-  const { agentId } = useAgentRouteParams();
 
   return (
     <Content>
@@ -64,7 +62,6 @@ export const ActionsPanel = ({
             dispatch(setIsNewSession(true));
             sendPluginEvent({
               name: PLUGIN_EVENT_NAMES.CLICK_ON_START_NEW_SESSION_BUTTON,
-              dimension2: agentId,
               label: EVENT_LABELS.SESSION_MANAGEMENT,
             });
           }}

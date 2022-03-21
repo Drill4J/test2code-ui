@@ -21,10 +21,9 @@ import tw, { styled } from "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
+import { PageHeader } from "components";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { SavedTimeSection } from "./saved-time-section";
-import { PageHeader } from "../../../../components";
-import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../../common/analytic";
-import { useAgentRouteParams } from "../../../../hooks";
 
 interface AgentInfo {
   agentType: string;
@@ -73,7 +72,6 @@ export const TestsToRunHeader = ({
       ? previousBuildTestsDuration - currentDuration
       : 0,
   );
-  const { agentId } = useAgentRouteParams();
 
   return (
     <PageHeader tw="justify-between">
@@ -119,7 +117,6 @@ export const TestsToRunHeader = ({
               push(getModalPath({ name: "getSuggestedTests" }));
               sendKeyMetricsEvent({
                 name: KEY_METRICS_EVENT_NAMES.CLICK_ON_GET_SUGGESTED_TESTS_BUTTON,
-                dimension2: agentId,
               });
             }}
             data-test="tests-to-run-header:get-suggested-tests-button"

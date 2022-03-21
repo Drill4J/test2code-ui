@@ -29,10 +29,10 @@ import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
 import { getModalPath, getPagePath } from "common";
 import { Risk } from "types";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
 import { BaselineTooltip } from "./baseline-tooltip";
-import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../../common/analytic";
 
 export const CoveragePluginHeader = () => {
   const { agentId = "" } = useAgentRouteParams();
@@ -107,7 +107,6 @@ export const CoveragePluginHeader = () => {
                 onClick={() => {
                   sendKeyMetricsEvent({
                     name: KEY_METRICS_EVENT_NAMES.CLICK_ON_CONFIGURE_BUTTON,
-                    dimension2: agentId,
                   });
                 }}
               >

@@ -29,7 +29,6 @@ export async function abortSession(
     sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
     sendPluginEvent({
       name: PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_SESSION_BUTTON,
-      dimension2: agentId,
       label: EVENT_LABELS.SESSION_MANAGEMENT,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {

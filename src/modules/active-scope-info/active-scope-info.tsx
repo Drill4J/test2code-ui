@@ -83,7 +83,6 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
           data-test="active-scope-info:sessions-management-link"
           onClick={() => sendPluginEvent({
             name: PLUGIN_EVENT_NAMES.CLICK_ON_SESSION_MANAGEMENT_LINK,
-            dimension2: agentId,
           })}
         >
           Sessions Management

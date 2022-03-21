@@ -21,8 +21,8 @@ import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { useAgentRouteParams } from "hooks";
-import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "../../../../../common/analytic";
 
 export const GetSuggestedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
@@ -60,7 +60,6 @@ export const GetSuggestedTestsModal = () => {
               setCopied(true);
               sendKeyMetricsEvent({
                 name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_TO_CLIPBOARD_BUTTON,
-                dimension2: agentId,
               });
             }}
             data-test="get-suggested-tests-modal:copy-to-clipboard-button"

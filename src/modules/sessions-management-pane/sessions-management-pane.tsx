@@ -31,6 +31,7 @@ import { matchPath, useLocation } from "react-router-dom";
 import "twin.macro";
 
 import { useActiveSessions } from "hooks";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
 import { agentPluginPath, groupPluginPath } from "admin-routes";
 import { ManagementNewSession } from "./management-new-session";
 import { startAgentSession, startServiceGroupSessions } from "./sessions-management-pane-api";
@@ -39,7 +40,6 @@ import { ActiveSessionsList } from "./active-sessions-list";
 import { BulkOperationWarning } from "./bulk-operation-warning";
 import { ActionsPanel } from "./actions-panel";
 import { setIsNewSession, useSessionsPaneDispatch, useSessionsPaneState } from "./store";
-import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "../../common/analytic";
 
 interface FormValues {
   sessionId: string;
@@ -89,7 +89,6 @@ export const SessionsManagementPane = () => {
               values.isRealtime && label.push("Real-time coverage collection");
               sendPluginEvent({
                 name: PLUGIN_EVENT_NAMES.CLICK_ON_START_SESSION_BUTTON,
-                dimension2: id,
                 label: label.join("#"),
               });
               resetForm();

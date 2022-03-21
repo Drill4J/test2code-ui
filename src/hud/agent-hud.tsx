@@ -50,7 +50,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   });
 
   return (
-    <PluginCard pluginLink={pluginPagePath} agentId={agentId}>
+    <PluginCard pluginLink={pluginPagePath}>
       <CoverageSection buildVersion={buildVersion} />
       {testSection}
       <RisksSection buildVersion={buildVersion} />

@@ -32,7 +32,6 @@ export async function finishSession(
     });
     sendPluginEvent({
       name: PLUGIN_EVENT_NAMES.CLICK_ON_FINISH_SESSION_BUTTON,
-      dimension2: agentId,
       label: EVENT_LABELS.SESSION_MANAGEMENT,
     });
   } catch ({ response: { data: { message } = {} } = {} }) {
