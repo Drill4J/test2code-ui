@@ -52,6 +52,7 @@ export const SelectAttribute = ({
           setAttributeName(value as string);
         }}
         defaultValue={attributeName}
+        onClear={() => setFieldValue(`attributes[${accessor}]`, { id: attrValues.id })}
       />
       <span>:</span>
       <HeadlessSelect
