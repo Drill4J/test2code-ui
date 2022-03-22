@@ -85,7 +85,7 @@ export const CoveragePluginHeader = () => {
                 return (
                   <>
 
-                    <HeadlessSelect.Input>
+                    <HeadlessSelect.Input disabled={!testsByType.length} isActive={isOpen}>
                       <div tw="flex justify-between items-center flex-grow">
                         {selectedOption
                           ? <HeadlessSelect.SelectedValue>{selectedOption.label}</HeadlessSelect.SelectedValue>
