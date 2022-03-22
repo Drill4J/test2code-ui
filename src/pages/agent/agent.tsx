@@ -21,9 +21,11 @@ import {
 import "twin.macro";
 
 import { getAdminPath } from "utils";
-import { Modals, Breadcrumbs, Baseline } from "components";
 import {
-  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData,
+  Modals, Breadcrumbs, Baseline, ComparedToBuild,
+} from "components";
+import {
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
 } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
@@ -35,12 +37,14 @@ import { ParentBuild } from "../../types";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useActiveBuild(agentId) || {};
+  const { buildVersion } = useTestToCodeRouteParams();
   const { routes, getPagePath } = useNavigation();
   const { pathname } = useLocation();
-  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const { version: parentBuildVersion } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
+  const isActiveBuild = activeBuildVersion === buildVersion;
 
-  if (!buildVersion) { // TODO Add spinner
+  if (!activeBuildVersion) { // TODO Add spinner
     return null;
   }
 
@@ -48,7 +52,10 @@ export const Agent = () => {
     <div tw="flex flex-col w-full h-full">
       <div tw="flex justify-between gap-x-3 px-6 border-b border-monochrome-medium-tint">
         <Breadcrumbs />
-        {previousBuildVersion && <Baseline />}
+        <div tw="flex gap-x-6 text-12 font-bold">
+          {parentBuildVersion && isActiveBuild && <Baseline />}
+          {parentBuildVersion && <ComparedToBuild parentBuildVersion={parentBuildVersion} />}
+        </div>
       </div>
       <Switch>
         <Route
@@ -56,7 +63,7 @@ export const Agent = () => {
           path={getAdminPath(pathname)}
           render={() => (
             <Redirect
-              to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+              to={getPagePath({ name: "overview", params: { buildVersion: activeBuildVersion }, queryParams: { activeTab: "methods" } })}
             />
           )}
         />
