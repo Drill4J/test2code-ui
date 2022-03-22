@@ -15,35 +15,56 @@
  */
 import React from "react";
 import { Link } from "react-router-dom";
-import { Icons, Typography } from "@drill4j/ui-kit";
-import { useFilteredData, useNavigation } from "hooks";
-import { ParentBuild } from "types";
+import { Icons, Tooltip, Typography } from "@drill4j/ui-kit";
+import {
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
+} from "hooks";
+import { ParentBuild, Baseline as BaselineType } from "types";
 import "twin.macro";
 
 export const Baseline = () => {
   const { getPagePath, getModalPath } = useNavigation();
-  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
+  const { version: parentBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const { agentId } = useAgentRouteParams();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
+
+  const { version: baseline } = useTestToCodeData<BaselineType>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const isBaseline = baseline === buildVersion;
 
   return (
     <div tw="flex gap-x-6 text-12 font-bold">
-      <Link
-        tw="link flex items-center gap-x-2 leading-24"
-        to={getModalPath({ name: "baselineBuildModal" })}
-        data-test="set-build-as-baseline"
+      <Tooltip
+        position="bottom-center"
+        message={(
+          <>
+            <div tw="font-bold">Baseline build is the reference build.</div>
+            <div>
+              All methods and key metrics of subsequent <br />
+              builds are compared with it.
+            </div>
+          </>
+        )}
       >
-        <Icons.Flag />
-        <span>Set Build as Baseline</span>
-      </Link>
+        <Link
+          tw="link flex items-center gap-x-2 mt-2 leading-24"
+          to={getModalPath({ name: "baselineBuildModal" })}
+          data-test="set-build-as-baseline"
+        >
+          <Icons.Flag />
+          <span>{isBaseline ? "Unset" : "Set"} Build as Baseline</span>
+        </Link>
+      </Tooltip>
       <div tw="flex items-center gap-x-1 leading-16 text-monochrome-default">
         Compared to build:
         <Typography.MiddleEllipsis>
           <Link
-            to={getPagePath({ name: "overview", params: { buildVersion: previousBuildVersion }, queryParams: { activeTab: "methods" } })}
-            title={previousBuildVersion}
+            to={getPagePath({ name: "overview", params: { buildVersion: parentBuildVersion }, queryParams: { activeTab: "methods" } })}
+            title={parentBuildVersion}
             tw="link whitespace-nowrap"
             data-test="parent-build-version"
           >
-            {previousBuildVersion}
+            {parentBuildVersion}
           </Link>
         </Typography.MiddleEllipsis>
       </div>

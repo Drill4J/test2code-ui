@@ -17,18 +17,25 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 import {
-  Table, Typography, dateTimeFormatter, Stub, Icons,
+  Table, Typography, dateTimeFormatter, Stub, Icons, Tooltip,
 } from "@drill4j/ui-kit";
 import { BuildVersion } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
-import { useAdminConnection, useAgentRouteParams, useNavigation } from "hooks";
+import {
+  useActiveBuild,
+  useAdminConnection, useAgentRouteParams, useNavigation, useTestToCodeData,
+} from "hooks";
 import { PageHeader } from "components";
+import { Baseline as BaselineType } from "types";
 
 export const AllBuilds = () => {
   const { agentId } = useAgentRouteParams();
   const { getPagePath } = useNavigation();
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
+  const { version: baseline } = useTestToCodeData<BaselineType>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const isBaseline = (build: string) => build === baseline;
 
   return (
     <div tw="flex flex-col flex-grow">
@@ -61,6 +68,21 @@ export const AllBuilds = () => {
                       <span>{buildVersion}</span>
                     </Typography.MiddleEllipsis>
                   </Link>
+                  {isBaseline(buildVersion) && (
+                    <Tooltip
+                      position="top-right"
+                      message={(
+                        <>
+                          <div tw="font-bold">This build is set as baseline.</div>
+                          <div>
+                            All subsequent builds are compared with it.
+                          </div>
+                        </>
+                      )}
+                    >
+                      <Icons.Flag />
+                    </Tooltip>
+                  )}
                 </NameCell>
               ),
               textAlign: "left",
@@ -100,6 +122,7 @@ export const AllBuilds = () => {
               message="Try adjusting your search or filter to find what you are looking for."
             />
           )}
+          columnsDependency={[baseline]}
         />
       </div>
     </div>

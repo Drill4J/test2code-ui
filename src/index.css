@@ -743,6 +743,14 @@ button:focus {
   margin-right: 0.5rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -791,10 +799,6 @@ button:focus {
   margin-bottom: 0.75rem;
 }
 
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
 .mr-4 {
   margin-right: 1rem;
 }
@@ -813,10 +817,6 @@ button:focus {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mt-2 {
-  margin-top: 0.5rem;
 }
 
 .mr-10 {

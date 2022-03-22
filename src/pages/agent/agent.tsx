@@ -22,19 +22,23 @@ import "twin.macro";
 
 import { getAdminPath } from "utils";
 import { Modals, Breadcrumbs, Baseline } from "components";
-import { useActiveBuild, useAgentRouteParams, useNavigation } from "hooks";
+import {
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData,
+} from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
 import { AllBuilds } from "./all-builds";
+import { ParentBuild } from "../../types";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useActiveBuild(agentId) || {};
   const { routes, getPagePath } = useNavigation();
   const { pathname } = useLocation();
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
 
   if (!buildVersion) { // TODO Add spinner
     return null;
@@ -44,7 +48,7 @@ export const Agent = () => {
     <div tw="flex flex-col w-full h-full">
       <div tw="flex justify-between gap-x-3 px-6 border-b border-monochrome-medium-tint">
         <Breadcrumbs />
-        <Baseline />
+        {previousBuildVersion && <Baseline />}
       </div>
       <Switch>
         <Route

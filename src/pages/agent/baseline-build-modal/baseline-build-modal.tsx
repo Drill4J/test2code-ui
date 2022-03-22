@@ -93,13 +93,16 @@ export const BaselineBuildModal = () => {
                 sendAlertEvent({
                   type: "SUCCESS",
                   title: `Current build has been ${isBaseline
-                    ? "unset as baseline successfully. All subsequent builds won't be compared to it."
-                    : "set as baseline successfully. All subsequent builds will be compared to it."}`,
+                    ? "unset as baseline successfully."
+                    : "set as baseline successfully."}`,
+                  text: isBaseline
+                    ? "All subsequent builds won't be compared to it."
+                    : "All subsequent builds will be compared to it.",
                 });
               } catch ({ response: { data: { message } = {} } = {} }) {
                 sendAlertEvent({
                   type: "ERROR",
-                  title: message || "There is some issue with your action. Please try again later.",
+                  title: `Failed to ${isBaseline ? "unset" : "set"} build as baseline. Please try again later.`,
                 });
               }
               closeModal();
