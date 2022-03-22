@@ -23,13 +23,12 @@ import "twin.macro";
 import { capitalize } from "@drill4j/common-utils";
 import { TestCoverageInfo } from "types/test-coverage-info";
 
-import { FilterList } from "@drill4j/types-admin";
 import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { transformTests } from "utils";
 import { getModalPath, BUILD_STATUS } from "common";
 
 interface Props {
-  tests: FilterList<TestCoverageInfo>;
+  tests: TestCoverageInfo[];
   topicCoveredMethodsByTest: string;
 }
 
@@ -98,9 +97,7 @@ const columns = [
     sortType: "number",
   }];
 
-export const TestDetails = ({
-  tests: { items: tests = [] },
-}: Props) => {
+export const TestDetails = ({ tests }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { buildStatus } = useActiveBuild(agentId) || {};
 

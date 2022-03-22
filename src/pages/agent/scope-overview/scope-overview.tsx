@@ -74,7 +74,7 @@ export const ScopeOverview = () => {
                 Scope tests
               </Tab>
             </div>
-            <div tw="flex flex-col flex-grow">
+            <div tw="flex flex-col flex-grow w-full">
               {activeTab === "methods" ? <ScopeMethodsInfo /> : <ScopeTestsInfo />}
             </div>
           </div>

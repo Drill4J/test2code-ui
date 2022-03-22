@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { useTableActionsState } from "@drill4j/ui-kit";
+import { Icons, Stub, useTableActionsState } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { useFilteredData, useTestToCodeRouteParams } from "hooks";
@@ -23,12 +23,19 @@ import { TestDetails } from "../../../tests-table";
 export const ScopeTestsTable = () => {
   const { search } = useTableActionsState();
   const { scopeId = "" } = useTestToCodeRouteParams();
-  const tests = useFilteredData<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`, { filters: search, output: "LIST" }) || {};
+  const { items = [], totalCount } = useFilteredData<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`,
+    { filters: search, output: "LIST" }) || {};
 
-  return (
+  return totalCount ? (
     <TestDetails
-      tests={tests as FilterList<TestCoverageInfo>}
+      tests={items}
       topicCoveredMethodsByTest={`/build/scopes/${scopeId}/tests`}
+    />
+  ) : (
+    <Stub
+      icon={<Icons.Test height={104} width={107} />}
+      title="No tests have been executed yet"
+      message="Start testing to begin collecting coverage."
     />
   );
 };

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import { useTableActionsState } from "@drill4j/ui-kit";
+import { useTableActionsState, Stub, Icons } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { TestCoverageInfo } from "types/test-coverage-info";
@@ -23,12 +23,20 @@ import { TestDetails } from "pages/agent/tests-table";
 
 export const BuildTestsTable = () => {
   const { search } = useTableActionsState();
-  const tests = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests", { filters: search, output: "LIST" }) || {};
+  const { items = [], totalCount } = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests",
+    { filters: search, output: "LIST" }) || {};
 
-  return (
+  return (totalCount ? (
     <TestDetails
-      tests={tests as FilterList<TestCoverageInfo>}
+      tests={items}
       topicCoveredMethodsByTest="/build/tests"
     />
+  ) : (
+    <Stub
+      icon={<Icons.Test height={104} width={107} />}
+      title="No tests have been executed yet"
+      message="Start testing to begin collecting coverage."
+    />
+  )
   );
 };
