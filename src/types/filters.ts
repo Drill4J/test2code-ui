@@ -38,15 +38,22 @@ export interface TestOverviewFilter {
   attributesOp?: string;
   agentId?: string;
   attributes?: Attribute[];
+  isLabel?: boolean;
 }
 
 export interface Attribute {
   fieldPath: string;
   valuesOp: BetweenOp;
   values: AttributeValue[];
+  isLabel?: boolean;
 }
 
 export interface AttributeValue {
   value: string;
   op: OP.EQ;
+}
+
+export interface BuildAttribute {
+  name?: string;
+  isLabel?: boolean
 }

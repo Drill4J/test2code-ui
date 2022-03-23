@@ -28,7 +28,7 @@ interface Props {
   removeAttribute: (() => void) | null;
 }
 
-export type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>};
+export type CustomAttribute = Attribute & {id: string; values: Record<string, boolean>; isLabel: boolean};
 
 export interface Values {
   name: string;
@@ -47,8 +47,9 @@ export const SelectAttribute = ({
       <Autocomplete
         placeholder="Key"
         options={attributesOptions}
-        onChange={(value) => {
+        onChange={(value, option) => {
           setFieldValue(`attributes[${accessor}].fieldPath`, value);
+          setFieldValue(`attributes[${accessor}].isLabel`, option?.isLabel);
           setAttributeName(value as string);
         }}
         defaultValue={attributeName}

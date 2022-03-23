@@ -34,7 +34,7 @@ import tw, { styled } from "twin.macro";
 
 import { useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams } from "hooks";
 import {
-  BetweenOp, Filter, OP, TestOverviewFilter,
+  BetweenOp, Filter, OP, TestOverviewFilter, BuildAttribute,
 } from "types";
 import { useSetFilterDispatch } from "common";
 import { createFilter, updateFilter } from "../../../api";
@@ -60,19 +60,23 @@ export const ConfigureFilter = ({
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const setFilter = useSetFilterDispatch();
-  const attributes = useTestToCodeData<string[]>("/build/attributes") || [];
+  const attributes = useTestToCodeData<BuildAttribute[]>("/build/attributes") || [];
   const filter = useTestToCodeData<TestOverviewFilter>(isEditing ? `/build/filters/${filterId}` : null);
 
   const { name: filterName, attributes: filterAttributes = [] } = filter || {};
 
-  const attributesOptions = useMemo(() => attributes.map((attr) => ({ value: attr, label: attr })), [attributes]);
+  const attributesOptions = useMemo(() => attributes
+    .map(({ name = "", isLabel }) => ({ value: name, label: name, isLabel })), [attributes]);
   const filterNames = useMemo(() => filters.map(({ name = "" }) => name), [filters]);
 
   const transformedFilterAttributes = useMemo(() => filterAttributes
-    .map(({ fieldPath, valuesOp, values = [] }) => ({
+    .map(({
+      fieldPath, valuesOp, values = [], isLabel,
+    }) => ({
       id: uuidv4(),
       fieldPath,
       valuesOp,
+      isLabel,
       values: values.reduce((acc, { value }) => ({ ...acc, [value]: true }), {}),
     })), [filterAttributes]);
 
@@ -82,7 +86,7 @@ export const ConfigureFilter = ({
   } : {
     name: `New filter ${filters.length + 1}`,
     attributes: [{
-      fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(),
+      fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(), isLabel: false,
     }],
   }), [isEditing, filterName, transformedFilterAttributes]);
 
@@ -94,9 +98,12 @@ export const ConfigureFilter = ({
           const values = {
             name,
             buildVersion,
-            attributes: selectedAttributes.map(({ valuesOp, values: attrValues, fieldPath }: any) => ({
+            attributes: selectedAttributes.map(({
+              valuesOp, values: attrValues, fieldPath, isLabel,
+            }: any) => ({
               fieldPath,
               valuesOp,
+              isLabel,
               values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
             })),
           };
@@ -105,7 +112,8 @@ export const ConfigureFilter = ({
           await action(agentId, values, {
             onSuccess: (createdFilterId) => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
-              setFilter(createdFilterId || filterId);
+              setFilter(createdFilterId);
+              setConfigureFilter(FILTER_STATE.EDITING);
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });
@@ -235,7 +243,7 @@ const unusedName = (field: string, names: string[]): FormValidator => (valitatio
 const emptyAttribute = (): FormValidator => (valitationItem) => {
   const field = "attributes";
   const attributes = getPropertyByPath<CustomAttribute[]>(valitationItem, field);
-  const isValid = attributes.every(({ values = {}, fieldPath }) => Boolean(fieldPath) && Object.keys(values).length);
-
+  const isValid = attributes.every(({ values = {}, fieldPath }) =>
+    Boolean(fieldPath) && Object.values(values).some(Boolean)); // has some selected attribute value
   return isValid ? {} : { [field as string]: "Please select attributes" };
 };

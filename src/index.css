@@ -629,6 +629,10 @@ button:focus {
   pointer-events: none;
 }
 
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 .visible {
   visibility: visible;
 }
@@ -743,10 +747,6 @@ button:focus {
   margin-right: 0.5rem;
 }
 
-.mb-2 {
-  margin-bottom: 0.5rem;
-}
-
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -799,6 +799,10 @@ button:focus {
   margin-bottom: 0.75rem;
 }
 
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
 .mr-4 {
   margin-right: 1rem;
 }
@@ -839,10 +843,6 @@ button:focus {
   display: block;
 }
 
-.inline-block {
-  display: inline-block;
-}
-
 .inline {
   display: inline;
 }
@@ -867,6 +867,14 @@ button:focus {
   display: contents;
 }
 
+.h-full {
+  height: 100%;
+}
+
+.h-4 {
+  height: 1rem;
+}
+
 .h-2 {
   height: 0.5rem;
 }
@@ -883,10 +891,6 @@ button:focus {
   height: 5rem;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-fit {
   height: -webkit-fit-content;
   height: -moz-fit-content;
@@ -899,10 +903,6 @@ button:focus {
 
 .h-\[80\%\] {
   height: 80%;
-}
-
-.h-4 {
-  height: 1rem;
 }
 
 .h-14 {
@@ -957,6 +957,10 @@ button:focus {
   min-height: 88px;
 }
 
+.w-4 {
+  width: 1rem;
+}
+
 .w-full {
   width: 100%;
 }
@@ -1003,10 +1007,6 @@ button:focus {
 
 .w-108 {
   width: 30rem;
-}
-
-.w-4 {
-  width: 1rem;
 }
 
 .w-36 {
@@ -1065,6 +1065,10 @@ button:focus {
 
 .max-w-200px {
   max-width: 200px;
+}
+
+.max-w-\[350px\] {
+  max-width: 350px;
 }
 
 .max-w-\[210px\] {
@@ -1128,6 +1132,10 @@ button:focus {
 
 .cursor-pointer {
   cursor: pointer;
+}
+
+.cursor-default {
+  cursor: default;
 }
 
 .grid-flow-row {
@@ -1222,11 +1230,6 @@ button:focus {
   gap: 0px;
 }
 
-.gap-x-6 {
-  -moz-column-gap: 1.5rem;
-       column-gap: 1.5rem;
-}
-
 .gap-x-2 {
   -moz-column-gap: 0.5rem;
        column-gap: 0.5rem;
@@ -1253,6 +1256,11 @@ button:focus {
 .gap-x-3 {
   -moz-column-gap: 0.75rem;
        column-gap: 0.75rem;
+}
+
+.gap-x-6 {
+  -moz-column-gap: 1.5rem;
+       column-gap: 1.5rem;
 }
 
 .space-y-4 > :not([hidden]) ~ :not([hidden]) {
@@ -1612,16 +1620,16 @@ button:focus {
   line-height: 24px;
 }
 
+.leading-20 {
+  line-height: 20px;
+}
+
 .leading-16 {
   line-height: 16px;
 }
 
 .leading-18 {
   line-height: 18px;
-}
-
-.leading-20 {
-  line-height: 20px;
 }
 
 .leading-48 {
@@ -1656,14 +1664,14 @@ button:focus {
   line-height: 36px;
 }
 
-.text-monochrome-default {
-  --tw-text-opacity: 1;
-  color: rgba(104, 116, 129, var(--tw-text-opacity));
-}
-
 .text-blue-default {
   --tw-text-opacity: 1;
   color: rgba(0, 127, 255, var(--tw-text-opacity));
+}
+
+.text-monochrome-default {
+  --tw-text-opacity: 1;
+  color: rgba(104, 116, 129, var(--tw-text-opacity));
 }
 
 .text-monochrome-black {
