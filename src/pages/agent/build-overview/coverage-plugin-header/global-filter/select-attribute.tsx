@@ -13,16 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Autocomplete, HeadlessSelect, Icons, useFormikContext,
+  OptionType,
 } from "@drill4j/ui-kit";
 import { Attribute, BetweenOp } from "types";
 import { SelectAttributeValues } from "./select-attribute-values";
 import "twin.macro";
 
 interface Props {
-  attributesOptions: {value: string, label: string}[];
+  attributesOptions: {value: string; label: string; isLabel: boolean}[];
   accessor: number;
   defaultValue: string;
   removeAttribute: (() => void) | null;
@@ -42,16 +43,18 @@ export const SelectAttribute = ({
   const { setFieldValue, values } = useFormikContext<Values>();
   const attrValues = values?.attributes[accessor]?.values || {};
 
+  const onSelectAttribute = useCallback((value: string, option: OptionType) => {
+    setFieldValue(`attributes[${accessor}].fieldPath`, value);
+    setFieldValue(`attributes[${accessor}].isLabel`, option?.isLabel);
+    setAttributeName(value as string);
+  }, []);
+
   return (
     <div tw="grid grid-cols-[224px 4px 90px 300px 16px] items-center gap-x-2">
       <Autocomplete
         placeholder="Key"
         options={attributesOptions}
-        onChange={(value, option) => {
-          setFieldValue(`attributes[${accessor}].fieldPath`, value);
-          setFieldValue(`attributes[${accessor}].isLabel`, option?.isLabel);
-          setAttributeName(value as string);
-        }}
+        onChange={onSelectAttribute as any}
         defaultValue={attributeName}
         onClear={() => setFieldValue(`attributes[${accessor}]`, { id: attrValues.id })}
       />
