@@ -28,17 +28,19 @@ export const ComparedToBuild = ({ parentBuildVersion }: Props) => {
 
   return (
     <div tw="flex items-center gap-x-1 leading-16 text-monochrome-default">
-      Compared to build:
-      <Typography.MiddleEllipsis>
-        <Link
-          to={getPagePath({ name: "overview", params: { buildVersion: parentBuildVersion }, queryParams: { activeTab: "methods" } })}
-          title={parentBuildVersion}
-          tw="link whitespace-nowrap"
-          data-test="parent-build-version"
-        >
-          {parentBuildVersion}
-        </Link>
-      </Typography.MiddleEllipsis>
+      <span>Compared to build:</span>
+      <div tw="max-w-[350px]">
+        <Typography.MiddleEllipsis>
+          <Link
+            to={getPagePath({ name: "overview", params: { buildVersion: parentBuildVersion }, queryParams: { activeTab: "methods" } })}
+            title={parentBuildVersion}
+            tw="link whitespace-nowrap"
+            data-test="parent-build-version"
+          >
+            {parentBuildVersion}
+          </Link>
+        </Typography.MiddleEllipsis>
+      </div>
     </div>
   );
 };

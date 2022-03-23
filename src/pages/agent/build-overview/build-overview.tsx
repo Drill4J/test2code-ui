@@ -21,11 +21,11 @@ import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
+import { TestTypeSummary } from "types";
+import { useFilterState } from "common";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
-import { TestTypeSummary } from "../../../types";
-import { useFilterState } from "../../../common";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2`}
