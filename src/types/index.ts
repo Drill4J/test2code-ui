@@ -56,3 +56,4 @@ export type {
   TestOverviewFilter, FilterValue, AttributeValue, Attribute, Filter, BuildAttribute,
 } from "./filters";
 export { BetweenOp, OP } from "./filters";
+export type { Label } from "./label";

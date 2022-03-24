@@ -823,16 +823,16 @@ button:focus {
   margin-top: 2rem;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .mr-10 {
   margin-right: 2.5rem;
 }
 
 .mr-6 {
   margin-right: 1.5rem;
-}
-
-.mb-1 {
-  margin-bottom: 0.25rem;
 }
 
 .mr-3 {
@@ -1081,6 +1081,10 @@ button:focus {
 
 .max-w-280px {
   max-width: 280px;
+}
+
+.max-w-\[100\%\] {
+  max-width: 100%;
 }
 
 .max-w-1\/2 {
@@ -1694,6 +1698,11 @@ button:focus {
   color: rgba(227, 230, 232, var(--tw-text-opacity));
 }
 
+.text-monochrome-dark-tint {
+  --tw-text-opacity: 1;
+  color: rgba(164, 172, 179, var(--tw-text-opacity));
+}
+
 .text-orange-default {
   --tw-text-opacity: 1;
   color: rgba(245, 166, 35, var(--tw-text-opacity));
@@ -1702,11 +1711,6 @@ button:focus {
 .text-data-visualization-saved-time {
   --tw-text-opacity: 1;
   color: rgba(103, 213, 181, var(--tw-text-opacity));
-}
-
-.text-monochrome-dark-tint {
-  --tw-text-opacity: 1;
-  color: rgba(164, 172, 179, var(--tw-text-opacity));
 }
 
 .no-underline {

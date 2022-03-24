@@ -66,7 +66,7 @@ export const ConfigureFilter = ({
   const { name: filterName, attributes: filterAttributes = [] } = filter || {};
 
   const attributesOptions = useMemo(() => attributes
-    .map(({ name = "", isLabel }) => ({ value: name, label: name, isLabel })), [attributes]);
+    .map(({ name = "", isLabel = false }) => ({ value: name, label: name, isLabel })), [attributes]);
   const filterNames = useMemo(() => filters.map(({ name = "" }) => name), [filters]);
 
   const transformedFilterAttributes = useMemo(() => filterAttributes

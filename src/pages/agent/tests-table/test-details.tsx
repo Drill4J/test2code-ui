@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 import {
-  Icons, Stub, Table, Cells,
+  Icons, Stub, Table, Cells, Label, Tooltip,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -25,12 +25,18 @@ import { TestCoverageInfo } from "types/test-coverage-info";
 
 import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { transformTests } from "utils";
+import { Label as LabelType } from "types";
 import { getModalPath, BUILD_STATUS } from "common";
 
 interface Props {
   tests: TestCoverageInfo[];
   topicCoveredMethodsByTest: string;
 }
+
+const FilterableHeader = (props: any) => {
+  console.log(props);
+  return <div tw="flex items-center gap-x-1">Test type <Icons.Filter tw="text-monochrome-dark-tint" /></div>;
+};
 
 const columns = [
   {
@@ -44,6 +50,31 @@ const columns = [
     accessor: "overview.details.path",
     textAlign: "left",
     filterable: true,
+  },
+  {
+    Header: "Labels",
+    accessor: "overview.details.labels",
+    textAlign: "left",
+    width: "232px",
+    Cell: ({ value: labels }: {value: LabelType[]}) => {
+      const [firstLabel, secondLabel, ...restLabels] = labels;
+      const firstLabelContent = `${firstLabel?.name}: ${firstLabel?.value}`;
+      const secondLabelContent = `${secondLabel?.name}: ${secondLabel?.value}`;
+
+      return (
+        <>
+          {firstLabel && <Label tw="max-w-[100%] truncate mb-1" title={firstLabelContent}>{firstLabelContent}</Label>}
+          <div tw="flex gap-x-1 w-full">
+            {secondLabelContent && <Label tw="truncate" title={secondLabelContent}>{secondLabelContent}</Label>}
+            {restLabels && (
+              <Tooltip message={restLabels.map(({ name, value }) => <div>{name}: {value}</div>)}>
+                <Label>+{restLabels.length}</Label>
+              </Tooltip>
+            )}
+          </div>
+        </>
+      );
+    },
   },
   {
     Header: "Test type",
