@@ -13,23 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { memo } from "react";
 import { useTableActionsState, Stub, Icons } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { useFilteredData } from "hooks";
 import { TestDetails } from "pages/agent/tests-table";
+import { BuildCoverage } from "types";
 
-export const BuildTestsTable = () => {
+export const BuildTestsTable = memo(() => {
   const { search } = useTableActionsState();
   const { items = [], totalCount } = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests",
     { filters: search, output: "LIST" }) || {};
+  const { byTestType = [] } = useFilteredData<BuildCoverage>("/build/coverage") || {};
+  const testsType = byTestType.map(({ type }) => type);
 
   return (totalCount ? (
     <TestDetails
       tests={items}
       topicCoveredMethodsByTest="/build/tests"
+      testTypes={testsType}
     />
   ) : (
     <Stub
@@ -39,4 +43,4 @@ export const BuildTestsTable = () => {
     />
   )
   );
-};
+});

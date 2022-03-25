@@ -17,19 +17,23 @@ import React from "react";
 import { Icons, Stub, useTableActionsState } from "@drill4j/ui-kit";
 import { FilterList } from "@drill4j/types-admin/dist";
 import { TestCoverageInfo } from "types/test-coverage-info";
-import { useFilteredData, useTestToCodeRouteParams } from "hooks";
+import { useTestToCodeData, useTestToCodeRouteParams } from "hooks";
+import { ScopeCoverage } from "types";
 import { TestDetails } from "../../../tests-table";
 
 export const ScopeTestsTable = () => {
   const { search } = useTableActionsState();
   const { scopeId = "" } = useTestToCodeRouteParams();
-  const { items = [], totalCount } = useFilteredData<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`,
+  const { items = [], totalCount } = useTestToCodeData<FilterList<TestCoverageInfo>>(`/build/scopes/${scopeId}/tests`,
     { filters: search, output: "LIST" }) || {};
+  const { byTestType = [] } = useTestToCodeData<ScopeCoverage>(`/build/scopes/${scopeId}/coverage`) || {};
+  const testsType = byTestType.map(({ type }) => type);
 
   return totalCount ? (
     <TestDetails
       tests={items}
       topicCoveredMethodsByTest={`/build/scopes/${scopeId}/tests`}
+      testTypes={testsType}
     />
   ) : (
     <Stub

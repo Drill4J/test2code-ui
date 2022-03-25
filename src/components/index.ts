@@ -25,3 +25,4 @@ export { Breadcrumbs } from "./breadcrumbs";
 export { PageHeader } from "./page-header";
 export { Baseline } from "./baseline";
 export { ComparedToBuild } from "./compared-to-build";
+export { ColumnFilterByValues } from "./column-filter-by-values";
