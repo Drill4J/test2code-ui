@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export type { Risk } from "./risk";
+export type { Risk, RiskStat } from "./risk";
 export type { ParentBuild } from "./parent-build";
 export type { ActiveScope } from "./active-scope";
 export type { ActiveSessions } from "./active-sessions";
