@@ -17,13 +17,13 @@ import React from "react";
 import { Risk } from "types";
 import {
   capitalize, Cells, Icons, Stub, Table,
-  Link,
+  Link, Typography,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
 import { getModalPath, getPagePath } from "common";
 import queryString from "querystring";
-import { CoverageCell } from "../../methods-table/coverage-cell";
+import { RiskStat } from "types/risk";
 
 interface Props {
   data: Risk[];
@@ -63,12 +63,29 @@ export const RisksTable = ({ data }: Props) => {
       textAlign: "left",
     },
     {
-      Header: "Coverage, %",
+      Header: "Current coverage, %",
       accessor: "coverage",
       Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
+        <Cells.CoverageProgress value={value} />
       ),
-      width: "147px",
+      width: "176px",
+      sortType: "number",
+    },
+    {
+      Header: "Previously covered, %",
+      accessor: "previousCovered.coverage",
+      Cell: ({ row: { original: { previousCovered } } }: { row: {original: {previousCovered: RiskStat}} }) => (
+        previousCovered ? (
+          <div tw="text-12 text-monochrome-default leading-24">
+            <span tw="text-14 text-monochrome-black">{previousCovered.coverage}</span>
+            <Typography.MiddleEllipsis>
+              <span title={`Build: ${previousCovered.buildVersion}`}>Build: {previousCovered.buildVersion}</span>
+            </Typography.MiddleEllipsis>
+          </div>
+        ) : <div>&mdash;</div>
+      ),
+      width: "180px",
+      sortType: "number",
     },
     {
       Header: "Associated Tests",
