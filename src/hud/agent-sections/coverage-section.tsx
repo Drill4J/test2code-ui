@@ -93,7 +93,7 @@ export const CoverageSection = ({ buildVersion }: Props) => {
           </Tooltip>
         )}
         additionalInfo={(
-          Boolean(buildDiff) && !isFirstBuild && scopeCount > 0 && (
+          Boolean(buildDiff) && Boolean(percentFormatter(buildCodeCoverage)) && !isFirstBuild && scopeCount > 0 && (
             <BuildInfo tw="w-full">
               <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
               <Typography.MiddleEllipsis tw="inline">
