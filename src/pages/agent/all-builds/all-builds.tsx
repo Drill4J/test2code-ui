@@ -68,6 +68,7 @@ export const AllBuilds = () => {
             {
               Header: "Added",
               accessor: "detectedAt",
+              width: "400px",
               Cell: ({ value }: any) => <span>{dateTimeFormatter(value)}</span>,
               textAlign: "left",
             },
