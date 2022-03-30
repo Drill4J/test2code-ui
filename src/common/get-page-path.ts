@@ -55,6 +55,8 @@ export const getPagePath = <AppPages extends Routes, PageName extends keyof AppP
 };
 
 export function getAdminPath() {
-  const path = window.location.pathname.split("test2code")[0];
-  return path.slice(-1) === "/" ? `${path}test2code` : `${path}/test2code`;
+  const isHUD = !window.location.pathname.includes("/plugins/test2code");
+  const path = isHUD ? window.location.pathname : window.location.pathname.split("test2code");
+  const parsedPath = path.slice(-1) === "/" ? path : `${path}/`;
+  return isHUD ? `${parsedPath}plugins/test2code` : `${parsedPath}test2code`;
 }
