@@ -75,7 +75,7 @@ export const RisksTable = ({ data }: Props) => {
       Header: "Previously covered, %",
       accessor: "previousCovered.coverage",
       Cell: ({ row: { original: { previousCovered } } }: { row: {original: {previousCovered: RiskStat}} }) => (
-        previousCovered ? (
+        previousCovered?.buildVersion ? (
           <div tw="text-12 text-monochrome-default leading-24">
             <span tw="text-14 text-monochrome-black">{previousCovered.coverage}</span>
             <Typography.MiddleEllipsis>
