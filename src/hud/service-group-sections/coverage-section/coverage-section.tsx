@@ -30,7 +30,7 @@ interface Props {
 export const CoverageSection = ({ totalCoverage = 0, methodCount: { total = 0, covered = 0 } = {} }: Props) => (
   <div>
     <DashboardSection
-      label="Build Coverage"
+      label="Coverage"
       info={`${percentFormatter(totalCoverage)}%`}
       graph={(
         <Tooltip message={<MethodsTooltip coveredMethods={{ total, covered }} />}>

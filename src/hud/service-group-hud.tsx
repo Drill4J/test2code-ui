@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 import React from "react";
-
 import { useGroupRouteParams, useServiceGroup } from "hooks";
 import { ServiceGroupSummary } from "types/service-group-summary";
-import { PluginCard } from "./plugin-card";
+import { Link } from "react-router-dom";
 import {
   CoverageSection, RisksSection,
 } from "./service-group-sections";
 import { TestType } from "./agent-sections/section-tooltip";
 import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
+import { PluginCard } from "./plugin-card";
+import "twin.macro";
 
 export interface GroupHudProps {
   customProps: { pluginPagePath: string; }
@@ -57,7 +58,13 @@ export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudPro
   });
 
   return (
-    <PluginCard pluginLink={pluginPagePath}>
+    <PluginCard header={(
+      <div tw="flex justify-between">
+        <span tw="font-bold text-monochrome-default uppercase">test2code</span>
+        <Link className="font-bold link no-underline" to={pluginPagePath}>Go to Plugin</Link>
+      </div>
+    )}
+    >
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
       {testSection}
       <RisksSection risks={riskCounts} />
