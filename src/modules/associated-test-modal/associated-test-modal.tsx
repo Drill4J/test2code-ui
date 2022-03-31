@@ -36,7 +36,7 @@ export const AssociatedTestModal = () => {
     tests = [], packageName = "", className: testClassName = "", methodName = "",
   } = associatedTests;
 
-  const closeModal = useCloseModal("/associated-tests-modal", ["testId", "treeLevel"]);
+  const closeModal = useCloseModal(["testId", "treeLevel"]);
 
   return (
     <Modal onClose={closeModal}>

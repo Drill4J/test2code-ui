@@ -44,7 +44,7 @@ const validateQualityGate = (formValues: ConditionSettingByType) => composeValid
 export const QualityGatePane = () => {
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
-  const closeModal = useCloseModal("/quality-gate");
+  const closeModal = useCloseModal();
 
   const handleOnToggle = () => {
     closeModal();
