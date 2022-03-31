@@ -24,6 +24,7 @@ import "twin.macro";
 import { getModalPath, getPagePath } from "common";
 import queryString from "querystring";
 import { RiskStat } from "types/risk";
+import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
   data: Risk[];
@@ -66,7 +67,7 @@ export const RisksTable = ({ data }: Props) => {
       Header: "Current coverage, %",
       accessor: "coverage",
       Cell: ({ value = 0 }: { value: number }) => (
-        <Cells.CoverageProgress value={value} />
+        <CoverageCell value={value} showCoverageIcon />
       ),
       width: "176px",
       sortType: "number",
