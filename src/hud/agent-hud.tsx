@@ -86,7 +86,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
               push(addQueryParamsToPath({ [SELECTED_BUILD_QUERY_PARAM]: value }));
             }}
           />
-          <Link className="font-bold link no-underline" to={pluginPagePath}>Go to Plugin</Link>
+          <Link className="font-bold link no-underline" to={getTest2CodeOverviewPath(pluginPagePath, selectedBuild)}>Go to Plugin</Link>
         </div>
       </div>
     )}
@@ -98,3 +98,8 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     </PluginCard>
   );
 };
+
+const getTest2CodeOverviewPath = (
+  pluginPagePath: string,
+  buildVersion: string,
+): string => `${pluginPagePath}/builds/${buildVersion}/overview`;
