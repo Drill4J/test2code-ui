@@ -106,7 +106,7 @@ export const RisksTable = ({ data }: Props) => {
 
   return (
     <Table
-      name="ALL RISK METHODS"
+      name={`ALL RISK METHODS (${data.length})`}
       resultName="risk methods"
       data={data}
       columns={columns}
