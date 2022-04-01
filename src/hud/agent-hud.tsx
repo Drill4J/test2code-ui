@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { BuildVersion } from "@drill4j/types-admin/index";
-import { Autocomplete } from "@drill4j/ui-kit";
+import { Autocomplete, addQueryParamsToPath, useQueryParams } from "@drill4j/ui-kit";
 import {
   CoverageSection, RisksSection,
 } from "./agent-sections";
@@ -28,15 +28,21 @@ import { TestType } from "./agent-sections/section-tooltip";
 import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
 import { PluginCard } from "./plugin-card";
 import "twin.macro";
+import { PLUGIN_ID } from "../common";
 
 export interface AgentHudProps {
   customProps: { pluginPagePath: string; }
 }
 
+const SELECTED_BUILD_QUERY_PARAM = `${PLUGIN_ID}_SELECTED_BUILD`;
+
 export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => {
   const { agentId } = useAgentRouteParams();
+  const { push } = useHistory();
+  const queryParams = useQueryParams<Record<string, string>>();
+
   const { buildVersion: activeBuildVersion } = useActiveBuild(agentId) || {};
-  const [selectedBuild, selectBuild] = useState<string | null>(null);
+  const [selectedBuild, selectBuild] = useState<string | null>(queryParams[SELECTED_BUILD_QUERY_PARAM] || null);
   const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary",
     { buildVersion: selectedBuild }) || {};
   const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage",
@@ -70,11 +76,15 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
     <PluginCard header={(
       <div tw="flex justify-between">
         <span tw="font-bold text-monochrome-default uppercase">test2code</span>
-        <div>
+        <div tw="flex items-center gap-x-6">
           <Autocomplete
+            tw="w-[240px]"
             defaultValue={selectedBuild}
             options={buildVersions.map(({ buildVersion }) => ({ label: buildVersion, value: buildVersion }))}
-            onChange={(value) => selectBuild(value as string)}
+            onChange={(value: any) => {
+              selectBuild(value);
+              push(addQueryParamsToPath({ [SELECTED_BUILD_QUERY_PARAM]: value }));
+            }}
           />
           <Link className="font-bold link no-underline" to={pluginPagePath}>Go to Plugin</Link>
         </div>

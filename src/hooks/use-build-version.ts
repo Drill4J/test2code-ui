@@ -22,7 +22,7 @@ import { useTestToCodeRouteParams } from "./use-test2code-params";
 
 interface Message {
   agentId?: string;
-  buildVersion?: string;
+  buildVersion?: string | null;
   filters?: Search[],
   orderBy?: Sort[],
   output?: OutputType,
