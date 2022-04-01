@@ -17,6 +17,7 @@ import React from "react";
 import { useGroupRouteParams, useServiceGroup } from "hooks";
 import { ServiceGroupSummary } from "types/service-group-summary";
 import { Link } from "react-router-dom";
+import { Icons, Tooltip } from "@drill4j/ui-kit";
 import {
   CoverageSection, RisksSection,
 } from "./service-group-sections";
@@ -60,7 +61,19 @@ export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudPro
   return (
     <PluginCard header={(
       <div tw="flex justify-between">
-        <span tw="font-bold text-monochrome-default uppercase">test2code</span>
+        <div tw="flex gap-x-2 text-monochrome-default"><span tw="font-bold uppercase">test2code</span>
+          <Tooltip
+            position="top-center"
+            message={(
+              <div tw="text-center">
+                Plugin data are based on latest builds <br />
+                of Agents in the Service Group
+              </div>
+            )}
+          >
+            <Icons.Info />
+          </Tooltip>
+        </div>
         <Link className="font-bold link no-underline" to={pluginPagePath}>Go to Plugin</Link>
       </div>
     )}
