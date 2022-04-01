@@ -93,13 +93,13 @@ export const CoverageSection = ({ buildVersion }: Props) => {
           </Tooltip>
         )}
         additionalInfo={(
-          Boolean(buildDiff) && Boolean(percentFormatter(buildCodeCoverage)) && !isFirstBuild && scopeCount > 0 && (
+          Boolean(buildDiff) && Boolean(buildCodeCoverage) && !isFirstBuild && scopeCount > 0 && (
             <BuildInfo tw="w-full">
               <span tw="whitespace-nowrap">{`${buildDiff > 0 ? "+" : "-"} ${percentFormatter(Math.abs(buildDiff))}% vs`}</span>
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
                   tw="whitespace-nowrap link font-bold leading-16 no-underline max-w-[210px]"
-                  to={`${getPagePath({ name: "overview", params: { buildVersion: previousBuildVersion } })}`}
+                  to={`${pathname}/plugins/test2code/builds/${previousBuildVersion}/overview`}
                   title={`Build ${previousBuildVersion}`}
                 >
                     &nbsp;Build&nbsp;
