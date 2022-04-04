@@ -17,7 +17,7 @@ import React from "react";
 import { Risk } from "types";
 import {
   capitalize, Cells, Icons, Stub, Table,
-  Link, Typography,
+  Link, Typography, percentFormatter,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
@@ -78,7 +78,7 @@ export const RisksTable = ({ data }: Props) => {
       Cell: ({ row: { original: { previousCovered } } }: { row: {original: {previousCovered: RiskStat}} }) => (
         previousCovered?.buildVersion ? (
           <div tw="text-12 text-monochrome-default leading-24">
-            <span tw="text-14 text-monochrome-black">{previousCovered.coverage}</span>
+            <span tw="text-14 text-monochrome-black">{percentFormatter(previousCovered.coverage)}</span>
             <Typography.MiddleEllipsis>
               <span title={`Build: ${previousCovered.buildVersion}`}>Build: {previousCovered.buildVersion}</span>
             </Typography.MiddleEllipsis>
