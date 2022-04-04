@@ -82,8 +82,10 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
             defaultValue={selectedBuild}
             options={buildVersions.map(({ buildVersion }) => ({ label: buildVersion, value: buildVersion }))}
             onChange={(value: any) => {
-              selectBuild(value);
-              push(addQueryParamsToPath({ [SELECTED_BUILD_QUERY_PARAM]: value }));
+              if (value !== selectedBuild) {
+                selectBuild(value);
+                push(addQueryParamsToPath({ [SELECTED_BUILD_QUERY_PARAM]: value }));
+              }
             }}
           />
           <Link className="font-bold link no-underline" to={getTest2CodeOverviewPath(pluginPagePath, selectedBuild)}>Go to Plugin</Link>
