@@ -51,7 +51,7 @@ export const FinishAllScopesModal = () => {
   const { summaries: agentsSummaries = [] } = useGroupData<ServiceGroupSummary>("/group/summary", groupId) || {};
   const activeSessions = useActiveSessions("ServiceGroup", groupId) || [];
   const [loading, setLoading] = useState(false);
-  const closeModal = useCloseModal("/finish-all-scopes-modal");
+  const closeModal = useCloseModal();
 
   return (
     <Modal onClose={closeModal}>

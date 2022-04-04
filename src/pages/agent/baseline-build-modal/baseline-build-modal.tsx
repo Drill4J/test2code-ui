@@ -44,7 +44,7 @@ export const BaselineBuildModal = () => {
   const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const [isConfirmed, setIsConfirmed] = useState(isBaseline);
-  const closeModal = useCloseModal("/baseline-build-modal");
+  const closeModal = useCloseModal();
 
   return (
     <Modal onClose={closeModal}>

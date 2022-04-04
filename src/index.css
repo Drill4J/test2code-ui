@@ -1618,14 +1618,14 @@ button:focus {
   line-height: 36px;
 }
 
-.text-blue-default {
-  --tw-text-opacity: 1;
-  color: rgba(0, 127, 255, var(--tw-text-opacity));
-}
-
 .text-monochrome-default {
   --tw-text-opacity: 1;
   color: rgba(104, 116, 129, var(--tw-text-opacity));
+}
+
+.text-blue-default {
+  --tw-text-opacity: 1;
+  color: rgba(0, 127, 255, var(--tw-text-opacity));
 }
 
 .text-monochrome-black {

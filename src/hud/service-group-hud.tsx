@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 import React from "react";
-
 import { useGroupRouteParams, useServiceGroup } from "hooks";
 import { ServiceGroupSummary } from "types/service-group-summary";
-import { PluginCard } from "./plugin-card";
+import { Link } from "react-router-dom";
+import { Icons, Tooltip } from "@drill4j/ui-kit";
 import {
   CoverageSection, RisksSection,
 } from "./service-group-sections";
 import { TestType } from "./agent-sections/section-tooltip";
 import { getTestsAndTests2RunSections } from "./get-tests-and-tests-2-run-sections";
+import { PluginCard } from "./plugin-card";
+import "twin.macro";
 
 export interface GroupHudProps {
   customProps: { pluginPagePath: string; }
@@ -57,7 +59,25 @@ export const ServiceGroupHud = ({ customProps: { pluginPagePath } }: GroupHudPro
   });
 
   return (
-    <PluginCard pluginLink={pluginPagePath}>
+    <PluginCard header={(
+      <div tw="flex justify-between">
+        <div tw="flex gap-x-2 text-monochrome-default"><span tw="font-bold uppercase">test2code</span>
+          <Tooltip
+            position="top-center"
+            message={(
+              <div tw="text-center">
+                Plugin data are based on latest builds <br />
+                of Agents in the Service Group
+              </div>
+            )}
+          >
+            <Icons.Info />
+          </Tooltip>
+        </div>
+        <Link className="font-bold link no-underline" to={pluginPagePath}>Go to Plugin</Link>
+      </div>
+    )}
+    >
       <CoverageSection totalCoverage={coverage} methodCount={methodCount} />
       {testSection}
       <RisksSection risks={riskCounts} />

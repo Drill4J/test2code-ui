@@ -57,7 +57,7 @@ export const SessionsManagementPane = () => {
   const id = agentId || groupId;
   const activeSessions = useActiveSessions(agentType, id, buildVersion) || [];
   const hasGlobalSession = activeSessions.some(({ isGlobal }) => isGlobal);
-  const closePanel = useCloseModal("/session-management");
+  const closePanel = useCloseModal();
   const agent = useAgent(agentId);
   const group = useAdminConnection<ServiceGroup>(`/api/groups/${groupId}`);
 

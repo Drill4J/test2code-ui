@@ -51,7 +51,7 @@ export const TestsToRunPanel = () => {
         return testsToRun[selectedTestsType];
     }
   };
-  const closePanel = useCloseModal("/tests-to-run-modal");
+  const closePanel = useCloseModal();
 
   const dropdownItems = Object.entries(testsToRun).map(([key, value]) => ({
     value: key, label: `${capitalize(key)} (${value.length})`,

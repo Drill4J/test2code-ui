@@ -31,7 +31,7 @@ export const GetSuggestedTestsModal = () => {
     copied && timeout;
     return () => clearTimeout(timeout);
   }, [copied]);
-  const closeModal = useCloseModal("/get-suggested-tests");
+  const closeModal = useCloseModal();
 
   return (
     <Modal onClose={closeModal}>
