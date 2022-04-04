@@ -15,7 +15,7 @@
  */
 import React from "react";
 import { Tooltip, Typography } from "@drill4j/ui-kit";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { percentFormatter } from "@drill4j/common-utils";
@@ -24,14 +24,14 @@ import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
-import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
+import { useBuildVersion, usePreviousBuildCoverage } from "hooks";
 
 interface Props {
   buildVersion?: string;
 }
 
 export const CoverageSection = ({ buildVersion }: Props) => {
-  const { agentId = "" } = useAgentRouteParams();
+  const { pathname } = useLocation();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent", { buildVersion }) || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
@@ -96,7 +96,7 @@ export const CoverageSection = ({ buildVersion }: Props) => {
               <Typography.MiddleEllipsis tw="inline">
                 <NavLink
                   tw="whitespace-nowrap link font-bold leading-16 no-underline max-w-[210px]"
-                  to={`/agents/${agentId}/builds/${previousBuildVersion}/dashboard/test2code`}
+                  to={`${pathname}/plugins/test2code/builds/${previousBuildVersion}/overview`}
                   title={`Build ${previousBuildVersion}`}
                 >
                     &nbsp;Build&nbsp;
