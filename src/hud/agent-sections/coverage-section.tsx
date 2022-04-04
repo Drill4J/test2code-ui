@@ -24,9 +24,7 @@ import { Methods } from "types/methods";
 import { COVERAGE_TYPES_COLOR } from "common/constants";
 import { ParentBuild } from "types/parent-build";
 import { SingleBar, CoverageSectionTooltip, DashboardSection } from "components";
-import { useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage } from "hooks";
-import { getAdminPath } from "../../utils";
-import { getPagePath } from "../../common/get-page-path";
+import { useBuildVersion, usePreviousBuildCoverage } from "hooks";
 
 interface Props {
   buildVersion?: string;
@@ -34,7 +32,6 @@ interface Props {
 
 export const CoverageSection = ({ buildVersion }: Props) => {
   const { pathname } = useLocation();
-  const { agentId = "" } = useAgentRouteParams();
   const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent", { buildVersion }) || {};
   const { percentage: previousBuildCodeCoverage = 0 } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const { coverage: buildCodeCoverage = 0, scopeCount = 0 } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
