@@ -24,6 +24,7 @@ import {
   useActiveSessions, useAdminConnection, useAgent, useAgentRouteParams, useGroupRouteParams, useTestToCodeRouteParams,
 } from "hooks";
 import { ServiceGroup } from "@drill4j/types-admin/dist";
+import { AgentBuildInfo } from "@drill4j/types-admin";
 import { ManagementNewSession } from "./management-new-session";
 import {
   startServiceGroupSessions, startAgentSession,
@@ -60,6 +61,8 @@ export const SessionsManagementPane = () => {
   const closePanel = useCloseModal();
   const agent = useAgent(agentId);
   const group = useAdminConnection<ServiceGroup>(`/api/groups/${groupId}`);
+  const [agentBuildInfo] = useAdminConnection<AgentBuildInfo[]>(`/api/agent/${agentId}/builds`) || [];
+  const { systemSettings: agentSystemSettings } = agentBuildInfo || {};
 
   return (
     <Panel onClose={closePanel}>
@@ -98,7 +101,10 @@ export const SessionsManagementPane = () => {
                     agentId={agentId}
                     serviceGroupId={groupId}
                     hasGlobalSession={hasGlobalSession}
-                    agent={agent}
+                    agent={{
+                      ...agent,
+                      systemSettings: agentSystemSettings,
+                    }}
                     group={group}
                   />
                 )}
