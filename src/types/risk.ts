@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { RiskType } from "./risk-type";
+import { Count } from "./count";
 
 type CoverageRate = "MISSED" | "PARTLY" | "FULL";
 
@@ -23,6 +24,7 @@ interface ProbesCount{
 }
 
 export interface Risk {
+  id: string;
   ownerClass: string,
   name: string,
   desc: string,
@@ -31,4 +33,11 @@ export interface Risk {
   coverage: number,
   coverageRate: CoverageRate,
   assocTestsCount: number,
+  count: Count;
+  previousCovered: RiskStat | null;
+}
+
+export interface RiskStat {
+  buildVersion: string;
+  coverage: number;
 }

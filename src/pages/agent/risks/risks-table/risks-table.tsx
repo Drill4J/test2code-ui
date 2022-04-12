@@ -14,16 +14,15 @@
  * limitations under the License.
  */
 import React from "react";
-import { Risk } from "types";
+import { Risk, RiskStat } from "types";
 import {
-  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
+  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { getModalPath } from "common";
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
-import { CoverageCell } from "../../methods-table/coverage-cell";
 
 interface Props {
   data: Risk[];
@@ -57,7 +56,7 @@ export const RisksTable = ({ data }: Props) => {
                   methodDesc: desc,
                 },
               })}
-              tw="max-w-280px text-monochrome-black text-14 text-ellipsis link"
+              tw="max-w-280px text-14 text-ellipsis text-monochrome-black link"
               title={value}
               target="_blank"
             >
@@ -85,6 +84,21 @@ export const RisksTable = ({ data }: Props) => {
       textAlign: "left",
     },
     {
+      Header: "Covered in Builds",
+      accessor: "status",
+      notSortable: true,
+      Cell: ({ value }: any) => {
+        const builds = Object.entries(value).filter(([build, status]) => status === "COVERED").map(statusValue => statusValue[0]);
+        return (
+          <Typography.MiddleEllipsis>
+            <span title={builds.join(", ")}>{builds[0]}</span>
+          </Typography.MiddleEllipsis>
+        );
+      },
+      width: "150px",
+      textAlign: "left",
+    },
+    {
       Header: "Type",
       accessor: "type",
       Cell: ({ value }: any) => <>{capitalize(value)}</>,
@@ -92,12 +106,28 @@ export const RisksTable = ({ data }: Props) => {
       textAlign: "left",
     },
     {
-      Header: "Coverage, %",
+      Header: "Current coverage, %",
       accessor: "coverage",
       Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
+        <Cells.CoverageProgress value={value} />
       ),
-      width: "147px",
+      width: "176px",
+      sortType: "number",
+    },
+    {
+      Header: "Previously covered, %",
+      accessor: "previousCovered.coverage",
+      Cell: ({ row: { original: { previousCovered } } }: { row: {original: {previousCovered: RiskStat}} }) => (
+        previousCovered ? (
+          <div tw="text-12 text-monochrome-default leading-24">
+            <span tw="text-14 text-monochrome-black">{previousCovered.coverage}</span>
+            <Typography.MiddleEllipsis>
+              <span title={`Build: ${previousCovered.buildVersion}`}>Build: {previousCovered.buildVersion}</span>
+            </Typography.MiddleEllipsis>
+          </div>
+        ) : <div>&mdash;</div>
+      ),
+      width: "180px",
       sortType: "number",
     },
     {
