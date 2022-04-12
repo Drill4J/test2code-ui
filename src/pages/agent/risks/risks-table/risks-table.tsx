@@ -32,7 +32,6 @@ interface Props {
 export const RisksTable = ({ data }: Props) => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
-  console.log(data);
   const columns = [
     {
       Header: "Name",
