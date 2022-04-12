@@ -23,16 +23,20 @@ interface Props {
   attributeName: string;
 }
 
-export const SelectAttributeValues = ({ attributeName, onChange, currentValues }: Props) => {
+export const SelectAttributeValues = ({
+  attributeName, onChange, currentValues, ...rest
+}: Props) => {
   const values = useTestToCodeData<string[]>(`/build/attributes/${attributeName}/values`) || [];
   const valuesOptions = useMemo(() => values.map((value) => ({ value, label: value })), [values]);
   return (
-    <MultipleSelectAutocomplete
-      placeholder="Value"
-      options={valuesOptions}
-      onChange={onChange as any}
-      values={currentValues}
-      disabled={!attributeName}
-    />
+    <div {...rest}>
+      <MultipleSelectAutocomplete
+        placeholder="Value"
+        options={valuesOptions}
+        onChange={onChange as any}
+        values={currentValues}
+        disabled={!attributeName}
+      />
+    </div>
   );
 };

@@ -50,7 +50,7 @@ export const SelectAttribute = ({
   }, []);
 
   return (
-    <div tw="grid grid-cols-[224px 4px 90px 300px 16px] items-center gap-x-2">
+    <div tw="grid grid-cols-[1fr 4px 90px 1.25fr 16px] items-center gap-x-2">
       <Autocomplete
         placeholder="Key"
         options={attributesOptions}
@@ -97,6 +97,7 @@ export const SelectAttribute = ({
         )}
       </HeadlessSelect>
       <SelectAttributeValues
+        tw="leading-22"
         onChange={(value) => setFieldValue(`attributes[${accessor}].values`, value)}
         currentValues={attrValues as any}
         attributeName={attributeName}
