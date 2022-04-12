@@ -115,6 +115,7 @@ export const ConfigureFilter = ({
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
               setFilter(createdFilterId);
               setConfigureFilter(FILTER_STATE.EDITING);
+              closeConfigureFilter();
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });
@@ -131,9 +132,11 @@ export const ConfigureFilter = ({
           emptyAttribute(),
         ) as any}
         enableReinitialize
+        validateOnChange
+        validateOnMount
       >
         {({
-          setFieldValue, values, isSubmitting, isValid, dirty, resetForm,
+          setFieldValue, values, isSubmitting, isValid, dirty, resetForm, errors,
         }) => (
           <Form tw="grid grid-cols-[300px 1fr 300px]">
             <FormGroup tw="mr-6" label="Filter Name">
@@ -160,8 +163,10 @@ export const ConfigureFilter = ({
                 </div>
               </FormGroup>
               <button
-                tw="flex items-center gap-x-2 ml-6 link text-14 leading-24 cursor-pointer font-semibold"
+                tw="flex items-center gap-x-2 ml-6 link text-14 leading-24
+                cursor-pointer font-semibold disabled:(text-blue-default opacity-40)"
                 type="button"
+                disabled={Boolean(errors.attributes)}
                 onClick={() => setFieldValue(`attributes[${values.attributes.length}]`, { id: uuidv4(), valuesOp: BetweenOp.OR })}
               >
                 <Icons.Plus />Add New
