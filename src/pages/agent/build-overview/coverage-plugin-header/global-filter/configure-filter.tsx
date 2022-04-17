@@ -89,7 +89,6 @@ export const ConfigureFilter = ({
       fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(), isLabel: false,
     }],
   }), [isEditing, filterName, transformedFilterAttributes]);
-  console.log(initialValues, isEditing);
 
   return (
     <div tw="relative p-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
@@ -221,7 +220,7 @@ export const ConfigureFilter = ({
       <HideCriteria tw="absolute left-1/2 -translate-x-1/2 -bottom-px flex items-center gap-x-1 px-2" onClick={closeConfigureFilter}>
         <Icons.Expander width={8} height={8} rotate={-90} /> Hide Criteria
       </HideCriteria>
-      {filterName && isDeleteFilterModalOpen && (
+      {filterName && filterId && isDeleteFilterModalOpen && (
         <DeleteFilterModal
           closeModal={() => setIsDeleteFilterModalOpen(false)}
           closeEditingFilter={() => {
@@ -229,6 +228,7 @@ export const ConfigureFilter = ({
             setFilter(null);
           }}
           filterName={filterName}
+          filterId={filterId}
         />
       )}
     </div>

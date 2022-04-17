@@ -18,7 +18,7 @@ import axios from "axios";
 import { PLUGIN_ID } from "common";
 
 interface Payload {
-  name: string;
+  id: string;
 }
 
 export const deleteFilter = async (

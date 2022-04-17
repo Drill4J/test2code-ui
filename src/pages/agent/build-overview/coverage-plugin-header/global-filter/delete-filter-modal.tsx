@@ -25,9 +25,12 @@ interface Props {
   closeModal: () => void;
   closeEditingFilter: () => void;
   filterName: string;
+  filterId: string;
 }
 
-export const DeleteFilterModal = ({ closeModal, closeEditingFilter, filterName }: Props) => {
+export const DeleteFilterModal = ({
+  closeModal, closeEditingFilter, filterName, filterId,
+}: Props) => {
   const { agentId } = useAgentRouteParams();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,7 +49,7 @@ export const DeleteFilterModal = ({ closeModal, closeEditingFilter, filterName }
             disabled={isLoading}
             onClick={() => {
               setIsLoading(true);
-              deleteFilter(agentId, { name: filterName }, {
+              deleteFilter(agentId, { id: filterId }, {
                 onSuccess: () => {
                   sendAlertEvent({ type: "SUCCESS", title: "Filter has been deleted successfully." });
                   setIsLoading(false);
