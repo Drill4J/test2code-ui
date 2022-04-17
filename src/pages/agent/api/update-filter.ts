@@ -19,6 +19,7 @@ import { PLUGIN_ID } from "common";
 import { Attribute } from "types";
 
 interface Payload {
+  id: string;
   name: string;
   buildVersion: string;
   attributes: Attribute[]

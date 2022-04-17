@@ -96,6 +96,7 @@ export const ConfigureFilter = ({
         initialValues={initialValues as Values}
         onSubmit={async ({ name, attributes: selectedAttributes }: any) => {
           const values = {
+            id: filterId || "",
             name,
             buildVersion,
             attributes: selectedAttributes.map(({
