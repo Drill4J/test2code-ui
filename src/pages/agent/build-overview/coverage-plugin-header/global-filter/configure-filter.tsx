@@ -20,7 +20,8 @@ import {
   Fields,
   Form,
   FormGroup,
-  Formik, FormValidator,
+  Formik,
+  FormValidator,
   getPropertyByPath,
   Icons,
   Menu,
@@ -29,12 +30,12 @@ import {
   sizeLimit,
 } from "@drill4j/ui-kit";
 import { v4 as uuidv4 } from "uuid";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import tw, { styled } from "twin.macro";
 
 import { useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams } from "hooks";
 import {
-  BetweenOp, Filter, OP, TestOverviewFilter, BuildAttribute,
+  BetweenOp, BuildAttribute, Filter, OP, TestOverviewFilter,
 } from "types";
 import { useSetFilterDispatch } from "common";
 import { createFilter, updateFilter } from "../../../api";
@@ -90,6 +91,11 @@ export const ConfigureFilter = ({
     }],
   }), [isEditing, filterName, transformedFilterAttributes]);
 
+  useEffect(() => {
+    const input: HTMLInputElement | null = document.querySelector('input[name="name"]');
+    input?.select();
+  });
+
   return (
     <div tw="relative p-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
       <Formik
@@ -142,7 +148,7 @@ export const ConfigureFilter = ({
             <FormGroup tw="mr-6" label="Filter Name">
               <Field
                 name="name"
-                component={Fields.Input}
+                render={({ field }: any) => (<Fields.Input id="name" field={field} {...field} />)}
                 placeholder="Enter filter’s name"
               />
             </FormGroup>
@@ -198,11 +204,27 @@ export const ConfigureFilter = ({
                     {
                       label: "Duplicate filter",
                       icon: "Copy",
-                      onClick: () => {
-                        const newValues = { ...initialValues, name: `${initialValues.name} (1)` };
-                        resetForm({ values: newValues } as any);
-                        setConfigureFilter(FILTER_STATE.EDITING);
-                        setFilter(null);
+                      onClick: async () => {
+                        const duplicateValues = {
+                          name: `${filterName} (1)`,
+                          buildVersion,
+                          attributes: values.attributes.map(({
+                            valuesOp, values: attrValues, fieldPath, isLabel,
+                          }: any) => ({
+                            fieldPath,
+                            valuesOp,
+                            isLabel,
+                            values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
+                          })),
+                        };
+                        await createFilter(agentId, duplicateValues as any, {
+                          onSuccess: (createdFilterId) => {
+                            sendAlertEvent({ type: "SUCCESS", title: "Filter has been duplicate successfully." });
+                            setFilter(createdFilterId);
+                            setConfigureFilter(FILTER_STATE.EDITING);
+                          },
+                          onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
+                        });
                       },
                     },
                     {

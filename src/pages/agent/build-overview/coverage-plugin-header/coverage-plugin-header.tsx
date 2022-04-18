@@ -47,7 +47,7 @@ export const CoveragePluginHeader = () => {
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const { risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
   const initialRisks = useFilteredData<Risk[]>("/build/risks") || [];
-  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
   const testsByType = useTestToCodeData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
