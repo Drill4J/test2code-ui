@@ -58,12 +58,14 @@ export const CoveragePluginHeader = () => {
 
   const hasTestsInBuild = Boolean(testsByType.length);
 
+  const isActiveBuild = buildVersion === activeBuildVersion;
+
   return (
     <>
       <Header>
         <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
         <div tw="flex items-center gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
-          {Boolean(filters.length) && (
+          {Boolean(filters.length) && isActiveBuild && (
             <HeadlessSelect
               tw="w-[320px]"
               options={filters.map(({ name = "", id = "" }) => ({ label: name, value: id }))}
@@ -127,7 +129,7 @@ export const CoveragePluginHeader = () => {
             tw="flex items-center gap-x-2"
             secondary
             size="large"
-            disabled={!hasTestsInBuild}
+            disabled={!hasTestsInBuild || !isActiveBuild}
             onClick={() => {
               setConfigureFilter(FILTER_STATE.CREATING);
               setFilter(null);

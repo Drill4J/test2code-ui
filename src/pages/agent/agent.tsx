@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import {
   Route, Switch, Redirect, useLocation,
@@ -34,6 +34,7 @@ import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
 import { AllBuilds } from "./all-builds";
 import { ParentBuild } from "../../types";
+import { useSetFilterDispatch } from "../../common";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
@@ -43,6 +44,11 @@ export const Agent = () => {
   const { version: parentBuildVersion } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const isActiveBuild = activeBuildVersion === buildVersion;
+  const setFilter = useSetFilterDispatch();
+
+  useEffect(() => {
+    setFilter(null);
+  }, [buildVersion]);
 
   if (!activeBuildVersion) { // TODO Add spinner
     return null;

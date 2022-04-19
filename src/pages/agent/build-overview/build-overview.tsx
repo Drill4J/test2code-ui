@@ -26,6 +26,7 @@ import { useFilterState } from "common";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
+import { FilterLoader } from "./coverage-plugin-header/FilterLoader";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2`}
@@ -43,6 +44,7 @@ export const BuildOverview = () => {
 
   return (
     <>
+      <FilterLoader />
       <CoveragePluginHeader />
       {isEmptyFilterResult ? (
         <Stub
