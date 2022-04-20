@@ -37,6 +37,7 @@ import { ActionSection } from "./action-section";
 import { QualityGate } from "./quality-gate";
 import { ConfigureFilter } from "./global-filter";
 import { ConfigureFilterSate, FILTER_STATE } from "./types";
+import { useResultFilterState } from "../../../../common/contexts";
 
 export const CoveragePluginHeader = () => {
   const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
@@ -55,6 +56,7 @@ export const CoveragePluginHeader = () => {
   const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
   const setFilter = useSetFilterDispatch();
   const { filterId } = useFilterState();
+  const { isEmptyFilterResult } = useResultFilterState();
 
   const hasTestsInBuild = Boolean(testsByType.length);
 
@@ -142,39 +144,13 @@ export const CoveragePluginHeader = () => {
           label="risks"
           previousBuild={{ previousBuildVersion, previousBuildTests }}
         >
-          {initialRisks.length
-            ? (
-              <Count
-                to={getPagePath({ name: "risks", params: { buildVersion } })}
-                className="flex items-center w-full"
-                data-test="action-section:count:risks"
-              >
-                {risksCount}
-                <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-              </Count>
-            ) : <span data-test="action-section:no-value:risks">&ndash;</span>}
+          {getRisksSection(isEmptyFilterResult, initialRisks, buildVersion, risksCount, getPagePath)}
         </ActionSection>
         <ActionSection
           label="tests to run"
           previousBuild={{ previousBuildVersion, previousBuildTests }}
         >
-          {previousBuildTests.length > 0 ? (
-            <Count
-              to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
-              className="flex items-center w-full"
-              data-test="action-section:count:tests-to-run"
-            >
-              {testToRunCount}
-              <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-            </Count>
-          ) : (
-            <div
-              tw="text-20 leading-32 text-monochrome-black"
-              data-test="action-section:no-value:tests-to-run"
-            >
-              &ndash;
-            </div>
-          )}
+          {getTestsToRunSection(isEmptyFilterResult, previousBuildTests, buildVersion, testToRunCount, getPagePath)}
         </ActionSection>
         {filterId && (
           <ShowCriteria
@@ -214,3 +190,66 @@ const ShowCriteria = styled.button`
   ${tw`border border-monochrome-medium-tint bg-monochrome-white text-blue-default text-10 leading-14 font-bold`}
   border-radius: 0px 0px 8px 8px ;
 `;
+
+const getTestsToRunSection = (isEmptyFilterResult: boolean, previousBuildTests: TestTypeSummary[],
+  buildVersion: string, testToRunCount: number, getPagePath: any) => {
+  if (isEmptyFilterResult) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-dark-tint"
+        data-test="action-section:no-value:tests-to-run"
+      >
+        n/a
+      </div>
+    );
+  }
+  if (!previousBuildTests.length) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-black"
+        data-test="action-section:no-value:tests-to-run"
+      >
+        &ndash;
+      </div>
+    );
+  }
+  return (
+    <Count
+      to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
+      tw="flex items-center w-full"
+      data-test="action-section:count:tests-to-run"
+    >
+      {testToRunCount}
+      <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+    </Count>
+  );
+};
+
+const getRisksSection = (isEmptyFilterResult: boolean, initialRisks: Risk[],
+  buildVersion: string, risksCount: number, getPagePath: any) => {
+  if (isEmptyFilterResult) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-dark-tint"
+        data-test="action-section:no-value:risks"
+      >
+        n/a
+      </div>
+    );
+  }
+  if (!initialRisks.length) {
+    return (
+      <span data-test="action-section:no-value:risks">&ndash;</span>
+    );
+  }
+  return (
+    <Count
+      to={getPagePath({ name: "risks", params: { buildVersion } })}
+      tw="flex items-center w-full"
+      data-test="action-section:count:risks"
+    >
+      {risksCount}
+      <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+    </Count>
+  );
+};

@@ -20,12 +20,14 @@ import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 import { ConditionSetting, QualityGateStatus, QualityGate as QualityGateType } from "types";
 import { useFilteredData } from "hooks";
+import { useResultFilterState } from "common/contexts";
 
 export const QualityGate = () => {
   const { status = "FAILED" } = useFilteredData<QualityGateType>("/data/quality-gate") || {};
   const conditionSettings = useFilteredData<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
+  const { isEmptyFilterResult } = useResultFilterState();
 
   return (
     <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
@@ -33,7 +35,7 @@ export const QualityGate = () => {
         <div tw="mr-2 text-12 leading-16 font-bold" data-test="coverage-plugin-header:quality-gate-label">
           QUALITY GATE
         </div>
-        {!configured && (
+        {!configured && !isEmptyFilterResult && (
           <Tooltip
             message={(
               <>
@@ -46,29 +48,7 @@ export const QualityGate = () => {
           </Tooltip>
         )}
       </div>
-      {!configured ? (
-        <StatusWrapper
-          to={getModalPath({ name: "qualityGate" })}
-          data-test="coverage-plugin-header:configure-button"
-        >
-          <Button
-            primary
-            size="small"
-          >
-            Configure
-          </Button>
-        </StatusWrapper>
-      ) : (
-        <StatusWrapper
-          to={getModalPath({ name: "qualityGate" })}
-          status={status}
-        >
-          <StatusIcon />
-          <StatusTitle data-test="coverage-plugin-header:quality-gate-status">
-            {status}
-          </StatusTitle>
-        </StatusWrapper>
-      )}
+      {getQualityGateSection(isEmptyFilterResult, configured, status)}
     </div>
   );
 };
@@ -85,3 +65,43 @@ const StatusTitle = styled.div`
     ${tw`uppercase`}
   }
 `;
+
+const getQualityGateSection = (isEmptyFilterResult: boolean, configured: boolean, status: QualityGateStatus) => {
+  const StatusIcon = Icons[status];
+  if (isEmptyFilterResult) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-dark-tint"
+        data-test="action-section:no-value:qg"
+      >
+        n/a
+      </div>
+    );
+  }
+  if (!configured) {
+    return (
+      <StatusWrapper
+        to={getModalPath({ name: "qualityGate" })}
+        data-test="coverage-plugin-header:configure-button"
+      >
+        <Button
+          primary
+          size="small"
+        >
+          Configure
+        </Button>
+      </StatusWrapper>
+    );
+  }
+  return (
+    <StatusWrapper
+      to={getModalPath({ name: "qualityGate" })}
+      status={status}
+    >
+      <StatusIcon />
+      <StatusTitle data-test="coverage-plugin-header:quality-gate-status">
+        {status}
+      </StatusTitle>
+    </StatusWrapper>
+  );
+};

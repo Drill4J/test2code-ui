@@ -45,7 +45,7 @@ export const ActionSection =
           position={label === "risks" ? "top-center" : "top-left"}
           message={getTooltipMessage(label, previousBuildVersion, previousBuildTests.length)}
         >
-          <div tw="font-bold text-12 leading-16 uppercase">{label}</div>
+          <div tw="font-bold text-12 leading-16 text-monochrome-default uppercase">{label}</div>
           {previousBuildVersion ? children : <span data-test={`action-section:no-value:${spacesToDashes(label)}`}>&ndash;</span> }
         </Tooltip>
       </div>

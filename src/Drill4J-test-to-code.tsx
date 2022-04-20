@@ -27,6 +27,7 @@ import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2C
 import pkj from "../package.json";
 
 import "./index.css";
+import { ResultFilterContextProvider } from "./common/contexts/result-filter-context";
 
 console.log("Test2Code-UI version: ", pkj.version);
 
@@ -62,9 +63,11 @@ const AgentPluginLifecycle = singleSpaReact({
   rootComponent: ({ setPanel }) => (
     <BrowserRouter>
       <FilterContextProvider>
-        <SetPanelContext.Provider value={setPanel}>
-          <Agent />
-        </SetPanelContext.Provider>
+        <ResultFilterContextProvider>
+          <SetPanelContext.Provider value={setPanel}>
+            <Agent />
+          </SetPanelContext.Provider>
+        </ResultFilterContextProvider>
       </FilterContextProvider>
     </BrowserRouter>
   ),

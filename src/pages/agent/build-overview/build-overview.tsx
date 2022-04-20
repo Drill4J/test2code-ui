@@ -20,9 +20,8 @@ import {
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
-import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
-import { TestTypeSummary } from "types";
-import { useFilterState } from "common";
+import { useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useResultFilterState } from "common/contexts/result-filter-context";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
@@ -37,10 +36,8 @@ export const BuildOverview = () => {
   const { activeTab } = useQueryParams<{activeTab?: string; }>();
   const { push } = useHistory();
   const { getPagePath } = useNavigation();
-  const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
-  const { filterId } = useFilterState();
 
-  const isEmptyFilterResult = Boolean(filterId) && testsByType.length === 0;
+  const { isEmptyFilterResult } = useResultFilterState();
 
   return (
     <>

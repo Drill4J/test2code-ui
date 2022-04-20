@@ -17,3 +17,4 @@ export { SetPanelContext } from "./set-panel-context";
 export {
   SetFilterDispatchContext, useSetFilterDispatch, useFilterState, FilterContextProvider,
 } from "./filter-context";
+export { useResultFilterState, ResultFilterContext } from "./result-filter-context";
