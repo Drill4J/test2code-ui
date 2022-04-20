@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import tw, { styled } from "twin.macro";
 import { useFilterState } from "common";
 
@@ -21,9 +21,16 @@ export const FilterLoader = () => {
   const [state, setState] = useState(false);
   const { filterId } = useFilterState();
 
+  const isFirstRender = useRef(true);
+
+  // TODO: check load filtred data
   useEffect(() => {
-    setState(true);
-    setTimeout(() => setState(false), 2000);
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+    } else {
+      setState(true);
+      setTimeout(() => setState(false), 1000);
+    }
   }, [filterId]);
 
   if (state) {
@@ -44,14 +51,6 @@ const Line = styled.div`
   @keyframes move {
     0% {
       margin-left: -100%;
-    }
-    
-    30% {
-      margin-left: 0;
-    }
-    
-    70% {
-      margin-left: 0;
     }
 
     100% {

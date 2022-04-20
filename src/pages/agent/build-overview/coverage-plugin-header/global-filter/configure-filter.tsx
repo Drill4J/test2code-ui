@@ -91,10 +91,11 @@ export const ConfigureFilter = ({
     }],
   }), [isEditing, filterName, transformedFilterAttributes]);
 
-  useEffect(() => {
-    const input: HTMLInputElement | null = document.querySelector('input[name="name"]');
-    input?.select();
-  });
+  // TODO: implement select name's field
+  // useEffect(() => {
+  //   const input: HTMLInputElement | null = document.querySelector('input[name="name"]');
+  //   input?.select();
+  // });
 
   return (
     <div tw="relative p-6 bg-monochrome-light-tint border-b border-monochrome-medium-tint">
@@ -121,7 +122,6 @@ export const ConfigureFilter = ({
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
               setFilter(createdFilterId);
               setConfigureFilter(FILTER_STATE.EDITING);
-              closeConfigureFilter();
             },
             onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
           });

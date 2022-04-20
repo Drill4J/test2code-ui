@@ -26,7 +26,7 @@ import { useFilterState } from "common";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
-import { FilterLoader } from "./coverage-plugin-header/FilterLoader";
+import { FilterLoader } from "./coverage-plugin-header/filter-loader";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2`}
