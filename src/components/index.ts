@@ -26,3 +26,4 @@ export { PageHeader } from "./page-header";
 export { Baseline } from "./baseline";
 export { ComparedToBuild } from "./compared-to-build";
 export { ColumnFilterByValues } from "./column-filter-by-values";
+export { FilterInfoAlert } from "./filter-info-alert";

@@ -19,10 +19,10 @@ import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/com
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
+import { FilterInfoAlert, PageHeader } from "components";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
 import { SavedTimeSection } from "./saved-time-section";
-import { PageHeader } from "../../../../components";
 
 interface AgentInfo {
   agentType: string;
@@ -74,38 +74,43 @@ export const TestsToRunHeader = ({
 
   return (
     <PageHeader tw="justify-between">
-      <div>
-        <div
-          tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
-          data-test="tests-to-run-header:title"
-        >
-          Tests to Run
-          <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
+      <div tw="flex items-center">
+        <div>
+          <div
+            tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
+            data-test="tests-to-run-header:title"
+          >
+            Tests to Run
+            <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
+          </div>
+          <SubTitle data-test="tests-to-run-header:subtitle">
+            Build:
+            <div
+              tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
+              className="text-ellipsis"
+              data-test="tests-to-run-header:current-build-version"
+              title={buildVersion}
+            >
+              <Typography.MiddleEllipsis>
+                <span>{buildVersion}</span>
+              </Typography.MiddleEllipsis>
+            </div>
+            Compared to:
+            <div
+              tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
+              className="text-ellipsis"
+              data-test="tests-to-run-header:compared-build-version"
+              title={previousBuildVersion}
+            >
+              <Typography.MiddleEllipsis>
+                <span>{previousBuildVersion}</span>
+              </Typography.MiddleEllipsis>
+            </div>
+          </SubTitle>
         </div>
-        <SubTitle data-test="tests-to-run-header:subtitle">
-          Build:
-          <div
-            tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:current-build-version"
-            title={buildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{buildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-          Compared to:
-          <div
-            tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:compared-build-version"
-            title={previousBuildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{previousBuildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-        </SubTitle>
+        <div tw="ml-6">
+          <FilterInfoAlert />
+        </div>
       </div>
       <div tw="flex items-center gap-6 mr-10">
         {activeBuildVersion === buildVersion && (

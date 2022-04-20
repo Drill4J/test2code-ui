@@ -15,7 +15,7 @@
  */
 import React from "react";
 import tw, { styled } from "twin.macro";
-import { PageHeader } from "components";
+import { FilterInfoAlert, PageHeader } from "components";
 
 const Subtitle = styled.div`
   ${tw`grid gap-x-1`}
@@ -56,6 +56,9 @@ export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCovered
           Build {previousBuildVersion}
         </span>
       </Subtitle>
+    </div>
+    <div tw="ml-6">
+      <FilterInfoAlert />
     </div>
   </PageHeader>
 );
