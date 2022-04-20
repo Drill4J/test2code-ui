@@ -67,7 +67,7 @@ export const RisksTable = ({ data }: Props) => {
       Header: "Current coverage, %",
       accessor: "coverage",
       Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
+        <CoverageCell value={value} showCoverageIcon showPercent={false} />
       ),
       width: "176px",
       sortType: "number",
@@ -80,7 +80,7 @@ export const RisksTable = ({ data }: Props) => {
           <div tw="text-12 text-monochrome-default leading-24">
             <span tw="text-14 text-monochrome-black">{percentFormatter(previousCovered.coverage)}</span>
             <Typography.MiddleEllipsis>
-              <span title={`Build: ${previousCovered.buildVersion}`}>Build: {previousCovered.buildVersion}</span>
+              <span title={`Build: ${previousCovered.buildVersion}`}>{previousCovered.buildVersion}</span>
             </Typography.MiddleEllipsis>
           </div>
         ) : <div>&mdash;</div>

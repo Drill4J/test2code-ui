@@ -51,7 +51,7 @@ export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCovered
         data-test="risks-list:previous-build-version"
         title={`Build ${previousBuildVersion}`}
       >
-        Build {previousBuildVersion}
+        {previousBuildVersion}
       </span>
     </Subtitle>
   </div>

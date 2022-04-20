@@ -30,9 +30,10 @@ const Content = styled.div(({ showCoverageIcon } : { showCoverageIcon: boolean }
   !showCoverageIcon && tw`pr-8`,
 ]);
 
-export const CoverageCell = ({ value = 0, showCoverageIcon }: { value: number, showCoverageIcon: boolean }) => (
+export const CoverageCell = ({ value = 0, showCoverageIcon, showPercent = true }:
+{ value: number, showCoverageIcon: boolean, showPercent?: boolean }) => (
   <Content showCoverageIcon={showCoverageIcon}>
-    <span data-test="coverage-cell:coverage">{`${percentFormatter(value)}%`}</span>
+    <span data-test="coverage-cell:coverage">{`${percentFormatter(value)}${showPercent ? "%" : ""}`}</span>
     {showCoverageIcon && getCoverageIcon(value)}
   </Content>
 );
