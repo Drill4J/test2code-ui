@@ -50,7 +50,7 @@ export const BuildOverview = () => {
         <Stub
           icon={<Icons.Search height={120} width={120} />}
           title="No results found"
-          message="Try to change the configuration of the filter."
+          message="Try to change the filter configuration or choose another one."
         />
       ) : (
         <div tw="px-6 flex flex-col flex-grow">

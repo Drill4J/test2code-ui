@@ -39,7 +39,7 @@ export const DeleteFilterModal = ({
       <Modal.Content>
         <Modal.Header>Delete Filter</Modal.Header>
         <Modal.Body>
-          Are you sure, you want to delete the filter “{filterName}”?
+          Are you sure you want to delete the filter “{filterName}”?
         </Modal.Body>
         <Modal.Footer tw="flex gap-x-4">
           <Button
