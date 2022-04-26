@@ -33,8 +33,6 @@ export const ResultFilterContextProvider: React.FC = ({ children }) => {
   const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
   const isEmptyFilterResult = Boolean(filterId) && testsByType.length === 0;
 
-  console.log(testsByType);
-
   return (
     <ResultFilterContext.Provider value={{ isEmptyFilterResult }}>
       {children}
