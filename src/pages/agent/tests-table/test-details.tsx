@@ -98,22 +98,25 @@ const getColumns = (testTypes: string[]) => [
     accessor: "overview.details.labels",
     textAlign: "left",
     width: "232px",
+    isCustom: true,
     Cell: ({ value: labels }: {value: LabelType[]}) => {
       const [firstLabel, secondLabel, ...restLabels] = labels;
-      const firstLabelContent = `${firstLabel?.name}: ${firstLabel?.value}`;
-      const secondLabelContent = `${secondLabel?.name}: ${secondLabel?.value}`;
+      const firstLabelContent = firstLabel ? `${firstLabel?.name}: ${firstLabel?.value}` : null;
+      const secondLabelContent = secondLabel ? `${secondLabel?.name}: ${secondLabel?.value}` : null;
 
       return (
         <>
           {firstLabel && <Label tw="max-w-[100%] truncate mb-1" title={firstLabelContent}>{firstLabelContent}</Label>}
-          <div tw="flex gap-x-1 w-full">
-            {secondLabelContent && <Label tw="truncate" title={secondLabelContent}>{secondLabelContent}</Label>}
-            {restLabels && (
-              <Tooltip message={restLabels.map(({ name, value }) => <div>{name}: {value}</div>)}>
-                <Label>+{restLabels.length}</Label>
-              </Tooltip>
-            )}
-          </div>
+          {secondLabelContent && (
+            <div tw="flex gap-x-1 w-full">
+              <Label tw="truncate" title={secondLabelContent}>{secondLabelContent}</Label>
+              {restLabels.length && (
+                <Tooltip message={restLabels.map(({ name, value }) => <div>{name}: {value}</div>)}>
+                  <Label>+{restLabels.length}</Label>
+                </Tooltip>
+              )}
+            </div>
+          )}
         </>
       );
     },
