@@ -38,24 +38,6 @@ export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCovered
           {notCoveredRisksCount}
         </span>
       </div>
-      <Subtitle data-test="risks-list:subtitle">
-        <span>Build:</span>
-        <span
-          className="text-monochrome-black text-ellipsis"
-          data-test="risks-list:current-build-version"
-          title={buildVersion}
-        >
-          {buildVersion}
-        </span>
-        <span tw="ml-1">Compared to:</span>
-        <span
-          className="text-monochrome-black text-ellipsis"
-          data-test="risks-list:previous-build-version"
-          title={`Build ${previousBuildVersion}`}
-        >
-          Build {previousBuildVersion}
-        </span>
-      </Subtitle>
     </div>
     <div tw="ml-6">
       <FilterInfoAlert />

@@ -83,30 +83,6 @@ export const TestsToRunHeader = ({
             Tests to Run
             <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
           </div>
-          <SubTitle data-test="tests-to-run-header:subtitle">
-            Build:
-            <div
-              tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
-              className="text-ellipsis"
-              data-test="tests-to-run-header:current-build-version"
-              title={buildVersion}
-            >
-              <Typography.MiddleEllipsis>
-                <span>{buildVersion}</span>
-              </Typography.MiddleEllipsis>
-            </div>
-            Compared to:
-            <div
-              tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
-              className="text-ellipsis"
-              data-test="tests-to-run-header:compared-build-version"
-              title={previousBuildVersion}
-            >
-              <Typography.MiddleEllipsis>
-                <span>{previousBuildVersion}</span>
-              </Typography.MiddleEllipsis>
-            </div>
-          </SubTitle>
         </div>
         <div tw="ml-6">
           <FilterInfoAlert />
