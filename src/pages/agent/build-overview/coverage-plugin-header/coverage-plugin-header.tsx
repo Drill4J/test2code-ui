@@ -35,12 +35,12 @@ import { Metrics } from "types/metrics";
 import { Filter, Risk, TestTypeSummary } from "types";
 import { PageHeader } from "components";
 import { useFilterState, useSetFilterDispatch } from "common";
+import { applyFilter } from "pages/agent/api";
+import { useResultFilterState } from "common/contexts";
 import { ActionSection } from "./action-section";
 import { QualityGate } from "./quality-gate";
 import { ConfigureFilter } from "./global-filter";
 import { ConfigureFilterSate, FILTER_STATE } from "./types";
-import { useResultFilterState } from "../../../../common/contexts";
-import { applyFilter } from "../../api";
 
 export const CoveragePluginHeader = () => {
   const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
@@ -54,7 +54,7 @@ export const CoveragePluginHeader = () => {
   const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
-  const testsByType = useTestToCodeData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
+  const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
 
   const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
   const setFilter = useSetFilterDispatch();
