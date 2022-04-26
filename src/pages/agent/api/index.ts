@@ -21,3 +21,4 @@ export { toggleBaseline } from "./toggle-baseline";
 export { createFilter } from "./create-filter";
 export { updateFilter } from "./update-filter";
 export { deleteFilter } from "./delete-filter";
+export { applyFilter } from "./apply-filter";

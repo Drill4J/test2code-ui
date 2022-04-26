@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 import React, { useCallback, useEffect, useState } from "react";
-import { Button, HeadlessSelect, Icons } from "@drill4j/ui-kit";
+import {
+  Button, HeadlessSelect, Icons, sendAlertEvent,
+} from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
@@ -38,6 +40,7 @@ import { QualityGate } from "./quality-gate";
 import { ConfigureFilter } from "./global-filter";
 import { ConfigureFilterSate, FILTER_STATE } from "./types";
 import { useResultFilterState } from "../../../../common/contexts";
+import { applyFilter } from "../../api";
 
 export const CoveragePluginHeader = () => {
   const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
@@ -108,11 +111,19 @@ export const CoveragePluginHeader = () => {
                           {options.map(({ label, value }) => (
                             <HeadlessSelect.Option
                               selected={value === selectedOption?.value}
-                              onClick={() => {
-                                selectValue(value);
-                                setFilter(value);
-                                setConfigureFilter(FILTER_STATE.EDITING);
-                                setIsOpen(false);
+                              onClick={async () => {
+                                await applyFilter(agentId, { id: value },
+                                  {
+                                    onSuccess: () => {
+                                      selectValue(value);
+                                      setFilter(value);
+                                      setConfigureFilter(FILTER_STATE.EDITING);
+                                      setIsOpen(false);
+                                    },
+                                    onError: (message) => {
+                                      sendAlertEvent({ type: "ERROR", title: message });
+                                    },
+                                  });
                               }}
                             >
                               {label}
