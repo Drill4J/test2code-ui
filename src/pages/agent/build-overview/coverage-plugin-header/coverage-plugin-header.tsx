@@ -65,6 +65,13 @@ export const CoveragePluginHeader = () => {
 
   const isActiveBuild = buildVersion === activeBuildVersion;
 
+  useEffect(() => {
+    if (filterId && !filters.filter(filter => filter.id === filterId).length) {
+      setFilter(null);
+      setConfigureFilter(null);
+    }
+  }, [filterId, filters]);
+
   return (
     <>
       <Header>

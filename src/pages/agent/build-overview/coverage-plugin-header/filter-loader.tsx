@@ -19,10 +19,7 @@ import { useFilterState } from "common";
 import {
   useActiveBuild, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
-import {
-  BuildCoverage, BuildSummary, Methods, Metrics, Risk, TestCoverageInfo, TestTypeSummary,
-} from "types";
-import { FilterList } from "@drill4j/types-admin/index";
+import { BuildSummary, Methods, Metrics } from "types";
 
 export const FilterLoader = () => {
   const [state, setState] = useState(false);
@@ -32,19 +29,15 @@ export const FilterLoader = () => {
 
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const buildSummary = useFilteredData<BuildSummary>("/build/summary");
-  const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type");
-  const buildCoverage = useFilteredData<BuildCoverage>("/build/coverage") || {};
   const buildMethods = useFilteredData<Methods>("/build/methods");
   const stats = useFilteredData<Metrics>("/data/stats");
-  const risks = useFilteredData<FilterList<Risk>>("/build/risks");
-  const tests2run = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests-to-run");
 
   const { filterId } = useFilterState();
   const isActiveBuild = activeBuildVersion === buildVersion;
 
   useEffect(() => {
-    setIsLoaded(Boolean(buildSummary && testsByType && buildCoverage && buildMethods && stats && risks && tests2run));
-  }, [buildSummary, testsByType, buildCoverage, buildMethods, stats, risks, tests2run]);
+    setIsLoaded(Boolean(buildSummary && buildMethods && stats));
+  }, [buildSummary, buildMethods, stats]);
 
   useEffect(() => {
     isActiveBuild && setState(true);

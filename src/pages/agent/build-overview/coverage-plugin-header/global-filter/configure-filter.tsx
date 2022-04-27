@@ -201,32 +201,32 @@ export const ConfigureFilter = ({
                 <Menu
                   tw="mr-3"
                   items={[
-                    {
-                      label: "Duplicate filter",
-                      icon: "Copy",
-                      onClick: async () => {
-                        const duplicateValues = {
-                          name: `${filterName} (1)`,
-                          buildVersion,
-                          attributes: values.attributes.map(({
-                            valuesOp, values: attrValues, fieldPath, isLabel,
-                          }: any) => ({
-                            fieldPath,
-                            valuesOp,
-                            isLabel,
-                            values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
-                          })),
-                        };
-                        await createFilter(agentId, duplicateValues as any, {
-                          onSuccess: (createdFilterId) => {
-                            sendAlertEvent({ type: "SUCCESS", title: "Filter has been duplicate successfully." });
-                            setFilter(createdFilterId);
-                            setConfigureFilter(FILTER_STATE.EDITING);
-                          },
-                          onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
-                        });
-                      },
-                    },
+                    // {
+                    //   label: "Duplicate filter",
+                    //   icon: "Copy",
+                    //   onClick: async () => {
+                    //     const duplicateValues = {
+                    //       name: `${filterName} (1)`,
+                    //       buildVersion,
+                    //       attributes: values.attributes.map(({
+                    //         valuesOp, values: attrValues, fieldPath, isLabel,
+                    //       }: any) => ({
+                    //         fieldPath,
+                    //         valuesOp,
+                    //         isLabel,
+                    //         values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
+                    //       })),
+                    //     };
+                    //     await createFilter(agentId, duplicateValues as any, {
+                    //       onSuccess: (createdFilterId) => {
+                    //         sendAlertEvent({ type: "SUCCESS", title: "Filter has been duplicate successfully." });
+                    //         setFilter(createdFilterId);
+                    //         setConfigureFilter(FILTER_STATE.EDITING);
+                    //       },
+                    //       onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
+                    //     });
+                    //   },
+                    // },
                     {
                       label: "Delete filter",
                       icon: "Delete",
