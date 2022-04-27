@@ -42,8 +42,6 @@ export const FilterLoader = () => {
   const { filterId } = useFilterState();
   const isActiveBuild = activeBuildVersion === buildVersion;
 
-  console.log(isActiveBuild, activeBuildVersion, buildVersion);
-
   useEffect(() => {
     setIsLoaded(Boolean(buildSummary && testsByType && buildCoverage && buildMethods && stats && risks && tests2run));
   }, [buildSummary, testsByType, buildCoverage, buildMethods, stats, risks, tests2run]);
