@@ -14,22 +14,14 @@
  * limitations under the License.
  */
 import React from "react";
-import tw, { styled } from "twin.macro";
+import "twin.macro";
 import { FilterInfoAlert, PageHeader } from "components";
 
-const Subtitle = styled.div`
-  ${tw`grid gap-x-1`}
-  grid-template-columns: max-content minmax(auto, max-content) max-content minmax(auto, max-content);
-  ${tw`font-bold text-14 leading-20 text-monochrome-default`}
-`;
-
 interface Props {
-  buildVersion: string;
-  previousBuildVersion: string;
   notCoveredRisksCount: number;
 }
 
-export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCoveredRisksCount }: Props) => (
+export const RisksPageHeader = ({ notCoveredRisksCount }: Props) => (
   <PageHeader>
     <div>
       <div tw="mb-1 font-light text-24 leading-32 text-monochrome-black" data-test="risks-list:title">

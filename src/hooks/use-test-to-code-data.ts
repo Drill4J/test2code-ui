@@ -19,7 +19,6 @@ import {
 import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
-import { useFilterState } from "common";
 import { useAgentRouteParams } from "./use-agent-route-params";
 import { useTestToCodeRouteParams } from "./use-test2code-params";
 
@@ -38,11 +37,10 @@ export function useTestToCodeData<T>(
   const [data, setData] = useState<T | null>(null);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
-  const { filterId } = useFilterState();
   const hasBuildVersion = buildVersion || message.buildVersion;
   const memoMessage = useMemo(() => ({
     agentId, buildVersion, type: "AGENT", ...message,
-  }), [agentId, buildVersion, filterId, message.filters,
+  }), [agentId, buildVersion, message.filters,
     message.orderBy, message.buildVersion, message.agentId, message.output]);
   const handleDataChange = useCallback((newData: T) => setData(newData), [setData]);
 

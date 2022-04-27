@@ -30,7 +30,7 @@ import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
 import { transformTests } from "utils";
 import {
-  useFilteredData, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild,
+  useFilteredData, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild, useTestToCodeData,
 } from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
@@ -50,7 +50,7 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
-  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const summaryTestsToRun = useFilteredData<TestsToRunSummary>("/build/summary/tests-to-run") || {};
   const { tests: previousBuildTests = [], testDuration: totalDuration = 1 } = useFilteredData<BuildSummary>(
     "/build/summary", { buildVersion: previousBuildVersion },

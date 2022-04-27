@@ -25,8 +25,6 @@ import { RisksTable } from "./risks-table";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
-  const { buildVersion } = useTestToCodeRouteParams();
-  const { version: previousBuildVersion = "" } = useFilteredData<ParentBuild>("/data/parent") || {};
   const {
     items: risks = [],
     filteredCount = 0,
@@ -35,8 +33,6 @@ export const RisksPage = () => {
   return (
     <div tw="space-y-6 flex flex-col flex-grow">
       <RisksPageHeader
-        buildVersion={buildVersion}
-        previousBuildVersion={previousBuildVersion}
         notCoveredRisksCount={notCoveredRisksCount}
       />
       <div tw="flex-grow px-6">
