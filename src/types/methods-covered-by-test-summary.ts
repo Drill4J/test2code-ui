@@ -24,7 +24,7 @@ export interface MethodCounts {
 
 export interface MethodsCoveredByTestSummary {
   id?: string;
-  testName?: TestDetails;
+  details?: TestDetails;
   testType?: string;
   methodCounts?: MethodCounts;
 }
