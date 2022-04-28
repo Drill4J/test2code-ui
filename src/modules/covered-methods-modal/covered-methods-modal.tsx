@@ -42,8 +42,8 @@ export const CoveredMethodsModal = () => {
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
 
-  const testName = concatTestName(testSummary?.testName?.testName, testSummary?.testName?.params?.methodParams);
-  const testPath = concatTestName(testSummary?.testName?.path, testSummary?.testName?.params?.classParams);
+  const testName = concatTestName(testSummary?.details?.testName, testSummary?.details?.params?.methodParams);
+  const testPath = concatTestName(testSummary?.details?.path, testSummary?.details?.params?.classParams);
 
   return (
     <Modal onClose={closeModal}>
