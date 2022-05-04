@@ -48,7 +48,8 @@ export const AllScopes = () => {
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
   );
   const scopesData = activeScope && activeScope.name ? [activeScope, ...scopes] : scopes;
-  const isActiveBuildVersion = (activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE);
+  const isActiveBuildVersion = (activeBuildVersion === buildVersion);
+  const isOnlineBuild = buildStatus === BUILD_STATUS.ONLINE;
   const { coverage: { byTestType: activeScopeTestsType = [] } = {} } = activeScope || {};
 
   const testsColumns = [
@@ -191,6 +192,7 @@ export const AllScopes = () => {
                   accessor: "actions",
                   Cell: isActiveBuildVersion ? ({ row: { original = {} } = {} }: any) => {
                     const { active, enabled, id } = original;
+                    const title = !isOnlineBuild ? "Unavailable. Agent is offline." : undefined;
                     const menuActions = [
                       active && {
                         label: "Finish Scope",
@@ -200,15 +202,19 @@ export const AllScopes = () => {
                       active && {
                         label: "Sessions Management",
                         icon: "ManageSessions",
-                        Content: ({ children }: { children: JSX.Element }) => (
+                        disabled: !isOnlineBuild,
+                        title,
+                        Content: isOnlineBuild ? ({ children }: { children: JSX.Element }) => (
                           <Link to={getModalPath({ name: "sessionManagement" })}>
                             {children}
                           </Link>
-                        ),
+                        ) : undefined,
                       },
                       !active && {
                         label: `${enabled ? "Ignore" : "Include"} in stats`,
                         icon: enabled ? "EyeCrossed" : "Eye",
+                        disabled: !isOnlineBuild,
+                        title,
                         onClick: () => toggleScope(agentId, {
                           onSuccess: () => {
                             sendAlertEvent({
@@ -227,17 +233,21 @@ export const AllScopes = () => {
                       {
                         label: "Rename",
                         icon: "Edit",
+                        disabled: !isOnlineBuild,
+                        title,
                         onClick: () => push(getModalPath({ name: "renameScope", params: { scopeId: id } })),
                       },
                       {
                         label: "Delete",
                         icon: "Delete",
+                        disabled: !isOnlineBuild,
+                        title,
                         onClick: () => push(getModalPath({ name: "deleteScope", params: { scopeId: id } })),
                       },
                     ].filter(Boolean);
                     return (
                       <div tw="flex justify-end">
-                        <Menu items={menuActions} />
+                        <Menu disabled={!active && !isOnlineBuild} title={!active && title} items={menuActions} />
                       </div>
                     );
                   } : () => null,
