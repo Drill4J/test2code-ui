@@ -247,7 +247,9 @@ export const AllScopes = () => {
                     ].filter(Boolean);
                     return (
                       <div tw="flex justify-end">
-                        <Menu disabled={!active && !isOnlineBuild} title={!active && title} items={menuActions} />
+                        {!active
+                          ? (<Menu disabled={!isOnlineBuild} title={title} items={menuActions} />)
+                          : (<Menu items={menuActions} />)}
                       </div>
                     );
                   } : () => null,
