@@ -30,7 +30,7 @@ import {
   sizeLimit,
 } from "@drill4j/ui-kit";
 import { v4 as uuidv4 } from "uuid";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import tw, { styled } from "twin.macro";
 
 import { useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams } from "hooks";
@@ -38,7 +38,7 @@ import {
   BetweenOp, BuildAttribute, Filter, OP, TestOverviewFilter,
 } from "types";
 import { useSetFilterDispatch } from "common";
-import { createFilter, updateFilter } from "../../../api";
+import { createFilter, dublicateFilter, updateFilter } from "../../../api";
 import { DeleteFilterModal } from "./delete-filter-modal";
 import { CustomAttribute, SelectAttribute, Values } from "./select-attribute";
 import { ConfigureFilterSate, FILTER_STATE } from "../types";
@@ -57,12 +57,13 @@ export const ConfigureFilter = ({
   closeConfigureFilter, filterId, configureFilterState, setConfigureFilter, filters,
 }: Props) => {
   const isEditing = configureFilterState === FILTER_STATE.EDITING;
+  const idDuplicating = configureFilterState === FILTER_STATE.DUPLICATE;
   const [isDeleteFilterModalOpen, setIsDeleteFilterModalOpen] = useState(false);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const setFilter = useSetFilterDispatch();
   const attributes = useTestToCodeData<BuildAttribute[]>("/build/attributes") || [];
-  const filter = useTestToCodeData<TestOverviewFilter>(isEditing ? `/build/filters/${filterId}` : null);
+  const filter = useTestToCodeData<TestOverviewFilter>(filterId ? `/build/filters/${filterId}` : null);
 
   const { name: filterName, attributes: filterAttributes = [] } = filter || {};
 
@@ -81,7 +82,7 @@ export const ConfigureFilter = ({
       values: values.reduce((acc, { value }) => ({ ...acc, [value]: true }), {}),
     })), [filterAttributes]);
 
-  const initialValues = useMemo(() => (isEditing ? {
+  const initialValues = useMemo(() => (filterId ? {
     name: filterName,
     attributes: transformedFilterAttributes,
   } : {
@@ -89,7 +90,7 @@ export const ConfigureFilter = ({
     attributes: [{
       fieldPath: "", values: {}, valuesOp: BetweenOp.OR, id: uuidv4(), isLabel: false,
     }],
-  }), [isEditing, filterName, transformedFilterAttributes]);
+  }), [filterId, filterName, transformedFilterAttributes]);
 
   // TODO: implement select name's field
   // useEffect(() => {
@@ -103,7 +104,7 @@ export const ConfigureFilter = ({
         initialValues={initialValues as Values}
         onSubmit={async ({ name, attributes: selectedAttributes }: any) => {
           const values = {
-            id: filterId || "",
+            id: isEditing && filterId ? filterId : "",
             name,
             buildVersion,
             attributes: selectedAttributes.map(({
@@ -201,32 +202,21 @@ export const ConfigureFilter = ({
                 <Menu
                   tw="mr-3"
                   items={[
-                    // {
-                    //   label: "Duplicate filter",
-                    //   icon: "Copy",
-                    //   onClick: async () => {
-                    //     const duplicateValues = {
-                    //       name: `${filterName} (1)`,
-                    //       buildVersion,
-                    //       attributes: values.attributes.map(({
-                    //         valuesOp, values: attrValues, fieldPath, isLabel,
-                    //       }: any) => ({
-                    //         fieldPath,
-                    //         valuesOp,
-                    //         isLabel,
-                    //         values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
-                    //       })),
-                    //     };
-                    //     await createFilter(agentId, duplicateValues as any, {
-                    //       onSuccess: (createdFilterId) => {
-                    //         sendAlertEvent({ type: "SUCCESS", title: "Filter has been duplicate successfully." });
-                    //         setFilter(createdFilterId);
-                    //         setConfigureFilter(FILTER_STATE.EDITING);
-                    //       },
-                    //       onError: (msg) => sendAlertEvent({ type: "ERROR", title: msg }),
-                    //     });
-                    //   },
-                    // },
+                    {
+                      label: "Duplicate filter",
+                      icon: "Copy",
+                      onClick: async () => {
+                        filterId && await dublicateFilter(agentId, { id: filterId }, {
+                          onSuccess: name => {
+                            setConfigureFilter(FILTER_STATE.DUPLICATE);
+                            setFieldValue("name", name, true);
+                          },
+                          onError: message => {
+                            sendAlertEvent({ type: "ERROR", title: message });
+                          },
+                        });
+                      },
+                    },
                     {
                       label: "Delete filter",
                       icon: "Delete",

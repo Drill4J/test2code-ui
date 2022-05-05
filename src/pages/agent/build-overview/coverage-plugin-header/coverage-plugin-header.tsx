@@ -182,7 +182,7 @@ export const CoveragePluginHeader = () => {
       {configureFilterState && (
         <ConfigureFilter
           closeConfigureFilter={closeConfigureFilter}
-          filterId={configureFilterState === FILTER_STATE.EDITING ? filterId : null}
+          filterId={configureFilterState === FILTER_STATE.EDITING || configureFilterState === FILTER_STATE.DUPLICATE ? filterId : null}
           configureFilterState={configureFilterState}
           setConfigureFilter={setConfigureFilter}
           filters={filters}

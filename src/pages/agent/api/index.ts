@@ -22,3 +22,4 @@ export { createFilter } from "./create-filter";
 export { updateFilter } from "./update-filter";
 export { deleteFilter } from "./delete-filter";
 export { applyFilter } from "./apply-filter";
+export { dublicateFilter } from "./dublicate-filter";

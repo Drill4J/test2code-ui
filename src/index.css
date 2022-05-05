@@ -685,6 +685,14 @@ button:focus {
   top: 100%;
 }
 
+.top-\[41px\] {
+  top: 41px;
+}
+
+.bottom-0 {
+  bottom: 0px;
+}
+
 .-bottom-px {
   bottom: -1px;
 }
@@ -699,6 +707,10 @@ button:focus {
 
 .z-10 {
   z-index: 10;
+}
+
+.z-\[100\] {
+  z-index: 100;
 }
 
 .col-span-2 {
@@ -933,6 +945,10 @@ button:focus {
   height: 2rem;
 }
 
+.h-1 {
+  height: 0.25rem;
+}
+
 .max-h-\[850px\] {
   max-height: 850px;
 }
@@ -963,10 +979,6 @@ button:focus {
 
 .w-full {
   width: 100%;
-}
-
-.w-\[320px\] {
-  width: 320px;
 }
 
 .\!w-\[264px\] {
@@ -1025,6 +1037,10 @@ button:focus {
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
+}
+
+.w-\[320px\] {
+  width: 320px;
 }
 
 .w-97 {
@@ -1408,6 +1424,11 @@ button:focus {
   background-color: rgba(255, 255, 255, var(--tw-bg-opacity));
 }
 
+.bg-blue-default {
+  --tw-bg-opacity: 1;
+  background-color: rgba(0, 127, 255, var(--tw-bg-opacity));
+}
+
 .bg-data-visualization-coverage {
   --tw-bg-opacity: 1;
   background-color: rgba(98, 173, 252, var(--tw-bg-opacity));
@@ -1426,6 +1447,10 @@ button:focus {
 .bg-monochrome-black {
   --tw-bg-opacity: 1;
   background-color: rgba(27, 25, 27, var(--tw-bg-opacity));
+}
+
+.bg-opacity-80 {
+  --tw-bg-opacity: 0.8;
 }
 
 .bg-opacity-50 {
@@ -1747,6 +1772,10 @@ button:focus {
 
 .opacity-20 {
   opacity: 0.2;
+}
+
+.opacity-40 {
+  opacity: 0.4;
 }
 
 .outline-none {
