@@ -34,7 +34,7 @@ import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
 import { AllBuilds } from "./all-builds";
 import { ParentBuild } from "../../types";
-import { useSetFilterDispatch } from "../../common";
+import { useFilterState, useSetFilterDispatch } from "../../common";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
@@ -45,6 +45,7 @@ export const Agent = () => {
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const isActiveBuild = activeBuildVersion === buildVersion;
   const setFilter = useSetFilterDispatch();
+  const { filterId } = useFilterState();
 
   useEffect(() => {
     setFilter(null);

@@ -54,6 +54,7 @@ export const CoveragePluginHeader = () => {
   const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
+  const realFiltersData = useTestToCodeData<Filter[]>("/build/filters");
   const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
 
   const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
@@ -66,18 +67,18 @@ export const CoveragePluginHeader = () => {
   const isActiveBuild = buildVersion === activeBuildVersion;
 
   useEffect(() => {
-    if (filterId && !filters.filter(filter => filter.id === filterId).length) {
+    if (filterId && realFiltersData && !realFiltersData.filter(filter => filter.id === filterId).length) {
       setFilter(null);
       setConfigureFilter(null);
     }
-  }, [filterId, filters, isActiveBuild]);
+  }, [filterId, realFiltersData]);
 
   useEffect(() => {
-    if (!isActiveBuild) {
+    if (activeBuildVersion && !isActiveBuild) {
       setFilter(null);
       setConfigureFilter(null);
     }
-  }, [isActiveBuild]);
+  }, [isActiveBuild, activeBuildVersion]);
 
   return (
     <>
