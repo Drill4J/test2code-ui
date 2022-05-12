@@ -70,7 +70,14 @@ export const CoveragePluginHeader = () => {
       setFilter(null);
       setConfigureFilter(null);
     }
-  }, [filterId, filters]);
+  }, [filterId, filters, isActiveBuild]);
+
+  useEffect(() => {
+    if (!isActiveBuild) {
+      setFilter(null);
+      setConfigureFilter(null);
+    }
+  }, [isActiveBuild]);
 
   return (
     <>

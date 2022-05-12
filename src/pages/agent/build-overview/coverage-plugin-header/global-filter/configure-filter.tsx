@@ -57,7 +57,6 @@ export const ConfigureFilter = ({
   closeConfigureFilter, filterId, configureFilterState, setConfigureFilter, filters,
 }: Props) => {
   const isEditing = configureFilterState === FILTER_STATE.EDITING;
-  const idDuplicating = configureFilterState === FILTER_STATE.DUPLICATE;
   const [isDeleteFilterModalOpen, setIsDeleteFilterModalOpen] = useState(false);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
