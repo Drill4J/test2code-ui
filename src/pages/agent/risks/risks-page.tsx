@@ -17,7 +17,7 @@ import React from "react";
 import { FilterList, ParentBuild } from "@drill4j/types-admin";
 import "twin.macro";
 
-import { useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import { useBuildVersion } from "hooks";
 import { Risk } from "types";
 import { useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
@@ -25,20 +25,13 @@ import { RisksTable } from "./risks-table";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
-  const { buildVersion } = useTestToCodeRouteParams();
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
   const {
     items: risks = [],
     filteredCount = 0,
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
-  const notCoveredRisksCount = risks.filter(({ coverage = 0 }) => coverage === 0).length;
   return (
     <div tw="space-y-6 flex flex-col flex-grow">
-      <RisksPageHeader
-        buildVersion={buildVersion}
-        previousBuildVersion={previousBuildVersion}
-        notCoveredRisksCount={notCoveredRisksCount}
-      />
+      <RisksPageHeader />
       <div tw="flex-grow px-6">
         <RisksTable data={risks} filteredCount={filteredCount} />
       </div>
