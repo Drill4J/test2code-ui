@@ -14,26 +14,53 @@
  * limitations under the License.
  */
 import React from "react";
-import { FilterList, ParentBuild } from "@drill4j/types-admin";
+import { useHistory } from "react-router-dom";
+import { FilterList } from "@drill4j/types-admin";
 import "twin.macro";
 
-import { useBuildVersion } from "hooks";
+import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { Risk } from "types";
-import { useTableActionsState } from "@drill4j/ui-kit";
+import { Tab, useQueryParams, useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
 import { RisksTable } from "./risks-table";
+import { BuildMethodsInfo } from "../build-overview/build-methods-info";
+import { BuildTestsInfo } from "../build-overview/build-tests-info";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
+  const { buildVersion } = useTestToCodeRouteParams();
+  const { activeTab } = useQueryParams<{activeTab?: string; }>();
+  const { push } = useHistory();
+  const { getPagePath } = useNavigation();
   const {
     items: risks = [],
     filteredCount = 0,
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
   return (
-    <div tw="space-y-6 flex flex-col flex-grow">
+    <div tw="flex flex-col flex-grow">
       <RisksPageHeader />
-      <div tw="flex-grow px-6">
-        <RisksTable data={risks} filteredCount={filteredCount} />
+      <div tw="px-6 flex flex-col flex-grow">
+        <div tw="flex gap-x-6 mt-4 mb-4 border-b border-monochrome-medium-tint">
+          {/* !activeTab expressions means that t is default active tab */}
+          <Tab
+            active={!activeTab || activeTab === "current"}
+            onClick={() => push(getPagePath({ name: "risks", params: { buildVersion }, queryParams: { activeTab: "current" } }))}
+            data-test="risks:tab:current"
+          >
+            Current Risks
+          </Tab>
+          <Tab
+            active={activeTab === "previously"}
+            onClick={() => push(getPagePath({ name: "risks", params: { buildVersion }, queryParams: { activeTab: "previously" } }))}
+            data-test="risks:tab:previously"
+          >
+            Previously Covered
+          </Tab>
+        </div>
+        <div tw="flex-grow">
+          {(!activeTab || activeTab === "current") && <div>Current</div> }
+          {activeTab === "previously" && <div>Previously</div>}
+        </div>
       </div>
     </div>
   );
