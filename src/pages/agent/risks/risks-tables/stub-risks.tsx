@@ -13,4 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { RisksTable } from "./risks-table";
+import React from "react";
+
+import { Icons, Stub } from "@drill4j/ui-kit";
+
+export const StubRisks = () => (
+  <Stub
+    icon={<Icons.Function height={104} width={107} />}
+    title="No risked methods"
+    message=""
+  />
+);

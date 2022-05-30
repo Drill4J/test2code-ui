@@ -13,29 +13,5 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { RiskType } from "./risk-type";
-
-type CoverageRate = "MISSED" | "PARTLY" | "FULL";
-
-interface ProbesCount{
-  covered: number,
-  total: number
-}
-
-interface PreviousCovered {
-  build: string,
-  coverage: number,
-}
-
-export interface Risk {
-  id: string,
-  ownerClass: string,
-  name: string,
-  desc: string,
-  type: RiskType,
-  probesCount: ProbesCount,
-  coverage: number,
-  coverageRate: CoverageRate,
-  assocTestsCount: number,
-  previousCovered: PreviousCovered | null,
-}
+export { CurrentRisksTable } from "./current-risks-table";
+export { PreviousRisksTable } from "./previous-risks-table";

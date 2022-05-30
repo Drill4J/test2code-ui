@@ -24,15 +24,18 @@ import "twin.macro";
 import { getModalPath } from "common";
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { CoverageCell } from "../../methods-table/coverage-cell";
+import { StubRisks } from "./stub-risks";
 
 interface Props {
   data: Risk[];
-  filteredCount: number;
 }
 
-export const RisksTable = ({ data }: Props) => {
+export const CurrentRisksTable = ({ data }: Props) => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
+
+  if (!data.length) return <StubRisks />;
+
   const columns = [
     {
       Header: "Name",
@@ -140,7 +143,7 @@ export const RisksTable = ({ data }: Props) => {
       }]}
       renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
         <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-          <div tw="uppercase font-bold">{`All risks methods (${currentCount})`}</div>
+          <div tw="uppercase font-bold">Risked methods</div>
           <div data-test="risks-list:table-title">{`Displaying ${currentCount} of ${totalCount} methods`}</div>
         </div>
       )}

@@ -22,9 +22,7 @@ import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks"
 import { Risk } from "types";
 import { Tab, useQueryParams, useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
-import { RisksTable } from "./risks-table";
-import { BuildMethodsInfo } from "../build-overview/build-methods-info";
-import { BuildTestsInfo } from "../build-overview/build-tests-info";
+import { CurrentRisksTable, PreviousRisksTable } from "./risks-tables";
 
 export const RisksPage = () => {
   const { search, sort } = useTableActionsState();
@@ -34,13 +32,18 @@ export const RisksPage = () => {
   const { getPagePath } = useNavigation();
   const {
     items: risks = [],
-    filteredCount = 0,
   } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
+
+  const currentRisks: Risk[] = [];
+  const previousRisks: Risk[] = [];
+
+  risks.forEach((risk:Risk) => (risk.previousCovered ? previousRisks.push(risk) : currentRisks.push(risk)));
+
   return (
     <div tw="flex flex-col flex-grow">
       <RisksPageHeader />
       <div tw="px-6 flex flex-col flex-grow">
-        <div tw="flex gap-x-6 mt-4 mb-4 border-b border-monochrome-medium-tint">
+        <div tw="flex gap-x-6 mt-4 mb-8 border-b border-monochrome-medium-tint">
           {/* !activeTab expressions means that t is default active tab */}
           <Tab
             active={!activeTab || activeTab === "current"}
@@ -57,9 +60,9 @@ export const RisksPage = () => {
             Previously Covered
           </Tab>
         </div>
-        <div tw="flex-grow">
-          {(!activeTab || activeTab === "current") && <div>Current</div> }
-          {activeTab === "previously" && <div>Previously</div>}
+        <div tw="flex flex-col flex-grow">
+          {(!activeTab || activeTab === "current") && <CurrentRisksTable data={currentRisks} /> }
+          {activeTab === "previously" && <PreviousRisksTable data={previousRisks} />}
         </div>
       </div>
     </div>
