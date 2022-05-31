@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
+  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -91,16 +91,15 @@ export const CurrentRisksTable = ({ data }: Props) => {
       Header: "Type",
       accessor: "type",
       Cell: ({ value }: any) => <>{capitalize(value)}</>,
-      width: "127px",
+      width: "120px",
       textAlign: "left",
     },
     {
       Header: "Coverage, %",
       accessor: "coverage",
-      Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
-      ),
-      width: "147px",
+      Cell: ({ value = 0 }: { value: number }) => (!value ? <>-</> : <Cells.CoverageProgress tw="justify-between" value={value} />),
+      width: "176px",
+      textAlign: "left",
       sortType: "number",
     },
     {
@@ -110,18 +109,20 @@ export const CurrentRisksTable = ({ data }: Props) => {
         <Cells.Clickable
           data-test="risks-table:associated-tests-count"
           disabled={!value}
-          tw="inline"
+          tw="inline no-underline"
         >
-          <Link to={getModalPath({
-            name: "associatedTests",
-            params: { testId: row.original.id, treeLevel: "1", testsCount: value },
-          })}
-          >
-            {value}
-          </Link>
+          <LinkButton>
+            <Link to={getModalPath({
+              name: "associatedTests",
+              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+            })}
+            >
+              {value}
+            </Link>
+          </LinkButton>
         </Cells.Clickable>
       ),
-      width: "144px",
+      width: "174px",
       sortType: "number",
     },
   ];

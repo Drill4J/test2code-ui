@@ -16,7 +16,7 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography,
+  Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -91,16 +91,15 @@ export const PreviousRisksTable = ({ data }: Props) => {
       Header: "Build",
       accessor: "previousCovered.build",
       Cell: ({ value }: any) => <span title={value}><Typography.MiddleEllipsis><span>{value}</span></Typography.MiddleEllipsis></span>,
-      width: "127px",
+      width: "176px",
       textAlign: "left",
     },
     {
       Header: "Coverage, %",
-      accessor: "previousCovered.coverage",
-      Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
-      ),
-      width: "147px",
+      accessor: "coverage",
+      Cell: ({ value = 0 }: { value: number }) => (!value ? <>-</> : <Cells.CoverageProgress tw="justify-between" value={value} />),
+      width: "176px",
+      textAlign: "left",
       sortType: "number",
     },
     {
@@ -110,18 +109,20 @@ export const PreviousRisksTable = ({ data }: Props) => {
         <Cells.Clickable
           data-test="risks-table:associated-tests-count"
           disabled={!value}
-          tw="inline"
+          tw="inline no-underline"
         >
-          <Link to={getModalPath({
-            name: "associatedTests",
-            params: { testId: row.original.id, treeLevel: "1", testsCount: value },
-          })}
-          >
-            {value}
-          </Link>
+          <LinkButton>
+            <Link to={getModalPath({
+              name: "associatedTests",
+              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+            })}
+            >
+              {value}
+            </Link>
+          </LinkButton>
         </Cells.Clickable>
       ),
-      width: "144px",
+      width: "174px",
       sortType: "number",
     },
   ];
