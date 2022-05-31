@@ -23,7 +23,6 @@ import "twin.macro";
 
 import { getModalPath } from "common";
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
-import { CoverageCell } from "../../methods-table/coverage-cell";
 import { StubRisks } from "./stub-risks";
 
 interface Props {
