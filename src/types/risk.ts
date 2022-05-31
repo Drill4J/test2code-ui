@@ -23,7 +23,7 @@ interface ProbesCount{
 }
 
 interface PreviousCovered {
-  build: string,
+  buildVersion: string,
   coverage: number,
 }
 

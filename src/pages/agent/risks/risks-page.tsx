@@ -37,14 +37,13 @@ export const RisksPage = () => {
   const currentRisks: Risk[] = [];
   const previousRisks: Risk[] = [];
 
-  risks.forEach((risk:Risk) => (risk.previousCovered ? previousRisks.push(risk) : currentRisks.push(risk)));
+  risks.forEach((risk:Risk) => (risk.previousCovered?.buildVersion ? previousRisks.push(risk) : currentRisks.push(risk)));
 
   return (
     <div tw="flex flex-col flex-grow">
       <RisksPageHeader />
       <div tw="px-6 flex flex-col flex-grow">
         <div tw="flex gap-x-6 mt-4 mb-8 border-b border-monochrome-medium-tint">
-          {/* !activeTab expressions means that t is default active tab */}
           <Tab
             active={!activeTab || activeTab === "current"}
             onClick={() => push(getPagePath({ name: "risks", params: { buildVersion }, queryParams: { activeTab: "current" } }))}
