@@ -9,7 +9,7 @@ jobs:
     - uses: LKP-RnD/purge-expired-artifacts-action@v4
       with:
        token: ${{ secrets.GITHUB_TOKEN }}
-       repo_to_purge: "frontity/frontity"
+       repo_to_purge: "Drill4J/test2code-ui"
        dry_run: "false"
     - uses: actions/checkout@v2
     - run: npm install
