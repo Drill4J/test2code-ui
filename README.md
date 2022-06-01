@@ -1,5 +1,7 @@
 ## For development
 
+npm: https://www.npmjs.com/package/@drill4j/test2code-ui
+
 For development you need a [node.js](https://nodejs.org).
 
 To launch the development environment, follow these steps:
