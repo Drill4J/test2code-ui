@@ -88,14 +88,14 @@ export const PreviousRisksTable = ({ data }: Props) => {
     },
     {
       Header: "Build",
-      accessor: "previousCovered.build",
+      accessor: "previousCovered.buildVersion",
       Cell: ({ value }: any) => <span title={value}><Typography.MiddleEllipsis><span>{value}</span></Typography.MiddleEllipsis></span>,
       width: "176px",
       textAlign: "left",
     },
     {
       Header: "Coverage, %",
-      accessor: "coverage",
+      accessor: "previousCovered.coverage",
       Cell: ({ value = 0 }: { value: number }) => (!value ? <>-</> : <Cells.CoverageProgress tw="justify-between" value={value} />),
       width: "176px",
       textAlign: "left",
