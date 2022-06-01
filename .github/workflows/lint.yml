@@ -6,6 +6,11 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
     steps:
+    - uses: LKP-RnD/purge-expired-artifacts-action@v4
+      with:
+       token: ${{ secrets.GITHUB_TOKEN }}
+       repo_to_purge: "Drill4J/test2code-ui"
+       dry_run: "false"
     - uses: actions/checkout@v2
     - run: npm install
     - uses: bradennapier/eslint-plus-action@v3.4.2
