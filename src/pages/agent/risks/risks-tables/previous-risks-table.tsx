@@ -16,23 +16,25 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  capitalize, Cells, Icons, Stub, Table, Tooltip, CopyButton,
+  Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
 
 import { getModalPath } from "common";
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
-import { CoverageCell } from "../../methods-table/coverage-cell";
+import { StubRisks } from "./stub-risks";
 
 interface Props {
   data: Risk[];
-  filteredCount: number;
 }
 
-export const RisksTable = ({ data }: Props) => {
+export const PreviousRisksTable = ({ data }: Props) => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
+
+  if (!data.length) return <StubRisks />;
+
   const columns = [
     {
       Header: "Name",
@@ -85,19 +87,18 @@ export const RisksTable = ({ data }: Props) => {
       textAlign: "left",
     },
     {
-      Header: "Type",
-      accessor: "type",
-      Cell: ({ value }: any) => <>{capitalize(value)}</>,
-      width: "127px",
+      Header: "Build",
+      accessor: "previousCovered.buildVersion",
+      Cell: ({ value }: any) => <span title={value}><Typography.MiddleEllipsis><span>{value}</span></Typography.MiddleEllipsis></span>,
+      width: "176px",
       textAlign: "left",
     },
     {
       Header: "Coverage, %",
-      accessor: "coverage",
-      Cell: ({ value = 0 }: { value: number }) => (
-        <CoverageCell value={value} showCoverageIcon />
-      ),
-      width: "147px",
+      accessor: "previousCovered.coverage",
+      Cell: ({ value = 0 }: { value: number }) => (!value ? <>-</> : <Cells.CoverageProgress tw="justify-between" value={value} />),
+      width: "176px",
+      textAlign: "left",
       sortType: "number",
     },
     {
@@ -107,18 +108,20 @@ export const RisksTable = ({ data }: Props) => {
         <Cells.Clickable
           data-test="risks-table:associated-tests-count"
           disabled={!value}
-          tw="inline"
+          tw="inline no-underline"
         >
-          <Link to={getModalPath({
-            name: "associatedTests",
-            params: { testId: row.original.id, treeLevel: "1", testsCount: value },
-          })}
-          >
-            {value}
-          </Link>
+          <LinkButton>
+            <Link to={getModalPath({
+              name: "associatedTests",
+              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+            })}
+            >
+              {value}
+            </Link>
+          </LinkButton>
         </Cells.Clickable>
       ),
-      width: "144px",
+      width: "174px",
       sortType: "number",
     },
   ];
@@ -140,7 +143,20 @@ export const RisksTable = ({ data }: Props) => {
       }]}
       renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
         <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-          <div tw="uppercase font-bold">{`All risks methods (${currentCount})`}</div>
+          <div tw="flex gap-x-2 items-center uppercase font-bold">
+            Risked methods
+            <Tooltip
+              position="top-right"
+              message={(
+                <div tw="text-[13px] leading-20">
+                  The coverage of Risked Methods is indicated{"\n"}
+                  based on the build where it was the highest.
+                </div>
+              )}
+            >
+              <Icons.Info />
+            </Tooltip>
+          </div>
           <div data-test="risks-list:table-title">{`Displaying ${currentCount} of ${totalCount} methods`}</div>
         </div>
       )}

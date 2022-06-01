@@ -14,48 +14,13 @@
  * limitations under the License.
  */
 import React from "react";
-import tw, { styled } from "twin.macro";
+import "twin.macro";
 import { PageHeader } from "components";
 
-const Subtitle = styled.div`
-  ${tw`grid gap-x-1`}
-  grid-template-columns: max-content minmax(auto, max-content) max-content minmax(auto, max-content);
-  ${tw`font-bold text-14 leading-20 text-monochrome-default`}
-`;
-
-interface Props {
-  buildVersion: string;
-  previousBuildVersion: string;
-  notCoveredRisksCount: number;
-}
-
-export const RisksPageHeader = ({ buildVersion, previousBuildVersion, notCoveredRisksCount }: Props) => (
+export const RisksPageHeader = () => (
   <PageHeader>
-    <div>
-      <div tw="mb-1 font-light text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
-        <span>Risks</span>
-        <span tw="ml-2 text-monochrome-default">
-          {notCoveredRisksCount}
-        </span>
-      </div>
-      <Subtitle data-test="risks-list:subtitle">
-        <span>Build:</span>
-        <span
-          className="text-monochrome-black text-ellipsis"
-          data-test="risks-list:current-build-version"
-          title={buildVersion}
-        >
-          {buildVersion}
-        </span>
-        <span tw="ml-1">Compared to:</span>
-        <span
-          className="text-monochrome-black text-ellipsis"
-          data-test="risks-list:previous-build-version"
-          title={`Build ${previousBuildVersion}`}
-        >
-          Build {previousBuildVersion}
-        </span>
-      </Subtitle>
+    <div tw="mb-1 text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
+      <span>Risked Methods</span>
     </div>
   </PageHeader>
 );
