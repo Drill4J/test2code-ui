@@ -110,15 +110,17 @@ export const CurrentRisksTable = ({ data }: Props) => {
           disabled={!value}
           tw="inline no-underline"
         >
-          <LinkButton>
-            <Link to={getModalPath({
-              name: "associatedTests",
-              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
-            })}
-            >
-              {value}
-            </Link>
-          </LinkButton>
+          {value ? (
+            <LinkButton>
+              <Link to={getModalPath({
+                name: "associatedTests",
+                params: { testId: row.original.id, treeLevel: "1", testsCount: value },
+              })}
+              >
+                {value}
+              </Link>
+            </LinkButton>
+          ) : value}
         </Cells.Clickable>
       ),
       width: "174px",
