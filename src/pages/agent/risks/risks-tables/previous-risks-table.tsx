@@ -16,12 +16,11 @@
 import React from "react";
 import { Risk } from "types";
 import {
-  Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography, LinkButton,
+  Cells, Icons, Stub, Table, Tooltip, CopyButton, Typography,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
 
-import { getModalPath } from "common";
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { StubRisks } from "./stub-risks";
 
