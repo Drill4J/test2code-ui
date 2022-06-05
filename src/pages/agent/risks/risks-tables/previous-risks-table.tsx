@@ -101,29 +101,6 @@ export const PreviousRisksTable = ({ data }: Props) => {
       textAlign: "left",
       sortType: "number",
     },
-    {
-      Header: "Associated Tests",
-      accessor: "assocTestsCount",
-      Cell: ({ value = "", row }: any) => (
-        <Cells.Clickable
-          data-test="risks-table:associated-tests-count"
-          disabled={!value}
-          tw="inline no-underline"
-        >
-          <LinkButton>
-            <Link to={getModalPath({
-              name: "associatedTests",
-              params: { testId: row.original.id, treeLevel: "1", testsCount: value },
-            })}
-            >
-              {value}
-            </Link>
-          </LinkButton>
-        </Cells.Clickable>
-      ),
-      width: "174px",
-      sortType: "number",
-    },
   ];
 
   return (
