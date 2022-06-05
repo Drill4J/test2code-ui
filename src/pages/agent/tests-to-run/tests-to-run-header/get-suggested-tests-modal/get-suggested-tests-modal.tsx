@@ -21,7 +21,9 @@ import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
 
 import { getTestsToRunURL, TestsToRunUrl } from "components";
-import { useAgentRouteParams } from "hooks";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
+import { useAdminConnection, useAgentRouteParams } from "hooks";
+import { AnalyticsInfo } from "types";
 
 export const GetSuggestedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
@@ -32,6 +34,7 @@ export const GetSuggestedTestsModal = () => {
     return () => clearTimeout(timeout);
   }, [copied]);
   const closeModal = useCloseModal();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <Modal onClose={closeModal}>
@@ -57,6 +60,9 @@ export const GetSuggestedTestsModal = () => {
             onClick={() => {
               copyToClipboard(getTestsToRunURL(agentId, pluginId, "Agent"));
               setCopied(true);
+              !isAnalyticsDisabled && sendKeyMetricsEvent({
+                name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_TO_CLIPBOARD_BUTTON,
+              });
             }}
             data-test="get-suggested-tests-modal:copy-to-clipboard-button"
           >

@@ -13,29 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { Children, ReactNode } from "react";
-import tw, { styled } from "twin.macro";
+import React, { ReactNode } from "react";
+import "twin.macro";
 
 interface Props {
   header: React.ReactNode;
   children?: ReactNode[];
 }
 
-const Sections = styled.div`
-  ${tw`grid grid-cols-4`}
-  & > *:not(:last-child) {
-      ${tw`border-r border-monochrome-medium-tint`}
-  }`;
-
 export const PluginCard = ({ children, header }: Props) => (
   <div tw="w-full h-fit border border-monochrome-medium-tint">
     <div tw="w-full p-4 border-b border-monochrome-medium-tint text-14 leading-20">
       {header}
     </div>
-    <Sections>
-      {Children.map(children, (child) => (
-        <div tw="w-full p-4">{child}</div>
-      ))}
-    </Sections>
   </div>
 );

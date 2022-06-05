@@ -21,8 +21,11 @@ import tw, { styled } from "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
+import { PageHeader } from "components";
+import { useAdminConnection } from "hooks";
+import { AnalyticsInfo } from "types";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { SavedTimeSection } from "./saved-time-section";
-import { PageHeader } from "../../../../components";
 
 interface AgentInfo {
   agentType: string;
@@ -71,6 +74,7 @@ export const TestsToRunHeader = ({
       ? previousBuildTestsDuration - currentDuration
       : 0,
   );
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <PageHeader tw="justify-between">
@@ -112,7 +116,12 @@ export const TestsToRunHeader = ({
           <Button
             secondary
             size="large"
-            onClick={() => push(getModalPath({ name: "getSuggestedTests" }))}
+            onClick={() => {
+              push(getModalPath({ name: "getSuggestedTests" }));
+              !isAnalyticsDisabled && sendKeyMetricsEvent({
+                name: KEY_METRICS_EVENT_NAMES.CLICK_ON_GET_SUGGESTED_TESTS_BUTTON,
+              });
+            }}
             data-test="tests-to-run-header:get-suggested-tests-button"
             disabled={!totalTestsToRun}
           >

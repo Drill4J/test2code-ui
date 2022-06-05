@@ -16,6 +16,7 @@
 import axios from "axios";
 import { PLUGIN_ID } from "common";
 import { sendAlertEvent } from "@drill4j/ui-kit";
+import { EVENT_LABELS, PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
 
 export async function abortSession(
   agentId: string, sessionId: string,
@@ -26,6 +27,10 @@ export async function abortSession(
       payload: { sessionId },
     });
     sendAlertEvent({ type: "SUCCESS", title: "Session has been aborted successfully." });
+    sendPluginEvent({
+      name: PLUGIN_EVENT_NAMES.CLICK_ON_ABORT_SESSION_BUTTON,
+      label: EVENT_LABELS.SESSION_MANAGEMENT,
+    });
   } catch ({ response: { data: { message } = {} } = {} }) {
     sendAlertEvent({
       type: "ERROR",

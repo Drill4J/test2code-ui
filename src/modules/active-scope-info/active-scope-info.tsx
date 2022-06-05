@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 import React from "react";
-import {
-  Button, Icons, SessionIndicator,
-} from "@drill4j/ui-kit";
+import { Button, Icons, SessionIndicator } from "@drill4j/ui-kit";
 import { Link, useHistory } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
@@ -24,8 +22,10 @@ import tw, { styled } from "twin.macro";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
 import {
-  useActiveSessions, useAgentRouteParams, useNavigation, useTestToCodeRouteParams,
+  useActiveSessions, useAgentRouteParams, useNavigation, useTestToCodeRouteParams, useAdminConnection,
 } from "hooks";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { AnalyticsInfo } from "types";
 
 interface Props {
   scope: ActiveScope | null;
@@ -38,6 +38,7 @@ const Content = styled.div`
 export const ActiveScopeInfo = ({ scope }: Props) => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const {
     id: scopeId = "",
@@ -86,6 +87,9 @@ export const ActiveScopeInfo = ({ scope }: Props) => {
           tw="link"
           to={getModalPath({ name: "sessionManagement" })}
           data-test="active-scope-info:sessions-management-link"
+          onClick={() => !isAnalyticsDisabled && sendPluginEvent({
+            name: PLUGIN_EVENT_NAMES.CLICK_ON_SESSION_MANAGEMENT_LINK,
+          })}
         >
           Sessions Management
         </Link>

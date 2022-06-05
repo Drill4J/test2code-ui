@@ -15,8 +15,17 @@
  */
 import React from "react";
 import {
-  Form, Formik, Panel, Icons, composeValidators, sizeLimit,
-  required, handleFieldErrors, Stub, useCloseModal, sendAlertEvent,
+  composeValidators,
+  Form,
+  Formik,
+  handleFieldErrors,
+  Icons,
+  Panel,
+  required,
+  sendAlertEvent,
+  sizeLimit,
+  Stub,
+  useCloseModal,
 } from "@drill4j/ui-kit";
 import "twin.macro";
 
@@ -25,10 +34,10 @@ import {
 } from "hooks";
 import { ServiceGroup } from "@drill4j/types-admin/dist";
 import { AgentBuildInfo } from "@drill4j/types-admin";
+import { PLUGIN_EVENT_NAMES, sendPluginEvent } from "common/analytic";
+import { AnalyticsInfo } from "types";
 import { ManagementNewSession } from "./management-new-session";
-import {
-  startServiceGroupSessions, startAgentSession,
-} from "./sessions-management-pane-api";
+import { startAgentSession, startServiceGroupSessions } from "./sessions-management-pane-api";
 import { ManagementActiveSessions } from "./management-active-sessions";
 import { ActiveSessionsList } from "./active-sessions-list";
 import { BulkOperationWarning } from "./bulk-operation-warning";
@@ -63,6 +72,7 @@ export const SessionsManagementPane = () => {
   const group = useAdminConnection<ServiceGroup>(`/api/groups/${groupId}`);
   const [agentBuildInfo] = useAdminConnection<AgentBuildInfo[]>(`/api/agent/${agentId}/builds`) || [];
   const { systemSettings: agentSystemSettings } = agentBuildInfo || {};
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <Panel onClose={closePanel}>
@@ -77,6 +87,13 @@ export const SessionsManagementPane = () => {
             if (error.sessionId) {
               setFieldError("sessionId", error.sessionId);
             } else {
+              const label = [];
+              values.isGlobal && label.push("Set as global session");
+              values.isRealtime && label.push("Real-time coverage collection");
+              !isAnalyticsDisabled && sendPluginEvent({
+                name: PLUGIN_EVENT_NAMES.CLICK_ON_START_SESSION_BUTTON,
+                label: label.join("#"),
+              });
               resetForm();
               dispatch(setIsNewSession(false));
             }

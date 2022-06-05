@@ -13,14 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Icons } from "@drill4j/ui-kit";
 import tw from "twin.macro";
 
 import { copyToClipboard, percentFormatter } from "@drill4j/common-utils";
 import { ConditionSettingByType, Results } from "types/quality-gate-type";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAdminConnection, useAgentRouteParams, useBuildVersion } from "hooks";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { Metrics } from "types/metrics";
+import { AnalyticsInfo } from "types";
 import { QualityGateConfigurationUrl } from "./quality-gate-configuration-url";
 import { getQualityGateConfigurationUrl } from "./get-quality-gate-configuration-url";
 import { Condition } from "./condition";
@@ -34,6 +36,7 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
   const [copied, setCopied] = useState(false);
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const { coverage = 0, risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   useEffect(() => {
     const timeout = setTimeout(() => setCopied(false), 5000);
@@ -109,7 +112,12 @@ export const QualityGateStatus = ({ conditionSettingByType, results }: Props) =>
             : (
               <Icons.Copy
                 data-test="quality-gate-status:copy-icon"
-                onClick={() => { copyToClipboard(getQualityGateConfigurationUrl(agentId, pluginId)); setCopied(true); }}
+                onClick={() => {
+                  copyToClipboard(getQualityGateConfigurationUrl(agentId, pluginId)); setCopied(true);
+                  !isAnalyticsDisabled && sendKeyMetricsEvent({
+                    name: KEY_METRICS_EVENT_NAMES.CLICK_ON_COPY_ICON_IN_QG_PANEL,
+                  });
+                }}
               />
             )}
         </div>

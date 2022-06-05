@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export const agentPluginPath = "*/agents/:agentId/plugins/:pluginId";
-export const groupPluginPath = "*/groups/:groupId/plugins/:pluginId";
-export const agentDashboardPath = "*/agents/:agentId";
-export const groupDashboardPath = "*/groups/:groupId";
+export interface AnalyticsInfo {
+  clientId: string;
+  isAnalyticsDisabled: boolean;
+}

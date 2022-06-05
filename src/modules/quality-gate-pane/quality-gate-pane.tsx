@@ -22,10 +22,11 @@ import {
 import tw, { styled } from "twin.macro";
 
 import {
-  ConditionSetting,
-  ConditionSettingByType, QualityGate, QualityGateStatus as Status,
+  ConditionSetting, ConditionSettingByType, QualityGate, QualityGateStatus as Status,
 } from "types/quality-gate-type";
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
+import { useAdminConnection, useAgentRouteParams, useBuildVersion } from "hooks";
+import { AnalyticsInfo } from "types";
 import { QualityGateStatus } from "./quality-gate-status";
 import { QualityGateSettings } from "./quality-gate-settings";
 import { updateQualityGateSettings } from "./api";
@@ -45,6 +46,7 @@ export const QualityGatePane = () => {
   const { pluginId = "", agentId = "" } = useAgentRouteParams();
   const [isEditing, setIsEditing] = useState(false);
   const closeModal = useCloseModal();
+  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   const handleOnToggle = () => {
     closeModal();
@@ -76,6 +78,15 @@ export const QualityGatePane = () => {
           onSubmit={async (values) => {
             await updateQualityGateSettings(agentId, pluginId)(values as ConditionSettingByType);
             setIsEditing(false);
+            const { coverage, risks, tests } = values as ConditionSettingByType;
+            const label = [];
+            coverage?.enabled && label.push("Build coverage");
+            risks?.enabled && label.push("Risks");
+            tests?.enabled && label.push("Tests to run");
+            !isAnalyticsDisabled && sendKeyMetricsEvent({
+              name: KEY_METRICS_EVENT_NAMES.CLICK_ON_SAVE_BUTTON_IN_QG_PANEL,
+              label: label.join("#"),
+            });
           }}
           initialValues={conditionSettingByType}
           validate={validateQualityGate}
