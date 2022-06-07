@@ -104,7 +104,7 @@ export const AllScopes = () => {
                 isActiveBuildVersion,
                 activeScope?.coverage.percentage,
                 activeScopeTestsType.length,
-                byTestType.length, scopes.length,
+                byTestType.length, scopes.length, isOnlineBuild,
               ]}
               defaultSortBy={[{
                 id: "started",
