@@ -94,6 +94,10 @@ export const AllBuilds = () => {
             },
           ]}
           data={buildVersions}
+          defaultSortBy={[{
+            id: "detectedAt",
+            desc: true,
+          }]}
           stub={(
             <Stub
               icon={<Icons.BuildList height={104} width={107} />}
