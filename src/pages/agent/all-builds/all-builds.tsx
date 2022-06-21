@@ -70,12 +70,12 @@ export const AllBuilds = () => {
                     <Tooltip
                       position="top-right"
                       message={(
-                        <>
+                        <div tw="flex flex-col gap-[6px] text-[13px]">
                           <div tw="font-bold">This build is set as baseline.</div>
                           <div>
                             All subsequent builds are compared with it.
                           </div>
-                        </>
+                        </div>
                       )}
                     >
                       <Icons.Flag />

@@ -33,7 +33,6 @@ import { AnalyticsInfo, Risk } from "types";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { PageHeader } from "components";
 import { ActionSection } from "./action-section";
-import { BaselineTooltip } from "./baseline-tooltip";
 
 export const CoveragePluginHeader = () => {
   const { agentId = "" } = useAgentRouteParams();
@@ -48,38 +47,17 @@ export const CoveragePluginHeader = () => {
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
   const configured = conditionSettings.some(({ enabled }) => enabled);
   const StatusIcon = Icons[status];
-  const { push } = useHistory();
   const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
 
   return (
     <ContentWrapper>
-      <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
-      <BaselinePanel>
-        <div>Current build:</div>
-        <div className="flex items-center text-monochrome-black" title={buildVersion}>
-          <Typography.MiddleEllipsis>
-            <span tw="whitespace-nowrap" data-test="header:current-build-version">{buildVersion}</span>
-          </Typography.MiddleEllipsis>
-          <BaselineTooltip />
-        </div>
-        <div>Parent build:</div>
-        {previousBuildVersion
-          ? (
-            <div
-              className="flex link"
-              onClick={() => push(getPagePath({
-                name: "overview",
-                params: { buildVersion: previousBuildVersion },
-                queryParams: { activeTab: "methods" },
-              }))}
-              title={previousBuildVersion}
-            >
-              <Typography.MiddleEllipsis>
-                <span tw="whitespace-nowrap" data-test="header:parent-build-version">{previousBuildVersion}</span>
-              </Typography.MiddleEllipsis>
-            </div>
-          ) : <span>&ndash;</span>}
-      </BaselinePanel>
+      <div
+        tw="flex items-center h-14 col-span-4 lg:col-span-1 pr-6 font-light text-24 leading-32 border-r border-monochrome-medium-tint"
+        data-test="coverage-plugin-header:plugin-name"
+      >
+        Test2Code
+      </div>
+      <div />
       {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && (
         <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
           <div className="flex items-center w-full">
@@ -194,12 +172,6 @@ const ContentWrapper = styled(PageHeader)`
   @media screen and (min-width: 1024px) {
     grid-template-columns: max-content auto max-content max-content max-content !important;
   }
-`;
-const BaselinePanel = styled.div`
-  ${tw`grid gap-x-2 lg:pl-6`}
-  ${tw`lg:border-l border-monochrome-medium-tint font-bold text-12 leading-24 text-monochrome-default`}
-  grid-template-columns: max-content minmax(64px, 60%);
-  grid-template-rows: repeat(2, 1fr);
 `;
 const StatusWrapper = styled(Link)(({ status }: { status?: QualityGateStatus }) => [
   tw`flex items-center h-8 text-14`,
