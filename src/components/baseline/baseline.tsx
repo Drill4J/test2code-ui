@@ -35,13 +35,13 @@ export const Baseline = () => {
     <Tooltip
       position="bottom-center"
       message={(
-        <>
+        <div tw="flex flex-col gap-[6px] text-[13px]">
           <div tw="font-bold">Baseline build is the reference build.</div>
           <div>
             All methods and key metrics of subsequent <br />
             builds are compared with it.
           </div>
-        </>
+        </div>
       )}
     >
       <Link

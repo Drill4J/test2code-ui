@@ -127,21 +127,21 @@ const BaselineFlag = () => {
         position="bottom-center"
         message={isInitialBuild
           ? (
-            <>
+            <div tw="flex flex-col gap-[6px] text-[13px]">
               <div tw="font-bold">This build is set as baseline.</div>
               <div>
                 The initial build is set as baseline by default.<br />
                 All methods and key metrics of subsequent<br />
                 builds are compared with it.
               </div>
-            </>
+            </div>
           ) : (
-            <>
+            <div tw="flex flex-col gap-[6px] text-[13px]">
               <div tw="font-bold">This build is set as baseline.</div>
               <div>
                 All subsequent builds are compared with it.
               </div>
-            </>
+            </div>
           )}
       >
         <Icons.Flag width={16} height={16} />
