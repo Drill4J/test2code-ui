@@ -41,7 +41,7 @@ export const Breadcrumbs = () => {
     testsToRunCrumb: { content: "Tests to Run", link: routes.testsToRun },
     allScopesCrumb: { content: "All Scopes", link: routes.allScopes },
     scopeCrumb: { content: ":scopeId", link: routes.scope },
-    risksCrumb: { content: "Risks", link: routes.risks },
+    risksCrumb: { content: "Risked Methods", link: routes.risks },
   }), [routes]);
 
   const Routes = useMemo(() => [
