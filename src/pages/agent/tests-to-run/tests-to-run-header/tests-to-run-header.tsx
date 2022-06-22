@@ -80,36 +80,11 @@ export const TestsToRunHeader = ({
     <PageHeader tw="justify-between">
       <div>
         <div
-          tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
+          tw="flex gap-x-2 text-24 leading-36 text-monochrome-black"
           data-test="tests-to-run-header:title"
         >
-          Tests to Run
-          <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
+          Recommended Tests
         </div>
-        <SubTitle data-test="tests-to-run-header:subtitle">
-          Build:
-          <div
-            tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:current-build-version"
-            title={buildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{buildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-          Compared to:
-          <div
-            tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:compared-build-version"
-            title={previousBuildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{previousBuildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-        </SubTitle>
       </div>
       <div tw="flex items-center gap-6 mr-10">
         {activeBuildVersion === buildVersion && (
@@ -125,7 +100,7 @@ export const TestsToRunHeader = ({
             data-test="tests-to-run-header:get-suggested-tests-button"
             disabled={!totalTestsToRun}
           >
-            Get Suggested Tests
+            Get Recommended Tests
           </Button>
         )}
         <SavedTimeSection
