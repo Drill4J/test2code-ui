@@ -59,9 +59,9 @@ export const CoveragePluginHeader = () => {
       </div>
       <div />
       {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && (
-        <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
+        <div tw="px-4 min-w-[160px] border-l border-monochrome-medium-tint text-monochrome-default">
           <div className="flex items-center w-full">
-            <div tw="mr-2 text-12 leading-16 font-bold" data-test="coverage-plugin-header:quality-gate-label">
+            <div tw="mr-2 text-14 leading-24 font-bold" data-test="coverage-plugin-header:quality-gate-label">
               QUALITY GATE
             </div>
             {!configured && (
@@ -114,7 +114,7 @@ export const CoveragePluginHeader = () => {
         </div>
       )}
       <ActionSection
-        label="risks"
+        label="risked methods"
         previousBuild={{ previousBuildVersion, previousBuildTests }}
       >
         {initialRisks.length
@@ -136,7 +136,7 @@ export const CoveragePluginHeader = () => {
           ) : <span data-test="action-section:no-value:risks">&ndash;</span>}
       </ActionSection>
       <ActionSection
-        label="tests to run"
+        label="recommended tests"
         previousBuild={{ previousBuildVersion, previousBuildTests }}
       >
         {previousBuildTests.length > 0 ? (
@@ -168,7 +168,7 @@ export const CoveragePluginHeader = () => {
 };
 
 const ContentWrapper = styled(PageHeader)`
-  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
+  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 w-full`}
   @media screen and (min-width: 1024px) {
     grid-template-columns: max-content auto max-content max-content max-content !important;
   }
