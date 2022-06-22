@@ -92,7 +92,7 @@ export const TestsToRunHeader = ({
             secondary
             size="large"
             onClick={() => {
-              push(getModalPath({ name: "getSuggestedTests" }));
+              push(getModalPath({ name: "getRecommendedTests" }));
               !isAnalyticsDisabled && sendKeyMetricsEvent({
                 name: KEY_METRICS_EVENT_NAMES.CLICK_ON_GET_SUGGESTED_TESTS_BUTTON,
               });

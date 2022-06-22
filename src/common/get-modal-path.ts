@@ -20,7 +20,7 @@ interface Routes {
   sessionManagement: void;
   qualityGate: void;
   baselineBuildModal: void;
-  getSuggestedTests: void;
+  getRecommendedTests: void;
   renameScope: "scopeId";
   deleteScope: "scopeId";
   finishScope: "scopeId";
@@ -38,7 +38,7 @@ export const modalsRoutes: Record<string, keyof typeof agentModalsNames> = {
   coveredMethods: "COVERED_METHODS",
   qualityGate: "QUALITY_GATE",
   baselineBuildModal: "BASELINE_BUILD",
-  getSuggestedTests: "GET_SUGGESTED_TESTS",
+  getRecommendedTests: "GET_RECOMMENDED_TESTS",
 };
 
 interface Path<PageName extends keyof AppPages, AppPages extends Routes> {
