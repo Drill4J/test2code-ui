@@ -15,9 +15,9 @@
  */
 import React from "react";
 import {
-  useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, CopyButton, Tooltip,
+  useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, CopyButton, Tooltip, removeQueryParamsFromPath,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
@@ -25,8 +25,9 @@ import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks"
 import { concatTestPath, concatTestName } from "utils/transform-tests";
 
 export const AssociatedTestModal = () => {
+  const { push } = useHistory();
   const { scopeId, buildVersion } = useTestToCodeRouteParams();
-  const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
+  const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string; virtualTableState?: string }>();
   const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
   const { getPagePath } = useNavigation();
@@ -38,8 +39,12 @@ export const AssociatedTestModal = () => {
 
   const closeModal = useCloseModal(["testId", "treeLevel"]);
 
+  const clearVirtualTableState = () => {
+    push(removeQueryParamsFromPath(["virtualTableState"]));
+  };
+
   return (
-    <Modal onClose={closeModal}>
+    <Modal onClose={() => { clearVirtualTableState(); closeModal(); }}>
       <Modal.Content tw="max-w-[1024px] w-[80%] max-h-[850px] h-[80%] flex flex-col" type="info">
         <Modal.Header tw="text-20">
           <div tw="space-x-2"><span>Associated Tests</span>

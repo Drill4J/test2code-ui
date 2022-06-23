@@ -15,9 +15,9 @@
  */
 import React from "react";
 import {
-  Modal, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, CopyButton,
+  Modal, useCloseModal, useQueryParams, VirtualizedTable, Cells, Icons, Skeleton, Stub, Tooltip, CopyButton, removeQueryParamsFromPath,
 } from "@drill4j/ui-kit";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { MethodsCoveredByTestSummary } from "types/methods-covered-by-test-summary";
@@ -26,6 +26,7 @@ import { MethodsDetails } from "types";
 import { concatTestName } from "utils/transform-tests";
 
 export const CoveredMethodsModal = () => {
+  const { push } = useHistory();
   const { scopeId } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
 
@@ -38,6 +39,10 @@ export const CoveredMethodsModal = () => {
   const showSkeleton = !Object.keys(testSummary).length;
   const closeModal = useCloseModal(["testId", "coveredMethods"]);
 
+  const clearVirtualTableState = () => {
+    push(removeQueryParamsFromPath(["virtualTableState"]));
+  };
+
   const coveredMethods = useBuildVersion<MethodsDetails[]>(
     `${topicCoveredMethodsByTest}/${testSummary.id}/methods/all`,
   ) || [];
@@ -46,7 +51,7 @@ export const CoveredMethodsModal = () => {
   const testPath = concatTestName(testSummary?.details?.path, testSummary?.details?.params?.classParams);
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal onClose={() => { clearVirtualTableState(); closeModal(); }}>
       <Modal.Content tw="max-w-[1024px] w-[80%] max-h-[850px] h-[80%] flex flex-col" type="info">
         <Modal.Header tw="text-20">
           <div tw="space-x-2">
