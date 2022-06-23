@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 import {
-  Icons, Legend, Stub, Table, useTableActionsState, Cells,
+  Icons, Legend, Stub, Table, useTableActionsState, Cells, Tooltip, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import { capitalize } from "@drill4j/common-utils";
@@ -24,6 +24,7 @@ import { FilterList } from "@drill4j/types-admin";
 import "twin.macro";
 
 import { getModalPath, DATA_VISUALIZATION_COLORS } from "common";
+import { TestsStatus } from "components";
 import { TestCoverageInfo } from "types/test-coverage-info";
 import { BuildSummary } from "types/build-summary";
 import { TestsInfo } from "types/tests-info";
@@ -151,24 +152,52 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                   </>
                 ),
                 textAlign: "left",
+                width: "120px",
               },
               {
-                Header: "State",
-                accessor: "toRun",
-                Cell: ({ value }: any) => (
-                  <span tw="leading-64" title={value ? "To run" : "Done"}>
-                    {value
-                      ? "To run"
-                      : <span tw="font-bold text-green-default">Done</span>}
+                Header: "Status",
+                accessor: "overview.result",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (
+                  <span tw="leading-64">
+                    {toRun ? <span tw="text-14 leading-16 text-monochrome-black">To run</span> : <TestsStatus status={value} />}
                   </span>
                 ),
                 textAlign: "left",
+                width: "101px",
               },
               {
                 Header: "Coverage, %",
                 accessor: "coverage.percentage",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Coverage tw="inline" value={value} />),
+                Cell: ({ value, row: { original: { toRun } } }: any) => (
+                  toRun ? (
+                    <Tooltip
+                      position="top-center"
+                      message={(
+                        <span tw="text-[13px]">Will be available after the test run</span>
+                      )}
+                    >
+                      <span>&ndash;</span>
+                    </Tooltip>
+                  ) : <Cells.Coverage tw="inline" value={value} />
+                ),
                 sortType: "number",
+                width: "115px",
+              },
+              {
+                Header: "Duration",
+                accessor: "overview.duration",
+                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? (
+                  <Tooltip
+                    position="top-center"
+                    message={(
+                      <span tw="text-[13px]">Will be available after the test run</span>
+                    )}
+                  >
+                    <span>&ndash;</span>
+                  </Tooltip>
+                ) : <Cells.Duration value={value} />),
+                sortType: "number",
+                width: "104px",
               },
               {
                 Header: "Methods covered",
@@ -177,23 +206,31 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
                   value,
                   row: { original: { id = "", toRun = false, coverage: { methodCount: { covered = 0 } = {} } = {} } = {} },
                 }: any) => (
-                  toRun ? null : (
+                  toRun ? (
+                    <Tooltip
+                      position="top-center"
+                      message={(
+                        <span tw="text-[13px]">Will be available after the test run</span>
+                      )}
+                    >
+                      <span>&ndash;</span>
+                    </Tooltip>
+                  ) : (
                     <Cells.Clickable
-                      tw="inline"
+                      tw="inline  no-underline"
                       disabled={!value}
                     >
-                      <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-                        {value}
-                      </Link>
+                      {value ? (
+                        <LinkButton>
+                          <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+                            {value}
+                          </Link>
+                        </LinkButton>
+                      ) : value}
                     </Cells.Clickable>
                   )
                 ),
-              },
-              {
-                Header: "Duration",
-                accessor: "overview.duration",
-                Cell: ({ value, row: { original: { toRun } } }: any) => (toRun ? null : <Cells.Duration value={value} />),
-                sortType: "number",
+                width: "150px",
               }]}
             renderHeader={({ currentCount }: { currentCount: number }) => (
               <div tw="flex justify-start text-monochrome-default text-14 leading-24 pb-3">

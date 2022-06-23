@@ -15,7 +15,7 @@
  */
 import React, { useEffect, useState } from "react";
 import {
-  Button, Icons, Modal, useCloseModal,
+  Icons, LinkButton, Modal, useCloseModal,
 } from "@drill4j/ui-kit";
 import { copyToClipboard } from "@drill4j/common-utils";
 import "twin.macro";
@@ -25,7 +25,7 @@ import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
 import { useAdminConnection, useAgentRouteParams } from "hooks";
 import { AnalyticsInfo } from "types";
 
-export const GetSuggestedTestsModal = () => {
+export const GetRecommendedTestsModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const [copied, setCopied] = useState(false);
   useEffect(() => {
@@ -40,7 +40,7 @@ export const GetSuggestedTestsModal = () => {
     <Modal onClose={closeModal}>
       <Modal.Content tw="w-108" type="info">
         <Modal.Header>
-          <span>Get Suggested Tests</span>
+          <span>Get Recommended Tests</span>
         </Modal.Header>
         <Modal.Body
           tw="flex flex-col gap-y-4 text-14 leading-20 break-words text-monochrome-black"
@@ -52,11 +52,8 @@ export const GetSuggestedTestsModal = () => {
           </span>
           <TestsToRunUrl agentId={agentId} pluginId={pluginId} agentType="Agent" />
         </Modal.Body>
-        <Modal.Footer tw="flex justify-end gap-x-4">
-          <Button
-            tw="min-w-154px"
-            primary
-            size="large"
+        <div tw="mt-8 py-4 px-6 border-t border-monochrome-medium-tint">
+          <LinkButton
             onClick={() => {
               copyToClipboard(getTestsToRunURL(agentId, pluginId, "Agent"));
               setCopied(true);
@@ -69,21 +66,18 @@ export const GetSuggestedTestsModal = () => {
             {copied
               ? (
                 <div tw="flex justify-center items-center gap-x-2 w-full">
-                  <Icons.Check height={10} width={14} viewBox="0 0 14 10" />
+                  <Icons.Check height={16} width={16} />
                   Copied
                 </div>
               )
-              : "Copy to Clipboard"}
-          </Button>
-          <Button
-            secondary
-            size="large"
-            onClick={closeModal}
-            data-test="get-suggested-tests-modal:close-button"
-          >
-            Close
-          </Button>
-        </Modal.Footer>
+              : (
+                <div tw="flex justify-center items-center gap-x-2 w-full">
+                  <Icons.Copy height={16} width={16} />
+                  Copy to Clipboard
+                </div>
+              )}
+          </LinkButton>
+        </div>
       </Modal.Content>
     </Modal>
   );
