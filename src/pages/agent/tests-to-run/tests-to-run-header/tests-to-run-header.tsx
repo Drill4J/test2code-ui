@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 import React from "react";
-import { Button, Typography } from "@drill4j/ui-kit";
+import { Button } from "@drill4j/ui-kit";
 import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/common-utils";
 import { useHistory } from "react-router-dom";
-import tw, { styled } from "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
@@ -40,11 +39,6 @@ interface Props {
   summaryTestsToRun: TestsToRunSummary;
 }
 
-const SubTitle = styled.div`
-  ${tw`grid mr-4 text-14 leading-24 font-bold text-monochrome-default`};
-  grid-template-columns: max-content minmax(auto, max-content) max-content minmax(auto, max-content);
-`;
-
 export const TestsToRunHeader = ({
   agentInfo,
   previousBuildAutoTestsCount,
@@ -57,7 +51,6 @@ export const TestsToRunHeader = ({
       duration: currentDuration = 0,
       parentDuration = 0,
       total: totalTestsToRun = 0,
-      completed: completedTestsToRun = 0,
     } = {},
     statsByType: {
       AUTO: { total: totalAutoTestsToRun = 0, completed: completedAutoTestsToRun = 0 } = {},
@@ -65,7 +58,7 @@ export const TestsToRunHeader = ({
   } = summaryTestsToRun;
 
   const {
-    buildVersion, previousBuildVersion, activeBuildVersion,
+    buildVersion, activeBuildVersion,
   } = agentInfo;
   const totalDuration = getDuration(previousBuildTestsDuration);
   const estimatedTimeSaved = getDuration(previousBuildTestsDuration - parentDuration);
