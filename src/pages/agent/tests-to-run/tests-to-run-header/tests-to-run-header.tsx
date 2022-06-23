@@ -17,6 +17,7 @@ import React from "react";
 import { Button } from "@drill4j/ui-kit";
 import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/common-utils";
 import { useHistory } from "react-router-dom";
+import "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
