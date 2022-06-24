@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 import {
-  Icons, Stub, Table, Cells,
+  Icons, Stub, Table, Cells, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -27,6 +27,7 @@ import { FilterList } from "@drill4j/types-admin";
 import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { transformTests } from "utils";
 import { getModalPath, BUILD_STATUS } from "common";
+import { TestsStatus } from "../../../components";
 
 interface Props {
   tests: FilterList<TestCoverageInfo>;
@@ -60,12 +61,7 @@ const columns = [
     Header: "Status",
     accessor: "overview.result",
     Cell: ({ value }: any) => (
-      <Cells.TestStatus
-        tw="inline"
-        type={value}
-      >
-        {capitalize(value)}
-      </Cells.TestStatus>
+      <TestsStatus status={value} />
     ),
     textAlign: "left",
   },
@@ -76,26 +72,29 @@ const columns = [
     sortType: "number",
   },
   {
+    Header: "Duration",
+    accessor: "overview.duration",
+    Cell: Cells.Duration,
+    sortType: "number",
+  },
+  {
     Header: "Methods covered",
     accessor: "coverage.methodCount.covered",
     sortType: "number",
     Cell: ({ value, row: { original: { id = "", coverage: { methodCount: { covered = 0 } = {} } = {} } = {} } = {} }: any) => (
       <Cells.Clickable
-        tw="inline"
-        data-test="test-actions:view-curl:id"
+        tw="inline  no-underline"
         disabled={!value}
       >
-        <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
-          {value}
-        </Link>
+        {value ? (
+          <LinkButton>
+            <Link to={getModalPath({ name: "coveredMethods", params: { coveredMethods: covered, testId: id } })}>
+              {value}
+            </Link>
+          </LinkButton>
+        ) : value}
       </Cells.Clickable>
     ),
-  },
-  {
-    Header: "Duration",
-    accessor: "overview.duration",
-    Cell: Cells.Duration,
-    sortType: "number",
   }];
 
 export const TestDetails = ({
