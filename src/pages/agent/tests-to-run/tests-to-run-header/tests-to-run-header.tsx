@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 import React from "react";
-import { Button, Typography } from "@drill4j/ui-kit";
+import { Button } from "@drill4j/ui-kit";
 import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/common-utils";
 import { useHistory } from "react-router-dom";
-import tw, { styled } from "twin.macro";
+import "twin.macro";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
@@ -40,11 +40,6 @@ interface Props {
   summaryTestsToRun: TestsToRunSummary;
 }
 
-const SubTitle = styled.div`
-  ${tw`grid mr-4 text-14 leading-24 font-bold text-monochrome-default`};
-  grid-template-columns: max-content minmax(auto, max-content) max-content minmax(auto, max-content);
-`;
-
 export const TestsToRunHeader = ({
   agentInfo,
   previousBuildAutoTestsCount,
@@ -57,7 +52,6 @@ export const TestsToRunHeader = ({
       duration: currentDuration = 0,
       parentDuration = 0,
       total: totalTestsToRun = 0,
-      completed: completedTestsToRun = 0,
     } = {},
     statsByType: {
       AUTO: { total: totalAutoTestsToRun = 0, completed: completedAutoTestsToRun = 0 } = {},
@@ -65,7 +59,7 @@ export const TestsToRunHeader = ({
   } = summaryTestsToRun;
 
   const {
-    buildVersion, previousBuildVersion, activeBuildVersion,
+    buildVersion, activeBuildVersion,
   } = agentInfo;
   const totalDuration = getDuration(previousBuildTestsDuration);
   const estimatedTimeSaved = getDuration(previousBuildTestsDuration - parentDuration);
@@ -80,36 +74,11 @@ export const TestsToRunHeader = ({
     <PageHeader tw="justify-between">
       <div>
         <div
-          tw="flex gap-x-2 text-24 leading-36 font-light text-monochrome-black"
+          tw="flex gap-x-2 text-24 leading-36 text-monochrome-black"
           data-test="tests-to-run-header:title"
         >
-          Tests to Run
-          <div tw="text-monochrome-default">{totalTestsToRun - completedTestsToRun}</div>
+          Recommended Tests
         </div>
-        <SubTitle data-test="tests-to-run-header:subtitle">
-          Build:
-          <div
-            tw="max-w-280px min-width[32px] mr-2 ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:current-build-version"
-            title={buildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{buildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-          Compared to:
-          <div
-            tw="max-w-280px min-width[32px] ml-1 text-monochrome-black"
-            className="text-ellipsis"
-            data-test="tests-to-run-header:compared-build-version"
-            title={previousBuildVersion}
-          >
-            <Typography.MiddleEllipsis>
-              <span>{previousBuildVersion}</span>
-            </Typography.MiddleEllipsis>
-          </div>
-        </SubTitle>
       </div>
       <div tw="flex items-center gap-6 mr-10">
         {activeBuildVersion === buildVersion && (
@@ -117,7 +86,7 @@ export const TestsToRunHeader = ({
             secondary
             size="large"
             onClick={() => {
-              push(getModalPath({ name: "getSuggestedTests" }));
+              push(getModalPath({ name: "getRecommendedTests" }));
               !isAnalyticsDisabled && sendKeyMetricsEvent({
                 name: KEY_METRICS_EVENT_NAMES.CLICK_ON_GET_SUGGESTED_TESTS_BUTTON,
               });
@@ -125,7 +94,7 @@ export const TestsToRunHeader = ({
             data-test="tests-to-run-header:get-suggested-tests-button"
             disabled={!totalTestsToRun}
           >
-            Get Suggested Tests
+            Get Recommended Tests
           </Button>
         )}
         <SavedTimeSection

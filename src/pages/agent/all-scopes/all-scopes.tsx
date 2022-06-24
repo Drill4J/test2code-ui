@@ -76,7 +76,7 @@ export const AllScopes = () => {
           </div>
         );
       },
-      width: "20%",
+      width: "180px",
     }));
 
   const data = useMemo(() => scopesData.map((value) => {
@@ -172,7 +172,7 @@ export const AllScopes = () => {
                     </>
                   ),
                   textAlign: "left",
-                  width: "20%",
+                  width: "200px",
                   sortType: "number",
                 },
                 {
@@ -183,7 +183,7 @@ export const AllScopes = () => {
                       {percentFormatter(original?.coverage?.percentage)}
                     </div>
                   ),
-                  width: "20%",
+                  width: "180px",
                   sortType: "number",
                 },
                 ...testsColumns,

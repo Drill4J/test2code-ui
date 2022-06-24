@@ -21,7 +21,7 @@ import {
 } from "modules";
 import { DeleteScopeModal, FinishScopeModal, RenameScopeModal } from "pages/agent/scope-modals";
 import { BaselineBuildModal } from "pages/agent/baseline-build-modal";
-import { GetSuggestedTestsModal } from "pages/agent/tests-to-run/tests-to-run-header/get-suggested-tests-modal";
+import { GetRecommendedTestsModal } from "pages/agent/tests-to-run/tests-to-run-header/get-recommended-tests-modal";
 import { FinishAllScopesModal } from "../../pages/group/finish-all-scopes-modal";
 import { TestsToRunPanel } from "../tests-to-run-panel";
 
@@ -34,7 +34,7 @@ export const agentModalsNames = {
   COVERED_METHODS: "COVERED_METHODS",
   QUALITY_GATE: "QUALITY_GATE",
   BASELINE_BUILD: "BASELINE_BUILD",
-  GET_SUGGESTED_TESTS: "GET_SUGGESTED_TESTS",
+  GET_RECOMMENDED_TESTS: "GET_RECOMMENDED_TESTS",
   FINISH_ALL_SCOPES: "FINISH_ALL_SCOPES",
   TESTS_TO_RUN: "TESTS_TO_RUN",
 };
@@ -50,7 +50,7 @@ const modals: Record<ModalsType, any> = {
   COVERED_METHODS: CoveredMethodsModal,
   QUALITY_GATE: QualityGatePane,
   BASELINE_BUILD: BaselineBuildModal,
-  GET_SUGGESTED_TESTS: GetSuggestedTestsModal,
+  GET_RECOMMENDED_TESTS: GetRecommendedTestsModal,
   FINISH_ALL_SCOPES: FinishAllScopesModal,
   TESTS_TO_RUN: TestsToRunPanel,
 };
