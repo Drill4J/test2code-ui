@@ -21,7 +21,7 @@ import {
   CoverageSection, RisksSection,
 } from "./agent-sections";
 import {
-  useActiveBuild, useAdminConnection, useAgentRouteParams, useBuildVersion,
+  useActiveBuild, useAgentRouteParams, useFilteredData, useAdminConnection,
 } from "../hooks";
 import { BuildCoverage, BuildSummary } from "../types";
 import { TestType } from "./agent-sections/section-tooltip";
@@ -42,12 +42,12 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   const queryParams = useQueryParams<Record<string, string>>();
 
   const { buildVersion: activeBuildVersion } = useActiveBuild(agentId) || {};
-  const [selectedBuild, selectBuild] = useState<string | null>(queryParams[SELECTED_BUILD_QUERY_PARAM] || null);
-  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useBuildVersion<BuildSummary>("/build/summary",
-    { buildVersion: selectedBuild }) || {};
-  const { byTestType = [], finishedScopesCount = 0 } = useBuildVersion<BuildCoverage>("/build/coverage",
+  const [selectedBuild, selectBuild] = useState<string | undefined>(queryParams[SELECTED_BUILD_QUERY_PARAM]);
+  const { byTestType = [], finishedScopesCount = 0 } = useFilteredData<BuildCoverage>("/build/coverage",
     { buildVersion: selectedBuild }) || {};
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
+  const { testsToRun: { count = 0, byType: testsToRunByType = {} } = {} } = useFilteredData<BuildSummary>("/build/summary",
+    { buildVersion: selectedBuild }) || {};
 
   const totalTestsCount = byTestType.reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0);
   const buildTestsByType = byTestType
@@ -65,7 +65,7 @@ export const AgentHud = ({ customProps: { pluginPagePath } }: AgentHudProps) => 
   });
 
   useEffect(() => {
-    if (selectedBuild === null && activeBuildVersion) { // select active build after the first receive data
+    if (!selectedBuild && activeBuildVersion) { // select active build after the first receive data
       selectBuild(activeBuildVersion);
     }
   }, [activeBuildVersion]);

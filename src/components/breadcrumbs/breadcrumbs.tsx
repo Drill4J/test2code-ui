@@ -23,7 +23,7 @@ import {
   useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
 } from "hooks";
 import { Icons, Tooltip } from "@drill4j/ui-kit";
-import { Baseline, ParentBuild } from "../../types";
+import { Baseline, ParentBuild } from "types";
 
 interface CrumbType {
   content: string;

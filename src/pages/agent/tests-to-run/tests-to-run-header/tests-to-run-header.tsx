@@ -19,9 +19,9 @@ import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/com
 import { useHistory } from "react-router-dom";
 import "twin.macro";
 
+import { FilterInfoAlert, PageHeader } from "components";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
-import { PageHeader } from "components";
 import { useAdminConnection } from "hooks";
 import { AnalyticsInfo } from "types";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";

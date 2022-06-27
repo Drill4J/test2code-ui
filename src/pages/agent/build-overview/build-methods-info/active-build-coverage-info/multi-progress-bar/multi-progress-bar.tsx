@@ -20,7 +20,7 @@ import {
 import { percentFormatter } from "@drill4j/common-utils";
 import tw, { styled } from "twin.macro";
 import {
-  useActiveBuild, useActiveScope, useActiveSessions, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+  useActiveBuild, useActiveScope, useActiveSessions, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
 import { BUILD_STATUS } from "common";
 import { BuildCoverage } from "types/build-coverage";
@@ -38,7 +38,7 @@ export const MultiProgressBar = () => {
   const activeSessions = useActiveSessions("Agent", agentId, buildVersion);
   const active = Boolean(activeSessions?.length) && buildStatus === BUILD_STATUS.ONLINE;
   const scope = useActiveScope();
-  const buildCoverage = useBuildVersion<BuildCoverage>("/build/coverage");
+  const buildCoverage = useFilteredData<BuildCoverage>("/build/coverage");
   const {
     coverage: {
       percentage: coveragePercentage = 0,

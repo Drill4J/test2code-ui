@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveSessions, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+  useActiveSessions, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
 import { ActiveScope } from "types/active-scope";
 import { getModalPath } from "common";
@@ -49,7 +49,7 @@ export const ScopeOverviewHeader = ({ status, isActiveBuild }: Props) => {
   const activeSessionsQuantity = useActiveSessions("Agent", agentId, buildVersion)?.length;
   const {
     name = "", active = false, enabled = false, started = 0, finished = 0,
-  } = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`) || {};
+  } = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`) || {};
   const menuActions = [
     !active && {
       label: `${enabled ? "Ignore" : "Include"} in stats`,

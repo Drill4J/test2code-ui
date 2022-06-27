@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 import { FilterList } from "@drill4j/types-admin";
 import "twin.macro";
 
-import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { Risk } from "types";
 import { Tab, useQueryParams, useTableActionsState } from "@drill4j/ui-kit";
 import { RisksPageHeader } from "./risks-page-header";
@@ -32,7 +32,8 @@ export const RisksPage = () => {
   const { getPagePath } = useNavigation();
   const {
     items: risks = [],
-  } = useBuildVersion<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
+    filteredCount = 0,
+  } = useFilteredData<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
 
   const currentRisks: Risk[] = [];
   const previousRisks: Risk[] = [];

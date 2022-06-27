@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import {
   Route, Switch, Redirect, useLocation,
@@ -24,9 +24,8 @@ import { getAdminPath } from "utils";
 import {
   Modals, Breadcrumbs, Baseline, ComparedToBuild,
 } from "components";
-import { ParentBuild } from "types";
 import {
-  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData,
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
 } from "hooks";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
@@ -34,17 +33,26 @@ import { AllScopes } from "./all-scopes";
 import { TestsToRun } from "./tests-to-run";
 import { RisksPage } from "./risks";
 import { AllBuilds } from "./all-builds";
+import { ParentBuild } from "../../types";
+import { useFilterState, useSetFilterDispatch } from "../../common";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useActiveBuild(agentId) || {};
+  const { buildVersion } = useTestToCodeRouteParams();
   const { routes, getPagePath } = useNavigation();
   const { pathname } = useLocation();
   const { version: parentBuildVersion } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
   const isActiveBuild = activeBuildVersion === buildVersion;
 
-  if (!buildVersion) { // TODO Add spinner
+  const setFilter = useSetFilterDispatch();
+  const { filterId } = useFilterState();
+
+  useEffect(() => {
+    setFilter(null);
+  }, [buildVersion]);
+
+  if (!activeBuildVersion) {
     return null;
   }
 
@@ -63,7 +71,7 @@ export const Agent = () => {
           path={getAdminPath(pathname)}
           render={() => (
             <Redirect
-              to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+              to={getPagePath({ name: "overview", params: { buildVersion: activeBuildVersion }, queryParams: { activeTab: "methods" } })}
             />
           )}
         />

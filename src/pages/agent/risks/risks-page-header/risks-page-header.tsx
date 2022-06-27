@@ -15,12 +15,17 @@
  */
 import React from "react";
 import "twin.macro";
-import { PageHeader } from "components";
+import { FilterInfoAlert, PageHeader } from "components";
 
 export const RisksPageHeader = () => (
   <PageHeader>
-    <div tw="mb-1 text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
-      <span>Risked Methods</span>
+    <div>
+      <div tw="mb-1 font-light text-24 leading-32 text-monochrome-black" data-test="risks-list:title">
+        <span>Risked Methods</span>
+      </div>
+    </div>
+    <div tw="ml-6">
+      <FilterInfoAlert />
     </div>
   </PageHeader>
 );

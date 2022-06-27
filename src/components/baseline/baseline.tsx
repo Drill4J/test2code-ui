@@ -16,14 +16,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Icons, Tooltip } from "@drill4j/ui-kit";
-import { getModalPath } from "common";
 import {
-  useActiveBuild, useAgentRouteParams, useTestToCodeData, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
 } from "hooks";
 import { Baseline as BaselineType } from "types";
 import "twin.macro";
 
 export const Baseline = () => {
+  const { getModalPath } = useNavigation();
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
