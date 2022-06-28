@@ -167,13 +167,13 @@ export const CoveragePluginHeader = () => {
         </div>
         {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && <QualityGate />}
         <ActionSection
-          label="risks"
+          label="risked methods"
           previousBuild={{ previousBuildVersion, previousBuildTests }}
         >
           {getRisksSection(isEmptyFilterResult, initialRisks, buildVersion, risksCount, getPagePath)}
         </ActionSection>
         <ActionSection
-          label="tests to run"
+          label="recommended tests"
           previousBuild={{ previousBuildVersion, previousBuildTests }}
         >
           {getTestsToRunSection(isEmptyFilterResult, previousBuildTests, buildVersion, testToRunCount, getPagePath)}

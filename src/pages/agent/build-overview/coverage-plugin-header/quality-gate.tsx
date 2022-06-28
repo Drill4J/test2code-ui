@@ -26,7 +26,6 @@ export const QualityGate = () => {
   const { status = "FAILED" } = useFilteredData<QualityGateType>("/data/quality-gate") || {};
   const conditionSettings = useFilteredData<ConditionSetting[]>("/data/quality-gate-settings") || [];
   const configured = conditionSettings.some(({ enabled }) => enabled);
-  const StatusIcon = Icons[status];
   const { isEmptyFilterResult } = useResultFilterState();
 
   return (

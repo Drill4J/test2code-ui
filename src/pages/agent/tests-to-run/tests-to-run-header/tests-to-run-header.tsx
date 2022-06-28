@@ -72,12 +72,15 @@ export const TestsToRunHeader = ({
 
   return (
     <PageHeader tw="justify-between">
-      <div>
+      <div tw="flex">
         <div
           tw="flex gap-x-2 text-24 leading-36 text-monochrome-black"
           data-test="tests-to-run-header:title"
         >
           Recommended Tests
+        </div>
+        <div tw="ml-6">
+          <FilterInfoAlert />
         </div>
       </div>
       <div tw="flex items-center gap-6 mr-10">

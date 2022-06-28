@@ -32,7 +32,6 @@ export const RisksPage = () => {
   const { getPagePath } = useNavigation();
   const {
     items: risks = [],
-    filteredCount = 0,
   } = useFilteredData<FilterList<Risk>>("/build/risks", { filters: search, orderBy: sort, output: "LIST" }) || {};
 
   const currentRisks: Risk[] = [];
