@@ -41,7 +41,7 @@ export const SelectAttribute = ({
 }: Props) => {
   const [attributeName, setAttributeName] = useState<string>(defaultValue);
   const { setFieldValue, values } = useFormikContext<Values>();
-  const attrValues = values?.attributes[accessor]?.values || {};
+  const attrValues = values.attributes[accessor]?.values || {};
 
   const onSelectAttribute = useCallback((value: string, option: OptionType) => {
     if (value !== attributeName) {
@@ -55,11 +55,15 @@ export const SelectAttribute = ({
     setAttributeName(value as string);
   }, [attributeName]);
 
+  const selectAttr = [...values.attributes].filter((value, index) => index !== accessor).map(attr => attr.fieldPath);
+
+  const keyOptions = attributesOptions.filter(({ value }) => !selectAttr.includes(value));
+
   return (
     <div tw="grid grid-cols-[1fr 4px 90px 1.25fr 16px] items-center gap-x-2">
       <Autocomplete
         placeholder="Key"
-        options={attributesOptions}
+        options={keyOptions}
         onChange={onSelectAttribute as any}
         defaultValue={attributeName}
         onClear={() => setFieldValue(`attributes[${accessor}]`, { id: attrValues.id })}
