@@ -44,10 +44,16 @@ export const SelectAttribute = ({
   const attrValues = values?.attributes[accessor]?.values || {};
 
   const onSelectAttribute = useCallback((value: string, option: OptionType) => {
-    setFieldValue(`attributes[${accessor}].fieldPath`, value);
-    setFieldValue(`attributes[${accessor}].isLabel`, option?.isLabel);
+    if (value !== attributeName) {
+      setFieldValue(`attributes[${accessor}]`, {
+        ...values.attributes[accessor],
+        values: {},
+        fieldPath: value,
+        isLabel: option?.isLabel,
+      });
+    }
     setAttributeName(value as string);
-  }, []);
+  }, [attributeName]);
 
   return (
     <div tw="grid grid-cols-[1fr 4px 90px 1.25fr 16px] items-center gap-x-2">
