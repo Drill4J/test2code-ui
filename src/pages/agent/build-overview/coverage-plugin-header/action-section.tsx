@@ -61,11 +61,11 @@ function getTooltipMessage(label: string, buildVersion: string, testsCount: numb
       </TooltipMessage>
     );
   }
-  if (buildVersion && testsCount === 0 && label === "tests to run") {
+  if (buildVersion && testsCount === 0 && label === "recommended tests") {
     return (
       <TooltipMessage>
         There are no tests in the parent build<br />
-        to create a list of suggested tests to run
+        to create a list of recommended tests to run
       </TooltipMessage>
     );
   }
