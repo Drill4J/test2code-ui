@@ -13,9 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from "react";
 import {
-  Button, HeadlessSelect, Icons, sendAlertEvent,
+  Button, HeadlessSelect, Icons, OptionType, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import tw, { styled } from "twin.macro";
@@ -104,6 +106,14 @@ export const CoveragePluginHeader = () => {
                   selectValue(filterId || "");
                 }, [filterId]);
 
+                const sortOpitons = useCallback((a: OptionType, b: OptionType) => {
+                  if (a.value === selectedOption?.value) return -1;
+                  if (b.value === selectedOption?.value) return 1;
+                  return 0;
+                }, [selectedOption]);
+
+                const sortedOptions = selectedOption ? options.sort(sortOpitons) : options;
+
                 return (
                   <>
                     <HeadlessSelect.Input isActive={isOpen}>
@@ -123,7 +133,7 @@ export const CoveragePluginHeader = () => {
                     {isOpen && (
                       <HeadlessSelect.Body>
                         <HeadlessSelect.ContainerWithScroll>
-                          {options.map(({ label, value }) => (
+                          {sortedOptions.map(({ label, value }) => (
                             <HeadlessSelect.Option
                               selected={value === selectedOption?.value}
                               onClick={async () => {

@@ -53,14 +53,14 @@ export const SelectAttribute = ({
       });
     }
     setAttributeName(value as string);
-  }, [attributeName]);
+  }, [attributeName, accessor]);
 
   const selectAttr = [...values.attributes].filter((value, index) => index !== accessor).map(attr => attr.fieldPath);
 
   const keyOptions = attributesOptions.filter(({ value }) => !selectAttr.includes(value));
 
   return (
-    <div tw="grid grid-cols-[1fr 4px 90px 1.25fr 16px] items-center gap-x-2">
+    <div tw="grid grid-cols-[minmax(0, 1fr) 4px 90px minmax(0, 1.25fr) 16px] items-center gap-x-2">
       <Autocomplete
         placeholder="Key"
         options={keyOptions}
