@@ -112,11 +112,12 @@ export const ConfigureFilter = ({
               fieldPath,
               valuesOp,
               isLabel,
-              values: Object.keys(attrValues).map((value) => ({ value, op: OP.EQ })),
+              values: Object.entries(attrValues).filter(([, status]) => status).map(([value]) => ({ value, op: OP.EQ })),
             })),
           };
 
           const action = isEditing ? updateFilter : createFilter;
+
           await action(agentId, values, {
             onSuccess: (createdFilterId) => {
               sendAlertEvent({ type: "SUCCESS", title: "Filter has been saved successfully." });
