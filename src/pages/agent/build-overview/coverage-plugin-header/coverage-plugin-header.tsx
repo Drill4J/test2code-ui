@@ -20,6 +20,7 @@ import {
   Button, HeadlessSelect, Icons, OptionType, sendAlertEvent,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common/constants";
@@ -197,15 +198,23 @@ export const CoveragePluginHeader = () => {
           </ShowCriteria>
         )}
       </Header>
-      {configureFilterState && (
-        <ConfigureFilter
-          closeConfigureFilter={closeConfigureFilter}
-          filterId={configureFilterState === FILTER_STATE.EDITING || configureFilterState === FILTER_STATE.DUPLICATE ? filterId : null}
-          configureFilterState={configureFilterState}
-          setConfigureFilter={setConfigureFilter}
-          filters={filters}
-        />
-      )}
+      <AnimatePresence>
+        {configureFilterState && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "fit-content" }}
+            exit={{ height: 0, overflow: "hidden" }}
+          >
+            <ConfigureFilter
+              closeConfigureFilter={closeConfigureFilter}
+              filterId={configureFilterState === FILTER_STATE.EDITING || configureFilterState === FILTER_STATE.DUPLICATE ? filterId : null}
+              configureFilterState={configureFilterState}
+              setConfigureFilter={setConfigureFilter}
+              filters={filters}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };
