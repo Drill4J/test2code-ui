@@ -18,8 +18,9 @@ export {
   COVERAGE_TYPES_COLOR, DATA_VISUALIZATION_COLORS, RISKS_TYPES_COLOR, TESTS_TO_RUN_TYPES_COLOR,
   TESTS_TYPES_COLOR, AGENT_STATUS, PLUGIN_ID, BUILD_STATUS,
 } from "./constants";
-export { routes, getAdminPath } from "./get-page-path";
 export { defaultAdminSocket, test2CodePluginSocket } from "./connections";
 export { modalsRoutes, getModalPath } from "./get-modal-path";
 export { getGroupModalPath, groupModalsRoutes } from "./get-group-modal";
-export { SetPanelContext } from "./contexts";
+export {
+  SetPanelContext, SetFilterDispatchContext, useSetFilterDispatch, useFilterState, FilterContextProvider,
+} from "./contexts";

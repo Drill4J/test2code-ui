@@ -18,6 +18,7 @@ import { createRouter, getPagePath as getPage } from "nanostores";
 import * as queryString from "querystring";
 import { useLocation } from "react-router-dom";
 import { getAdminPath } from "utils";
+import { getModalPath } from "../common";
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 interface Routes {
@@ -68,5 +69,5 @@ export const useNavigation = () => {
     }
     return path;
   };
-  return { getPagePath, routes };
+  return { getPagePath, routes, getModalPath };
 };

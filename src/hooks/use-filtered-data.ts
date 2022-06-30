@@ -13,52 +13,53 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { useEffect, useState } from "react";
+import {
+  useCallback, useEffect, useMemo, useState,
+} from "react";
 import { OutputType, Search, Sort } from "@drill4j/types-admin";
 
 import { test2CodePluginSocket } from "common/connections";
+import { useFilterState } from "common";
 import { useAgentRouteParams } from "./use-agent-route-params";
 import { useTestToCodeRouteParams } from "./use-test2code-params";
 
 interface Message {
   agentId?: string;
-  buildVersion?: string | null;
+  buildVersion?: string;
   filters?: Search[],
   orderBy?: Sort[],
   output?: OutputType,
 }
 
-export function useBuildVersion<T>(
+export function useFilteredData<T>(
   topic: string,
   message: Message = {},
 ): T | null {
   const [data, setData] = useState<T | null>(null);
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
+  const { filterId } = useFilterState();
   const hasBuildVersion = buildVersion || message.buildVersion;
+  const memoMessage = useMemo(() => (filterId
+    ? {
+      agentId, buildVersion, type: "AGENT", filterId, ...message,
+    } : {
+      agentId, buildVersion, type: "AGENT", ...message,
+    }), [agentId, buildVersion, filterId, message.filters,
+    message.orderBy, message.buildVersion, message.agentId, message.output]);
+  const handleDataChange = useCallback((newData: T) => setData(newData), [setData]);
 
   useEffect(() => {
-    function handleDataChange(newData: T) {
-      setData(newData);
-    }
-
     const unsubscribe = hasBuildVersion && agentId && test2CodePluginSocket.subscribe(
       topic,
       handleDataChange,
-      {
-        agentId,
-        buildVersion,
-        type: "AGENT",
-        ...message,
-      },
+      memoMessage,
     );
 
     return () => {
       unsubscribe && unsubscribe();
     };
-  }, [message.buildVersion, message.agentId,
-    message.output, agentId, buildVersion, topic,
-    message.filters, message.orderBy]);
+  }, [agentId, buildVersion, topic, memoMessage]);
 
   return data;
 }

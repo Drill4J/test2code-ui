@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 import React from "react";
+import { Link, useHistory } from "react-router-dom";
+
+import tw, { styled } from "twin.macro";
+
 import {
   useQueryParams, useCloseModal, Modal, Cells, Skeleton, Icons, VirtualizedTable, Stub, CopyButton, Tooltip, removeQueryParamsFromPath,
 } from "@drill4j/ui-kit";
-import { Link, useHistory } from "react-router-dom";
-import tw, { styled } from "twin.macro";
 
 import { AssociatedTests } from "types/associated-tests";
-import { useBuildVersion, useNavigation, useTestToCodeRouteParams } from "hooks";
+
+import { useFilteredData, useNavigation, useTestToCodeRouteParams } from "hooks";
 import { concatTestPath, concatTestName } from "utils/transform-tests";
 
 export const AssociatedTestModal = () => {
   const { push } = useHistory();
   const { scopeId, buildVersion } = useTestToCodeRouteParams();
-  const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string; virtualTableState?: string }>();
-  const associatedTests = useBuildVersion<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
+  const params = useQueryParams<{testId?: string; treeLevel?: number; testsCount?: string }>();
+  const associatedTests = useFilteredData<AssociatedTests>(`${scopeId ? `/build/scopes/${scopeId}` : "/build"}/tests/associatedWith/${
     params?.testId}`) || {};
   const { getPagePath } = useNavigation();
   const isSkeleton = Object.keys(associatedTests).length === 0;

@@ -21,7 +21,7 @@ import tw, { styled } from "twin.macro";
 
 import { BUILD_STATUS } from "common";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams,
+  useActiveBuild, useAgentRouteParams, useFilteredData, useTestToCodeRouteParams,
 } from "hooks";
 import { Baseline } from "types/baseline";
 import { toggleBaseline } from "../api";
@@ -41,7 +41,7 @@ export const BaselineBuildModal = () => {
   const { pluginId, agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
-  const { version: baseline } = useBuildVersion<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const { version: baseline } = useFilteredData<Baseline>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = baseline === buildVersion;
   const [isConfirmed, setIsConfirmed] = useState(isBaseline);
   const closeModal = useCloseModal();
@@ -93,13 +93,16 @@ export const BaselineBuildModal = () => {
                 sendAlertEvent({
                   type: "SUCCESS",
                   title: `Current build has been ${isBaseline
-                    ? "unset as baseline successfully. All subsequent builds won't be compared to it."
-                    : "set as baseline successfully. All subsequent builds will be compared to it."}`,
+                    ? "unset as baseline successfully."
+                    : "set as baseline successfully."}`,
+                  text: isBaseline
+                    ? "All subsequent builds won't be compared to it."
+                    : "All subsequent builds will be compared to it.",
                 });
               } catch ({ response: { data: { message } = {} } = {} }) {
                 sendAlertEvent({
                   type: "ERROR",
-                  title: message || "There is some issue with your action. Please try again later.",
+                  title: `Failed to ${isBaseline ? "unset" : "set"} build as baseline. Please try again later.`,
                 });
               }
               closeModal();

@@ -15,7 +15,7 @@
  */
 import React, { useMemo } from "react";
 import {
-  Icons, Stub, Table, Cells, LinkButton,
+  Icons, Stub, Table, Cells, Label, Tooltip, LinkButton,
 } from "@drill4j/ui-kit";
 import { Link } from "react-router-dom";
 import "twin.macro";
@@ -23,18 +23,64 @@ import "twin.macro";
 import { capitalize } from "@drill4j/common-utils";
 import { TestCoverageInfo } from "types/test-coverage-info";
 
-import { FilterList } from "@drill4j/types-admin";
 import { useActiveBuild, useAgentRouteParams } from "hooks";
 import { transformTests } from "utils";
+import { Label as LabelType } from "types";
 import { getModalPath, BUILD_STATUS } from "common";
-import { TestsStatus } from "../../../components";
+import { ColumnFilterByValues, TestsStatus } from "components";
+import { filterByValues } from "components/column-filter-by-values";
 
 interface Props {
-  tests: FilterList<TestCoverageInfo>;
+  tests: TestCoverageInfo[];
   topicCoveredMethodsByTest: string;
+  testTypes: string[]
 }
 
-const columns = [
+export const TestDetails = ({ tests, testTypes }: Props) => {
+  const { agentId } = useAgentRouteParams();
+  const { buildStatus } = useActiveBuild(agentId) || {};
+
+  const columns = useMemo(() => getColumns(testTypes), [testTypes]);
+
+  const stub = useMemo(() => (tests.length > 0
+    ? (
+      <Stub
+        icon={<Icons.Test height={104} width={107} />}
+        title="No results found"
+        message="Try adjusting your search or filter to find what you are looking for."
+      />
+    )
+    : (
+      <Stub
+        icon={<Icons.Test height={104} width={107} />}
+        title={buildStatus === BUILD_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
+        message={buildStatus === BUILD_STATUS.BUSY
+          ? "It may take a few seconds."
+          : "Information about project tests will appear after the first launch of tests."}
+      />
+    )), [tests.length]);
+
+  const transformedTests = useMemo(() => transformTests(tests), [tests]);
+
+  return (
+    <div tw="flex flex-col mt-8 flex-grow" data-test="test-details:table-wrapper">
+      <Table
+        data={transformedTests}
+        columns={columns}
+        stub={stub}
+        renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
+          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
+            <div tw="uppercase font-bold">Application tests</div>
+            <div>{`Displaying ${currentCount} of ${totalCount} tests`}</div>
+          </div>
+        )}
+        columnsDependency={[testTypes] as any}
+      />
+    </div>
+  );
+};
+
+const getColumns = (testTypes: string[]) => [
   {
     Header: "Name",
     accessor: "overview.details.name",
@@ -48,6 +94,34 @@ const columns = [
     filterable: true,
   },
   {
+    Header: "Labels",
+    accessor: "overview.details.labels",
+    textAlign: "left",
+    width: "232px",
+    isCustom: true,
+    Cell: ({ value: labels }: {value: LabelType[]}) => {
+      const [firstLabel, secondLabel, ...restLabels] = labels;
+      const firstLabelContent = firstLabel ? `${firstLabel?.name}: ${firstLabel?.value}` : null;
+      const secondLabelContent = secondLabel ? `${secondLabel?.name}: ${secondLabel?.value}` : null;
+
+      return (
+        <>
+          {firstLabel && <Label tw="max-w-[100%] truncate mb-1" title={firstLabelContent}>{firstLabelContent}</Label>}
+          {secondLabelContent && (
+            <div tw="flex gap-x-1 w-full">
+              <Label tw="truncate" title={secondLabelContent}>{secondLabelContent}</Label>
+              {restLabels.length && (
+                <Tooltip message={restLabels.map(({ name, value }) => <div>{name}: {value}</div>)}>
+                  <Label>+{restLabels.length}</Label>
+                </Tooltip>
+              )}
+            </div>
+          )}
+        </>
+      );
+    },
+  },
+  {
     Header: "Test type",
     accessor: "type",
     Cell: ({ value }: any) => (
@@ -56,6 +130,9 @@ const columns = [
       </>
     ),
     textAlign: "left",
+    filterable: true,
+    filter: filterByValues("type"),
+    Filter: ColumnFilterByValues(testTypes.map((type) => ({ label: type, value: type }))),
   },
   {
     Header: "Status",
@@ -96,44 +173,3 @@ const columns = [
       </Cells.Clickable>
     ),
   }];
-
-export const TestDetails = ({
-  tests: { items: tests = [] },
-}: Props) => {
-  const { agentId } = useAgentRouteParams();
-  const { buildStatus } = useActiveBuild(agentId) || {};
-
-  const stub = useMemo(() => (tests.length > 0
-    ? (
-      <Stub
-        icon={<Icons.Test height={104} width={107} />}
-        title="No results found"
-        message="Try adjusting your search or filter to find what you are looking for."
-      />
-    )
-    : (
-      <Stub
-        icon={<Icons.Test height={104} width={107} />}
-        title={buildStatus === BUILD_STATUS.BUSY ? "Build tests are loading" : "No tests available yet"}
-        message={buildStatus === BUILD_STATUS.BUSY
-          ? "It may take a few seconds."
-          : "Information about project tests will appear after the first launch of tests."}
-      />
-    )), [tests.length]);
-
-  return (
-    <div tw="flex flex-col mt-8 flex-grow" data-test="test-details:table-wrapper">
-      <Table
-        data={transformTests(tests)}
-        columns={columns}
-        stub={stub}
-        renderHeader={({ currentCount, totalCount }: { currentCount: number, totalCount: number }) => (
-          <div tw="flex justify-between text-monochrome-default text-14 leading-24 pb-3">
-            <div tw="uppercase font-bold">Application tests</div>
-            <div>{`Displaying ${currentCount} of ${totalCount} tests`}</div>
-          </div>
-        )}
-      />
-    </div>
-  );
-};

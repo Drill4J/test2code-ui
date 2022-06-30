@@ -15,15 +15,17 @@
  */
 import React from "react";
 import {
-  Icons, Tab, useQueryParams,
+  Icons, Stub, Tab, useQueryParams,
 } from "@drill4j/ui-kit";
 import { useHistory } from "react-router-dom";
 import tw, { styled } from "twin.macro";
 
 import { useNavigation, useTestToCodeRouteParams } from "hooks";
+import { useResultFilterState } from "common/contexts/result-filter-context";
 import { CoveragePluginHeader } from "./coverage-plugin-header";
 import { BuildMethodsInfo } from "./build-methods-info";
 import { BuildTestsInfo } from "./build-tests-info";
+import { FilterLoader } from "./coverage-plugin-header/filter-loader";
 
 const TabIconWrapper = styled.div`
   ${tw`flex items-center mr-2`}
@@ -35,36 +37,47 @@ export const BuildOverview = () => {
   const { push } = useHistory();
   const { getPagePath } = useNavigation();
 
+  const { isEmptyFilterResult } = useResultFilterState();
+
   return (
     <>
+      <FilterLoader />
       <CoveragePluginHeader />
-      <div tw="px-6 flex flex-col flex-grow">
-        <div tw="flex gap-x-6 mt-6 mb-4 border-b border-monochrome-medium-tint">
-          {/* !activeTab expressions means that t is default active tab */}
-          <Tab
-            active={!activeTab || activeTab === "methods"}
-            onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }))}
-            data-test="build-overview:tab:build-methods"
-          >
-            <TabIconWrapper>
-              <Icons.Function />
-            </TabIconWrapper>
-            Build methods
-          </Tab>
-          <Tab
-            active={activeTab === "tests"}
-            onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "tests" } }))}
-            data-test="build-overview:tab:build-tests"
-          >
-            <TabIconWrapper>
-              <Icons.Test width={16} />
-            </TabIconWrapper>
-            Build tests
-          </Tab>
+      {isEmptyFilterResult ? (
+        <Stub
+          icon={<Icons.Search height={120} width={120} />}
+          title="No results found"
+          message="Try to change the filter configuration or choose another one."
+        />
+      ) : (
+        <div tw="px-6 flex flex-col flex-grow">
+          <div tw="flex gap-x-6 mt-6 mb-4 border-b border-monochrome-medium-tint">
+            {/* !activeTab expressions means that t is default active tab */}
+            <Tab
+              active={!activeTab || activeTab === "methods"}
+              onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } }))}
+              data-test="build-overview:tab:build-methods"
+            >
+              <TabIconWrapper>
+                <Icons.Function />
+              </TabIconWrapper>
+              Build methods
+            </Tab>
+            <Tab
+              active={activeTab === "tests"}
+              onClick={() => push(getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "tests" } }))}
+              data-test="build-overview:tab:build-tests"
+            >
+              <TabIconWrapper>
+                <Icons.Test width={16} />
+              </TabIconWrapper>
+              Build tests
+            </Tab>
+          </div>
+          {(!activeTab || activeTab === "methods") && <BuildMethodsInfo />}
+          {activeTab === "tests" && <BuildTestsInfo />}
         </div>
-        {(!activeTab || activeTab === "methods") && <BuildMethodsInfo /> }
-        {activeTab === "tests" && <BuildTestsInfo />}
-      </div>
+      )}
     </>
   );
 };

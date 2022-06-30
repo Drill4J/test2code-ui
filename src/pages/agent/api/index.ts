@@ -18,3 +18,8 @@ export { finishScope } from "./finish-scope";
 export { toggleScope } from "./toggle-scope";
 export { renameScope } from "./rename-scope";
 export { toggleBaseline } from "./toggle-baseline";
+export { createFilter } from "./create-filter";
+export { updateFilter } from "./update-filter";
+export { deleteFilter } from "./delete-filter";
+export { applyFilter } from "./apply-filter";
+export { dublicateFilter } from "./dublicate-filter";

@@ -21,7 +21,7 @@ import "twin.macro";
 import { BuildMethodsCard } from "components";
 import { Methods } from "types/methods";
 import { ActiveScope } from "types/active-scope";
-import { useAgentRouteParams, useBuildVersion, useTestToCodeRouteParams } from "hooks";
+import { useAgentRouteParams, useFilteredData, useTestToCodeRouteParams } from "hooks";
 import { PLUGIN_ID } from "common";
 import { ScopeCoverageInfo } from "../scope-coverage-info";
 import { MethodsTable } from "../../methods-table";
@@ -29,10 +29,10 @@ import { MethodsTable } from "../../methods-table";
 export const ScopeMethodsInfo = () => {
   const { agentId } = useAgentRouteParams();
   const { buildVersion, scopeId } = useTestToCodeRouteParams();
-  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
+  const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     all, new: newMethods, modified, risks,
-  } = useBuildVersion<Methods>(`/build/scopes/${scope?.id}/methods`) || {};
+  } = useFilteredData<Methods>(`/build/scopes/${scope?.id}/methods`) || {};
 
   return (
     <>

@@ -23,7 +23,7 @@ import tw, { styled } from "twin.macro";
 import { ActiveScope } from "types/active-scope";
 import { ActiveSessions } from "types/active-sessions";
 import {
-  useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+  useAgentRouteParams, useFilteredData, useNavigation, useTestToCodeRouteParams,
 } from "hooks";
 import { getModalPath } from "common";
 import { finishScope } from "../../api";
@@ -32,12 +32,12 @@ import { ScopeSummary } from "./scope-summary";
 export const FinishScopeModal = () => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { scopeId } = useQueryParams<{scopeId?: string;}>();
-  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
+  const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
   const {
     agentId = "", pluginId = "",
   } = useAgentRouteParams();
   const { getPagePath } = useNavigation();
-  const { testTypes: activeSessionTest = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
+  const { testTypes: activeSessionTest = [] } = useFilteredData<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const [loading, setLoading] = useState(false);
   const testsCount = scope
     ? (scope.coverage.byTestType || []).reduce((acc, { summary: { testCount = 0 } }) => acc + testCount, 0)

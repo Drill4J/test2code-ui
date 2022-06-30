@@ -31,7 +31,7 @@ import { TestsInfo } from "types/tests-info";
 import { ParentBuild } from "types/parent-build";
 import { transformTests } from "utils";
 import {
-  useBuildVersion, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild,
+  useFilteredData, useAgentRouteParams, useTestToCodeRouteParams, useActiveBuild, useTestToCodeData,
 } from "hooks";
 
 import { TestsToRunSummary } from "types/tests-to-run-summary";
@@ -46,14 +46,14 @@ export const TestsToRun = ({ agentType = "Agent" }: Props) => {
   const { search } = useTableActionsState();
   const {
     items: testsToRun = [],
-  } = useBuildVersion<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
+  } = useFilteredData<FilterList<TestCoverageInfo>>("/build/tests-to-run", { filters: search, output: "LIST" }) || {};
 
   const { agentId } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
-  const summaryTestsToRun = useBuildVersion<TestsToRunSummary>("/build/summary/tests-to-run") || {};
-  const { tests: previousBuildTests = [], testDuration: totalDuration = 1 } = useBuildVersion<BuildSummary>(
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const summaryTestsToRun = useFilteredData<TestsToRunSummary>("/build/summary/tests-to-run") || {};
+  const { tests: previousBuildTests = [], testDuration: totalDuration = 1 } = useFilteredData<BuildSummary>(
     "/build/summary", { buildVersion: previousBuildVersion },
   ) || {};
   const { AUTO } = previousBuildTests

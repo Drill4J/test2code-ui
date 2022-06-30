@@ -26,7 +26,7 @@ import { useExpanded, useTable } from "react-table";
 import { styled } from "twin.macro";
 
 import { ClassCoverage } from "types/class-coverage";
-import { useBuildVersion } from "hooks";
+import { useFilteredData } from "hooks";
 import { Package } from "types/package";
 import { getModalPath } from "common";
 import { NameCell } from "./name-cell";
@@ -47,7 +47,7 @@ export const MethodsTable = ({
 
   const {
     items: coverageByPackages = [],
-  } = useBuildVersion<FilterList<ClassCoverage>>(topic, { output: "LIST" }) ||
+  } = useFilteredData<FilterList<ClassCoverage>>(topic, { output: "LIST" }) ||
   {};
 
   const columns = [
@@ -172,7 +172,7 @@ export const MethodsTable = ({
 
   const ExpandedClasses = ({ parentRow }: any) => {
     const { classes = [] } =
-      useBuildVersion<Package>(
+      useFilteredData<Package>(
         `/${classesTopicPrefix}/coverage/packages/${parentRow.values.name}`,
       ) || {};
     const defaultExpandedClass = classes.find(({ methods = [] }) => methods

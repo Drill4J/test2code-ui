@@ -53,3 +53,8 @@ export type { TestsToRunSummary } from "./tests-to-run-summary";
 export type { TestsToRun } from "./tests-to-run";
 export type { TestDetails } from "./test-details";
 export type { AnalyticsInfo } from "./analytics-info";
+export type {
+  TestOverviewFilter, FilterValue, AttributeValue, Attribute, Filter, BuildAttribute,
+} from "./filters";
+export { BetweenOp, OP } from "./filters";
+export type { Label } from "./label";

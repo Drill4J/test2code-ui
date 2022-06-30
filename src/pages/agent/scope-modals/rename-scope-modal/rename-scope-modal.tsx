@@ -26,7 +26,7 @@ import "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { ActiveScope } from "types/active-scope";
 
-import { useAgentRouteParams, useBuildVersion } from "hooks";
+import { useAgentRouteParams, useFilteredData } from "hooks";
 import { renameScope } from "../../api";
 
 const validateScope = composeValidators(
@@ -39,7 +39,7 @@ const validateScope = composeValidators(
 export const RenameScopeModal = () => {
   const { agentId = "", pluginId = "" } = useAgentRouteParams();
   const { scopeId = "" } = useQueryParams<{ scopeId?: string; }>();
-  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
+  const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
   const closeModal = useCloseModal(["scopeId"]);
 
   return (
