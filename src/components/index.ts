@@ -23,3 +23,8 @@ export { Column as ListColumn, List } from "./list";
 export { Modals, agentModalsNames } from "./modals";
 export { Breadcrumbs } from "./breadcrumbs";
 export { PageHeader } from "./page-header";
+export { Baseline } from "./baseline";
+export { ComparedToBuild } from "./compared-to-build";
+export { TestsStatus } from "./tests-status";
+export { ColumnFilterByValues } from "./column-filter-by-values";
+export { FilterInfoAlert } from "./filter-info-alert";

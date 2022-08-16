@@ -22,11 +22,12 @@ import axios from "axios";
 import { Agent, Group } from "pages";
 
 import { agentDashboardPath, groupDashboardPath } from "admin-routes";
-import { SetPanelContext } from "common";
+import { SetPanelContext, FilterContextProvider } from "common";
 import { AgentHud as Test2CodeAgentHUD, GroupHudProps, ServiceGroupHud as Test2CodeServiceGroupHUD } from "./hud";
 import pkj from "../package.json";
 
 import "./index.css";
+import { ResultFilterContextProvider } from "./common/contexts/result-filter-context";
 
 console.log("Test2Code-UI version: ", pkj.version);
 
@@ -61,9 +62,13 @@ const AgentPluginLifecycle = singleSpaReact({
   ReactDOM,
   rootComponent: ({ setPanel }) => (
     <BrowserRouter>
-      <SetPanelContext.Provider value={setPanel}>
-        <Agent />
-      </SetPanelContext.Provider>
+      <FilterContextProvider>
+        <ResultFilterContextProvider>
+          <SetPanelContext.Provider value={setPanel}>
+            <Agent />
+          </SetPanelContext.Provider>
+        </ResultFilterContextProvider>
+      </FilterContextProvider>
     </BrowserRouter>
   ),
   domElementGetter: () => document.getElementById("test2code") || document.body,

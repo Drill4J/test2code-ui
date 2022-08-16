@@ -19,7 +19,7 @@ import { Icons, Tooltip } from "@drill4j/ui-kit";
 import { BuildSummary } from "types/build-summary";
 import { RISKS_TYPES_COLOR } from "common/constants";
 import { SingleBar, DashboardSection, SectionTooltip } from "components";
-import { useBuildVersion } from "hooks";
+import { useFilteredData } from "hooks";
 import { convertToPercentage } from "@drill4j/common-utils";
 
 interface Props {
@@ -29,7 +29,7 @@ interface Props {
 export const RisksSection = ({ buildVersion }: Props) => {
   const {
     riskCounts: { total = 0, new: newMethodsCount = 0, modified: modifiedMethodsCount = 0 } = {},
-  } = useBuildVersion<BuildSummary>("/build/summary", { buildVersion }) || {};
+  } = useFilteredData<BuildSummary>("/build/summary", { buildVersion }) || {};
   const tooltipData = {
     new: {
       count: newMethodsCount,

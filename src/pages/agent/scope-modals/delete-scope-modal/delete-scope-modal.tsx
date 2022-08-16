@@ -23,7 +23,7 @@ import "twin.macro";
 
 import { ActiveScope } from "types/active-scope";
 import {
-  useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+  useAgentRouteParams, useFilteredData, useNavigation, useTestToCodeRouteParams,
 } from "hooks";
 import { ActiveSessions } from "types/active-sessions";
 import { getModalPath } from "common";
@@ -34,10 +34,10 @@ export const DeleteScopeModal = () => {
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
   const { scopeId } = useQueryParams<{scopeId?: string;}>();
-  const scope = useBuildVersion<ActiveScope>(`/build/scopes/${scopeId}`);
+  const scope = useFilteredData<ActiveScope>(`/build/scopes/${scopeId}`);
   const { push, location: { pathname = "" } } = useHistory();
   const [loading, setLoading] = useState(false);
-  const { testTypes = [] } = useBuildVersion<ActiveSessions>("/active-scope/summary/active-sessions") || {};
+  const { testTypes = [] } = useFilteredData<ActiveSessions>("/active-scope/summary/active-sessions") || {};
   const closeModal = useCloseModal(["scopeId"]);
 
   return (

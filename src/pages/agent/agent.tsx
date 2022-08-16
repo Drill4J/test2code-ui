@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, { useEffect } from "react";
 import { TableActionsProvider } from "@drill4j/ui-kit";
 import {
   Route, Switch, Redirect, useLocation,
@@ -21,8 +21,14 @@ import {
 import "twin.macro";
 
 import { getAdminPath } from "utils";
-import { Modals, Breadcrumbs } from "components";
-import { useActiveBuild, useAgentRouteParams, useNavigation } from "hooks";
+import {
+  Modals, Breadcrumbs, Baseline, ComparedToBuild,
+} from "components";
+import {
+  useActiveBuild, useAgentRouteParams, useNavigation, useTestToCodeData, useTestToCodeRouteParams,
+} from "hooks";
+import { ParentBuild } from "types";
+import { useSetFilterDispatch } from "common";
 import { BuildOverview } from "./build-overview";
 import { ScopeOverview } from "./scope-overview";
 import { AllScopes } from "./all-scopes";
@@ -32,24 +38,39 @@ import { AllBuilds } from "./all-builds";
 
 export const Agent = () => {
   const { agentId } = useAgentRouteParams();
-  const { buildVersion } = useActiveBuild(agentId) || {};
+  const { buildVersion } = useTestToCodeRouteParams();
   const { routes, getPagePath } = useNavigation();
   const { pathname } = useLocation();
+  const { version: parentBuildVersion } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
+  const isActiveBuild = activeBuildVersion === buildVersion;
 
-  if (!buildVersion) { // TODO Add spinner
+  const setFilter = useSetFilterDispatch();
+
+  useEffect(() => {
+    setFilter(null);
+  }, [buildVersion]);
+
+  if (!activeBuildVersion) {
     return null;
   }
 
   return (
     <div tw="flex flex-col w-full h-full">
-      <Breadcrumbs />
+      <div tw="flex justify-between gap-x-3 px-6 border-b border-monochrome-medium-tint">
+        <Breadcrumbs />
+        <div tw="flex gap-x-6 text-12 font-bold">
+          {parentBuildVersion && isActiveBuild && <Baseline />}
+          {parentBuildVersion && <ComparedToBuild parentBuildVersion={parentBuildVersion} />}
+        </div>
+      </div>
       <Switch>
         <Route
           exact
           path={getAdminPath(pathname)}
           render={() => (
             <Redirect
-              to={getPagePath({ name: "overview", params: { buildVersion }, queryParams: { activeTab: "methods" } })}
+              to={getPagePath({ name: "overview", params: { buildVersion: activeBuildVersion }, queryParams: { activeTab: "methods" } })}
             />
           )}
         />

@@ -25,7 +25,7 @@ export function startAgentSession(
     agentId}/plugins/${PLUGIN_ID}/dispatch-action`, {
     type: "START",
     payload: {
-      sessionId: sessionId.trim(), isGlobal, isRealtime,
+      sessionId: sessionId.trim(), isGlobal, isRealtime, testType: "unit",
     },
   });
 }

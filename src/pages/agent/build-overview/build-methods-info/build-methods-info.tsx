@@ -23,7 +23,7 @@ import { ActiveScopeInfo } from "modules";
 import { Methods } from "types/methods";
 import { BuildCoverage } from "types/build-coverage";
 import {
-  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, usePreviousBuildCoverage,
+  useActiveBuild, useActiveScope, useAgentRouteParams, useFilteredData, usePreviousBuildCoverage, useTestToCodeData,
 } from "hooks";
 import { BUILD_STATUS } from "common/constants";
 import { PreviousBuildInfo } from "./previous-build-info-types";
@@ -54,9 +54,9 @@ export const BuildMethodsInfo = () => {
   const scope = useActiveScope();
   const {
     all, new: newMethods, modified, deleted, risks,
-  } = useBuildVersion<Methods>("/build/methods") || {};
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
-  const buildCoverage = useBuildVersion<BuildCoverage>("/build/coverage") || {};
+  } = useFilteredData<Methods>("/build/methods") || {};
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
+  const buildCoverage = useFilteredData<BuildCoverage>("/build/coverage") || {};
   const {
     percentage: previousBuildCodeCoverage = 0,
   } = usePreviousBuildCoverage(previousBuildVersion) || {};

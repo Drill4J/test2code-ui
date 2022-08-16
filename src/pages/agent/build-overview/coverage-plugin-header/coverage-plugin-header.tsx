@@ -13,206 +13,288 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React from "react";
+import React, {
+  useCallback, useEffect, useMemo, useState,
+} from "react";
 import {
-  Button, Icons, Tooltip, Typography,
+  Button, HeadlessSelect, Icons, OptionType, sendAlertEvent,
 } from "@drill4j/ui-kit";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 import tw, { styled } from "twin.macro";
 
-import { ConditionSetting, QualityGate, QualityGateStatus } from "types/quality-gate-type";
 import { BUILD_STATUS } from "common/constants";
 import {
-  useActiveBuild, useAgentRouteParams, useBuildVersion, useNavigation, usePreviousBuildCoverage,
-  useTestToCodeRouteParams, useAdminConnection,
+  useActiveBuild,
+  useAgentRouteParams,
+  useFilteredData,
+  useNavigation,
+  usePreviousBuildCoverage,
+  useTestToCodeData,
+  useTestToCodeRouteParams,
 } from "hooks";
 import { ParentBuild } from "types/parent-build";
 import { Metrics } from "types/metrics";
-import { getModalPath } from "common";
-import { AnalyticsInfo, Risk } from "types";
-import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
+import { Filter, Risk, TestTypeSummary } from "types";
 import { PageHeader } from "components";
+import { useFilterState, useSetFilterDispatch } from "common";
+import { applyFilter } from "pages/agent/api";
+import { useResultFilterState } from "common/contexts";
 import { ActionSection } from "./action-section";
-import { BaselineTooltip } from "./baseline-tooltip";
+import { QualityGate } from "./quality-gate";
+import { ConfigureFilter } from "./global-filter";
+import { ConfigureFilterSate, FILTER_STATE } from "./types";
 
 export const CoveragePluginHeader = () => {
+  const [configureFilterState, setConfigureFilter] = useState<ConfigureFilterSate>(null);
   const { agentId = "" } = useAgentRouteParams();
   const { buildVersion } = useTestToCodeRouteParams();
   const { getPagePath } = useNavigation();
+
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
-  const { risks: risksCount = 0, tests: testToRunCount = 0 } = useBuildVersion<Metrics>("/data/stats") || {};
-  const initialRisks = useBuildVersion<Risk[]>("/build/risks") || [];
-  const { version: previousBuildVersion = "" } = useBuildVersion<ParentBuild>("/data/parent") || {};
-  const conditionSettings = useBuildVersion<ConditionSetting[]>("/data/quality-gate-settings") || [];
-  const { status = "FAILED" } = useBuildVersion<QualityGate>("/data/quality-gate") || {};
+  const { risks: risksCount = 0, tests: testToRunCount = 0 } = useFilteredData<Metrics>("/data/stats") || {};
+  const initialRisks = useFilteredData<Risk[]>("/build/risks") || [];
+  const { version: previousBuildVersion = "" } = useTestToCodeData<ParentBuild>("/data/parent") || {};
   const { byTestType: previousBuildTests = [] } = usePreviousBuildCoverage(previousBuildVersion) || {};
-  const configured = conditionSettings.some(({ enabled }) => enabled);
-  const StatusIcon = Icons[status];
-  const { push } = useHistory();
-  const { isAnalyticsDisabled } = useAdminConnection<AnalyticsInfo>("/api/analytics/info") || {};
+  const filters = useTestToCodeData<Filter[]>("/build/filters") || [];
+  const realFiltersData = useTestToCodeData<Filter[]>("/build/filters");
+  const testsByType = useFilteredData<TestTypeSummary[]>("/build/summary/tests/by-type") || [];
+
+  const closeConfigureFilter = useCallback(() => setConfigureFilter(null), [setConfigureFilter]);
+  const setFilter = useSetFilterDispatch();
+  const { filterId } = useFilterState();
+  const { isEmptyFilterResult } = useResultFilterState();
+
+  const hasTestsInBuild = Boolean(testsByType.length);
+
+  const isActiveBuild = buildVersion === activeBuildVersion;
+
+  useEffect(() => {
+    if (filterId && realFiltersData && !realFiltersData.filter(filter => filter.id === filterId).length) {
+      setFilter(null);
+      setConfigureFilter(null);
+    }
+  }, [filterId, realFiltersData]);
+
+  useEffect(() => {
+    if (activeBuildVersion && !isActiveBuild) {
+      setFilter(null);
+      setConfigureFilter(null);
+    }
+  }, [isActiveBuild, activeBuildVersion]);
 
   return (
-    <ContentWrapper>
-      <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
-      <BaselinePanel>
-        <div>Current build:</div>
-        <div className="flex items-center text-monochrome-black" title={buildVersion}>
-          <Typography.MiddleEllipsis>
-            <span tw="whitespace-nowrap" data-test="header:current-build-version">{buildVersion}</span>
-          </Typography.MiddleEllipsis>
-          <BaselineTooltip />
-        </div>
-        <div>Parent build:</div>
-        {previousBuildVersion
-          ? (
-            <div
-              className="flex link"
-              onClick={() => push(getPagePath({
-                name: "overview",
-                params: { buildVersion: previousBuildVersion },
-                queryParams: { activeTab: "methods" },
-              }))}
-              title={previousBuildVersion}
+    <>
+      <Header>
+        <div tw="col-span-4 lg:col-span-1 mr-6 font-light text-24 leading-32" data-test="coverage-plugin-header:plugin-name">Test2Code</div>
+        <div tw="flex items-center gap-x-4 py-2 px-6 border-l border-monochrome-medium-tint ">
+          {Boolean(filters.length) && isActiveBuild && (
+            <HeadlessSelect
+              tw="w-[320px]"
+              options={filters.map(({ name = "", id = "" }) => ({ label: name, value: id }))}
             >
-              <Typography.MiddleEllipsis>
-                <span tw="whitespace-nowrap" data-test="header:parent-build-version">{previousBuildVersion}</span>
-              </Typography.MiddleEllipsis>
-            </div>
-          ) : <span>&ndash;</span>}
-      </BaselinePanel>
-      {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && (
-        <div tw="pl-4 pr-4 lg:mr-10 border-l border-monochrome-medium-tint text-monochrome-default">
-          <div className="flex items-center w-full">
-            <div tw="mr-2 text-12 leading-16 font-bold" data-test="coverage-plugin-header:quality-gate-label">
-              QUALITY GATE
-            </div>
-            {!configured && (
-              <Tooltip
-                message={(
+              {({
+                options, selectedOption, isOpen, selectValue, setIsOpen,
+              }) => {
+                const unSelectFilter = useCallback((e) => {
+                  e.stopPropagation();
+                  selectValue("");
+                  setFilter(null);
+                  setConfigureFilter(null);
+                }, []);
+
+                useEffect(() => {
+                  selectValue(filterId || "");
+                }, [filterId]);
+
+                const sortOpitons = useCallback((a: OptionType, b: OptionType) => {
+                  if (a.value === selectedOption?.value) return -1;
+                  if (b.value === selectedOption?.value) return 1;
+                  return 0;
+                }, [selectedOption]);
+
+                const sortedOptions = selectedOption ? options.sort(sortOpitons) : options;
+
+                return (
                   <>
-                    <div tw="text-center">Configure quality gate conditions to</div>
-                    <div>define whether your build passes or not.</div>
+                    <HeadlessSelect.Input isActive={isOpen}>
+                      <div tw="flex justify-between items-center flex-grow">
+                        {selectedOption
+                          ? <HeadlessSelect.SelectedValue>{selectedOption.label}</HeadlessSelect.SelectedValue>
+                          : <HeadlessSelect.Placeholder>Select filter</HeadlessSelect.Placeholder>}
+                        {selectedOption && (
+                          <Icons.Close
+                            width={12}
+                            height={12}
+                            onClick={unSelectFilter}
+                          />
+                        )}
+                      </div>
+                    </HeadlessSelect.Input>
+                    {isOpen && (
+                      <HeadlessSelect.Body>
+                        <HeadlessSelect.ContainerWithScroll>
+                          {sortedOptions.map(({ label, value }) => (
+                            <HeadlessSelect.Option
+                              selected={value === selectedOption?.value}
+                              onClick={async () => {
+                                await applyFilter(agentId, { id: value },
+                                  {
+                                    onSuccess: () => {
+                                      selectValue(value);
+                                      setFilter(value);
+                                      setConfigureFilter(FILTER_STATE.EDITING);
+                                      setIsOpen(false);
+                                    },
+                                    onError: (message) => {
+                                      sendAlertEvent({ type: "ERROR", title: message });
+                                    },
+                                  });
+                              }}
+                            >
+                              {label}
+                            </HeadlessSelect.Option>
+                          ))}
+                        </HeadlessSelect.ContainerWithScroll>
+                      </HeadlessSelect.Body>
+                    )}
                   </>
-                )}
-              >
-                <Icons.Info tw="flex text-monochrome-default" />
-              </Tooltip>
-            )}
-          </div>
-          {!configured ? (
-            <StatusWrapper
-              to={getModalPath({ name: "qualityGate" })}
-              data-test="coverage-plugin-header:configure-button"
-            >
-              <Button
-                primary
-                size="small"
-                onClick={() => {
-                  !isAnalyticsDisabled && sendKeyMetricsEvent({
-                    name: KEY_METRICS_EVENT_NAMES.CLICK_ON_CONFIGURE_BUTTON,
-                  });
-                }}
-              >
-                Configure
-              </Button>
-            </StatusWrapper>
-          ) : (
-            <StatusWrapper
-              to={getModalPath({ name: "qualityGate" })}
-              status={status}
-              onClick={() => {
-                !isAnalyticsDisabled && sendKeyMetricsEvent({
-                  name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
-                  label: "Quality Gates",
-                });
+                );
               }}
-            >
-              <StatusIcon />
-              <StatusTitle data-test="coverage-plugin-header:quality-gate-status">
-                {status}
-              </StatusTitle>
-            </StatusWrapper>
+            </HeadlessSelect>
           )}
-        </div>
-      )}
-      <ActionSection
-        label="risks"
-        previousBuild={{ previousBuildVersion, previousBuildTests }}
-      >
-        {initialRisks.length
-          ? (
-            <Count
-              to={getPagePath({ name: "risks", params: { buildVersion } })}
-              className="flex items-center w-full"
-              data-test="action-section:count:risks"
-              onClick={() => {
-                !isAnalyticsDisabled && sendKeyMetricsEvent({
-                  name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
-                  label: "Risks",
-                });
-              }}
-            >
-              {risksCount}
-              <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-            </Count>
-          ) : <span data-test="action-section:no-value:risks">&ndash;</span>}
-      </ActionSection>
-      <ActionSection
-        label="tests to run"
-        previousBuild={{ previousBuildVersion, previousBuildTests }}
-      >
-        {previousBuildTests.length > 0 ? (
-          <Count
-            to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
-            className="flex items-center w-full"
-            data-test="action-section:count:tests-to-run"
+          <Button
+            tw="flex items-center gap-x-2"
+            secondary
+            size="large"
+            disabled={!hasTestsInBuild || !isActiveBuild}
             onClick={() => {
-              !isAnalyticsDisabled && sendKeyMetricsEvent({
-                name: KEY_METRICS_EVENT_NAMES.CLICK_ON_ICON,
-                label: "Test to Run",
-              });
+              setConfigureFilter(FILTER_STATE.CREATING);
+              setFilter(null);
             }}
           >
-            {testToRunCount}
-            <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
-          </Count>
-        ) : (
-          <div
-            tw="text-20 leading-32 text-monochrome-black"
-            data-test="action-section:no-value:tests-to-run"
+            <Icons.Filter /> Add New Filter
+          </Button>
+        </div>
+        {activeBuildVersion === buildVersion && buildStatus === BUILD_STATUS.ONLINE && <QualityGate />}
+        <ActionSection
+          label="risked methods"
+          previousBuild={{ previousBuildVersion, previousBuildTests }}
+        >
+          {getRisksSection(isEmptyFilterResult, initialRisks, buildVersion, risksCount, getPagePath)}
+        </ActionSection>
+        <ActionSection
+          label="recommended tests"
+          previousBuild={{ previousBuildVersion, previousBuildTests }}
+        >
+          {getTestsToRunSection(isEmptyFilterResult, previousBuildTests, buildVersion, testToRunCount, getPagePath)}
+        </ActionSection>
+        {filterId && (
+          <ShowCriteria
+            tw="absolute left-1/2 -translate-x-1/2 top-full flex items-center gap-x-1 px-2"
+            onClick={() => setConfigureFilter(FILTER_STATE.EDITING)}
           >
-            &ndash;
-          </div>
+            <Icons.Expander width={8} height={8} rotate={90} /> Show Criteria
+          </ShowCriteria>
         )}
-      </ActionSection>
-    </ContentWrapper>
+      </Header>
+      <AnimatePresence>
+        {configureFilterState && (
+          <motion.div
+            initial={{ height: 0 }}
+            animate={{ height: "fit-content" }}
+            exit={{ height: 0, overflow: "hidden" }}
+          >
+            <ConfigureFilter
+              closeConfigureFilter={closeConfigureFilter}
+              filterId={configureFilterState === FILTER_STATE.EDITING || configureFilterState === FILTER_STATE.DUPLICATE ? filterId : null}
+              configureFilterState={configureFilterState}
+              setConfigureFilter={setConfigureFilter}
+              filters={filters}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 
-const ContentWrapper = styled(PageHeader)`
-  ${tw`grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
+const Header = styled(PageHeader)`
+  ${tw`relative grid grid-rows-2 lg:grid-rows-1 grid-cols-4 gap-2 w-full`}
   @media screen and (min-width: 1024px) {
     grid-template-columns: max-content auto max-content max-content max-content !important;
   }
 `;
-const BaselinePanel = styled.div`
-  ${tw`grid gap-x-2 lg:pl-6`}
-  ${tw`lg:border-l border-monochrome-medium-tint font-bold text-12 leading-24 text-monochrome-default`}
-  grid-template-columns: max-content minmax(64px, 60%);
-  grid-template-rows: repeat(2, 1fr);
-`;
-const StatusWrapper = styled(Link)(({ status }: { status?: QualityGateStatus }) => [
-  tw`flex items-center h-8 text-14`,
-  status === "PASSED" && tw`text-green-default cursor-pointer`,
-  status === "FAILED" && tw`text-red-default cursor-pointer`,
-]);
-const StatusTitle = styled.div`
-  ${tw`ml-2 font-bold lowercase`}
-  &::first-letter {
-    ${tw`uppercase`}
-  }
-`;
+
 const Count = styled(Link)`
   ${tw`flex items-center w-full text-20 leading-32 cursor-pointer`}
   ${tw`text-monochrome-black hover:text-blue-medium-tint active:text-blue-shade`}
 `;
+
+const ShowCriteria = styled.button`
+  ${tw`border border-monochrome-medium-tint bg-monochrome-white text-blue-default text-10 leading-14 font-bold`}
+  border-radius: 0px 0px 8px 8px ;
+`;
+
+const getTestsToRunSection = (isEmptyFilterResult: boolean, previousBuildTests: TestTypeSummary[],
+  buildVersion: string, testToRunCount: number, getPagePath: any) => {
+  if (isEmptyFilterResult) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-dark-tint"
+        data-test="action-section:no-value:tests-to-run"
+      >
+        n/a
+      </div>
+    );
+  }
+  if (!previousBuildTests.length) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-black"
+        data-test="action-section:no-value:tests-to-run"
+      >
+        &ndash;
+      </div>
+    );
+  }
+  return (
+    <Count
+      to={getPagePath({ name: "testsToRun", params: { buildVersion } })}
+      tw="flex items-center w-full"
+      data-test="action-section:count:tests-to-run"
+    >
+      {testToRunCount}
+      <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+    </Count>
+  );
+};
+
+const getRisksSection = (isEmptyFilterResult: boolean, initialRisks: Risk[],
+  buildVersion: string, risksCount: number, getPagePath: any) => {
+  if (isEmptyFilterResult) {
+    return (
+      <div
+        tw="text-20 leading-32 text-monochrome-dark-tint"
+        data-test="action-section:no-value:risks"
+      >
+        n/a
+      </div>
+    );
+  }
+  if (!initialRisks.length) {
+    return (
+      <span data-test="action-section:no-value:risks">&ndash;</span>
+    );
+  }
+  return (
+    <Count
+      to={getPagePath({ name: "risks", params: { buildVersion } })}
+      tw="flex items-center w-full"
+      data-test="action-section:count:risks"
+    >
+      {risksCount}
+      <Icons.Expander tw="ml-1 text-blue-default" width={8} height={8} />
+    </Count>
+  );
+};

@@ -26,7 +26,7 @@ import tw from "twin.macro";
 import { ScopeSummary } from "types/scope-summary";
 import { TestTypeSummary } from "types/test-type-summary";
 import {
-  useActiveBuild, useActiveScope, useAgentRouteParams, useBuildVersion, useNavigation, useTestToCodeRouteParams,
+  useActiveBuild, useActiveScope, useAgentRouteParams, useFilteredData, useNavigation, useTestToCodeRouteParams,
 } from "hooks";
 import { BUILD_STATUS } from "common/constants";
 import { getModalPath } from "common";
@@ -41,8 +41,8 @@ export const AllScopes = () => {
   const { push } = useHistory();
   const { buildVersion: activeBuildVersion = "", buildStatus } = useActiveBuild(agentId) || {};
   const activeScope = useActiveScope();
-  const scopes = useBuildVersion<ScopeSummary[]>("/build/scopes/finished") || [];
-  const { byTestType = [] } = useBuildVersion<BuildCoverage>("/build/coverage") || {};
+  const scopes = useFilteredData<ScopeSummary[]>("/build/scopes/finished") || [];
+  const { byTestType = [] } = useFilteredData<BuildCoverage>("/build/coverage") || {};
   const { getPagePath } = useNavigation();
   scopes.sort(
     ({ started: firstStartedDate }, { started: secondStartedDate }) => secondStartedDate - firstStartedDate,
@@ -76,7 +76,7 @@ export const AllScopes = () => {
           </div>
         );
       },
-      width: "20%",
+      width: "180px",
     }));
 
   const data = useMemo(() => scopesData.map((value) => {
@@ -172,7 +172,7 @@ export const AllScopes = () => {
                     </>
                   ),
                   textAlign: "left",
-                  width: "20%",
+                  width: "200px",
                   sortType: "number",
                 },
                 {
@@ -183,7 +183,7 @@ export const AllScopes = () => {
                       {percentFormatter(original?.coverage?.percentage)}
                     </div>
                   ),
-                  width: "20%",
+                  width: "180px",
                   sortType: "number",
                 },
                 ...testsColumns,
