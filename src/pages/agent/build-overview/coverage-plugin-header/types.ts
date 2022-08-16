@@ -13,4 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { BaselineTooltip } from "./baseline-tooltip";
+export enum FILTER_STATE {
+  CREATING = "CREATING",
+  EDITING = "EDITING",
+  DUPLICATE = "DUPLICATE"
+}
+
+export type ConfigureFilterSate = FILTER_STATE.EDITING | FILTER_STATE.CREATING | FILTER_STATE.DUPLICATE | null;

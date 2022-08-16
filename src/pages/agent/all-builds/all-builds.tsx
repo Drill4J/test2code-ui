@@ -23,16 +23,18 @@ import { BuildVersion } from "@drill4j/types-admin";
 import tw, { styled } from "twin.macro";
 
 import {
-  useActiveBuild, useAdminConnection, useAgentRouteParams, useBuildVersion, useNavigation,
+  useActiveBuild,
+  useAdminConnection, useAgentRouteParams, useNavigation, useTestToCodeData,
 } from "hooks";
 import { PageHeader } from "components";
+import { Baseline as BaselineType } from "types";
 
 export const AllBuilds = () => {
   const { agentId } = useAgentRouteParams();
   const { getPagePath } = useNavigation();
   const buildVersions = useAdminConnection<BuildVersion[]>(`/agents/${agentId}/builds/summary`) || [];
   const { buildVersion: activeBuildVersion = "" } = useActiveBuild(agentId) || {};
-  const { version: baseline } = useBuildVersion("/data/baseline", { buildVersion: activeBuildVersion }) || {};
+  const { version: baseline } = useTestToCodeData<BaselineType>("/data/baseline", { buildVersion: activeBuildVersion }) || {};
   const isBaseline = (build: string) => build === baseline;
 
   return (

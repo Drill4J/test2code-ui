@@ -19,9 +19,9 @@ import { convertToPercentage, getDuration, percentFormatter } from "@drill4j/com
 import { useHistory } from "react-router-dom";
 import "twin.macro";
 
+import { FilterInfoAlert, PageHeader } from "components";
 import { TestsToRunSummary } from "types/tests-to-run-summary";
 import { getModalPath } from "common";
-import { PageHeader } from "components";
 import { useAdminConnection } from "hooks";
 import { AnalyticsInfo } from "types";
 import { KEY_METRICS_EVENT_NAMES, sendKeyMetricsEvent } from "common/analytic";
@@ -72,12 +72,15 @@ export const TestsToRunHeader = ({
 
   return (
     <PageHeader tw="justify-between">
-      <div>
+      <div tw="flex">
         <div
           tw="flex gap-x-2 text-24 leading-36 text-monochrome-black"
           data-test="tests-to-run-header:title"
         >
           Recommended Tests
+        </div>
+        <div tw="ml-6">
+          <FilterInfoAlert />
         </div>
       </div>
       <div tw="flex items-center gap-6 mr-10">

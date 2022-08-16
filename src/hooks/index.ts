@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export { useBuildVersion } from "./use-build-version";
+export { useFilteredData } from "./use-filtered-data";
 export { usePreviousBuildCoverage } from "./use-previouse-build-coverage";
 export { useServiceGroup } from "./use-service-group";
 export { useAgent } from "./use-agent";
