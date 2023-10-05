@@ -55,7 +55,7 @@ export const FinishScopeModal = () => {
           </div>
         </Modal.Header>
         <Formik
-          initialValues={{ ignoreScope: false, forceFinish: false }}
+          initialValues={{ ignoreScope: false, forceFinish: true }}
           onSubmit={async ({ ignoreScope, forceFinish }: any) => {
             setLoading(true);
             await finishScope(agentId, pluginId, {
@@ -78,69 +78,18 @@ export const FinishScopeModal = () => {
           }}
         >
           {({ values: { forceFinish } }) => {
-            const finishScopeButtonContent = getFinishScopeButtonContent({
-              loading, hasTests: Boolean(testsCount), hasActiveSessions: Boolean(activeSessionTest.length), forceFinish,
-            });
+            const finishScopeButtonContent = getFinishScopeButtonContent({ loading });
             return (
               <Form tw="flex flex-col">
                 <Modal.Body>
-                  {activeSessionTest.length > 0 && (
-                    <ContentAlert tw="mb-6" type="WARNING">
-                      <div>
-                        At least one active session has been detected.<br />
-                        First, you need to finish it in&nbsp;
-                        <Link
-                          data-test="finish-scope-modal:general-alert:session-management-link"
-                          tw="link font-bold text-14"
-                          to={getModalPath({ name: "sessionManagement" })}
-                        >
-                          Sessions Management
-                        </Link>
-                      </div>
-                    </ContentAlert>
-                  )}
-                  {Boolean(!testsCount && !activeSessionTest.length) && (
-                    <ContentAlert tw="mb-6" type="WARNING">
-                      Scope is empty and will be deleted after finishing.
-                    </ContentAlert>
-                  )}
                   <ScopeSummary scope={scope as ActiveScope} testsCount={testsCount} />
-                  <div tw="flex flex-col gap-y-4 mt-6 text-14 leading-20 text-blue-default">
-                    {Boolean(activeSessionTest.length) && (
-                      <div>
-                        <Label disabled={false}>
-                          <Field
-                            type="checkbox"
-                            name="forceFinish"
-                          >
-                            {({ field }: any) => (<Checkbox field={field} />)}
-                          </Field>
-                          <span tw="text-monochrome-black">Delete active sessions and finish scope anyway</span>
-                        </Label>
-                        {forceFinish && scope && !scope.coverage.percentage && (
-                          <div tw="flex gap-x-2 items-center mt-2 ml-6 text-orange-default font-regular">
-                            <Icons.Warning /> Scope is empty and will be deleted after finishing
-                          </div>
-                        )}
-                      </div>
-                    )}
-                    <Label disabled={((!testsCount || activeSessionTest.length > 0) && !forceFinish) || !scope?.coverage.percentage}>
-                      <Field
-                        type="checkbox"
-                        name="ignoreScope"
-                      >
-                        {({ field }: any) => (<Checkbox field={field} />)}
-                      </Field>
-                      <span tw="text-monochrome-black">Ignore scope in build stats</span>
-                    </Label>
-                  </div>
                 </Modal.Body>
                 <Modal.Footer tw="flex items-center gap-x-4">
                   <Button
                     className={`flex justify-center items-center gap-x-1 ${finishScopeButtonContent === "Finish Scope" ? "w-30" : "w-40"}`}
                     primary
                     size="large"
-                    disabled={loading || (Boolean(activeSessionTest.length) && !forceFinish)}
+                    disabled={loading}
                     type="submit"
                     data-test="finish-scope-modal:finish-scope-button"
                   >
@@ -150,7 +99,6 @@ export const FinishScopeModal = () => {
                     secondary
                     size="large"
                     onClick={closeModal}
-                    disabled={loading}
                     data-test="finish-scope-modal:cancel-modal-button"
                   >
                     Cancel
@@ -171,22 +119,10 @@ const Label = styled.label<{disabled: boolean}>`
 `;
 
 function getFinishScopeButtonContent({
-  loading, hasTests, hasActiveSessions, forceFinish,
+  loading,
 }: any): React.ReactNode {
   if (loading) {
     return <Spinner />;
-  }
-
-  if (hasTests) {
-    return "Finish Scope";
-  }
-
-  if (!hasTests && hasActiveSessions && !forceFinish) {
-    return "Finish Scope";
-  }
-
-  if (!hasTests) {
-    return "Finish and Delete";
   }
 
   return "Finish Scope";
