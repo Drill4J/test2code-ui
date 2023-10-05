@@ -29,24 +29,24 @@ jobs:
 #               -H 'Accept: application/vnd.github.everest-preview+json' \
 #               "https://api.github.com/repos/Drill4J/e2e/dispatches" \
 #               -d `{ "event_type": "run_test", "client_payload": { "${{ github.event.repository.name }}": "${{ steps.get_version.outputs.tag }}" } }`
-      - name: Repository Dispatch
-        uses: peter-evans/repository-dispatch@v1
-        with:
-          repository: Drill4J/e2e
-          token: ${{ secrets.VEE_TABLE_TOKEN }}
-          event-type: run_test
-          client-payload: '{ "${{ github.event.repository.name }}": "${{ steps.get_version.outputs.tag }}" }'
-      # place this action LAST
-      - uses: Drill4J/vee-table@0.0.0
-        with:
-          # leave everything "as-is"
-          github-access-token: ${{ secrets.VEE_TABLE_TOKEN }}
-          action-type: 'add-version'
-          ledger-repo-url: 'https://github.com/Drill4J/vee-ledger'
-          ledger-repo-owner: 'Drill4J'
-          ledger-repo-name: 'vee-ledger'
-          version-component-id: ${{ github.event.repository.name }}
-          # leave everything "as-is"
+      # - name: Repository Dispatch
+      #   uses: peter-evans/repository-dispatch@v1
+      #   with:
+      #     repository: Drill4J/e2e
+      #     token: ${{ secrets.VEE_TABLE_TOKEN }}
+      #     event-type: run_test
+      #     client-payload: '{ "${{ github.event.repository.name }}": "${{ steps.get_version.outputs.tag }}" }'
+      # # place this action LAST
+      # - uses: Drill4J/vee-table@0.0.0
+      #   with:
+      #     # leave everything "as-is"
+      #     github-access-token: ${{ secrets.VEE_TABLE_TOKEN }}
+      #     action-type: 'add-version'
+      #     ledger-repo-url: 'https://github.com/Drill4J/vee-ledger'
+      #     ledger-repo-owner: 'Drill4J'
+          # ledger-repo-name: 'vee-ledger'
+          # version-component-id: ${{ github.event.repository.name }}
+          # # leave everything "as-is"
 
-          # steps.build_artifact is your step, where new version tag is created
-          version-tag: ${{ steps.get_version.outputs.tag }} # Pass new version tag
+          # # steps.build_artifact is your step, where new version tag is created
+          # version-tag: ${{ steps.get_version.outputs.tag }} # Pass new version tag
