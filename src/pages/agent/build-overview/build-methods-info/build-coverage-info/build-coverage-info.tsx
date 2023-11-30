@@ -15,11 +15,9 @@
  */
 import React from "react";
 import { MainProgressBar, ProgressBarLegends } from "@drill4j/ui-kit";
-import { NavLink } from "react-router-dom";
 import { percentFormatter } from "@drill4j/common-utils";
 import "twin.macro";
 
-import { useNavigation, useTestToCodeRouteParams } from "hooks";
 import { PreviousBuildInfo } from "../previous-build-info-types";
 
 interface Props {
@@ -31,21 +29,10 @@ export const BuildCoverageInfo = ({
   buildCodeCoverage, previousBuildInfo: { previousBuildVersion = "", previousBuildCodeCoverage = 0 } = {},
 }: Props) => {
   const buildDiff = percentFormatter(buildCodeCoverage) - percentFormatter(previousBuildCodeCoverage);
-  const { buildVersion } = useTestToCodeRouteParams();
-  const { getPagePath } = useNavigation();
 
   return (
     <div tw="w-full h-full text-12 leading-16 text-monochrome-default">
-      <div className="flex justify-between items-center w-full">
-        <div tw="font-bold" data-test="build-coverage-info:title">BUILD COVERAGE</div>
-        <NavLink
-          className="link font-bold leading-16 no-underline"
-          to={getPagePath({ name: "allScopes", params: { buildVersion } })}
-          data-test="build-coverage-info:all-scopes-link"
-        >
-          All scopes
-        </NavLink>
-      </div>
+      <div tw="font-bold" data-test="build-coverage-info:title">BUILD COVERAGE</div>
       <div tw="flex items-baseline mt-6 mb-3 text-12" data-test="build-coverage-info:detailed-code-coverage-info">
         <div tw="mr-2 text-32 leading-40 text-monochrome-black" data-test="build-coverage-info:build-coverage-percentage">
           {percentFormatter(buildCodeCoverage)}%
