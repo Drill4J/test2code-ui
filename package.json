@@ -101,7 +101,7 @@
     "react-ga": "^3.3.0",
     "react-router-dom": "^5.2.1",
     "single-spa-css": "^1.1.2",
-    "twin.macro": "^2.4.2",
+    "twin.macro": "^3.0.0",
     "uuid": "^8.3.2"
   },
   "husky": {
